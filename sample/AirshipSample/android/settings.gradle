@@ -1,0 +1,4 @@
+rootProject.name = 'AirshipSample'
+include ':urbanairship-react-native'
+project(':urbanairship-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/urbanairship-react-native/android')
+include ':app'
