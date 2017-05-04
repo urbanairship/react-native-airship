@@ -36,6 +36,10 @@ class EventEmitter {
 
     private static final String CHANNEL_ID = "channelId";
     private static final String REGISTRATION_TOKEN = "registrationToken";
+
+    private static final String DEEP_LINK = "deepLink";
+
+
     private static EventEmitter sharedInstance = new EventEmitter();
 
     private ReactInstanceManager instanceManager;
@@ -71,6 +75,13 @@ class EventEmitter {
     void notifyNotificationResponse(AirshipReceiver.NotificationInfo notificationInfo) {
         WritableMap map = createPushMap(notificationInfo.getMessage());
         map.putBoolean(RESPONSE_FOREGROUND, true);
+
+        emit(NOTIFICATION_RESPONSE_EVENT, map, true);
+    }
+
+    void notifyDeepLink(String deepLink) {
+        WritableMap map = Arguments.createMap();
+        map.putString(DEEP_LINK, deepLink);
 
         emit(NOTIFICATION_RESPONSE_EVENT, map, true);
     }
@@ -140,5 +151,4 @@ class EventEmitter {
 
         return instanceManager;
     }
-
 }
