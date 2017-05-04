@@ -25,7 +25,7 @@ export type AirshipEventName = $Enum<{
   pushReceived: string,
 }>;
 
-function convertEventEnum(type: AirshipEventName): string? {
+function convertEventEnum(type: AirshipEventName): ?string {
   if (type === 'notificationResponse') {
     return NOTIFICATION_RESPONSE_EVENT;
   } else if (type === 'pushReceived') {
