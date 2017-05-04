@@ -34,6 +34,8 @@ class EventEmitter {
     private static final String RESPONSE_FOREGROUND = "isForeground";
 
 
+    private static final String CHANNEL_ID = "channelId";
+    private static final String REGISTRATION_TOKEN = "registrationToken";
     private static EventEmitter sharedInstance = new EventEmitter();
 
     private ReactInstanceManager instanceManager;
@@ -43,7 +45,14 @@ class EventEmitter {
     }
 
     void notifyChannelRegistrationFinished(String channel) {
-        emit(CHANNEL_REGISTRATION_EVENT, channel, false);
+        WritableMap map = Arguments.createMap();
+        map.putString(CHANNEL_ID, channel);
+
+        if (UAirship.shared().getPushManager().getRegistrationToken() != null) {
+            map.putString(REGISTRATION_TOKEN, UAirship.shared().getPushManager().getRegistrationToken());
+        }
+
+        emit(CHANNEL_REGISTRATION_EVENT, map, false);
     }
 
     void notifyPushReceived(PushMessage message) {
