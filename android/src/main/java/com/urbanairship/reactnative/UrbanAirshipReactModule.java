@@ -190,7 +190,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void runAction(String name, Dynamic value, final Promise promise) {
+    public void runAction(final String name, Dynamic value, final Promise promise) {
         ActionRunRequest.createRequest(name)
                 .setValue(convertDynamic(value))
                 .run(new ActionCompletionCallback() {
@@ -206,7 +206,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                                 return;
 
                             case STATUS_ACTION_NOT_FOUND:
-                                promise.reject("STATUS_ACTION_NOT_FOUND", "Action not found.");
+                                promise.reject("STATUS_ACTION_NOT_FOUND", "Action " + name + "not found.");
                                 return;
 
                             case STATUS_EXECUTION_ERROR:
@@ -272,7 +272,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 return JsonValue.wrapOpt(object.asDouble());
 
             case Map:
-                ReadableMap map = (ReadableMap) object;
+                ReadableMap map = object.asMap();
                 JsonMap.Builder mapBuilder = JsonMap.newBuilder();
 
                 ReadableMapKeySetIterator iterator = map.keySetIterator();

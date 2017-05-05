@@ -4,7 +4,12 @@
  * @flow
  */
 
- const UrbanAirship = require('urbanairship-react-native');
+
+import {
+  UrbanAirship,
+  UACustomEvent,
+} from 'urbanairship-react-native'
+
 
 import React, { Component } from 'react';
 import {

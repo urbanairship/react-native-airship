@@ -25,6 +25,7 @@ class EventEmitter {
     private static final String NOTIFICATION_RESPONSE_EVENT = "com.urbanairship.notification_response";
     private static final String PUSH_RECEIVED_EVENT = "com.urbanairship.push_received";
     private static final String NOTIFICATION_OPT_IN_STATUS_EVENT = "com.urbanairship.notification_opt_in_status";
+    private static final String DEEP_LINK_EVENT = "com.urbanairship.deep_link";
 
 
     private static final String PUSH_ALERT = "alert";
@@ -87,7 +88,7 @@ class EventEmitter {
         WritableMap map = Arguments.createMap();
         map.putString(DEEP_LINK, deepLink);
 
-        emit(NOTIFICATION_RESPONSE_EVENT, map, true);
+        emit(DEEP_LINK_EVENT, map, true);
     }
 
     public void notifyNotificationOptInStatus(boolean optIn) {
