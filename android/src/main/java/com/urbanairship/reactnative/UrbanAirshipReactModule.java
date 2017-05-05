@@ -33,7 +33,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
 import static com.urbanairship.actions.ActionResult.STATUS_EXECUTION_ERROR;
@@ -148,13 +147,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void associateIdentifier(String id, String value) {
+    public void associateIdentifier(String key, String id) {
         AssociatedIdentifiers.Editor editor = UAirship.shared().getAnalytics().editAssociatedIdentifiers();
 
-        if (value == null) {
-            editor.removeIdentifier(id);
+        if (id == null) {
+            editor.removeIdentifier(key);
         } else {
-            editor.addIdentifier(id, value);
+            editor.addIdentifier(key, id);
         }
 
         editor.apply();
