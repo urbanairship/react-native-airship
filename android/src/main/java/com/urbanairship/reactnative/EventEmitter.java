@@ -24,6 +24,7 @@ class EventEmitter {
     private static final String CHANNEL_REGISTRATION_EVENT = "com.urbanairship.registration";
     private static final String NOTIFICATION_RESPONSE_EVENT = "com.urbanairship.notification_response";
     private static final String PUSH_RECEIVED_EVENT = "com.urbanairship.push_received";
+    private static final String NOTIFICATION_OPT_IN_STATUS_EVENT = "com.urbanairship.notification_opt_in_status";
 
 
     private static final String PUSH_ALERT = "alert";
@@ -38,6 +39,9 @@ class EventEmitter {
     private static final String REGISTRATION_TOKEN = "registrationToken";
 
     private static final String DEEP_LINK = "deepLink";
+
+    private static final String OPTED_IN = "optedIn";
+
 
 
     private static EventEmitter sharedInstance = new EventEmitter();
@@ -84,6 +88,12 @@ class EventEmitter {
         map.putString(DEEP_LINK, deepLink);
 
         emit(NOTIFICATION_RESPONSE_EVENT, map, true);
+    }
+
+    public void notifyNotificationOptInStatus(boolean optIn) {
+        WritableMap map = Arguments.createMap();
+        map.putBoolean(OPTED_IN, optIn);
+        emit(NOTIFICATION_OPT_IN_STATUS_EVENT, map, true);
     }
 
     private void emit(final String name, final Object data, final boolean waitForReact) {
@@ -151,4 +161,6 @@ class EventEmitter {
 
         return instanceManager;
     }
+
+
 }
