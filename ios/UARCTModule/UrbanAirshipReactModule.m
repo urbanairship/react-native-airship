@@ -3,13 +3,7 @@
 #import "UrbanAirshipReactModule.h"
 #import "AirshipLib.h"
 #import "UARCTEventEmitter.h"
-#import <React/RCTBridgeModule.h>
-#import <React/RCTEventEmitter.h>
-
-NSString *const UARCTRegistrationEvent = @"com.urbanairship.registration";
-NSString *const UARCTNotificationResponseEvent = @"com.urbanairship.notification_response";
-NSString *const UARCTPushReceivedEvent= @"com.urbanairship.push_received";
-NSString *const UARCTDeepLinkEvent = @"com.urbanairship.deep_link";
+#import "UARCTDeepLinkEvent.h"
 
 NSString *const NotificationPresentationAlertKey = @"alert";
 NSString *const NotificationPresentationBadgeKey = @"badge";
@@ -17,44 +11,12 @@ NSString *const NotificationPresentationSoundKey = @"sound";
 
 NSString *const PresentationOptions = @"com.urbanairship.presentation_options";
 
-@interface UrbanAirshipReactModule()
-@property(nonatomic, strong) NSMutableDictionary *pendingEvents;
-@property (nonatomic, copy) NSString *deepLink;
-@end
-
 @implementation UrbanAirshipReactModule
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.pendingEvents = [NSMutableDictionary dictionary];
-
-        if ([UAirship push].launchNotificationResponse) {
-            self.pendingEvents[UARCTNotificationResponseEvent] = [self eventBodyForNotificationResponse:[UAirship push].launchNotificationResponse];
-        }
-
-        [self registerDeepLinkEvent];
-    }
-
-    return self;
-}
 
 #pragma mark -
 #pragma mark Module setup
 
 RCT_EXPORT_MODULE();
-
-- (dispatch_queue_t)methodQueue {
-    return dispatch_get_main_queue();
-}
-
-- (void)setBridge:(RCTBridge *)bridge {
-    [UARCTEventEmitter shared].bridge = bridge;
-}
-
-- (RCTBridge *)bridge {
-    return [UARCTEventEmitter shared].bridge;
-}
 
 #pragma mark -
 #pragma mark Module methods
@@ -274,190 +236,6 @@ RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {
 
     [UAirship push].defaultPresentationOptions = presentationOptions;
     [[NSUserDefaults standardUserDefaults] setInteger:presentationOptions forKey:PresentationOptions];
-}
-
-#pragma mark -
-#pragma mark Events
-
-- (void)startObserving {
-    [UAirship push].registrationDelegate = self;
-    [UAirship push].pushNotificationDelegate = self;
-
-    for (NSString *event in self.pendingEvents) {
-        [self sendEventWithName:event body:self.pendingEvents[event]];
-    }
-
-    [self.pendingEvents removeAllObjects];
-}
-
-- (void)stopObserving {
-    [UAirship push].registrationDelegate = nil;
-    [UAirship push].pushNotificationDelegate = nil;
-
-}
-
-- (NSArray<NSString *> *)supportedEvents {
-    return @[UARCTRegistrationEvent, UARCTPushReceivedEvent, UARCTNotificationResponseEvent, UARCTDeepLinkEvent];
-}
-
-- (void)registerDeepLinkEvent {
-    __weak UrbanAirshipReactModule *weakSelf = self;
-    UAAction *customDLA = [UAAction actionWithBlock: ^(UAActionArguments *args, UAActionCompletionHandler handler)  {
-        if ([args.value isKindOfClass:[NSURL class]]) {
-            weakSelf.deepLink = [args.value absoluteString];
-        } else {
-            weakSelf.deepLink = args.value;
-        }
-
-        NSDictionary *data;
-        data = @{ @"deepLink":weakSelf.deepLink};
-
-        // Send DL event
-        [self sendEventWithName:UARCTDeepLinkEvent body:data];
-
-        handler([UAActionResult resultWithValue:args.value]);
-    } acceptingArguments:^BOOL(UAActionArguments *arg)  {
-        if (arg.situation == UASituationBackgroundPush || arg.situation == UASituationBackgroundInteractiveButton) {
-            return NO;
-        }
-
-        return [arg.value isKindOfClass:[NSURL class]] || [arg.value isKindOfClass:[NSString class]];
-    }];
-
-    [[UAirship shared].actionRegistry updateAction:customDLA forEntryWithName:kUADeepLinkActionDefaultRegistryName];
-}
-
-#pragma mark -
-#pragma mark UAPushDelegate
-
--(void)receivedForegroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)())completionHandler {
-    [self sendEventWithName:UARCTPushReceivedEvent body:[self eventBodyForNotificationContent:notificationContent]];
-    completionHandler();
-}
-
--(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [self sendEventWithName:UARCTPushReceivedEvent body:[self eventBodyForNotificationContent:notificationContent]];
-    completionHandler(UIBackgroundFetchResultNoData);
-}
-
--(void)receivedNotificationResponse:(UANotificationResponse *)notificationResponse completionHandler:(void (^)())completionHandler {
-    // Ignore dismisses for now
-    if ([notificationResponse.actionIdentifier isEqualToString:UANotificationDismissActionIdentifier]) {
-        completionHandler();
-        return;
-    }
-    [self sendEventWithName:UARCTNotificationResponseEvent body:[self eventBodyForNotificationResponse:notificationResponse]];
-    completionHandler();
-}
-
-- (UNNotificationPresentationOptions)presentationOptionsForNotification:(UNNotification *)notification {
-    return (UNNotificationPresentationOptions)[[NSUserDefaults standardUserDefaults] objectForKey:PresentationOptions];
-}
-
-#pragma mark -
-#pragma mark UARegistrationDelegate
-
-- (void)registrationSucceededForChannelID:(NSString *)channelID deviceToken:(NSString *)deviceToken {
-    NSMutableDictionary *registrationBody = [NSMutableDictionary dictionary];
-    [registrationBody setValue:channelID forKey:@"channel"];
-    [registrationBody setValue:deviceToken forKey:@"registrationToken"];
-    [self sendEventWithName:UARCTRegistrationEvent body:registrationBody];
-}
-
-- (void)notificationAuthorizedOptionsDidChange:(UANotificationOptions)options {
-    NSMutableDictionary *authOptionsBody = [NSMutableDictionary dictionary];
-
-    BOOL optedIn = NO;
-
-    if (options & (UANotificationOptionAlert | UANotificationOptionBadge | UANotificationOptionSound)) {
-        optedIn = YES;
-    }
-
-    [authOptionsBody setValue:@(options) forKey:@"options"];
-    [authOptionsBody setValue:@(optedIn) forKey:@"optedIn"];
-
-    [self sendEventWithName:UARCTRegistrationEvent body:authOptionsBody];
-}
-
-#pragma mark -
-#pragma mark Helper methods
-
-- (NSMutableDictionary *)eventBodyForNotificationResponse:(UANotificationResponse *)notificationResponse {
-    NSMutableDictionary *body = [self eventBodyForNotificationContent:notificationResponse.notificationContent];
-
-
-    if ([notificationResponse.actionIdentifier isEqualToString:UANotificationDefaultActionIdentifier]) {
-        [body setValue:@(YES) forKey:@"isForeground"];
-    } else {
-        [body setValue:notificationResponse.actionIdentifier forKey:@"actionId"];
-
-
-        UANotificationAction *notificationAction = [self notificationActionForCategory:notificationResponse.notificationContent.categoryIdentifier
-                                                                      actionIdentifier:notificationResponse.actionIdentifier];
-
-        BOOL isForeground = notificationAction.options & UNNotificationActionOptionForeground;
-        [body setValue:@(isForeground) forKey:@"isForeground"];
-    }
-
-    return body;
-}
-
-- (NSMutableDictionary *)eventBodyForNotificationContent:(UANotificationContent *)content {
-    NSMutableDictionary *pushBody = [NSMutableDictionary dictionary];
-    [pushBody setValue:content.alertBody forKey:@"alert"];
-    [pushBody setValue:content.alertTitle forKey:@"title"];
-
-    // remove extraneous key/value pairs
-    NSMutableDictionary *extras = [NSMutableDictionary dictionaryWithDictionary:content.notificationInfo];
-
-    if([[extras allKeys] containsObject:@"aps"]) {
-        [extras removeObjectForKey:@"aps"];
-    }
-
-    if([[extras allKeys] containsObject:@"_"]) {
-        [extras removeObjectForKey:@"_"];
-    }
-
-    if (extras.count) {
-        [pushBody setValue:extras forKey:@"extras"];
-    }
-
-    return pushBody;
-}
-
-- (UANotificationAction *)notificationActionForCategory:(NSString *)category actionIdentifier:(NSString *)identifier {
-    NSSet *categories = [UAirship push].combinedCategories;
-
-    UANotificationCategory *notificationCategory;
-    UANotificationAction *notificationAction;
-
-    for (UANotificationCategory *possibleCategory in categories) {
-        if ([possibleCategory.identifier isEqualToString:category]) {
-            notificationCategory = possibleCategory;
-            break;
-        }
-    }
-
-    if (!notificationCategory) {
-        UA_LERR(@"Unknown notification category identifier %@", category);
-        return nil;
-    }
-
-    NSMutableArray *possibleActions = [NSMutableArray arrayWithArray:notificationCategory.actions];
-
-    for (UANotificationAction *possibleAction in possibleActions) {
-        if ([possibleAction.identifier isEqualToString:identifier]) {
-            notificationAction = possibleAction;
-            break;
-        }
-    }
-    
-    if (!notificationAction) {
-        UA_LERR(@"Unknown notification action identifier %@", identifier);
-        return nil;
-    }
-    
-    return notificationAction;
 }
 
 @end

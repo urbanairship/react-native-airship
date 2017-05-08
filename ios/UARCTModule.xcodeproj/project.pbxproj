@@ -10,6 +10,7 @@
 		6E42C7AF1EBA953100C85B3A /* UARCTAutopilot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C7AC1EBA953100C85B3A /* UARCTAutopilot.m */; };
 		6E42C7B01EBA953100C85B3A /* UrbanAirshipReactModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C7AE1EBA953100C85B3A /* UrbanAirshipReactModule.m */; };
 		6E42C8551EC0DD0900C85B3A /* UARCTEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */; };
+		99B8E2CC1EC14020003FA382 /* UARCTDeepLinkEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E2CB1EC14020003FA382 /* UARCTDeepLinkEvent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,8 @@
 		6E42C8531EC0DD0900C85B3A /* UARCTEventEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UARCTEventEmitter.h; path = UARCTModule/UARCTEventEmitter.h; sourceTree = "<group>"; };
 		6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UARCTEventEmitter.m; path = UARCTModule/UARCTEventEmitter.m; sourceTree = "<group>"; };
 		6E4D17C21EBA7FAA0032DED3 /* libUARCTModule.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUARCTModule.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		99B8E2CA1EC14020003FA382 /* UARCTDeepLinkEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UARCTDeepLinkEvent.h; sourceTree = "<group>"; };
+		99B8E2CB1EC14020003FA382 /* UARCTDeepLinkEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UARCTDeepLinkEvent.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +55,8 @@
 				6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */,
 				6E42C7AB1EBA953100C85B3A /* UARCTAutopilot.h */,
 				6E42C7AC1EBA953100C85B3A /* UARCTAutopilot.m */,
+				99B8E2CA1EC14020003FA382 /* UARCTDeepLinkEvent.h */,
+				99B8E2CB1EC14020003FA382 /* UARCTDeepLinkEvent.m */,
 				6E42C7AD1EBA953100C85B3A /* UrbanAirshipReactModule.h */,
 				6E42C7AE1EBA953100C85B3A /* UrbanAirshipReactModule.m */,
 			);
@@ -139,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99B8E2CC1EC14020003FA382 /* UARCTDeepLinkEvent.m in Sources */,
 				6E42C7AF1EBA953100C85B3A /* UARCTAutopilot.m in Sources */,
 				6E42C8551EC0DD0900C85B3A /* UARCTEventEmitter.m in Sources */,
 				6E42C7B01EBA953100C85B3A /* UrbanAirshipReactModule.m in Sources */,

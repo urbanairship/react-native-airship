@@ -3,6 +3,7 @@
 #import <UIKit/UIKit.h>
 #import "UARCTAutopilot.h"
 #import "UARCTEventEmitter.h"
+#import "UARCTDeepLinkEvent.h"
 
 #import "AirshipLib.h"
 
@@ -18,6 +19,11 @@
 
     [UAirship push].pushNotificationDelegate = [UARCTEventEmitter shared];
     [UAirship push].registrationDelegate = [UARCTEventEmitter shared];
+
+    // Register custom deep link action
+    UARCTDeepLinkEvent *dle = [[UARCTDeepLinkEvent alloc] init];
+    [[UAirship shared].actionRegistry updateAction:dle forEntryWithName:kUADeepLinkActionDefaultRegistryName];
+    dle.deepLinkDelegate = [UARCTEventEmitter shared];
 }
 
 @end

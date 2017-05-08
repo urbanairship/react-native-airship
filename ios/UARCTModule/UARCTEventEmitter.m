@@ -9,15 +9,14 @@
 @property(readonly) BOOL isObserving;
 @end
 
-NSString *const UARCTRegistrationEvent = @"com.urbanairship.registration";
-NSString *const UARCTNotificationResponseEvent = @"com.urbanairship.notification_response";
-NSString *const UARCTPushReceivedEvent= @"com.urbanairship.push_received";
-
+NSString *const UARCTRegistrationEventName = @"com.urbanairship.registration";
+NSString *const UARCTNotificationResponseEventName = @"com.urbanairship.notification_response";
+NSString *const UARCTPushReceivedEventName= @"com.urbanairship.push_received";
+NSString *const UARCTDeepLinkEventName = @"com.urbanairship.deep_link";
 
 @implementation UARCTEventEmitter
 
 static UARCTEventEmitter *sharedEventEmitter_;
-
 
 + (void)load {
     sharedEventEmitter_ = [[UARCTEventEmitter alloc] init];
@@ -31,6 +30,10 @@ static UARCTEventEmitter *sharedEventEmitter_;
     self = [super init];
     if (self) {
         self.pendingEvents = [NSMutableArray array];
+
+        if ([UAirship push].launchNotificationResponse) {
+            [self.pendingEvents addObject:[self eventBodyForNotificationResponse:[UAirship push].launchNotificationResponse]];
+        }
     }
 
     return self;
@@ -69,16 +72,22 @@ static UARCTEventEmitter *sharedEventEmitter_;
 }
 
 #pragma mark -
+#pragma mark UARCTDeepLinkDelegate
+
+-(void)deepLinkReceived:(NSDictionary *)data {
+    [self sendEventWithName:UARCTDeepLinkEventName body:data];
+}
+
+#pragma mark -
 #pragma mark UAPushDelegate
 
 -(void)receivedForegroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)())completionHandler {
-    [self sendEventWithName:UARCTPushReceivedEvent body:[self eventBodyForNotificationContent:notificationContent]];
+    [self sendEventWithName:UARCTPushReceivedEventName body:[self eventBodyForNotificationContent:notificationContent]];
     completionHandler();
 }
 
-
 -(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [self sendEventWithName:UARCTPushReceivedEvent body:[self eventBodyForNotificationContent:notificationContent]];
+    [self sendEventWithName:UARCTPushReceivedEventName body:[self eventBodyForNotificationContent:notificationContent]];
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
@@ -91,8 +100,8 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
     NSDictionary *body = [self eventBodyForNotificationResponse:notificationResponse];
 
-    if (![self sendEventWithName:UARCTNotificationResponseEvent body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEvent, @"body": body }];
+    if (![self sendEventWithName:UARCTNotificationResponseEventName body:body]) {
+        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEventName, @"body": body }];
     }
 
     completionHandler();
@@ -106,7 +115,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
     NSMutableDictionary *registrationBody = [NSMutableDictionary dictionary];
     [registrationBody setValue:channelID forKey:@"channel"];
     [registrationBody setValue:deviceToken forKey:@"registrationToken"];
-    [self sendEventWithName:UARCTRegistrationEvent body:registrationBody];
+    [self sendEventWithName:UARCTRegistrationEventName body:registrationBody];
 }
 
 #pragma mark -
