@@ -3,6 +3,6 @@
 #import <React/RCTEventEmitter.h>
 #import "AirshipLib.h"
 
-@interface UrbanAirshipReactModule : RCTEventEmitter <UAPushNotificationDelegate, UARegistrationDelegate>
+@interface UrbanAirshipReactModule : NSObject <RCTBridgeModule>
 
 @end
