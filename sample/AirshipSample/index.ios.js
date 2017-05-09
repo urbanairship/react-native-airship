@@ -1,72 +1,9 @@
 /**
  * Sample React Native App
- * https://github.com/facebook/react-native
  * @flow
  */
 
- import {
-   UrbanAirship,
-   UACustomEvent,
- } from 'urbanairship-react-native'
+import React, { AppRegistry } from 'react-native';
+import AirshipSample from './app'
 
-import React, { Component } from 'react';
-
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
-
-export default class AirshipSample extends Component {
-  constructor(props) {
-    super(props);
-    UrbanAirship.setUserNotificationsEnabled(true);
-  }
-
-  componentWillMount() {
-        // add handler to handle all incoming notifications
-    UrbanAirship.addListener("notificationResponse", (notification) => {
-      console.log('notification:', response.notification.alert);
-      alert(response.notification.alert);
-    });
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
-
-AppRegistry.registerComponent('AirshipSample', () => AirshipSample);
+AppRegistry.registerComponent('AirshipSample', () => AirshipSample)
