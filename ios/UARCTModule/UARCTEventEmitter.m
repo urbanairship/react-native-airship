@@ -9,15 +9,19 @@
 @property(readonly) BOOL isObserving;
 @end
 
-NSString *const UARCTRegistrationEvent = @"com.urbanairship.registration";
-NSString *const UARCTNotificationResponseEvent = @"com.urbanairship.notification_response";
-NSString *const UARCTPushReceivedEvent= @"com.urbanairship.push_received";
+NSString *const UARCTRegistrationEventName = @"com.urbanairship.registration";
+NSString *const UARCTNotificationResponseEventName = @"com.urbanairship.notification_response";
+NSString *const UARCTPushReceivedEventName= @"com.urbanairship.push_received";
+NSString *const UARCTDeepLinkEventName = @"com.urbanairship.deep_link";
+NSString *const UARCTOptInStatusChangedEventName = @"com.urbanairship.notification_opt_in_status";
 
+NSString *const NotificationPresentationAlertKey = @"alert";
+NSString *const NotificationPresentationBadgeKey = @"badge";
+NSString *const NotificationPresentationSoundKey = @"sound";
 
 @implementation UARCTEventEmitter
 
 static UARCTEventEmitter *sharedEventEmitter_;
-
 
 + (void)load {
     sharedEventEmitter_ = [[UARCTEventEmitter alloc] init];
@@ -69,16 +73,24 @@ static UARCTEventEmitter *sharedEventEmitter_;
 }
 
 #pragma mark -
+#pragma mark UARCTDeepLinkDelegate
+
+-(void)deepLinkReceived:(NSString *)deepLink {
+    if ([self sendEventWithName:UARCTDeepLinkEventName body:deepLink]) {
+        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEventName, @"body": deepLink}];
+    }
+}
+
+#pragma mark -
 #pragma mark UAPushDelegate
 
 -(void)receivedForegroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)())completionHandler {
-    [self sendEventWithName:UARCTPushReceivedEvent body:[self eventBodyForNotificationContent:notificationContent]];
+    [self sendEventWithName:UARCTPushReceivedEventName body:[self eventBodyForNotificationContent:notificationContent]];
     completionHandler();
 }
 
-
 -(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [self sendEventWithName:UARCTPushReceivedEvent body:[self eventBodyForNotificationContent:notificationContent]];
+    [self sendEventWithName:UARCTPushReceivedEventName body:[self eventBodyForNotificationContent:notificationContent]];
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
@@ -91,13 +103,12 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
     NSDictionary *body = [self eventBodyForNotificationResponse:notificationResponse];
 
-    if (![self sendEventWithName:UARCTNotificationResponseEvent body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEvent, @"body": body }];
+    if (![self sendEventWithName:UARCTNotificationResponseEventName body:body]) {
+        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEventName, @"body": body }];
     }
 
     completionHandler();
 }
-
 
 #pragma mark -
 #pragma mark UARegistrationDelegate
@@ -106,12 +117,37 @@ static UARCTEventEmitter *sharedEventEmitter_;
     NSMutableDictionary *registrationBody = [NSMutableDictionary dictionary];
     [registrationBody setValue:channelID forKey:@"channel"];
     [registrationBody setValue:deviceToken forKey:@"registrationToken"];
-    [self sendEventWithName:UARCTRegistrationEvent body:registrationBody];
+    [self sendEventWithName:UARCTRegistrationEventName body:registrationBody];
+}
+
+- (void)notificationAuthorizedOptionsDidChange:(UANotificationOptions)options {
+    BOOL optedIn = NO;
+
+    BOOL alertBool = NO;
+    BOOL badgeBool = NO;
+    BOOL soundBool = NO;
+
+    if (options & UANotificationOptionAlert) {
+        alertBool = YES;
+    }
+
+    if (options & UANotificationOptionBadge) {
+        badgeBool = YES;
+    }
+
+    if (options & UANotificationOptionSound) {
+        soundBool = YES;
+    }
+
+    optedIn = alertBool || badgeBool || soundBool;
+
+    NSDictionary *body = @{@"body": @{ @"optIn": @(optedIn), @"notificationOptions" : @{ @"alert" : @(alertBool), @"badge" : @(badgeBool), @"sound" : @(soundBool)}}};
+
+    [self sendEventWithName:UARCTOptInStatusChangedEventName body:body];
 }
 
 #pragma mark -
 #pragma mark Helper methods
-
 
 - (NSMutableDictionary *)eventBodyForNotificationResponse:(UANotificationResponse *)notificationResponse {
     NSMutableDictionary *body = [self eventBodyForNotificationContent:notificationResponse.notificationContent];

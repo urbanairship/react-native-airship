@@ -3,8 +3,11 @@
 #import <UIKit/UIKit.h>
 #import "UARCTAutopilot.h"
 #import "UARCTEventEmitter.h"
+#import "UARCTDeepLinkAction.h"
 
 #import "AirshipLib.h"
+
+NSString *const PresentationOptions = @"com.urbanairship.presentation_options";
 
 @implementation UARCTAutopilot
 
@@ -18,6 +21,18 @@
 
     [UAirship push].pushNotificationDelegate = [UARCTEventEmitter shared];
     [UAirship push].registrationDelegate = [UARCTEventEmitter shared];
+
+    // Register custom deep link action
+    UARCTDeepLinkAction *dle = [[UARCTDeepLinkAction alloc] init];
+    [[UAirship shared].actionRegistry updateAction:dle forEntryWithName:kUADeepLinkActionDefaultRegistryName];
+    dle.deepLinkDelegate = [UARCTEventEmitter shared];
+
+    UNNotificationPresentationOptions presentationOptions = (UNNotificationPresentationOptions)[[NSUserDefaults standardUserDefaults] valueForKey:PresentationOptions];
+
+    if (presentationOptions) {
+        [[UAirship push] setDefaultPresentationOptions:presentationOptions];
+    }
+
 }
 
 @end
