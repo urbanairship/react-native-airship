@@ -4,7 +4,7 @@
   "description": "Urban Airship plugin for React Native apps.",
   "main": "./js/index.js",
   "author": "Urban Airship",
-  "homepage": "https://github.com/urbanairship/react-native",
+  "homepage": "https://github.com/urbanairship/react-native-module",
   "keywords": [
     "react",
     "react-native",
@@ -15,7 +15,7 @@
   ],
   "repository": {
    "type": "git",
-   "url": "git+https://github.com/urbanairship/react-native.git"
+   "url": "git+https://github.com/urbanairship/react-native-module.git"
  },
   "license": "Apache-2.0"
 }
