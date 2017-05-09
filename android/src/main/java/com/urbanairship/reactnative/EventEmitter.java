@@ -27,13 +27,13 @@ class EventEmitter {
     private static final String NOTIFICATION_OPT_IN_STATUS_EVENT = "com.urbanairship.notification_opt_in_status";
     private static final String DEEP_LINK_EVENT = "com.urbanairship.deep_link";
 
-
     private static final String PUSH_ALERT = "alert";
     private static final String PUSH_TITLE = "title";
     private static final String PUSH_EXTRAS = "extras";
 
     private static final String RESPONSE_ACTION_ID = "actionId";
     private static final String RESPONSE_FOREGROUND = "isForeground";
+    private static final String RESPONSE_NOTIFICATION = "notification";
 
 
     private static final String CHANNEL_ID = "channelId";
@@ -70,7 +70,8 @@ class EventEmitter {
     }
 
     void notifyNotificationResponse(AirshipReceiver.NotificationInfo notificationInfo, AirshipReceiver.ActionButtonInfo info) {
-        WritableMap map = createPushMap(notificationInfo.getMessage());
+        WritableMap map = Arguments.createMap();
+        map.putMap(RESPONSE_NOTIFICATION, createPushMap(notificationInfo.getMessage()));
         map.putString(RESPONSE_ACTION_ID, info.getButtonId());
         map.putBoolean(RESPONSE_FOREGROUND, info.isForeground());
 

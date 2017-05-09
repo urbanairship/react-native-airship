@@ -150,20 +150,18 @@ static UARCTEventEmitter *sharedEventEmitter_;
 #pragma mark Helper methods
 
 - (NSMutableDictionary *)eventBodyForNotificationResponse:(UANotificationResponse *)notificationResponse {
-    NSMutableDictionary *body = [self eventBodyForNotificationContent:notificationResponse.notificationContent];
-
+    NSMutableDictionary *body = [NSMutableDictionary dictionary];
+    [body setValue:[self eventBodyForNotificationContent:notificationResponse.notificationContent] forKey:@"notification"];
 
     if ([notificationResponse.actionIdentifier isEqualToString:UANotificationDefaultActionIdentifier]) {
         [body setValue:@(YES) forKey:@"isForeground"];
     } else {
-        [body setValue:notificationResponse.actionIdentifier forKey:@"actionId"];
-
-
         UANotificationAction *notificationAction = [self notificationActionForCategory:notificationResponse.notificationContent.categoryIdentifier
                                                                       actionIdentifier:notificationResponse.actionIdentifier];
-
         BOOL isForeground = notificationAction.options & UNNotificationActionOptionForeground;
+
         [body setValue:@(isForeground) forKey:@"isForeground"];
+        [body setValue:notificationResponse.actionIdentifier forKey:@"actionId"];
     }
 
     return body;
@@ -173,7 +171,6 @@ static UARCTEventEmitter *sharedEventEmitter_;
     NSMutableDictionary *pushBody = [NSMutableDictionary dictionary];
     [pushBody setValue:content.alertBody forKey:@"alert"];
     [pushBody setValue:content.alertTitle forKey:@"title"];
-
 
     // remove extraneous key/value pairs
     NSMutableDictionary *extras = [NSMutableDictionary dictionaryWithDictionary:content.notificationInfo];
@@ -224,7 +221,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
         UA_LERR(@"Unknown notification action identifier %@", identifier);
         return nil;
     }
-    
+
     return notificationAction;
 }
 
