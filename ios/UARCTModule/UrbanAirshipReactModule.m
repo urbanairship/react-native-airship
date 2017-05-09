@@ -3,7 +3,7 @@
 #import "UrbanAirshipReactModule.h"
 #import "AirshipLib.h"
 #import "UARCTEventEmitter.h"
-#import "UARCTDeepLinkEvent.h"
+#import "UARCTDeepLinkAction.h"
 
 NSString *const NotificationPresentationAlertKey = @"alert";
 NSString *const NotificationPresentationBadgeKey = @"badge";
@@ -17,6 +17,18 @@ NSString *const PresentationOptions = @"com.urbanairship.presentation_options";
 #pragma mark Module setup
 
 RCT_EXPORT_MODULE();
+
+- (dispatch_queue_t)methodQueue {
+    return dispatch_get_main_queue();
+}
+
+- (void)setBridge:(RCTBridge *)bridge {
+    [UARCTEventEmitter shared].bridge = bridge;
+}
+
+- (RCTBridge *)bridge {
+    return [UARCTEventEmitter shared].bridge;
+}
 
 #pragma mark -
 #pragma mark Module methods
@@ -95,8 +107,8 @@ RCT_REMAP_METHOD(getChannelId,
 }
 
 RCT_REMAP_METHOD(associateIdentifier,
-                 identifier:(NSString *)identifier
-                 key:(NSString *)key) {
+                 key:(NSString *)key
+                 identifier:(NSString *)identifier) {
     UAAssociatedIdentifiers *identifiers = [[UAirship shared].analytics currentAssociatedDeviceIdentifiers];
     [identifiers setIdentifier:identifier forKey:key];
     [[UAirship shared].analytics associateDeviceIdentifiers:identifiers];

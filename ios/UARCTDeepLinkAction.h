@@ -4,11 +4,11 @@
 
 @protocol UARCTDeepLinkDelegate
 
-- (void)deepLinkReceived:(NSDictionary *)data;
+- (void)deepLinkReceived:(NSString *)deepLink;
 
 @end
 
-@interface UARCTDeepLinkEvent : UAAction
+@interface UARCTDeepLinkAction : UAAction
 
 @property (nonatomic, weak) id<UARCTDeepLinkDelegate> deepLinkDelegate;
 

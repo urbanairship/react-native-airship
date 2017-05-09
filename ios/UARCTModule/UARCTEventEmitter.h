@@ -3,7 +3,7 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTEventEmitter.h>
 #import "AirshipLib.h"
-#import "UARCTDeepLinkEvent.h"
+#import "UARCTDeepLinkAction.h"
 
 @interface UARCTEventEmitter : NSObject <UARCTDeepLinkDelegate, UAPushNotificationDelegate, UARegistrationDelegate>
 

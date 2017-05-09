@@ -1,8 +1,8 @@
 /* Copyright 2017 Urban Airship and Contributors */
 
-#import "UARCTDeepLinkEvent.h"
+#import "UARCTDeepLinkAction.h"
 
-@implementation UARCTDeepLinkEvent
+@implementation UARCTDeepLinkAction
 
 - (BOOL)acceptsArguments:(UAActionArguments *)arguments {
     if (arguments.situation == UASituationBackgroundPush || arguments.situation == UASituationBackgroundInteractiveButton) {
@@ -23,11 +23,8 @@
         deepLink = arguments.value;
     }
 
-    NSDictionary *data;
-    data = @{@"deepLink":deepLink};
-
     // Send DL event
-    [self.deepLinkDelegate deepLinkReceived:data];
+    [self.deepLinkDelegate deepLinkReceived:deepLink];
 
     completionHandler([UAActionResult resultWithValue:arguments.value]);
 }
