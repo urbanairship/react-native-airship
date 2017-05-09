@@ -27,11 +27,11 @@ export default class AirshipSample extends Component {
 
   componentWillMount() {
         // add handler to handle all incoming notifications
-        UrbanAirship.addListener("notificationResponse", (notification) => {
-            console.log('notification:', notification.alert);
-            alert(notification.alert);
-        });
-      }
+    UrbanAirship.addListener("notificationResponse", (notification) => {
+      console.log('notification:', response.notification.alert);
+      alert(response.notification.alert);
+    });
+  }
 
 
   render() {
