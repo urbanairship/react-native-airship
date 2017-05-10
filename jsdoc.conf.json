@@ -2,9 +2,10 @@
   "source": {
     "include": ["./js"]
   },
-  
+
   "opts": {
-    "template": "node_modules/minami"
+    "template": "node_modules/minami",
+    "readme": "README.md"
   },
 
   "plugins": ["./node_modules/jsdoc-babel"],

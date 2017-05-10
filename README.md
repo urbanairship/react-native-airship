@@ -10,7 +10,7 @@ A React Native module for Urban Airship's iOS and Android SDK.
 ### Contributing Code
 
 We accept pull requests! If you would like to submit a pull request, please fill out and submit a
-[Code Contribution Agreement](https://docs.urbanairship.com/contribution-agreement.html).
+[Code Contribution Agreement](https://docs.urbanairship.com/contribution-agreement/).
 
 ### Issues
 
