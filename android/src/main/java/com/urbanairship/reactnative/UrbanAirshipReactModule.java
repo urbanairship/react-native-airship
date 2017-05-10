@@ -2,9 +2,14 @@
 
 package com.urbanairship.reactnative;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.os.AsyncTaskCompat;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
@@ -15,8 +20,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableMapKeySetIterator;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
@@ -24,23 +27,22 @@ import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
 import com.urbanairship.analytics.AssociatedIdentifiers;
-import com.urbanairship.json.JsonMap;
-import com.urbanairship.json.JsonValue;
 import com.urbanairship.push.TagGroupsEditor;
 
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
 import static com.urbanairship.actions.ActionResult.STATUS_EXECUTION_ERROR;
 import static com.urbanairship.actions.ActionResult.STATUS_REJECTED_ARGUMENTS;
+import static com.urbanairship.reactnative.Utils.convertDynamic;
+import static com.urbanairship.reactnative.Utils.convertJsonValue;
 
 public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
-
-
+    
     private static final String SHARED_PREFERENCES_FILE = "com.urbanairship.reactnative";
     private static final String NOTIFICATIONS_OPT_IN_KEY = "NOTIFICATIONS_OPT_IN_KEY";
 
@@ -51,8 +53,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String TAG_OPERATION_ADD = "add";
     private static final String TAG_OPERATION_REMOVE = "remove";
 
-
-
+    private static final String QUIET_TIME_START_HOUR = "startHour";
+    private static final String QUIET_TIME_START_MINUTE = "startMinute";
+    private static final String QUIET_TIME_END_HOUR = "endHour";
+    private static final String QUIET_TIME_END_MINUTE = "endMinute";
 
     public UrbanAirshipReactModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -171,7 +175,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setLocationEnabled(boolean enabled) {
-        UAirship.shared().getLocationManager().setLocationUpdatesEnabled(enabled);
+        if (enabled && shouldRequestLocationPermissions()) {
+            RequestPermissionsTask task = new RequestPermissionsTask(getReactApplicationContext(), new RequestPermissionsTask.Callback() {
+                @Override
+                public void onResult(boolean enabled) {
+                    if (enabled) {
+                        UAirship.shared().getLocationManager().setLocationUpdatesEnabled(true);
+                    }
+                }
+            });
+
+            AsyncTaskCompat.executeParallel(task, Manifest.permission.ACCESS_COARSE_LOCATION,  Manifest.permission.ACCESS_FINE_LOCATION);
+        } else {
+            UAirship.shared().getLocationManager().setLocationUpdatesEnabled(enabled);
+        }
     }
 
     @ReactMethod
@@ -218,6 +235,63 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 });
     }
 
+    @ReactMethod
+    public void setQuietTime(ReadableMap map) {
+        Calendar start = new GregorianCalendar();
+        Calendar end = new GregorianCalendar();
+
+        int startHour = map.hasKey(QUIET_TIME_START_HOUR) ? map.getInt(QUIET_TIME_START_HOUR) : 0;
+        int startMinute = map.hasKey(QUIET_TIME_START_MINUTE) ? map.getInt(QUIET_TIME_START_MINUTE) : 0;
+
+        int endHour = map.hasKey(QUIET_TIME_END_HOUR) ? map.getInt(QUIET_TIME_END_HOUR) : 0;
+        int endMinute = map.hasKey(QUIET_TIME_END_MINUTE) ? map.getInt(QUIET_TIME_END_MINUTE) : 0;
+
+        start.set(Calendar.HOUR_OF_DAY, startHour);
+        start.set(Calendar.MINUTE, startMinute);
+        end.set(Calendar.HOUR_OF_DAY, endHour);
+        end.set(Calendar.MINUTE, endMinute);
+        UAirship.shared().getPushManager().setQuietTimeInterval(start.getTime(), end.getTime());
+    }
+
+    @ReactMethod
+    public void getQuietTime(Promise promise) {
+        Date[] quietTime = UAirship.shared().getPushManager().getQuietTimeInterval();
+
+        int startHour = 0;
+        int startMinute = 0;
+        int endHour = 0;
+        int endMinute = 0;
+
+        if (quietTime != null) {
+            Calendar start = new GregorianCalendar();
+            Calendar end = new GregorianCalendar();
+            start.setTime(quietTime[0]);
+            end.setTime(quietTime[1]);
+
+            startHour = start.get(Calendar.HOUR_OF_DAY);
+            startMinute = start.get(Calendar.MINUTE);
+            endHour = end.get(Calendar.HOUR_OF_DAY);
+            endMinute = end.get(Calendar.MINUTE);
+        }
+
+        WritableMap map = Arguments.createMap();
+        map.putInt(QUIET_TIME_START_HOUR, startHour);
+        map.putInt(QUIET_TIME_START_MINUTE, startMinute);
+        map.putInt(QUIET_TIME_END_HOUR, endHour);
+        map.putInt(QUIET_TIME_END_MINUTE, endMinute);
+
+        promise.resolve(map);
+    }
+
+    @ReactMethod
+    public void setQuietTimeEnabled(Boolean enabled) {
+        UAirship.shared().getPushManager().setQuietTimeEnabled(enabled);
+    }
+
+    @ReactMethod
+    public void isQuietTimeEnabled(Promise promise) {
+        promise.resolve(UAirship.shared().getPushManager().isQuietTimeEnabled());
+    }
 
     private static void applyTagGroupOperations(TagGroupsEditor editor, ReadableArray operations) {
         for (int i = 0; i < operations.size(); i++) {
@@ -253,145 +327,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
 
-    private static JsonValue convertDynamic(Dynamic object) {
-        if (object == null) {
-            return JsonValue.NULL;
+    private boolean shouldRequestLocationPermissions() {
+        if (Build.VERSION.SDK_INT < 23) {
+            return false;
         }
 
-        switch (object.getType()) {
-            case Null:
-                return JsonValue.NULL;
-
-            case Boolean:
-                return JsonValue.wrapOpt(object.asBoolean());
-
-            case String:
-                return JsonValue.wrapOpt(object.asString());
-
-            case Number:
-                return JsonValue.wrapOpt(object.asDouble());
-
-            case Map:
-                ReadableMap map = object.asMap();
-                JsonMap.Builder mapBuilder = JsonMap.newBuilder();
-
-                ReadableMapKeySetIterator iterator = map.keySetIterator();
-                while (iterator.hasNextKey()) {
-                    String key = iterator.nextKey();
-                    mapBuilder.putOpt(key, convertDynamic(map.getDynamic(key)));
-                }
-
-                return mapBuilder.build().toJsonValue();
-
-            case Array:
-                List<JsonValue> jsonValues = new ArrayList<>();
-                ReadableArray array = object.asArray();
-                for (int i = 0; i < array.size(); i++) {
-                    jsonValues.add(convertDynamic(array.getDynamic(i)));
-                }
-
-                return JsonValue.wrapOpt(jsonValues);
-
-            default:
-                return JsonValue.NULL;
-        }
-    }
-
-
-    private static Object convertJsonValue(JsonValue value) {
-        if (value.isNull()) {
-            return null;
-        }
-
-        if (value.isJsonList()) {
-            WritableArray array = Arguments.createArray();
-            for (JsonValue arrayValue : value.getList()) {
-                if (arrayValue.isNull()) {
-                    array.pushNull();
-                    continue;
-                }
-
-                if (arrayValue.isBoolean()) {
-                    array.pushBoolean(arrayValue.getBoolean(false));
-                    continue;
-                }
-
-                if (arrayValue.isInteger()) {
-                    array.pushInt(arrayValue.getInt(0));
-                    continue;
-                }
-
-                if (arrayValue.isDouble() || arrayValue.isNumber()) {
-                    array.pushDouble(arrayValue.getDouble(0));
-                    continue;
-                }
-
-                if (arrayValue.isString()) {
-                    array.pushString(arrayValue.getString());
-                    continue;
-                }
-
-                if (arrayValue.isJsonList()) {
-                    array.pushArray((WritableArray) convertJsonValue(arrayValue));
-                    continue;
-                }
-
-                if (arrayValue.isJsonMap()) {
-                    array.pushMap((WritableMap) convertJsonValue(arrayValue));
-                    continue;
-                }
-            }
-
-            return array;
-        }
-
-        if (value.isJsonMap()) {
-            WritableMap map = Arguments.createMap();
-            for (Map.Entry<String, JsonValue> entry : value.getMap().entrySet()) {
-
-                String key = entry.getKey();
-                JsonValue mapValue = entry.getValue();
-
-                if (mapValue.isNull()) {
-                    map.putNull(key);
-                    continue;
-                }
-
-                if (mapValue.isBoolean()) {
-                    map.putBoolean(key, mapValue.getBoolean(false));
-                    continue;
-                }
-
-                if (mapValue.isInteger()) {
-                    map.putInt(key, mapValue.getInt(0));
-                    continue;
-                }
-
-                if (mapValue.isDouble() || mapValue.isNumber()) {
-                    map.putDouble(key, mapValue.getDouble(0));
-                    continue;
-                }
-
-                if (mapValue.isString()) {
-                    map.putString(key, mapValue.getString());
-                    continue;
-                }
-
-                if (mapValue.isJsonList()) {
-                    map.putArray(key, (WritableArray) convertJsonValue(mapValue));
-                    continue;
-                }
-
-                if (mapValue.isJsonMap()) {
-                    map.putMap(key, (WritableMap) convertJsonValue(mapValue));
-                    continue;
-                }
-            }
-
-            return map;
-        }
-
-        return value.getValue();
+        return ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED &&
+                ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED;
     }
 }
 

@@ -245,4 +245,64 @@ RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {
     [[NSUserDefaults standardUserDefaults] setInteger:presentationOptions forKey:PresentationOptions];
 }
 
+
+RCT_EXPORT_METHOD(setQuietTimeEnabled:(BOOL)enabled) {
+    [UAirship push].quietTimeEnabled = enabled;
+}
+
+RCT_REMAP_METHOD(isQuietTimeEnabled,
+                 isQuietTimeEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve(@([UAirship push].isQuietTimeEnabled));
+}
+
+
+RCT_REMAP_METHOD(getQuietTime,
+                 getQuietTime_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    NSDictionary *quietTimeDictionary = [UAirship push].quietTime;
+
+    if (quietTimeDictionary) {
+        NSString *start = [quietTimeDictionary objectForKey:@"start"];
+        NSString *end = [quietTimeDictionary objectForKey:@"end"];
+
+        NSDateFormatter *df = [NSDateFormatter new];
+        df.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        df.dateFormat = @"HH:mm";
+
+        NSDate *startDate = [df dateFromString:start];
+        NSDate *endDate = [df dateFromString:end];
+
+        // these will be nil if the dateformatter can't make sense of either string
+        if (startDate && endDate) {
+            NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+            NSDateComponents *startComponents = [gregorian components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:startDate];
+            NSDateComponents *endComponents = [gregorian components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:endDate];
+
+            resolve(@{ @"startHour": @(startComponents.hour),
+                       @"startMinute": @(startComponents.minute),
+                       @"endHour": @(endComponents.hour),
+                       @"endMinute": @(endComponents.minute) });
+
+        }
+    } else {
+        resolve(@{ @"startHour": @(0),
+                   @"startMinute": @(0),
+                   @"endHour": @(0),
+                   @"endMinute": @(0) });
+    }
+
+}
+
+RCT_EXPORT_METHOD(setQuietTime:(NSDictionary *)quietTime) {
+    [[UAirship push] setQuietTimeStartHour:[quietTime[@"startHour"] integerValue]
+                               startMinute:[quietTime[@"startMinute"] integerValue]
+                                   endHour:[quietTime[@"endHour"] integerValue]
+                                 endMinute:[quietTime[@"endMinute"] integerValue]];
+
+    [[UAirship push] updateRegistration];
+}
+
+
 @end

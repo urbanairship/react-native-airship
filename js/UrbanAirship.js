@@ -359,6 +359,49 @@ class UrbanAirship {
     AirshipNotificationEmitter.removeListener(name, listener);
   }
 
+  /**
+     * Sets the quiet time.
+     *
+     * @param {Object} quiteTime The quiet time object.
+     * @param {number} quiteTime.startHour Start hour.
+     * @param {number} quiteTime.startMinute Start minute.
+     * @param {number} quiteTime.endHour End hour.
+     * @param {number} quiteTime.endMinute End minute.
+     */
+  static setQuietTime(quietTime: {startHour?: number, startMinute?: number, endHour?: number, endMinute?: number }) {
+    return UrbanAirshipModule.setQuietTime(quietTime);
+  }
+
+  /**
+   * Returns the quiet time as an object with the following:
+   * "startHour": Number,
+   * "startMinute": Number,
+   * "endHour": Number,
+   * "endMinute": Number
+   *
+   * @return {Promise.Object} A promist with the result.
+   */
+  static getQuietTime(): Promise<Object> {
+    return UrbanAirshipModule.getQuietTime();
+  }
+
+  /**
+   * Enables or disables quiet time.
+   *
+   * @param {boolean} enabled true to enable quiet time, false to disable.
+   */
+  static setQuietTimeEnabled(enabled: boolean) {
+    UrbanAirshipModule.setUserNotificationsEnabled(enabled);
+  }
+
+  /**
+   * Checks if quietTime is enabled or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
+  static isQuietTimeEnabled(): Promise<boolean> {
+    return UrbanAirshipModule.isUserNotificationsEnabled();
+  }
 }
 
 module.exports = UrbanAirship;
