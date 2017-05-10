@@ -2,6 +2,11 @@
 
 A React Native module for Urban Airship's iOS and Android SDK.
 
+### Resources:
+
+* [Getting started guide](http://docs.urbanairship.com/platform/react-native/)
+* [API docs](http://docs.urbanairship.com/reference/libraries/react-native/latest/index.html)
+
 ### Contributing Code
 
 We accept pull requests! If you would like to submit a pull request, please fill out and submit a
