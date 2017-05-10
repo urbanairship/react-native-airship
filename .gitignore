@@ -47,3 +47,6 @@ airshipconfig.properties
 
 # iOS
 AirshipConfig.plist
+
+#jsdoc
+out/

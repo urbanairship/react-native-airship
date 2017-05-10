@@ -1,0 +1,15 @@
+{
+  "source": {
+    "include": ["./js"]
+  },
+  
+  "opts": {
+    "template": "node_modules/minami"
+  },
+
+  "plugins": ["./node_modules/jsdoc-babel"],
+  "babel": {
+    "extensions": ["js", "es6", "jsx" ],
+    "plugins": "transform-flow-strip-types"
+  }
+}
