@@ -19,6 +19,11 @@ const PUSH_RECEIVED_EVENT = "com.urbanairship.push_received";
 const DEEP_LINK_EVENT = "com.urbanairship.deep_link";
 const NOTIFICATION_OPT_IN_STATUS = "com.urbanairship.notification_opt_in_status";
 
+
+
+/**
+ * @private
+ */
 function convertEventEnum(type: UAEventName): ?string {
   if (type === 'notificationResponse') {
     return NOTIFICATION_RESPONSE_EVENT;
@@ -34,66 +39,217 @@ function convertEventEnum(type: UAEventName): ?string {
   return "";
 }
 
+export type UAEventName = $Enum<{
+  notificationResponse: string,
+  pushReceived: string,
+  register: string,
+  deepLink: string,
+  notificationOptInStatus: string
+}>;
+
+
+/**
+ * Fired when a user responds to a notification.
+ *
+ * @event UrbanAirship#notificationResponse
+ * @type {object}
+ * @param {object} notification The notification.
+ * @param {string} notification.alert The notification alert.
+ * @param {string} notification.title The notification title.
+ * @param {object} notification.extras Any push extras.
+ * @param {string=} actionId The ID of the notification action button if available.
+ * @param {boolean} isForeground Will always be true if the user taps the main notification. Otherwise its defined by the notificaiton action button.
+ */
+
+/**
+ * Fired when a push is received.
+ *
+ * @event UrbanAirship#pushReceived
+ * @type {object}
+ * @param {string} alert The notification alert.
+ * @param {string} title The notification title.
+ * @param {object} extras Any push extras.
+ */
+
+/**
+ * Event fired when a new deep link is received.
+ *
+ * @event UrbanAirship#deepLink
+ * @type {object}
+ * @param {string} deepLink The deep link.
+ */
+
+/**
+ * Event fired when a channel registration occurs.
+ *
+ * @event UrbanAirship#register
+ * @type {object}
+ * @param {string} channelID The channel ID.
+ * @param {string} [registrationToken] The registration token.
+ */
+
+/**
+ * Event fired when the user notification opt-in status changes.
+ *
+ * @event UrbanAirship#notificationOptInStatus
+ * @type {object}
+ * @param {boolean} optIn If the user is opted in or not to user notifications.
+ * @param {object} [notificationOptions] iOS only. A map of opted in options.
+ * @param {boolean} notificationOptions.alert If the user is opted into alerts.
+ * @param {boolean} notificationOptions.sound If the user is opted into sounds.
+ * @param {boolean} notificationOptions.badge If the user is opted into badge updates.
+ */
+
+/**
+ * The main Urban Airship API.
+ */
 class UrbanAirship {
+
+  /**
+   * Sets user notifications enabled. The first time user notifications are enabled
+   * on iOS, it will prompt the user for notification permissions.
+   *
+   * @param {boolean} enabled true to enable notifications, false to disable.
+   */
   static setUserNotificationsEnabled(enabled: boolean) {
     UrbanAirshipModule.setUserNotificationsEnabled(enabled);
   }
 
+  /**
+   * Checks if user notifications are enabled or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
   static isUserNotificationsEnabled(): Promise<boolean> {
     return UrbanAirshipModule.isUserNotificationsEnabled();
   }
 
+  /**
+   * Checks if app notifications are enabled or not. Its possible to have `userNotificationsEnabled`
+   * but app notifications being disabled if the user opted out of notifications.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
   static isUserNotificationsOptedIn(): Promise<boolean> {
     return UrbanAirshipModule.isUserNotificationsOptedIn();
   }
 
+  /**
+   * Sets the named user.
+   *
+   * @param {?string} namedUser The named user string or null to clear the named user.
+   */
   static setNamedUser(namedUser: ?string) {
     UrbanAirshipModule.setNamedUser(namedUser);
   }
 
+  /**
+   * Gets the named user.
+   *
+   * @return {Promise.<string>} A promise with the result.
+   */
   static getNamedUser(): Promise<?string> {
     return UrbanAirshipModule.getNamedUser();
   }
 
+  /**
+   * Adds a channel tag.
+   *
+   * @param {string} tag A channel tag.
+   */
   static addTag(tag: string) {
     UrbanAirshipModule.addTag(tag);
   }
 
+  /**
+   * Removes a channel tag.
+   *
+   * @param {string} tag A channel tag.
+   */
   static removeTag(tag: string) {
     UrbanAirshipModule.removeTag(tag);
   }
 
+  /**
+   * Gets the channel tags.
+   *
+   * @return {Promise.<Array>} A promise with the result.
+   */
   static getTags(): Promise<Array<string>> {
     return UrbanAirshipModule.getTags();
   }
 
+  /**
+   * Creates an editor to modify the named user tag groups.
+   *
+   * @return {TagGroupEditor} A tag group editor instance.
+   */
   static editNamedUserTagGroups(): TagGroupEditor {
     return new TagGroupEditor((operations) => {
       UrbanAirshipModule.editNamedUserTagGroups(operations);
     });
   }
+
+  /**
+   * Creates an editor to modify the channel tag groups.
+   *
+   * @return {TagGroupEditor} A tag group editor instance.
+   */
   static editChannelTagGroups(): TagGroupEditor {
     return new TagGroupEditor((operations) => {
       UrbanAirshipModule.editChannelTagGroups(operations);
     });
   }
 
+  /**
+   * Enables or disables analytics.
+   *
+   * Disabling analytics will delete any locally stored events
+   * and prevent any events from uploading. Features that depend on analytics being
+   * enabled may not work properly if it's disabled (reports, region triggers,
+   * location segmentation, push to local time).
+   *
+   * @param {boolean} enabled true to enable notifications, false to disable.
+   */
   static setAnalyticsEnabled(enabled: boolean) {
     UrbanAirshipModule.setAnalyticsEnabled(enabled);
   }
 
+  /**
+   * Checks if analytics is enabled or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
   static isAnalyticsEnabled(): Promise<boolean> {
     return UrbanAirshipModule.isAnalyticsEnabled();
   }
 
+  /**
+   * Gets the channel ID.
+   *
+   * @return {Promise.<string>} A promise with the result.
+   */
   static getChannelId(): Promise<?string> {
     return UrbanAirshipModule.getChannelId();
   }
 
+  /**
+   * Associates an identifier for the Connect data stream.
+   *
+   * @param {string} key The identifier's key.
+   * @param {string} value The identifier's value.
+   */
   static associateIdentifier(key: string, id: ?string) {
     UrbanAirshipModule.associateIdentifier(key, id);
   }
 
+  /**
+   * Adds a custom event.
+   *
+   * @param {UACustomEvent} event The custom event.
+   * @return {Promise.<null, Error>}  A promise that returns null if resolved, or an Error if the
+   * custom event is rejected.
+   */
   static addCustomEvent(event: UACustomEvent): Promise {
     var actionArg = {
       event_name: event._name,
@@ -112,40 +268,95 @@ class UrbanAirship {
         });
   }
 
+  /**
+   * Enables or disables Urban Airship location services.
+   *
+   * @param {boolean} enabled true to enable location, false to disable.
+   */
   static setLocationEnabled(enabled: boolean) {
     UrbanAirshipModule.setLocationEnabled(enabled);
   }
 
+  /**
+   * Allows or disallows location services to continue in the background.
+   *
+   * @param {boolean} allowed true to allow background location, false to disallow.
+   */
   static setBackgroundLocationAllowed(allowed: boolean) {
     UrbanAirshipModule.setBackgroundLocationAllowed(allowed);
   }
 
+  /**
+   * Checks if location is enabled or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
   static isLocationEnabled(): Promise<boolean> {
     return UrbanAirshipModule.isLocationEnabled();
   }
 
+  /**
+   * Checks if background location is allowed or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
   static isBackgroundLocationAllowed(): Promise<boolean> {
     return UrbanAirshipModule.isBackgroundLocationAllowed();
   }
 
+  /**
+   * Runs an Urban Airship action.
+   *
+   * @param {string} name The name of the action.
+   * @param {*} value The action's value.
+   * @return {Promise.<*, Error>}  A promise that returns the action result if the action
+   * successfully runs, or the Error if the action was unable to be run.
+   */
   static runAction(name: string, value: ?any) : Promise<any> {
     return UrbanAirshipModule.runAction(name, value);
   }
 
+  /**
+   * Sets the foregorund presentation options for iOS.
+   *
+   * This method is only supported on iOS >= 10. Android and older iOS devices
+   * will no-op.
+   *
+   * @param {Object} options The a map of options.
+   * @param {boolean} [options.alert=false] True to display an alert when a notification is received in the foreground, otherwise false.
+   * @param {boolean} [options.sound=false] True to play a sound when a notification is received in the foreground, otherwise false.
+   * @param {boolean} [options.badge=false] True to update the badge when a notification is received in the foreground, otherwise false.
+   */
   static setForegroundPresentationOptions(options: { alert?: boolean, badge?: boolean, sound?: boolean}) {
     if (Platform.OS == 'ios') {
       return UrbanAirshipModule.setForegroundPresentationOptions(options);
     }
   }
 
-  static addListener(type: UAEventName, listener: Function): EmitterSubscription {
-    var eventName = convertEventEnum(type);
-    return AirshipNotificationEmitter.addListener(eventName, listener);
+  /**
+   * Adds a listener for an Urban Airship event.
+   *
+   * @param {string} eventName The event name. Either notificationResponse, pushReceived,
+   * register, deepLink, or notificationOptInStatus.
+   * @param {Function} listener The event listner.
+   * @return {EmitterSubscription} An emitter subscription.
+   */
+  static addListener(eventName: UAEventName, listener: Function): EmitterSubscription {
+    var name = convertEventEnum(eventName);
+    return AirshipNotificationEmitter.addListener(name, listener);
   }
 
-  static removeListener(type: AirshipEventName, handler: Function) {
-    var eventName = convertEventEnum(type);
-    AirshipNotificationEmitter.removeListener(eventName, listener);
+  /**
+   * Removes a listener for an Urban Airship event.
+   *
+   * @param {string} eventName The event name. Either notificationResponse, pushReceived,
+   * register, deepLink, or notificationOptInStatus.
+   * @param {Function} listener The event listner.
+   * @return {EmitterSubscription} An emitter subscription.
+   */
+  static removeListener(eventName: AirshipEventName, handler: Function) {
+    var name = convertEventEnum(eventName);
+    AirshipNotificationEmitter.removeListener(name, listener);
   }
 
 }
