@@ -4,12 +4,7 @@
 #import "AirshipLib.h"
 #import "UARCTEventEmitter.h"
 #import "UARCTDeepLinkAction.h"
-
-NSString *const NotificationPresentationAlertKey = @"alert";
-NSString *const NotificationPresentationBadgeKey = @"badge";
-NSString *const NotificationPresentationSoundKey = @"sound";
-
-NSString *const PresentationOptions = @"com.urbanairship.presentation_options";
+#import "UARCTAutopilot.h"
 
 @implementation UrbanAirshipReactModule
 

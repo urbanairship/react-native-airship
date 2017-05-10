@@ -4,4 +4,6 @@
 
 @interface UARCTAutopilot : NSObject
 
+extern NSString *const PresentationOptions;
+
 @end

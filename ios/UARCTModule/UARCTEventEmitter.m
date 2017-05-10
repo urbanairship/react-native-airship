@@ -15,9 +15,9 @@ NSString *const UARCTPushReceivedEventName= @"com.urbanairship.push_received";
 NSString *const UARCTDeepLinkEventName = @"com.urbanairship.deep_link";
 NSString *const UARCTOptInStatusChangedEventName = @"com.urbanairship.notification_opt_in_status";
 
-NSString *const NotificationPresentationAlertKey = @"alert";
-NSString *const NotificationPresentationBadgeKey = @"badge";
-NSString *const NotificationPresentationSoundKey = @"sound";
+NSString *const NotificationPresentationAlertKey = @"com.urbanairship.alert";
+NSString *const NotificationPresentationBadgeKey = @"com.urbanairship.badge";
+NSString *const NotificationPresentationSoundKey = @"com.urbanairship.sound";
 
 @implementation UARCTEventEmitter
 

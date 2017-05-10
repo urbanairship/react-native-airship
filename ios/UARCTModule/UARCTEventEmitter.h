@@ -5,6 +5,10 @@
 #import "AirshipLib.h"
 #import "UARCTDeepLinkAction.h"
 
+extern NSString *const NotificationPresentationAlertKey;
+extern NSString *const NotificationPresentationBadgeKey;
+extern NSString *const NotificationPresentationSoundKey;
+
 @interface UARCTEventEmitter : NSObject <UARCTDeepLinkDelegate, UAPushNotificationDelegate, UARegistrationDelegate>
 
 @property (nonatomic, weak) RCTBridge *bridge;
