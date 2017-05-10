@@ -57,6 +57,9 @@ capabilities:
 </plist>
 ```
 
+7) Optional. In order to take advantage of iOS 10 notification attachments, such as images, animated gifs, and
+video, you will need to create a notification service extension by following the [iOS Notification Service Extension Guide](https://docs.urbanairship.com/platform/reference/ios-extension/#cocoapods)
+
 # Android Installation
 
 1) Install and link the module:
