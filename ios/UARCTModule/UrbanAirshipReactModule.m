@@ -55,18 +55,31 @@ RCT_REMAP_METHOD(isUserNotificationsOptedIn,
 }
 
 RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {
-    namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    [UAirship namedUser].identifier = namedUser;
+    if (namedUser) {
+        namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        [UAirship namedUser].identifier = namedUser;
+    }
 }
 
+RCT_REMAP_METHOD(getNamedUser,
+                 getNamedUser_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve([UAirship namedUser].identifier);
+}
+
+
 RCT_EXPORT_METHOD(addTag:(NSString *)tag) {
-    [[UAirship push] addTag:tag];
-    [[UAirship push] updateRegistration];
+    if (tag) {
+        [[UAirship push] addTag:tag];
+        [[UAirship push] updateRegistration];
+    }
 }
 
 RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
-    [[UAirship push] removeTag:tag];
-    [[UAirship push] updateRegistration];
+    if (tag) {
+        [[UAirship push] removeTag:tag];
+        [[UAirship push] updateRegistration];
+    }
 }
 
 RCT_REMAP_METHOD(getTags,
@@ -75,14 +88,18 @@ RCT_REMAP_METHOD(getTags,
     resolve([UAirship push].tags ?: [NSArray array]);
 }
 
-RCT_EXPORT_METHOD(addTag:(NSArray *)tags group:(NSString *)group) {
-    [[UAirship push] addTags:tags group:group];
-    [[UAirship push] updateRegistration];
+RCT_EXPORT_METHOD(addTags:(NSArray *)tags group:(NSString *)group) {
+    if (tags && group && tags.count > 0) {
+        [[UAirship push] addTags:tags group:group];
+        [[UAirship push] updateRegistration];
+    }
 }
 
-RCT_EXPORT_METHOD(removeTag:(NSArray *)tags group:(NSString *)group) {
-    [[UAirship push] removeTags:tags group:group];
-    [[UAirship push] updateRegistration];
+RCT_EXPORT_METHOD(removeTags:(NSArray *)tags group:(NSString *)group) {
+    if (tags && group && tags.count > 0) {
+        [[UAirship push] removeTags:tags group:group];
+        [[UAirship push] updateRegistration];
+    }
 }
 
 RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
