@@ -30,6 +30,7 @@ import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.push.TagGroupsEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -174,7 +175,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void addTag(String tag) {
-        UAirship.shared().getPushManager().editTags().addTag(tag).apply();
+        if (tag != null) {
+            UAirship.shared().getPushManager().editTags().addTag(tag).apply();
+        }
     }
 
     /**
@@ -184,7 +187,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void removeTag(String tag) {
-        UAirship.shared().getPushManager().editTags().removeTag(tag).apply();
+        if (tag != null) {
+            UAirship.shared().getPushManager().editTags().removeTag(tag).apply();
+        }
     }
 
     /**
@@ -194,7 +199,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getTags(Promise promise) {
-        promise.resolve(UAirship.shared().getPushManager().getTags());
+        promise.resolve(new ArrayList<>(UAirship.shared().getPushManager().getTags()));
     }
 
     /**
