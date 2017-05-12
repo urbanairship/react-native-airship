@@ -6,36 +6,47 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.urbanairship.AirshipReceiver;
+import com.urbanairship.UAirship;
 import com.urbanairship.push.PushMessage;
+import com.urbanairship.reactnative.events.NotificationResponseEvent;
+import com.urbanairship.reactnative.events.PushReceivedEvent;
+import com.urbanairship.reactnative.events.RegistrationEvent;
 
 
+/**
+ * Module receiver used to dispatch Urban Airship events.
+ */
 public class ReactAirshipReceiver extends AirshipReceiver {
-
 
     @Override
     protected void onChannelCreated(@NonNull Context context, @NonNull String channelId) {
-        EventEmitter.shared().notifyChannelRegistrationFinished(channelId);
+        Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
+        EventEmitter.shared().sendEvent(context, event);
     }
 
     @Override
     protected void onChannelUpdated(@NonNull Context context, @NonNull String channelId) {
-        EventEmitter.shared().notifyChannelRegistrationFinished(channelId);
+        Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
+        EventEmitter.shared().sendEvent(context, event);
     }
 
     @Override
     protected void onPushReceived(@NonNull Context context, @NonNull PushMessage message, boolean notificationPosted) {
-        EventEmitter.shared().notifyPushReceived(message);
+        Event event = new PushReceivedEvent(message);
+        EventEmitter.shared().sendEvent(context, event);
     }
 
     @Override
     protected boolean onNotificationOpened(@NonNull Context context, @NonNull NotificationInfo notificationInfo, @NonNull ActionButtonInfo actionButtonInfo) {
-        EventEmitter.shared().notifyNotificationResponse(notificationInfo, actionButtonInfo);
+        Event event = new NotificationResponseEvent(notificationInfo, actionButtonInfo);
+        EventEmitter.shared().sendEvent(context, event);
         return false;
     }
 
     @Override
     protected boolean onNotificationOpened(@NonNull Context context, @NonNull NotificationInfo notificationInfo) {
-        EventEmitter.shared().notifyNotificationResponse(notificationInfo);
+        Event event = new NotificationResponseEvent(notificationInfo);
+        EventEmitter.shared().sendEvent(context, event);
         return false;
     }
 }

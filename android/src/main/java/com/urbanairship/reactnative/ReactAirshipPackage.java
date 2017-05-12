@@ -12,6 +12,9 @@ import java.util.Collections;
 import java.util.List;
 
 
+/**
+ * Urban Airship react native package.
+ */
 public class ReactAirshipPackage implements ReactPackage {
 
     @Override

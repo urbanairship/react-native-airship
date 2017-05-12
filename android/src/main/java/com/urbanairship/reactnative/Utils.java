@@ -14,9 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Module utils.
+ */
 class Utils {
 
+    /**
+     * Converts a dynamic object into a {@link JsonValue}.
+     *
+     * @param object The dynamic object.
+     * @return A {@link JsonValue}.
+     */
     public static JsonValue convertDynamic(Dynamic object) {
         if (object == null) {
             return JsonValue.NULL;
@@ -62,7 +70,13 @@ class Utils {
     }
 
 
-    public static Object convertJsonValue(JsonValue value) {
+    /**
+     * Converts a JsonValue into either a WritableArray, WritableMap, or primitive type.
+     *
+     * @param value The JsonValue.
+     * @return The converted object.
+     */
+    static Object convertJsonValue(JsonValue value) {
         if (value.isNull()) {
             return null;
         }

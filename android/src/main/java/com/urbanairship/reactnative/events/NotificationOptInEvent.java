@@ -1,0 +1,49 @@
+/* Copyright 2017 Urban Airship and Contributors */
+
+package com.urbanairship.reactnative.events;
+
+import android.support.annotation.NonNull;
+
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+import com.urbanairship.reactnative.Event;
+
+
+/**
+ * Notification opt-in status event.
+ */
+public class NotificationOptInEvent implements Event {
+
+    private static final String NOTIFICATION_OPT_IN_STATUS_EVENT = "com.urbanairship.notification_opt_in_status";
+    private static final String OPTED_IN = "optedIn";
+
+    private final boolean optInStatus;
+
+    /**
+     * Default constructor.
+     *
+     * @param optInStatus The app opt-in status.
+     */
+    public NotificationOptInEvent(boolean optInStatus) {
+        this.optInStatus = optInStatus;
+    }
+
+    @NonNull
+    @Override
+    public String getName() {
+        return NOTIFICATION_OPT_IN_STATUS_EVENT;
+    }
+
+    @NonNull
+    @Override
+    public WritableMap getBody() {
+        WritableMap map = Arguments.createMap();
+        map.putBoolean(OPTED_IN, optInStatus);
+        return map;
+    }
+
+    @Override
+    public boolean isCritical() {
+        return false;
+    }
+}
