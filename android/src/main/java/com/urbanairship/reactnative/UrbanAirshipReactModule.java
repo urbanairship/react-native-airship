@@ -20,6 +20,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
@@ -30,7 +31,6 @@ import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.push.TagGroupsEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -199,7 +199,12 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getTags(Promise promise) {
-        promise.resolve(new ArrayList<>(UAirship.shared().getPushManager().getTags()));
+        WritableArray array = Arguments.createArray();
+        for (String tag : UAirship.shared().getPushManager().getTags()) {
+            array.pushString(tag);
+        }
+
+        promise.resolve(array);
     }
 
     /**
