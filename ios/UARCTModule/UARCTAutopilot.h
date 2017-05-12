@@ -2,8 +2,12 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const UARCTPresentationOptionsStorageKey;
+
+/**
+ * Handles takeOff for the Urban Airship SDK.
+ */
 @interface UARCTAutopilot : NSObject
 
-extern NSString *const PresentationOptions;
 
 @end

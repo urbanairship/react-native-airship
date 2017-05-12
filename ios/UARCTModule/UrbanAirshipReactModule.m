@@ -221,20 +221,20 @@ RCT_EXPORT_METHOD(editChannelGroups:(NSArray *)operations) {
 RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {
     UNNotificationPresentationOptions presentationOptions = UNNotificationPresentationOptionNone;
 
-    if (options[NotificationPresentationAlertKey] != nil) {
-        if ([options[NotificationPresentationAlertKey] boolValue]) {
+    if (options[UARCTNotificationPresentationAlertKey] != nil) {
+        if ([options[UARCTNotificationPresentationAlertKey] boolValue]) {
             presentationOptions = presentationOptions | UNNotificationPresentationOptionAlert;
         }
     }
 
-    if (options[NotificationPresentationBadgeKey] != nil) {
-        if ([options[NotificationPresentationBadgeKey] boolValue]) {
+    if (options[UARCTNotificationPresentationBadgeKey] != nil) {
+        if ([options[UARCTNotificationPresentationBadgeKey] boolValue]) {
             presentationOptions = presentationOptions | UNNotificationPresentationOptionBadge;
         }
     }
 
-    if (options[NotificationPresentationSoundKey] != nil) {
-        if ([options[NotificationPresentationSoundKey] boolValue]) {
+    if (options[UARCTNotificationPresentationSoundKey] != nil) {
+        if ([options[UARCTNotificationPresentationSoundKey] boolValue]) {
             presentationOptions = presentationOptions | UNNotificationPresentationOptionSound;
         }
     }
@@ -242,7 +242,8 @@ RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {
     UA_LDEBUG(@"Foreground presentation options set: %lu", (unsigned long)options);
 
     [UAirship push].defaultPresentationOptions = presentationOptions;
-    [[NSUserDefaults standardUserDefaults] setInteger:presentationOptions forKey:PresentationOptions];
+    [[NSUserDefaults standardUserDefaults] setInteger:presentationOptions
+                                               forKey:UARCTPresentationOptionsStorageKey];
 }
 
 

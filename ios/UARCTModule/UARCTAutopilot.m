@@ -7,7 +7,7 @@
 
 #import "AirshipLib.h"
 
-NSString *const PresentationOptions = @"com.urbanairship.presentation_options";
+NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
 
 @implementation UARCTAutopilot
 
@@ -27,7 +27,7 @@ NSString *const PresentationOptions = @"com.urbanairship.presentation_options";
     [[UAirship shared].actionRegistry updateAction:dle forEntryWithName:kUADeepLinkActionDefaultRegistryName];
     dle.deepLinkDelegate = [UARCTEventEmitter shared];
 
-    UNNotificationPresentationOptions presentationOptions = (UNNotificationPresentationOptions)[[NSUserDefaults standardUserDefaults] valueForKey:PresentationOptions];
+    UNNotificationPresentationOptions presentationOptions = (UNNotificationPresentationOptions)[[NSUserDefaults standardUserDefaults] valueForKey:UARCTPresentationOptionsStorageKey];
 
     if (presentationOptions) {
         [[UAirship push] setDefaultPresentationOptions:presentationOptions];
