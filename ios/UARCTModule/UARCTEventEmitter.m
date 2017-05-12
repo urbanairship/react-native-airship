@@ -76,8 +76,9 @@ static UARCTEventEmitter *sharedEventEmitter_;
 #pragma mark UARCTDeepLinkDelegate
 
 -(void)deepLinkReceived:(NSString *)deepLink {
-    if ([self sendEventWithName:UARCTDeepLinkEventName body:deepLink]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEventName, @"body": deepLink}];
+    id body = @{ @"deepLink" : deepLink };
+    if ([self sendEventWithName:UARCTDeepLinkEventName body:body]) {
+        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEventName, @"body": body}];
     }
 }
 
