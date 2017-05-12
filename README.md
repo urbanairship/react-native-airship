@@ -101,7 +101,6 @@ import {
   UrbanAirship,
   UACustomEvent,
 } from 'urbanairship-react-native'
-```
 
 ...
 
