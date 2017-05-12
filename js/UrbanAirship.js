@@ -84,7 +84,7 @@ export type UAEventName = $Enum<{
  *
  * @event UrbanAirship#register
  * @type {object}
- * @param {string} channelID The channel ID.
+ * @param {string} channelId The channel ID.
  * @param {string} [registrationToken] The registration token.
  */
 

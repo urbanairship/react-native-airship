@@ -115,7 +115,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (void)registrationSucceededForChannelID:(NSString *)channelID deviceToken:(NSString *)deviceToken {
     NSMutableDictionary *registrationBody = [NSMutableDictionary dictionary];
-    [registrationBody setValue:channelID forKey:@"channel"];
+    [registrationBody setValue:channelID forKey:@"channelId"];
     [registrationBody setValue:deviceToken forKey:@"registrationToken"];
     [self sendEventWithName:UARCTRegistrationEventName body:registrationBody];
 }
