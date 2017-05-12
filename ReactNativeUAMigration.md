@@ -121,7 +121,7 @@ UrbanAirship.addListener("deepLink", (event) => {
 ### ReactNativeUA's handle_background_notification
 
 This method is no longer needed. The `notificationResponse` will not fire until
-after the application has a change to add a listener.
+after the application has had a chance to add a listener.
 
 ### Android icons
 

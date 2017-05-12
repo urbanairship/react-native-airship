@@ -20,7 +20,7 @@ Please visit https://support.urbanairship.com/ for any issues integrating or usi
  - React Native >= 0.44.0
  - React Native cli >= 2.0.1
 
-# iOS Installation
+## iOS Installation
 
 1) Install and link the module:
 ```
@@ -66,7 +66,7 @@ capabilities:
 7) Optional. In order to take advantage of iOS 10 notification attachments, such as images, animated gifs, and
 video, you will need to create a notification service extension by following the [iOS Notification Service Extension Guide](https://docs.urbanairship.com/platform/reference/ios-extension/#cocoapods)
 
-# Android Installation
+## Android Installation
 
 1) Install and link the module:
 ```
@@ -88,4 +88,30 @@ gcmSender = Your Google API Project Number
 # Notification customization
 notificationIcon = ic_notification
 notificationAccentColor = #ff0000
+```
+
+## Enabling Notifications
+
+Notifications by default are disabled to avoid prompting the user for permissions
+at an inopportune time. For testing purposes, you probably want to enable Notifications
+immediately to verify push is working:
+
+```
+import {
+  UrbanAirship,
+  UACustomEvent,
+} from 'urbanairship-react-native'
+```
+
+...
+
+export default class Sample extends Component {
+
+  constructor(props) {
+    super(props);
+    UrbanAirship.setUserNotificationsEnabled(true);
+  }
+
+  ...
+}
 ```
