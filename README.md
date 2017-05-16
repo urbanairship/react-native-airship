@@ -32,7 +32,7 @@ react-native link urbanairship-react-native
 
 3) Update the app's Podfile to include the Urban Airship SDK:
 ```
-pod 'UrbanAirship-iOS-SDK', '~>8.3.0'
+pod 'UrbanAirship-iOS-SDK', '~>8.3.2'
 ```
 
 4) Update your pods:
