@@ -55,10 +55,8 @@ RCT_REMAP_METHOD(isUserNotificationsOptedIn,
 }
 
 RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {
-    if (namedUser) {
-        namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        [UAirship namedUser].identifier = namedUser;
-    }
+  namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  [UAirship namedUser].identifier = namedUser.length ? namedUser : nil;
 }
 
 RCT_REMAP_METHOD(getNamedUser,
@@ -86,20 +84,6 @@ RCT_REMAP_METHOD(getTags,
                  getTags_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
     resolve([UAirship push].tags ?: [NSArray array]);
-}
-
-RCT_EXPORT_METHOD(addTags:(NSArray *)tags group:(NSString *)group) {
-    if (tags && group && tags.count > 0) {
-        [[UAirship push] addTags:tags group:group];
-        [[UAirship push] updateRegistration];
-    }
-}
-
-RCT_EXPORT_METHOD(removeTags:(NSArray *)tags group:(NSString *)group) {
-    if (tags && group && tags.count > 0) {
-        [[UAirship push] removeTags:tags group:group];
-        [[UAirship push] updateRegistration];
-    }
 }
 
 RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
@@ -208,7 +192,7 @@ RCT_REMAP_METHOD(runAction,
                     }];
 }
 
-RCT_EXPORT_METHOD(editNamedUserGroups:(NSArray *)operations) {
+RCT_EXPORT_METHOD(editNamedUserTagGroups:(NSArray *)operations) {
     UANamedUser *namedUser = [UAirship namedUser];
     for (NSDictionary *operation in [operations objectAtIndex:0]) {
         NSString *group = operation[@"group"];
@@ -222,7 +206,7 @@ RCT_EXPORT_METHOD(editNamedUserGroups:(NSArray *)operations) {
     [namedUser updateTags];
 }
 
-RCT_EXPORT_METHOD(editChannelGroups:(NSArray *)operations) {
+RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
     for (NSDictionary *operation in [operations objectAtIndex:0]) {
         NSString *group = operation[@"group"];
         if ([operation[@"operationType"] isEqualToString:@"add"]) {
