@@ -1,4 +1,14 @@
+use_frameworks!
+project 'AirshipSample.xcodeproj'
+
 target 'AirshipSample' do
   # Required for Urban Airship
   pod 'UrbanAirship-iOS-SDK', '~>8.3.2'
+End
+
+target 'ServiceExtension' do
+platform :ios, '10.0'
+  # Pods for Service Extension
+  pod 'UrbanAirship-iOS-AppExtensions'
 end
+

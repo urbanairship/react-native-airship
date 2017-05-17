@@ -36,7 +36,9 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Urban Airship React Native sample location, when in use</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Urban Airship React Native sample location</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

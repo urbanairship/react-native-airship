@@ -20,12 +20,15 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		47F45E53476E418F1F5289E9 /* Pods_AirshipSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09800642C34D8BF8D3E02A5B /* Pods_AirshipSample.framework */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
-		5F291F89D9533B461BB16002 /* libPods-AirshipSample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 667CBB83683A2AFB5ED5B4E1 /* libPods-AirshipSample.a */; };
 		6E42C7DB1EBA98BC00C85B3A /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E42C7DA1EBA98BC00C85B3A /* AirshipConfig.plist */; };
 		6E42C7F51EBBA4A400C85B3A /* AirshipConfig.plist.sample in Resources */ = {isa = PBXBuildFile; fileRef = 6E42C7F41EBBA4A400C85B3A /* AirshipConfig.plist.sample */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		99912C4D1ECB77A500295C67 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 99912C4C1ECB77A500295C67 /* NotificationService.m */; };
+		99912C511ECB77A500295C67 /* ServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 99912C491ECB77A500295C67 /* ServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C4AFD9952B954B7D9B5ACC6F /* libUARCTModule.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB190E2D822D493D9C6446CB /* libUARCTModule.a */; };
+		F585A7885736C35A3E105A59 /* Pods_ServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D678DF918FCAA33BE9000AE0 /* Pods_ServiceExtension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -211,7 +214,28 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		99912C4F1ECB77A500295C67 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 99912C481ECB77A500295C67;
+			remoteInfo = ServiceExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		99912C6F1ECB77A500295C67 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				99912C511ECB77A500295C67 /* ServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -220,6 +244,7 @@
 		00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTImage.xcodeproj; path = "../node_modules/react-native/Libraries/Image/RCTImage.xcodeproj"; sourceTree = "<group>"; };
 		00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTNetwork.xcodeproj; path = "../node_modules/react-native/Libraries/Network/RCTNetwork.xcodeproj"; sourceTree = "<group>"; };
 		00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVibration.xcodeproj; path = "../node_modules/react-native/Libraries/Vibration/RCTVibration.xcodeproj"; sourceTree = "<group>"; };
+		09800642C34D8BF8D3E02A5B /* Pods_AirshipSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirshipSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* AirshipSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirshipSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -230,17 +255,30 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AirshipSample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = AirshipSample/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		1BE555A6D88AED9871117AB1 /* Pods-ServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-ServiceExtension/Pods-ServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		1E43F9E9239B46A9A273C361 /* UARCTModule.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = UARCTModule.xcodeproj; path = "../node_modules/urbanairship-react-native/ios/UARCTModule.xcodeproj"; sourceTree = "<group>"; };
+		43E6F9CD759BF73655B5788B /* Pods-AirshipSample-ServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample-ServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirshipSample-ServiceExtension/Pods-AirshipSample-ServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
-		667CBB83683A2AFB5ED5B4E1 /* libPods-AirshipSample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirshipSample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E42C7DA1EBA98BC00C85B3A /* AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		6E42C7F41EBBA4A400C85B3A /* AirshipConfig.plist.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AirshipConfig.plist.sample; sourceTree = "<group>"; };
 		6EA16B961EBA728400C7811A /* AirshipSample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AirshipSample.entitlements; path = AirshipSample/AirshipSample.entitlements; sourceTree = "<group>"; };
+		786A52490C19A1E92AFB539D /* Pods-AirshipSample-ServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample-ServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirshipSample-ServiceExtension/Pods-AirshipSample-ServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		92E750B5D4D49D179314DB3F /* Pods_AirshipSample_ServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirshipSample_ServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		99912C491ECB77A500295C67 /* ServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		99912C4B1ECB77A500295C67 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
+		99912C4C1ECB77A500295C67 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
+		99912C4E1ECB77A500295C67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		99912CA31ECB7C7000295C67 /* libPods-ServiceExtension.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-ServiceExtension.a"; path = "../../../../../../Library/Developer/Xcode/DerivedData/AirshipSample-dwgkjnzqbkartpfasjjrtlzzqudr/Build/Products/Debug-iphonesimulator/libPods-ServiceExtension.a"; sourceTree = "<group>"; };
+		99912D2D1ECBA57E00295C67 /* ServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ServiceExtension.entitlements; sourceTree = "<group>"; };
+		99912D301ECBA7F500295C67 /* AirshipAppExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AirshipAppExtensions.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/AirshipSample-dwgkjnzqbkartpfasjjrtlzzqudr/Build/Products/Debug-iphoneos/UrbanAirship-iOS-AppExtensions/AirshipAppExtensions.framework"; sourceTree = "<group>"; };
+		99912DB71ECBB62200295C67 /* Pods */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Pods; sourceTree = "<group>"; };
 		AB190E2D822D493D9C6446CB /* libUARCTModule.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libUARCTModule.a; sourceTree = "<group>"; };
 		B39588D533FBCB0B5F439074 /* Pods-AirshipSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirshipSample/Pods-AirshipSample.debug.xcconfig"; sourceTree = "<group>"; };
+		D678DF918FCAA33BE9000AE0 /* Pods_ServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC2A6B3C15F02F715B1E01F3 /* Pods-AirshipSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample.release.xcconfig"; path = "Pods/Target Support Files/Pods-AirshipSample/Pods-AirshipSample.release.xcconfig"; sourceTree = "<group>"; };
+		FF92353B8390409904B897C2 /* Pods-ServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ServiceExtension/Pods-ServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,8 +297,16 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				5F291F89D9533B461BB16002 /* libPods-AirshipSample.a in Frameworks */,
 				C4AFD9952B954B7D9B5ACC6F /* libUARCTModule.a in Frameworks */,
+				47F45E53476E418F1F5289E9 /* Pods_AirshipSample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		99912C461ECB77A500295C67 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F585A7885736C35A3E105A59 /* Pods_ServiceExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,7 +406,12 @@
 		2297A5C6A17907EDA3C1A0A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				667CBB83683A2AFB5ED5B4E1 /* libPods-AirshipSample.a */,
+				99912DB71ECBB62200295C67 /* Pods */,
+				99912D301ECBA7F500295C67 /* AirshipAppExtensions.framework */,
+				99912CA31ECB7C7000295C67 /* libPods-ServiceExtension.a */,
+				09800642C34D8BF8D3E02A5B /* Pods_AirshipSample.framework */,
+				92E750B5D4D49D179314DB3F /* Pods_AirshipSample_ServiceExtension.framework */,
+				D678DF918FCAA33BE9000AE0 /* Pods_ServiceExtension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -426,6 +477,7 @@
 				6E42C7DA1EBA98BC00C85B3A /* AirshipConfig.plist */,
 				13B07FAE1A68108700A75B9A /* AirshipSample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				99912C4A1ECB77A500295C67 /* ServiceExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				E31125E263967966FB2FAF00 /* Pods */,
 				2297A5C6A17907EDA3C1A0A5 /* Frameworks */,
@@ -438,8 +490,20 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* AirshipSample.app */,
+				99912C491ECB77A500295C67 /* ServiceExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		99912C4A1ECB77A500295C67 /* ServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				99912D2D1ECBA57E00295C67 /* ServiceExtension.entitlements */,
+				99912C4B1ECB77A500295C67 /* NotificationService.h */,
+				99912C4C1ECB77A500295C67 /* NotificationService.m */,
+				99912C4E1ECB77A500295C67 /* Info.plist */,
+			);
+			path = ServiceExtension;
 			sourceTree = "<group>";
 		};
 		E31125E263967966FB2FAF00 /* Pods */ = {
@@ -447,6 +511,10 @@
 			children = (
 				B39588D533FBCB0B5F439074 /* Pods-AirshipSample.debug.xcconfig */,
 				DC2A6B3C15F02F715B1E01F3 /* Pods-AirshipSample.release.xcconfig */,
+				FF92353B8390409904B897C2 /* Pods-ServiceExtension.debug.xcconfig */,
+				1BE555A6D88AED9871117AB1 /* Pods-ServiceExtension.release.xcconfig */,
+				43E6F9CD759BF73655B5788B /* Pods-AirshipSample-ServiceExtension.debug.xcconfig */,
+				786A52490C19A1E92AFB539D /* Pods-AirshipSample-ServiceExtension.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -465,15 +533,36 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				FF905C99F424B3813F7A98C6 /* [CP] Embed Pods Frameworks */,
 				9D331DA0422AAA6755480151 /* [CP] Copy Pods Resources */,
+				99912C6F1ECB77A500295C67 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				99912C501ECB77A500295C67 /* PBXTargetDependency */,
 			);
 			name = AirshipSample;
 			productName = "Hello World";
 			productReference = 13B07F961A680F5B00A75B9A /* AirshipSample.app */;
 			productType = "com.apple.product-type.application";
+		};
+		99912C481ECB77A500295C67 /* ServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 99912C6E1ECB77A500295C67 /* Build configuration list for PBXNativeTarget "ServiceExtension" */;
+			buildPhases = (
+				0AEEF158516E3D3E5C7E74AB /* [CP] Check Pods Manifest.lock */,
+				99912C451ECB77A500295C67 /* Sources */,
+				99912C461ECB77A500295C67 /* Frameworks */,
+				99912C471ECB77A500295C67 /* Resources */,
+				A08F3684C094E551F3DDF453 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ServiceExtension;
+			productName = ServiceExtension;
+			productReference = 99912C491ECB77A500295C67 /* ServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -481,7 +570,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 610;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
@@ -490,6 +579,16 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+					99912C481ECB77A500295C67 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = PGJV57GD94;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -561,6 +660,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* AirshipSample */,
+				99912C481ECB77A500295C67 /* ServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -762,6 +862,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		99912C471ECB77A500295C67 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -794,6 +901,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		0AEEF158516E3D3E5C7E74AB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		9D331DA0422AAA6755480151 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -807,6 +929,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirshipSample/Pods-AirshipSample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A08F3684C094E551F3DDF453 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ServiceExtension/Pods-ServiceExtension-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FF905C99F424B3813F7A98C6 /* [CP] Embed Pods Frameworks */ = {
@@ -836,7 +973,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		99912C451ECB77A500295C67 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99912C4D1ECB77A500295C67 /* NotificationService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		99912C501ECB77A500295C67 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 99912C481ECB77A500295C67 /* ServiceExtension */;
+			targetProxy = 99912C4F1ECB77A500295C67 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
@@ -933,15 +1086,19 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -974,8 +1131,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -983,6 +1142,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -993,6 +1153,52 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		99912C521ECB77A500295C67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF92353B8390409904B897C2 /* Pods-ServiceExtension.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_ENTITLEMENTS = ServiceExtension/ServiceExtension.entitlements;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = PGJV57GD94;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = ServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.ServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		99912C531ECB77A500295C67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1BE555A6D88AED9871117AB1 /* Pods-ServiceExtension.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_ENTITLEMENTS = ServiceExtension/ServiceExtension.entitlements;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = PGJV57GD94;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = ServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.ServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -1013,6 +1219,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		99912C6E1ECB77A500295C67 /* Build configuration list for PBXNativeTarget "ServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99912C521ECB77A500295C67 /* Debug */,
+				99912C531ECB77A500295C67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
