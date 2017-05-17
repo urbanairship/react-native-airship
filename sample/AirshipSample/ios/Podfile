@@ -1,12 +1,14 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+use_frameworks!
+project 'AirshipSample.xcodeproj'
 
 target 'AirshipSample' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # Required for Urban Airship
+  pod 'UrbanAirship-iOS-SDK', '~>8.3.2'
+End
 
-
-  # Pods for AirshipSample
-  pod 'UrbanAirship-iOS-SDK', '~>8.3.0'
-
-
+target 'ServiceExtension' do
+platform :ios, '10.0'
+  # Pods for Service Extension
+  pod 'UrbanAirship-iOS-AppExtensions'
 end
+
