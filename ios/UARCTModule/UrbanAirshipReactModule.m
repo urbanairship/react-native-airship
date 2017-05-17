@@ -194,7 +194,7 @@ RCT_REMAP_METHOD(runAction,
 
 RCT_EXPORT_METHOD(editNamedUserTagGroups:(NSArray *)operations) {
     UANamedUser *namedUser = [UAirship namedUser];
-    for (NSDictionary *operation in [operations objectAtIndex:0]) {
+    for (NSDictionary *operation in operations) {
         NSString *group = operation[@"group"];
         if ([operation[@"operationType"] isEqualToString:@"add"]) {
             [namedUser addTags:operation[@"tags"] group:group];
@@ -207,8 +207,8 @@ RCT_EXPORT_METHOD(editNamedUserTagGroups:(NSArray *)operations) {
 }
 
 RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
-    for (NSDictionary *operation in [operations objectAtIndex:0]) {
-        NSString *group = operation[@"group"];
+    for (NSDictionary *operation in operations) {
+        NSString *group = [operation objectForKey:@"group"];
         if ([operation[@"operationType"] isEqualToString:@"add"]) {
             [[UAirship push] addTags:operation[@"tags"] group:group];
         } else if ([operation[@"operationType"] isEqualToString:@"remove"]) {

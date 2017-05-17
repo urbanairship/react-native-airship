@@ -7,8 +7,8 @@ import {
   Platform
 } from 'react-native';
 
-import { UACustomEvent } from './UACustomEvent.js'
-import { TagGroupEditor } from './TagGroupEditor.js'
+import UACustomEvent from './UACustomEvent.js'
+import TagGroupEditor from './TagGroupEditor.js'
 
 const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
 const AirshipNotificationEmitter = new NativeEventEmitter(UrbanAirshipModule);
