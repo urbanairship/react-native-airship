@@ -3,8 +3,8 @@ project 'AirshipSample.xcodeproj'
 
 target 'AirshipSample' do
   # Required for Urban Airship
-  pod 'UrbanAirship-iOS-SDK', '~>8.3.2'
-End
+  pod 'UrbanAirship-iOS-SDK'
+end
 
 target 'ServiceExtension' do
 platform :ios, '10.0'
