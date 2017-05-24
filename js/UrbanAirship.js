@@ -352,9 +352,8 @@ class UrbanAirship {
    * @param {string} eventName The event name. Either notificationResponse, pushReceived,
    * register, deepLink, or notificationOptInStatus.
    * @param {Function} listener The event listner.
-   * @return {EmitterSubscription} An emitter subscription.
    */
-  static removeListener(eventName: AirshipEventName, handler: Function) {
+  static removeListener(eventName: AirshipEventName, listener: Function) {
     var name = convertEventEnum(eventName);
     AirshipNotificationEmitter.removeListener(name, listener);
   }
