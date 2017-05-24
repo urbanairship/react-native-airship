@@ -1,3 +1,7 @@
+Version 1.0.2 - May 24, 2017
+============================
+- Fix crash when calling removeListener
+
 Version 1.0.1 - May 23, 2017
 ============================
 - Update Android and iOS Urban Airship SDK dependencies
