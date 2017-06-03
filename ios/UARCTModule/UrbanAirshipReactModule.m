@@ -132,7 +132,7 @@ RCT_EXPORT_METHOD(setBackgroundLocationAllowed:(BOOL)enabled) {
 
 RCT_REMAP_METHOD(runAction,
                  name:(NSString *)name
-                 value:(NSString *)value
+                 value:(NSDictionary *)value
                  runAction_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
