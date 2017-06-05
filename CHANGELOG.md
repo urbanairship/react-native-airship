@@ -1,3 +1,7 @@
+Version 1.0.3 - June 5, 2017
+============================
+- Fix addCustomEvent on iOS
+
 Version 1.0.2 - May 24, 2017
 ============================
 - Fix crash when calling removeListener
