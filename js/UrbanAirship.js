@@ -402,6 +402,24 @@ class UrbanAirship {
   static isQuietTimeEnabled(): Promise<boolean> {
     return UrbanAirshipModule.isUserNotificationsEnabled();
   }
+
+  /**
+   * Sets the badge number for iOS.
+   *
+   * @param {number} badgeNumber specified badge to set.
+   */
+  static setBadgeNumber(badgeNumber: number) {
+    UrbanAirshipModule.setBadgeNumber(badgeNumber);
+  }
+
+  /**
+   * Gets the current badge number for iOS.
+   *
+   * @return {Promise.<number>} A promise with the result.
+   */
+  static getBadgeNumber(): Promise<number> {
+    return UrbanAirshipModule.getBadgeNumber();
+  }
 }
 
 module.exports = UrbanAirship;
