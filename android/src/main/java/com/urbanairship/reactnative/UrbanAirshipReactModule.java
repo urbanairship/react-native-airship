@@ -448,6 +448,16 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Badging is not supported on Android. Returns 0 if a badge count is requested on Android. 
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void getBadgeNumber(Promise promise) {
+        promise.resolve(0);
+    }
+
+    /**
      * Helper method to apply tag group changes.
      *
      * @param editor     The tag group editor.
@@ -486,7 +496,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         editor.apply();
     }
 
-
     /**
      * Helper to determine if location permissions should be requested or not.
      *
@@ -500,6 +509,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         return ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED &&
                 ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED;
     }
+
 }
 
 

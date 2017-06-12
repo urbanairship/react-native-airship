@@ -404,20 +404,27 @@ class UrbanAirship {
   }
 
   /**
-   * Sets the badge number for iOS.
+   * Sets the badge number for iOS. Badging is not supported for Android.
    *
    * @param {number} badgeNumber specified badge to set.
    */
   static setBadgeNumber(badgeNumber: number) {
-    UrbanAirshipModule.setBadgeNumber(badgeNumber);
+    if (Platform.OS == 'ios') {
+      UrbanAirshipModule.setBadgeNumber(badgeNumber);
+    } else {
+      console.log("This feature is not supported on this platform.")
+    }
   }
-
+  
   /**
-   * Gets the current badge number for iOS.
+   * Gets the current badge number for iOS. Badging is not supported for Android and this method will always return 0.
    *
    * @return {Promise.<number>} A promise with the result.
    */
   static getBadgeNumber(): Promise<number> {
+    if (Platform.OS != 'ios') {
+      console.log("This feature is not supported on this platform.")
+    }
     return UrbanAirshipModule.getBadgeNumber();
   }
 }
