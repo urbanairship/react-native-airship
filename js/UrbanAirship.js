@@ -379,7 +379,7 @@ class UrbanAirship {
    * "endHour": Number,
    * "endMinute": Number
    *
-   * @return {Promise.Object} A promist with the result.
+   * @return {Promise.Object} A promise with the result.
    */
   static getQuietTime(): Promise<Object> {
     return UrbanAirshipModule.getQuietTime();
