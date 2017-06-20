@@ -1,18 +1,18 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
     }
 }
 
 dependencies {
     compile 'com.facebook.react:react-native:[0.40,)'
-    compile 'com.google.android.gms:play-services-gcm:[10.2.0,)'
+    compile 'com.google.android.gms:play-services-gcm:[11.0.1,)'
 
-    compile 'com.urbanairship.android:urbanairship-sdk:8.4.2'
+    compile 'com.urbanairship.android:urbanairship-sdk:8.6.0'
 }
