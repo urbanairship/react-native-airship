@@ -464,6 +464,7 @@ class UrbanAirship {
    * "sentDate": number - The message sent date in milliseconds.
    * "listIconUrl": string, optional - The icon url for the message.
    * "isRead": boolean - The unread/read status of the message.
+   * "isDeleted": boolean - The deleted status of the message.
    * "extras": object - String to String map of any message extras.
    *
    * @return {Promise.<Array>} A promise with the result.
