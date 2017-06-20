@@ -4,6 +4,7 @@
 #import "UARCTAutopilot.h"
 #import "UARCTEventEmitter.h"
 #import "UARCTDeepLinkAction.h"
+#import "UARCTMessageCenter.h"
 
 #import "AirshipLib.h"
 
@@ -21,16 +22,28 @@ NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presenta
 
     [UAirship push].pushNotificationDelegate = [UARCTEventEmitter shared];
     [UAirship push].registrationDelegate = [UARCTEventEmitter shared];
+    [UAirship inbox].delegate = [UARCTMessageCenter shared];
 
     // Register custom deep link action
     UARCTDeepLinkAction *dle = [[UARCTDeepLinkAction alloc] init];
     [[UAirship shared].actionRegistry updateAction:dle forEntryWithName:kUADeepLinkActionDefaultRegistryName];
     dle.deepLinkDelegate = [UARCTEventEmitter shared];
 
+    // Add observer for inbox updated event
+    [[NSNotificationCenter defaultCenter] addObserver:[UARCTEventEmitter shared]
+                                         selector:@selector(inboxUpdated)
+                                             name:UAInboxMessageListUpdatedNotification
+                                           object:nil];
+
     UNNotificationPresentationOptions presentationOptions = (UNNotificationPresentationOptions)[[NSUserDefaults standardUserDefaults] valueForKey:UARCTPresentationOptionsStorageKey];
 
     if (presentationOptions) {
         [[UAirship push] setDefaultPresentationOptions:presentationOptions];
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:UARCTAutoLaunchMessageCenterKey] == nil) {
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:UARCTAutoLaunchMessageCenterKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
 }

@@ -11,6 +11,7 @@
 		6E42C7B01EBA953100C85B3A /* UrbanAirshipReactModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C7AE1EBA953100C85B3A /* UrbanAirshipReactModule.m */; };
 		6E42C8551EC0DD0900C85B3A /* UARCTEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */; };
 		99B8E2CC1EC14020003FA382 /* UARCTDeepLinkAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E2CB1EC14020003FA382 /* UARCTDeepLinkAction.m */; };
+		F8AA2B681EEF04C0008653D8 /* UARCTMessageCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = F8AA2B671EEF04C0008653D8 /* UARCTMessageCenter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +36,8 @@
 		6E4D17C21EBA7FAA0032DED3 /* libUARCTModule.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUARCTModule.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		99B8E2CA1EC14020003FA382 /* UARCTDeepLinkAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UARCTDeepLinkAction.h; sourceTree = "<group>"; };
 		99B8E2CB1EC14020003FA382 /* UARCTDeepLinkAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UARCTDeepLinkAction.m; sourceTree = "<group>"; };
+		F8AA2B661EEF04C0008653D8 /* UARCTMessageCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UARCTMessageCenter.h; path = UARCTModule/UARCTMessageCenter.h; sourceTree = "<group>"; };
+		F8AA2B671EEF04C0008653D8 /* UARCTMessageCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UARCTMessageCenter.m; path = UARCTModule/UARCTMessageCenter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +54,8 @@
 		6E4D17341EBA7C100032DED3 /* UARCTModule */ = {
 			isa = PBXGroup;
 			children = (
+				F8AA2B661EEF04C0008653D8 /* UARCTMessageCenter.h */,
+				F8AA2B671EEF04C0008653D8 /* UARCTMessageCenter.m */,
 				6E42C8531EC0DD0900C85B3A /* UARCTEventEmitter.h */,
 				6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */,
 				6E42C7AB1EBA953100C85B3A /* UARCTAutopilot.h */,
@@ -148,6 +153,7 @@
 				6E42C7AF1EBA953100C85B3A /* UARCTAutopilot.m in Sources */,
 				6E42C8551EC0DD0900C85B3A /* UARCTEventEmitter.m in Sources */,
 				6E42C7B01EBA953100C85B3A /* UrbanAirshipReactModule.m in Sources */,
+				F8AA2B681EEF04C0008653D8 /* UARCTMessageCenter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,6 +14,7 @@ NSString *const UARCTNotificationResponseEventName = @"com.urbanairship.notifica
 NSString *const UARCTPushReceivedEventName= @"com.urbanairship.push_received";
 NSString *const UARCTDeepLinkEventName = @"com.urbanairship.deep_link";
 NSString *const UARCTOptInStatusChangedEventName = @"com.urbanairship.notification_opt_in_status";
+NSString *const UARCTInboxUpdatedEventName = @"com.urbanairship.inbox_updated";
 
 NSString *const UARCTNotificationPresentationAlertKey = @"alert";
 NSString *const UARCTNotificationPresentationBadgeKey = @"badge";
@@ -151,6 +152,17 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 
     [self sendEventWithName:UARCTOptInStatusChangedEventName body:body];
+}
+
+#pragma mark -
+#pragma mark Message Center
+
+- (void)inboxUpdated {
+    NSDictionary *body = @{ @"messageUnreadCount": @([UAirship inbox].messageList.unreadCount),
+                            @"messageCount": @([UAirship inbox].messageList.messageCount)
+                            };
+
+    [self sendEventWithName:UARCTInboxUpdatedEventName body:body];
 }
 
 #pragma mark -
