@@ -306,5 +306,14 @@ RCT_EXPORT_METHOD(setQuietTime:(NSDictionary *)quietTime) {
     [[UAirship push] updateRegistration];
 }
 
+RCT_EXPORT_METHOD(setBadgeNumber:(NSInteger)badgeNumber) {
+    [[UAirship push] setBadgeNumber:badgeNumber];
+}
+
+RCT_REMAP_METHOD(getBadgeNumber,
+                 getBadgeNumber_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve(@([UIApplication sharedApplication].applicationIconBadgeNumber));
+}
 
 @end
