@@ -14,8 +14,8 @@ import com.urbanairship.reactnative.Event;
 public class InboxUpdatedEvent implements Event {
 
     private static final String INBOX_UPDATED_EVENT = "com.urbanairship.inbox_updated";
-    private static final String MESSAGE_CENTER_UNREAD_COUNT = "messageCenterUnreadCount";
-    private static final String MESSAGE_CENTER_COUNT = "messageCenterCount";
+    private static final String MESSAGE_UNREAD_COUNT = "messageUnreadCount";
+    private static final String MESSAGE_COUNT = "messageCount";
 
     private final int unreadCount;
     private final int count;
@@ -26,7 +26,7 @@ public class InboxUpdatedEvent implements Event {
      * @param unreadCount The number of unread messages in the message center.
      * @param count The number of total messages in the message center.
      */
-    public InboxUpdatedEvent(@NonNull int unreadCount, @NonNull int count) {
+    public InboxUpdatedEvent(int unreadCount, int count) {
         this.unreadCount = unreadCount;
         this.count = count;
     }
@@ -40,8 +40,8 @@ public class InboxUpdatedEvent implements Event {
     @Override
     public WritableMap getBody() {
         WritableMap map = Arguments.createMap();
-        map.putInt(MESSAGE_CENTER_UNREAD_COUNT, unreadCount);
-        map.putInt(MESSAGE_CENTER_COUNT, count);
+        map.putInt(MESSAGE_UNREAD_COUNT, unreadCount);
+        map.putInt(MESSAGE_COUNT, count);
 
         return map;
     }

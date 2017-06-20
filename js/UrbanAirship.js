@@ -21,7 +21,6 @@ const INBOX_UPDATED_EVENT = "com.urbanairship.inbox_updated";
 const NOTIFICATION_OPT_IN_STATUS = "com.urbanairship.notification_opt_in_status";
 
 
-
 /**
  * @private
  */
@@ -65,7 +64,7 @@ export type UAEventName = $Enum<{
  */
 
 /**
- * Fired when a push is received.
+ * Event fired when a push is received.
  *
  * @event UrbanAirship#pushReceived
  * @type {object}
@@ -102,6 +101,15 @@ export type UAEventName = $Enum<{
  * @param {boolean} notificationOptions.sound If the user is opted into sounds.
  * @param {boolean} notificationOptions.badge If the user is opted into badge updates.
  */
+
+ /**
+  * Event fired when the inbox is updated.
+  *
+  * @event UrbanAirship#inboxUpdated
+  * @type {object}
+  * @param {number} messageUnreadCount The message unread count.
+  * @param {number} messageCount THe total message count.
+  */
 
 /**
  * The main Urban Airship API.
@@ -417,9 +425,10 @@ class UrbanAirship {
       console.log("This feature is not supported on this platform.")
     }
   }
-  
+
   /**
-   * Gets the current badge number for iOS. Badging is not supported for Android and this method will always return 0.
+   * Gets the current badge number for iOS. Badging is not supported for Android
+   * and this method will always return 0.
    *
    * @return {Promise.<number>} A promise with the result.
    */
@@ -438,19 +447,25 @@ class UrbanAirship {
   }
 
   /**
-   * Displays an inbox message. 
-   * 
+   * Displays an inbox message.
+   *
    * @param {string} messageId The id of the message to be displayed.
-   * @param {boolean} [overlay=false] Display the message in an overlay. 
-   * @return {Promise.<boolean>} A promise with the result. 
+   * @param {boolean} [overlay=false] Display the message in an overlay.
+   * @return {Promise.<boolean>} A promise with the result.
    */
   static displayMessage(messageId: string, overlay: ?boolean): Promise<boolean> {
     return UrbanAirshipModule.displayMessage(messageId, overlay);
   }
 
   /**
-   * Retrieves the current inbox messages.
-   * 
+   * Retrieves the current inbox messages. Each message will have the following properties:
+   * "id": string - The messages ID. Needed to display, mark as read, or delete the message.
+   * "title": string - The message title.
+   * "sentDate": number - The message sent date in milliseconds.
+   * "listIconUrl": string, optional - The icon url for the message.
+   * "isRead": boolean - The unread/read status of the message.
+   * "extras": object - String to String map of any message extras.
+   *
    * @return {Promise.<Array>} A promise with the result.
    */
   static getInboxMessages(): Promise<Array> {
@@ -458,8 +473,8 @@ class UrbanAirship {
   }
 
   /**
-   * Deletes an inbox message. 
-   * 
+   * Deletes an inbox message.
+   *
    * @param {string} messageId The id of the message to be deleted.
    * @return {Promise.<boolean>} A promise with the result.
    */
@@ -468,28 +483,31 @@ class UrbanAirship {
   }
 
   /**
-   * Marks an inbox message as read. 
+   * Marks an inbox message as read.
    *
-   * @param {string} messageId The id of the message to be marked as read. 
-   * @return {Promise.<boolean>} A promise with the result. 
+   * @param {string} messageId The id of the message to be marked as read.
+   * @return {Promise.<boolean>} A promise with the result.
    */
   static markInboxMessageRead(messageId: string): Promise<boolean> {
     return UrbanAirshipModule.markInboxMessageRead(messageId);
   }
-  
+
   /**
-   * Forces the inbox to refresh. This is normally not needed as the inbox will automatically refresh on foreground or when a push arrives that's associated with a message. 
+   * Forces the inbox to refresh. This is normally not needed as the inbox will
+   * automatically refresh on foreground or when a push arrives that's associated
+   * with a message.
    *
-   * @return{Promise.<boolean>} A promise with the result. 
+   * @return{Promise.<boolean>} A promise with the result.
    */
   static refreshInbox(): Promise<boolean> {
     return UrbanAirshipModule.refreshInbox();
   }
 
   /**
-   * Sets the default behavior when the message center is launched from a push notification. If set to false the message center must be manually launched.
+   * Sets the default behavior when the message center is launched from a push
+   * notification. If set to false the message center must be manually launched.
    *
-   * @param {boolean} [enabled=true] enabled true to automatically launch the default message center, false to disable.
+   * @param {boolean} [enabled=true] true to automatically launch the default message center, false to disable.
    */
   static setAutoLaunchDefaultMessageCenter(enabled: boolean) {
     UrbanAirshipModule.setAutoLaunchDefaultMessageCenter(enabled);
