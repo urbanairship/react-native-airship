@@ -4,9 +4,13 @@ package com.urbanairship.reactnative;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.os.AsyncTaskCompat;
@@ -22,14 +26,18 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
+import com.urbanairship.actions.LandingPageActivity;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.push.TagGroupsEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
+import com.urbanairship.richpush.RichPushInbox;
+import com.urbanairship.richpush.RichPushMessage;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -62,6 +70,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String QUIET_TIME_START_MINUTE = "startMinute";
     private static final String QUIET_TIME_END_HOUR = "endHour";
     private static final String QUIET_TIME_END_MINUTE = "endMinute";
+
+    static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
 
     /**
      * Default constructor.
@@ -448,13 +458,150 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Badging is not supported on Android. Returns 0 if a badge count is requested on Android. 
+     * Badging is not supported on Android. Returns 0 if a badge count is requested on Android.
      *
      * @param promise The JS promise.
      */
     @ReactMethod
     public void getBadgeNumber(Promise promise) {
         promise.resolve(0);
+    }
+
+
+    /**
+     * Displays the default message center.
+     */
+    @ReactMethod
+    public void displayMessageCenter() {
+        UAirship.shared().getInbox().startInboxActivity();
+    }
+
+    /**
+     * Display an inbox message in the default message center.
+     *
+     * @param messageId The id of the message to be displayed.
+     * @param overlay Display the message in an overlay.
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void displayMessage(String messageId, boolean overlay, Promise promise) {
+        RichPushMessage message = UAirship.shared().getInbox().getMessage(messageId);
+
+        if (message == null) {
+            promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
+        } else {
+            if (overlay == true) {
+                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), LandingPageActivity.class)
+                        .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
+                        .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
+                        .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                this.getReactApplicationContext().startActivity(intent);
+            } else {
+                UAirship.shared().getInbox().startMessageActivity(messageId);
+            }
+        }
+    }
+
+    /**
+     * Retrieves the current inbox messages.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void getInboxMessages(Promise promise) {
+        WritableArray messagesArray = Arguments.createArray();
+
+        for (RichPushMessage message : UAirship.shared().getInbox().getMessages()) {
+            WritableMap messageMap = new WritableNativeMap();
+            messageMap.putString("title", message.getTitle());
+            messageMap.putString("id", message.getMessageId());
+            messageMap.putDouble("sentDate", message.getSentDate().getTime());
+            messageMap.putString("listIconUrl", message.getListIconUrl());
+            messageMap.putBoolean("isRead", message.isRead());
+            messageMap.putBoolean("isDeleted", message.isDeleted());
+
+            WritableMap extrasMap = new WritableNativeMap();
+            Bundle extras = message.getExtras();
+            for (String key : extras.keySet()) {
+                String value = extras.get(key).toString();
+                extrasMap.putString(key, value);
+            }
+
+            messageMap.putMap("extras", extrasMap);
+            messagesArray.pushMap(messageMap);
+        }
+
+        promise.resolve(messagesArray);
+    }
+
+    /**
+     * Deletes an inbox message.
+     *
+     * @param messageId The id of the message to be deleted.
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void deleteInboxMessage(String messageId, Promise promise) {
+        RichPushMessage message = UAirship.shared().getInbox().getMessage(messageId);
+
+        if (message == null) {
+            promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found");
+        } else {
+            message.delete();
+            promise.resolve(true);
+        }
+    }
+
+    /**
+     * Marks an inbox message as read.
+     *
+     * @param messageId The id of the message to be marked as read.
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void markInboxMessageRead(String messageId, Promise promise) {
+        RichPushMessage message = UAirship.shared().getInbox().getMessage(messageId);
+
+        if (message == null) {
+            promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
+        } else {
+            message.markRead();
+            promise.resolve(true);
+        }
+    }
+
+    /**
+     * Forces the inbox to refresh. This is normally not needed as the inbox will automatically refresh on foreground or when a push arrives thats associated with a message.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public  void refreshInbox(final Promise promise)  {
+        UAirship.shared().getInbox().fetchMessages(new RichPushInbox.FetchMessagesCallback() {
+            @Override
+            public void onFinished(boolean success) {
+                if (success) {
+                    promise.resolve(true);
+                } else {
+                   promise.reject("STATUS_DID_NOT_REFRESH","Inbox failed to refresh");
+                }
+            }
+        });
+    }
+
+    /**
+     * Sets the default behavior when the message center is launched from a push notification. If set to false the message center must be manually launched.
+     *
+     * @param enabled {@code true} to automatically launch the default message center, {@code false} to disable.
+     */
+    @ReactMethod
+    public void setAutoLaunchDefaultMessageCenter(boolean enabled)  {
+        PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext())
+                .edit()
+                .putBoolean(AUTO_LAUNCH_MESSAGE_CENTER, enabled)
+                .apply();
     }
 
     /**
@@ -511,5 +658,3 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
 }
-
-

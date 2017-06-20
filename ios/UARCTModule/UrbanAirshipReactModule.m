@@ -5,8 +5,11 @@
 #import "UARCTEventEmitter.h"
 #import "UARCTDeepLinkAction.h"
 #import "UARCTAutopilot.h"
+#import "UARCTMessageCenter.h"
 
 @implementation UrbanAirshipReactModule
+
+NSString * const UARCTErrorDomain = @"com.urbanairship.react";
 
 #pragma mark -
 #pragma mark Module setup
@@ -314,6 +317,120 @@ RCT_REMAP_METHOD(getBadgeNumber,
                  getBadgeNumber_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
     resolve(@([UIApplication sharedApplication].applicationIconBadgeNumber));
+}
+
+RCT_EXPORT_METHOD(displayMessageCenter) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UAirship defaultMessageCenter] display];
+    });
+}
+
+RCT_REMAP_METHOD(displayMessage,
+                 messageId:(NSString *)messageId
+                 overlay:(BOOL *)overlay
+                 displayMessage_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
+    
+    if (!message) {
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeMessageNotFound
+                                          userInfo:@{NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound}];
+        
+        reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
+    } else {
+        if (overlay) {
+            [UAOverlayViewController showMessage:message];
+        } else {
+            [[UAirship defaultMessageCenter] displayMessage:message animated:true];
+        }
+    }
+}
+
+RCT_REMAP_METHOD(getInboxMessages,
+                  getInboxMessages_resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    NSMutableArray *messages = [NSMutableArray array];
+    for (UAInboxMessage *message in [UAirship inbox].messageList.messages) {
+        
+        NSDictionary *icons = [message.rawMessageObject objectForKey:@"icons"];
+        NSString *iconUrl = [icons objectForKey:@"list_icon"];
+        NSNumber *sentDate = @([message.messageSent timeIntervalSince1970] * 1000);
+    
+        NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
+        [messageInfo setValue:message.title forKey:@"title"];
+        [messageInfo setValue:message.messageID forKey:@"id"];
+        [messageInfo setValue:sentDate forKey:@"sentDate"];
+        [messageInfo setValue:iconUrl forKey:@"listIconUrl"];
+        [messageInfo setValue:message.unread ? @NO : @YES  forKey:@"isRead"];
+        [messageInfo setValue:message.extra forKey:@"extras"];
+        [messageInfo setObject:message.deleted ? @NO : @YES forKey:@"isDeleted"];
+        
+        [messages addObject:messageInfo];
+    }
+
+    resolve(messages);
+}
+
+RCT_REMAP_METHOD(deleteInboxMessage,
+                 messageId:(NSString *)messageId
+                 deleteMessage_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
+    
+    if (!message) {
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeMessageNotFound
+                                          userInfo:@{NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound}];
+        
+        reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
+    } else {
+        [[UAirship inbox].messageList markMessagesDeleted:@[message] completionHandler:^(){
+            resolve(@YES);
+        }];
+    }
+}
+
+RCT_REMAP_METHOD(markInboxMessageRead,
+                 messageId:(NSString *)messageId
+                 markMessageRead_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
+    
+    if (!message) {
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeMessageNotFound
+                                          userInfo:@{NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound}];
+        
+        reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
+    } else {
+        [[UAirship inbox].messageList markMessagesRead:@[message] completionHandler:^(){
+            resolve(@YES);
+        }];
+    }
+}
+
+RCT_REMAP_METHOD(refreshInbox,
+                 refreshInbox_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:^(){
+        resolve(@YES);
+    } withFailureBlock:^(){
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeInboxRefreshFailed
+                                          userInfo:@{NSLocalizedDescriptionKey:UARCTErrorDescriptionInboxRefreshFailed}];
+        reject(UARCTStatusInboxRefreshFailed, UARCTErrorDescriptionInboxRefreshFailed, error);
+    }];
+}
+
+RCT_EXPORT_METHOD(setAutoLaunchDefaultMessageCenter:(BOOL)enabled) {
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:UARCTAutoLaunchMessageCenterKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end
