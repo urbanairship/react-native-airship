@@ -15,7 +15,7 @@ import com.urbanairship.reactnative.Event;
 public class NotificationOptInEvent implements Event {
 
     private static final String NOTIFICATION_OPT_IN_STATUS_EVENT = "com.urbanairship.notification_opt_in_status";
-    private static final String OPTED_IN = "optedIn";
+    private static final String OPT_IN = "optIn";
 
     private final boolean optInStatus;
 
@@ -38,7 +38,7 @@ public class NotificationOptInEvent implements Event {
     @Override
     public WritableMap getBody() {
         WritableMap map = Arguments.createMap();
-        map.putBoolean(OPTED_IN, optInStatus);
+        map.putBoolean(OPT_IN, optInStatus);
         return map;
     }
 
