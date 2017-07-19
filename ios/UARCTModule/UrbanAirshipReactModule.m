@@ -325,6 +325,12 @@ RCT_EXPORT_METHOD(displayMessageCenter) {
     });
 }
 
+RCT_EXPORT_METHOD(dismissMessageCenter) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UAirship defaultMessageCenter] dismiss];
+    });
+}
+
 RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
                  overlay:(BOOL *)overlay

@@ -17,6 +17,14 @@
             </intent-filter>
         </receiver>
 
+         <activity
+            android:name="com.urbanairship.reactnative.CustomMessageCenterActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="com.urbanairship.VIEW_RICH_PUSH_INBOX" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
     </application>
 </manifest>

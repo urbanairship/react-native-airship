@@ -447,6 +447,13 @@ class UrbanAirship {
   }
 
   /**
+   * Dismisses the default message center.
+   */
+  static dismissMessageCenter() {
+    UrbanAirshipModule.dismissMessageCenter();
+  }
+
+  /**
    * Displays an inbox message.
    *
    * @param {string} messageId The id of the message to be displayed.

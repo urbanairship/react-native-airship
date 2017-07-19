@@ -467,13 +467,22 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         promise.resolve(0);
     }
 
-
     /**
      * Displays the default message center.
      */
     @ReactMethod
     public void displayMessageCenter() {
         UAirship.shared().getInbox().startInboxActivity();
+    }
+
+    /**
+     * Dismisses the default message center.
+     */
+    @ReactMethod
+    public void dismissMessageCenter() {
+        Intent intent = new Intent(this.getCurrentActivity(), CustomMessageCenterActivity.class)
+                .setAction("CLOSE");
+        this.getCurrentActivity().startActivity(intent);
     }
 
     /**
