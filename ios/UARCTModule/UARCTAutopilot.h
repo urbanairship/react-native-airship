@@ -3,6 +3,7 @@
 #import <Foundation/Foundation.h>
 
 extern NSString *const UARCTPresentationOptionsStorageKey;
+extern NSString *const UARCTAirshipKitRecommendedVersion;
 
 /**
  * Handles takeOff for the Urban Airship SDK.
