@@ -9,7 +9,7 @@
 #import "AirshipLib.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
-NSString *const UARCTAirshipKitRecommendedVersion = @"8.4.2";
+NSString *const UARCTAirshipKitRecommendedVersion = @"8.4.3";
 
 @implementation UARCTAutopilot
 
@@ -48,7 +48,7 @@ NSString *const UARCTAirshipKitRecommendedVersion = @"8.4.2";
     }
 
     if (([UARCTAirshipKitRecommendedVersion compare:[UAirshipVersion get] options:NSNumericSearch] != NSOrderedAscending)) {
-         UA_LWARN(@"Current version of AirshipKit is below the recommended version. Current version: %@ Recommended version: %@", [UAirshipVersion get], UARCTAirshipKitRecommendedVersion);
+         UA_LIMPERR(@"Current version of AirshipKit is below the recommended version. Current version: %@ Recommended version: %@", [UAirshipVersion get], UARCTAirshipKitRecommendedVersion);
     }
 
 
