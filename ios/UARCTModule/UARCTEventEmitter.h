@@ -37,4 +37,9 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
  */
 - (void)removeListeners:(NSInteger)count;
 
+/**
+ * Sends an inbox updated event.
+ */
+- (void)inboxUpdated;
+
 @end
