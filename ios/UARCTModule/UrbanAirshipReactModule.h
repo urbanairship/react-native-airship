@@ -1,7 +1,13 @@
 /* Copyright 2017 Urban Airship and Contributors */
 
 #import <React/RCTEventEmitter.h>
+
+#if __has_include("AirshipLib.h")
 #import "AirshipLib.h"
+#else
+@import AirshipKit;
+#endif
+
 
 /**
  * React module for Urban Airship

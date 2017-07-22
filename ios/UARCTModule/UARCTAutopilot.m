@@ -1,12 +1,10 @@
 /* Copyright 2017 Urban Airship and Contributors */
 
-#import <UIKit/UIKit.h>
+
 #import "UARCTAutopilot.h"
 #import "UARCTEventEmitter.h"
 #import "UARCTDeepLinkAction.h"
 #import "UARCTMessageCenter.h"
-
-#import "AirshipLib.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
 NSString *const UARCTAirshipKitRecommendedVersion = @"8.4.3";
