@@ -25,6 +25,9 @@ project.xcworkspace
 # Cocoapods
 Pods/
 
+# Carthage
+Carthage/
+
 # node.js
 #
 node_modules/

@@ -170,12 +170,19 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../../../ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/common/**",
-					"$(SRCROOT)/../../../ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios",
+					"$(SRCROOT)/../../../ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios/**",
 					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/common/**",
-					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios",
+					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios/**",
+					"$(SRCROOT)../../AirshipSample/ios/Carthage/Build/iOS/AirshipKit.framework/**",
+					"$(SRCROOT)/../sample/AirshipSample/ios/Carthage/Build/iOS/AirshipKit.framework/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)../../AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/**/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)../../AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/**",
+					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/**",
+					"$(SRCROOT)../../AirshipSample/ios/Carthage/Build/iOS/**",
+					"$(SRCROOT)/../sample/AirshipSample/ios/Carthage/Build/iOS/**",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -192,12 +199,19 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../../../ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/common/**",
-					"$(SRCROOT)/../../../ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios",
+					"$(SRCROOT)/../../../ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios/**",
 					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/common/**",
-					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios",
+					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios/**",
+					"$(SRCROOT)../../AirshipSample/ios/Carthage/Build/iOS/AirshipKit.framework/**",
+					"$(SRCROOT)/../sample/AirshipSample/ios/Carthage/Build/iOS/AirshipKit.framework/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)../../AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/**/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)../../AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/**/**",
+					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/**/**",
+					"$(SRCROOT)../../AirshipSample/ios/Carthage/Build/iOS/**",
+					"$(SRCROOT)/../sample/AirshipSample/ios/Carthage/Build/iOS/**",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
