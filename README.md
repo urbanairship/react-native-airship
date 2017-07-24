@@ -23,29 +23,22 @@ Please visit https://support.urbanairship.com/ for any issues integrating or usi
 ## iOS Installation
 
 1) Install and link the module:
+
 ```
 react-native install urbanairship-react-native
 react-native link urbanairship-react-native
 ```
 
-2) Install [cocoapods](https://guides.cocoapods.org/using/getting-started.html)
+2) Install AirshipKit by following (installation guide)[https://docs.urbanairship.com/platform/ios/#sdk-installation].
+The react module will do its best to find the AirshipKit path, but if its unable to find it for your project due to a
+non standard install path for Carthage or manual installion, you can set `AIRSHIP_SEARCH_PATH` vairable with the
+location of the framework.
 
-3) Update the app's Podfile to include the Urban Airship SDK:
-```
-pod 'UrbanAirship-iOS-SDK'
-```
-
-4) Update your pods:
-```
-pod install
-```
-
-5) Open your apps project in the generated `.xcworkspace` file, add the following
-capabilities:
+3) Add the following capabilities for your application target:
   - Push Notification
   - Background Modes > Remote Notifications
 
-6) Create a plist `AirshipConfig.plist` and include it in your application’s target:
+4) Create a plist `AirshipConfig.plist` and include it in your application’s target:
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -63,8 +56,9 @@ capabilities:
 </plist>
 ```
 
-7) Optional. In order to take advantage of iOS 10 notification attachments, such as images, animated gifs, and
-video, you will need to create a notification service extension by following the [iOS Notification Service Extension Guide](https://docs.urbanairship.com/platform/reference/ios-extension/#cocoapods)
+5) Optional. In order to take advantage of iOS 10 notification attachments, such as images, animated gifs, and
+video, you will need to create a notification service extension by following the [iOS Notification Service Extension Guide](https://docs.urbanairship.com/platform/reference/ios-extension/)
+
 
 ## Android Installation
 
