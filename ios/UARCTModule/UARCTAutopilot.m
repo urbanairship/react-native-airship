@@ -47,7 +47,7 @@ NSString *const UARCTAirshipKitRecommendedVersion = @"8.4.3";
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
-    if (([UARCTAirshipKitRecommendedVersion compare:[UAirshipVersion get] options:NSNumericSearch] != NSOrderedAscending)) {
+    if (([UARCTAirshipKitRecommendedVersion compare:[UAirshipVersion get] options:NSNumericSearch] == NSOrderedDescending)) {
          UA_LIMPERR(@"Current version of AirshipKit is below the recommended version. Current version: %@ Recommended version: %@", [UAirshipVersion get], UARCTAirshipKitRecommendedVersion);
     }
 
