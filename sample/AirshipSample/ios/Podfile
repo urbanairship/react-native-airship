@@ -1,14 +1,13 @@
 use_frameworks!
 project 'AirshipSample.xcodeproj'
 
-target 'AirshipSample' do
+target 'AirshipSample-Cocoapods' do
   # Required for Urban Airship
   pod 'UrbanAirship-iOS-SDK'
 end
 
-target 'ServiceExtension' do
+target 'ServiceExtension-Cocoapods' do
 platform :ios, '10.0'
   # Pods for Service Extension
   pod 'UrbanAirship-iOS-AppExtensions'
 end
-
