@@ -217,13 +217,6 @@
 			remoteGlobalIDString = 2D2A28201D9B03D100D4039D;
 			remoteInfo = "RCTAnimation-tvOS";
 		};
-		6E00F1461F268F4E0048B6F4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 99912C481ECB77A500295C67;
-			remoteInfo = ServiceExtension;
-		};
 		6E00F1C31F268FE20048B6F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -313,9 +306,7 @@
 		571E3DC07FBB84B85AB0981C /* Pods-AirshipSample-Cocoapods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample-Cocoapods.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AirshipSample-Cocoapods/Pods-AirshipSample-Cocoapods.debug.xcconfig"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6E00F1661F268F4E0048B6F4 /* AirshipSample Carthage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AirshipSample Carthage.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E00F1671F268F4E0048B6F4 /* AirshipSample-Cocoapods copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AirshipSample-Cocoapods copy-Info.plist"; path = "/Users/ryan.lepinski/git/react-native-module/sample/AirshipSample/ios/AirshipSample-Cocoapods copy-Info.plist"; sourceTree = "<absolute>"; };
 		6E00F19A1F268F6F0048B6F4 /* ServiceExtension Carthage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ServiceExtension Carthage.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E00F19B1F268F6F0048B6F4 /* ServiceExtension Cocoapods copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ServiceExtension Cocoapods copy-Info.plist"; path = "/Users/ryan.lepinski/git/react-native-module/sample/AirshipSample/ios/ServiceExtension Cocoapods copy-Info.plist"; sourceTree = "<absolute>"; };
 		6E00F1C51F2690050048B6F4 /* AirshipAppExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AirshipAppExtensions.framework; path = Carthage/Build/iOS/AirshipAppExtensions.framework; sourceTree = "<group>"; };
 		6E00F1C71F2690100048B6F4 /* AirshipKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AirshipKit.framework; path = Carthage/Build/iOS/AirshipKit.framework; sourceTree = "<group>"; };
 		6E42C7DA1EBA98BC00C85B3A /* AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
@@ -574,8 +565,6 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				E31125E263967966FB2FAF00 /* Pods */,
 				2297A5C6A17907EDA3C1A0A5 /* Frameworks */,
-				6E00F1671F268F4E0048B6F4 /* AirshipSample-Cocoapods copy-Info.plist */,
-				6E00F19B1F268F6F0048B6F4 /* ServiceExtension Cocoapods copy-Info.plist */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -649,16 +638,15 @@
 			buildConfigurationList = 6E00F1631F268F4E0048B6F4 /* Build configuration list for PBXNativeTarget "AirshipSample Carthage" */;
 			buildPhases = (
 				6E00F1481F268F4E0048B6F4 /* Sources */,
+				6E00F1CA1F26901D0048B6F4 /* Carthage */,
 				6E00F14B1F268F4E0048B6F4 /* Frameworks */,
 				6E00F1591F268F4E0048B6F4 /* Resources */,
 				6E00F15E1F268F4E0048B6F4 /* Bundle React Native code and images */,
 				6E00F1611F268F4E0048B6F4 /* Embed App Extensions */,
-				6E00F1CA1F26901D0048B6F4 /* Carthage */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6E00F1451F268F4E0048B6F4 /* PBXTargetDependency */,
 				6E00F1C41F268FE20048B6F4 /* PBXTargetDependency */,
 			);
 			name = "AirshipSample Carthage";
@@ -671,9 +659,9 @@
 			buildConfigurationList = 6E00F1971F268F6F0048B6F4 /* Build configuration list for PBXNativeTarget "ServiceExtension Carthage" */;
 			buildPhases = (
 				6E00F1901F268F6F0048B6F4 /* Sources */,
+				6E00F1CB1F2690580048B6F4 /* Carthage */,
 				6E00F1921F268F6F0048B6F4 /* Frameworks */,
 				6E00F1951F268F6F0048B6F4 /* Resources */,
-				6E00F1CB1F2690580048B6F4 /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -1109,7 +1097,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
 		6E00F1CB1F2690580048B6F4 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1125,7 +1113,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
 		9D331DA0422AAA6755480151 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1212,11 +1200,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6E00F1451F268F4E0048B6F4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 99912C481ECB77A500295C67 /* ServiceExtension Cocoapods */;
-			targetProxy = 6E00F1461F268F4E0048B6F4 /* PBXContainerItemProxy */;
-		};
 		6E00F1C41F268FE20048B6F4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6E00F18E1F268F6F0048B6F4 /* ServiceExtension Carthage */;
@@ -1332,7 +1315,7 @@
 					"$(SRCROOT)/../node_modules/urbanairship-react-native/ios/**",
 					"$(SRCROOT)/../node_modules/urbanairship-react-native/ios/UARCTModule/**",
 				);
-				INFOPLIST_FILE = "AirshipSample-Cocoapods copy-Info.plist";
+				INFOPLIST_FILE = AirshipSample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1369,7 +1352,7 @@
 					"$(SRCROOT)/../node_modules/urbanairship-react-native/ios/**",
 					"$(SRCROOT)/../node_modules/urbanairship-react-native/ios/UARCTModule/**",
 				);
-				INFOPLIST_FILE = "AirshipSample-Cocoapods copy-Info.plist";
+				INFOPLIST_FILE = AirshipSample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1404,7 +1387,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "ServiceExtension Cocoapods copy-Info.plist";
+				INFOPLIST_FILE = ServiceExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.ServiceExtension;
@@ -1431,7 +1414,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "ServiceExtension Cocoapods copy-Info.plist";
+				INFOPLIST_FILE = ServiceExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.ServiceExtension;
