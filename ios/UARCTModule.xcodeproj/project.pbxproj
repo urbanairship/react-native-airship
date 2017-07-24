@@ -175,6 +175,8 @@
 					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios/**",
 					"$(SRCROOT)../../AirshipSample/ios/Carthage/Build/iOS/AirshipKit.framework/**",
 					"$(SRCROOT)/../sample/AirshipSample/ios/Carthage/Build/iOS/AirshipKit.framework/**",
+					"$(AIRSHIP_SEARCH_PATH)/AirshipKit.framework/**",
+					"$(AIRSHIP_SEARCH_PATH)/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -182,6 +184,7 @@
 					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/**",
 					"$(SRCROOT)../../AirshipSample/ios/Carthage/Build/iOS/**",
 					"$(SRCROOT)/../sample/AirshipSample/ios/Carthage/Build/iOS/**",
+					"$(AIRSHIP_SEARCH_PATH)/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -204,6 +207,8 @@
 					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/ios/**",
 					"$(SRCROOT)../../AirshipSample/ios/Carthage/Build/iOS/AirshipKit.framework/**",
 					"$(SRCROOT)/../sample/AirshipSample/ios/Carthage/Build/iOS/AirshipKit.framework/**",
+					"$(AIRSHIP_SEARCH_PATH)/AirshipKit.framework/**",
+					"$(AIRSHIP_SEARCH_PATH)/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -211,6 +216,7 @@
 					"$(SRCROOT)/../sample/AirshipSample/ios/Pods/UrbanAirship-iOS-SDK/AirshipKit/AirshipKit/**/**",
 					"$(SRCROOT)../../AirshipSample/ios/Carthage/Build/iOS/**",
 					"$(SRCROOT)/../sample/AirshipSample/ios/Carthage/Build/iOS/**",
+					"$(AIRSHIP_SEARCH_PATH)",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
