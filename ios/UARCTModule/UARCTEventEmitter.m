@@ -1,7 +1,6 @@
 /* Copyright 2017 Urban Airship and Contributors */
 
 #import "UARCTEventEmitter.h"
-#import "AirshipLib.h"
 
 @interface UARCTEventEmitter()
 @property(nonatomic, strong) NSMutableArray *pendingEvents;
