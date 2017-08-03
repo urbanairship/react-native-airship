@@ -500,7 +500,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
         } else {
             if (overlay == true) {
-                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), LandingPageActivity.class)
+                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomLandingPageActivity.class)
                         .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
                         .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
                         .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
@@ -508,8 +508,34 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
                 this.getReactApplicationContext().startActivity(intent);
             } else {
-                UAirship.shared().getInbox().startMessageActivity(messageId);
+                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
+                        .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
+                        .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
+                        .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                
+                this.getReactApplicationContext().startActivity(intent);
             }
+        }
+    }
+    
+    /**
+     * Dismisses the currently displayed inbox message.
+     *
+     * @param overlay Dismiss the message from an overlay.
+     */
+    @ReactMethod
+    public void dismissMessage(boolean overlay) {
+        if (overlay){
+            Intent intent = new Intent(this.getCurrentActivity(), CustomLandingPageActivity.class)
+                    .setAction("CLOSE")
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            this.getCurrentActivity().startActivity(intent);
+        } else {
+            Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
+                    .setAction("CLOSE")
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            this.getCurrentActivity().startActivity(intent);
         }
     }
 

@@ -465,6 +465,15 @@ class UrbanAirship {
   }
 
   /**
+   * Dismisses the currently displayed inbox message. 
+   *
+   * @param {boolean} [overlay=false] Dismisses the message in an overlay.
+   */
+  static dismissMessage(overlay: ?boolean) {
+    UrbanAirshipModule.dismissMessage(overlay);
+  }
+
+  /**
    * Retrieves the current inbox messages. Each message will have the following properties:
    * "id": string - The messages ID. Needed to display, mark as read, or delete the message.
    * "title": string - The message title.
