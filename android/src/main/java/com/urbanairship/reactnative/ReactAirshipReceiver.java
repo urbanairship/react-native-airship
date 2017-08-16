@@ -22,12 +22,14 @@ public class ReactAirshipReceiver extends AirshipReceiver {
     protected void onChannelCreated(@NonNull Context context, @NonNull String channelId) {
         Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
         EventEmitter.shared().sendEvent(context, event);
+        ReactAirshipPreferences.shared().checkOptInStatus(context);
     }
 
     @Override
     protected void onChannelUpdated(@NonNull Context context, @NonNull String channelId) {
         Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
         EventEmitter.shared().sendEvent(context, event);
+        ReactAirshipPreferences.shared().checkOptInStatus(context);
     }
 
     @Override
