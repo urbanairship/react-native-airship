@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.urbanairship.AirshipReceiver;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.PushMessage;
+import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.NotificationResponseEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.reactnative.events.RegistrationEvent;
@@ -22,12 +23,18 @@ public class ReactAirshipReceiver extends AirshipReceiver {
     protected void onChannelCreated(@NonNull Context context, @NonNull String channelId) {
         Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
         EventEmitter.shared().sendEvent(context, event);
+
+        // If the opt-in status changes send an event
+        UrbanAirshipReactModule.checkOptIn(context);
     }
 
     @Override
     protected void onChannelUpdated(@NonNull Context context, @NonNull String channelId) {
         Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
         EventEmitter.shared().sendEvent(context, event);
+
+        // If the opt-in status changes send an event
+        UrbanAirshipReactModule.checkOptIn(context);
     }
 
     @Override

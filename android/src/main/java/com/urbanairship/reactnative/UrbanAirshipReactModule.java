@@ -56,9 +56,6 @@ import static com.urbanairship.reactnative.Utils.convertJsonValue;
  */
 public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
-    private static final String SHARED_PREFERENCES_FILE = "com.urbanairship.reactnative";
-    private static final String NOTIFICATIONS_OPT_IN_KEY = "NOTIFICATIONS_OPT_IN_KEY";
-
     private static final String TAG_OPERATION_GROUP_NAME = "group";
     private static final String TAG_OPERATION_TYPE = "operationType";
     private static final String TAG_OPERATION_TAGS = "tags";
@@ -86,19 +83,11 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void initialize() {
         super.initialize();
 
-        final SharedPreferences preferences = getReactApplicationContext().getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
-
         getReactApplicationContext().addLifecycleEventListener(new LifecycleEventListener() {
             @Override
             public void onHostResume() {
                 // If the opt-in status changes send an event
-                boolean optIn = UAirship.shared().getPushManager().isOptIn();
-                if (preferences.getBoolean(NOTIFICATIONS_OPT_IN_KEY, true) != optIn) {
-                    preferences.edit().putBoolean(NOTIFICATIONS_OPT_IN_KEY, optIn).apply();
-
-                    Event event = new NotificationOptInEvent(optIn);
-                    EventEmitter.shared().sendEvent(getReactApplicationContext(), event);
-                }
+                checkOptIn(getReactApplicationContext());
             }
 
             @Override
@@ -110,6 +99,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             public void onHostDestroy() {
 
             }
+
         });
     }
 
@@ -655,6 +645,22 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
         return ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED &&
                 ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED;
+    }
+
+    /**
+     * Helper to determine user notifications authorization status
+     *
+     * @param context The application context.
+     */
+    static protected void checkOptIn(Context context) {
+        boolean optIn = UAirship.shared().getPushManager().isOptIn();
+
+        if (ReactAirshipPreferences.shared().getOptInStatus(context) != optIn) {
+            ReactAirshipPreferences.shared().setOptInStatus(optIn, context);
+
+            Event optInEvent = new NotificationOptInEvent(optIn);
+            EventEmitter.shared().sendEvent(context, optInEvent);
+        }
     }
 
 }
