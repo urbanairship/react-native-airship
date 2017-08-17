@@ -100,16 +100,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
             }
 
-            public void checkOptIn(Context context) {
-                boolean optIn = UAirship.shared().getPushManager().isOptIn();
-
-                if (ReactAirshipPreferences.shared().getOptInStatus(context) != optIn) {
-                    ReactAirshipPreferences.shared().setOptInStatus(optIn, context);
-
-                    Event optInEvent = new NotificationOptInEvent(optIn);
-                    EventEmitter.shared().sendEvent(context, optInEvent);
-                }
-            }
         });
     }
 
@@ -655,6 +645,22 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
         return ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED &&
                 ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED;
+    }
+
+    /**
+     * Helper to determine user notifications authorization status
+     *
+     * @param context The application context.
+     */
+    static protected void checkOptIn(Context context) {
+        boolean optIn = UAirship.shared().getPushManager().isOptIn();
+
+        if (ReactAirshipPreferences.shared().getOptInStatus(context) != optIn) {
+            ReactAirshipPreferences.shared().setOptInStatus(optIn, context);
+
+            Event optInEvent = new NotificationOptInEvent(optIn);
+            EventEmitter.shared().sendEvent(context, optInEvent);
+        }
     }
 
 }

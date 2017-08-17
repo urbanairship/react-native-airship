@@ -25,7 +25,7 @@ public class ReactAirshipReceiver extends AirshipReceiver {
         EventEmitter.shared().sendEvent(context, event);
 
         // If the opt-in status changes send an event
-        checkOptIn(context);
+        UrbanAirshipReactModule.checkOptIn(context);
     }
 
     @Override
@@ -34,18 +34,7 @@ public class ReactAirshipReceiver extends AirshipReceiver {
         EventEmitter.shared().sendEvent(context, event);
 
         // If the opt-in status changes send an event
-        checkOptIn(context);
-    }
-
-    public void checkOptIn(Context context) {
-        boolean optIn = UAirship.shared().getPushManager().isOptIn();
-
-        if (ReactAirshipPreferences.shared().getOptInStatus(context) != optIn) {
-            ReactAirshipPreferences.shared().setOptInStatus(optIn, context);
-
-            Event optInEvent = new NotificationOptInEvent(optIn);
-            EventEmitter.shared().sendEvent(context, optInEvent);
-        }
+        UrbanAirshipReactModule.checkOptIn(context);
     }
 
     @Override
