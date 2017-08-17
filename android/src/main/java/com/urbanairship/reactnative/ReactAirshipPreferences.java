@@ -19,7 +19,7 @@ public class ReactAirshipPreferences {
 
     private static final String SHARED_PREFERENCES_FILE = "com.urbanairship.reactnative";
 
-    protected static final String NOTIFICATIONS_OPT_IN_KEY = "NOTIFICATIONS_OPT_IN_KEY";
+    private static final String NOTIFICATIONS_OPT_IN_KEY = "NOTIFICATIONS_OPT_IN_KEY";
 
     /**
      * Returns the shared {@link ReactAirshipPreferences} instance.
@@ -30,7 +30,7 @@ public class ReactAirshipPreferences {
         return sharedInstance;
     }
 
-    public SharedPreferences getPreferences (Context context) {
+    private SharedPreferences getPreferences(Context context) {
         if (preferences == null) {
             preferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
         }
@@ -38,17 +38,20 @@ public class ReactAirshipPreferences {
         return preferences;
     }
 
-    public void checkOptInStatus (Context context) {
-        preferences = getPreferences(context);
+    /**
+     * Saves opt in status in shared preferences.
+     * @param optIn The opt in state.
+     * @param context The application context.
+     */
+    public void setOptInStatus(boolean optIn, Context context) {
+        getPreferences(context).edit().putBoolean(NOTIFICATIONS_OPT_IN_KEY, optIn).apply();
+    }
 
-        // If the opt-in status changes send an event
-        boolean optIn = UAirship.shared().getPushManager().isOptIn();
-
-        if (preferences.getBoolean(NOTIFICATIONS_OPT_IN_KEY, false) != optIn) {
-            preferences.edit().putBoolean(NOTIFICATIONS_OPT_IN_KEY, optIn).apply();
-
-            Event event = new NotificationOptInEvent(optIn);
-            EventEmitter.shared().sendEvent(context, event);
-        }
+    /**
+     * Gets opt in status from shared preferences.
+     * @param context The application context.
+     */
+    public boolean getOptInStatus(Context context) {
+        return getPreferences(context).getBoolean(NOTIFICATIONS_OPT_IN_KEY, false);
     }
 }

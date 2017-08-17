@@ -86,7 +86,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         getReactApplicationContext().addLifecycleEventListener(new LifecycleEventListener() {
             @Override
             public void onHostResume() {
-                ReactAirshipPreferences.shared().checkOptInStatus(getReactApplicationContext());
+                // If the opt-in status changes send an event
+                checkOptIn(getReactApplicationContext());
             }
 
             @Override
@@ -97,6 +98,17 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             @Override
             public void onHostDestroy() {
 
+            }
+
+            public void checkOptIn(Context context) {
+                boolean optIn = UAirship.shared().getPushManager().isOptIn();
+
+                if (ReactAirshipPreferences.shared().getOptInStatus(context) != optIn) {
+                    ReactAirshipPreferences.shared().setOptInStatus(optIn, context);
+
+                    Event optInEvent = new NotificationOptInEvent(optIn);
+                    EventEmitter.shared().sendEvent(context, optInEvent);
+                }
             }
         });
     }
