@@ -12,7 +12,7 @@ public class CustomMessageActivity extends MessageActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        if (getIntent() != null && "CLOSE".equals(getIntent().getAction())){
+        if (getIntent() != null && UrbanAirshipReactModule.CLOSE_MESSAGE_CENTER.equals(getIntent().getAction())){
             CustomMessageActivity.this.finish();
             return;
         }
@@ -22,7 +22,7 @@ public class CustomMessageActivity extends MessageActivity {
     protected void onNewIntent(Intent intent){
         super.onNewIntent(intent);
 
-        if (intent != null && "CLOSE".equals(intent.getAction())) {
+        if (intent != null && UrbanAirshipReactModule.CLOSE_MESSAGE_CENTER.equals(intent.getAction())) {
             finish();
             return;
         }

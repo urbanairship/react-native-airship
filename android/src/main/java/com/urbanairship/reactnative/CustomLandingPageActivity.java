@@ -13,7 +13,7 @@ public class CustomLandingPageActivity extends LandingPageActivity {
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        if (getIntent() != null && "CLOSE".equals(getIntent().getAction())) {
+        if (getIntent() != null && UrbanAirshipReactModule.CLOSE_MESSAGE_CENTER.equals(getIntent().getAction())) {
             finish();
         }
 
@@ -23,7 +23,7 @@ public class CustomLandingPageActivity extends LandingPageActivity {
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if (intent != null && "CLOSE".equals(intent.getAction())) {
+        if (intent != null && UrbanAirshipReactModule.CLOSE_MESSAGE_CENTER.equals(intent.getAction())) {
             finish();
             return;
         }

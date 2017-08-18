@@ -72,6 +72,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String QUIET_TIME_END_MINUTE = "endMinute";
 
     static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
+    static final String CLOSE_MESSAGE_CENTER = "CLOSE";
 
     /**
      * Default constructor.
@@ -481,7 +482,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void dismissMessageCenter() {
         Intent intent = new Intent(this.getCurrentActivity(), CustomMessageCenterActivity.class)
-                .setAction("CLOSE");
+                .setAction(CLOSE_MESSAGE_CENTER);
         this.getCurrentActivity().startActivity(intent);
     }
 
@@ -528,12 +529,12 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void dismissMessage(boolean overlay) {
         if (overlay){
             Intent intent = new Intent(this.getCurrentActivity(), CustomLandingPageActivity.class)
-                    .setAction("CLOSE")
+                    .setAction(CLOSE_MESSAGE_CENTER)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             this.getCurrentActivity().startActivity(intent);
         } else {
             Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
-                    .setAction("CLOSE")
+                    .setAction(CLOSE_MESSAGE_CENTER)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             this.getCurrentActivity().startActivity(intent);
         }
