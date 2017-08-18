@@ -25,13 +25,18 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 
 const styles = StyleSheet.create({
-  centeredContainer: {
+  backgroundContainer: {
     flex: 1,
     flexDirection:'column',
-    justifyContent: 'center',
+    backgroundColor: '#E0A500',
+  },
+  contentContainer: {
+    paddingVertical: 20,
     alignItems: 'center',
     backgroundColor: '#E0A500',
   },
@@ -143,6 +148,7 @@ export default class AirshipSample extends Component {
     this.handleNamedUserSet = this.handleNamedUserSet.bind(this);
     this.handleUpdateNamedUserText = this.handleUpdateNamedUserText.bind(this);
     this.handleRenderNamedUser = this.handleRenderNamedUser.bind(this);
+    this.handleMessageCenterDisplay = this.handleMessageCenterDisplay.bind(this);
 
     this.handleUpdateTagsList();
     this.handleUpdateNamedUser();
@@ -213,6 +219,10 @@ export default class AirshipSample extends Component {
     this.setState({tagText:text})
   }
 
+  handleMessageCenterDisplay() {
+    UrbanAirship.displayMessageCenter()
+  }
+
   componentWillMount() {
     UrbanAirship.getChannelId().then((channelId) => {
       this.setState({channelId:channelId})
@@ -260,42 +270,50 @@ export default class AirshipSample extends Component {
     }
 
     return (
-      <View style={styles.centeredContainer}>
-        <Image
-          style={{width: 300, height: 38, marginTop:50}}
-          source={require('./img/urban-airship-sidebyside.png')}
-        />
-        <View style={{height:75}}>
-        </View>
-        <EnablePushCell
-          notificationsEnabled={this.state.notificationsEnabled}
-          handleNotificationsEnabled={this.handleNotificationsEnabled}
-        />
-        <View>
-          {channelcell}
-        </View>
-        <NamedUserManagerCell
-          namedUserText={this.state.namedUserText}
-          handleNamedUserSet={this.handleNamedUserSet}
-          handleUpdateNamedUserText={this.handleUpdateNamedUserText}
-          handleRenderNamedUser={this.handleRenderNamedUser}
-        />
-        <TagsManagerCell
-          tagText={this.state.tagText}
-          tagsDS={this.state.tagsDS}
-          handleTagAdd={this.handleTagAdd}
-          handleTagRemove={this.handleTagRemove}
-          handleUpdateTagText={this.handleUpdateTagText}
-        />
-        <EnableLocationCell
-          locationEnabled={this.state.locationEnabled}
-          handleLocationEnabled={this.handleLocationEnabled}
-        />
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <View style={styles.backgroundContainer}>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          <Image
+            style={{width: 300, height: 38, marginTop:50, alignItems:'center'}}
+            source={require('./img/urban-airship-sidebyside.png')}
+          />
+          <View style={{height:75}}>
+            </View>
+              <EnablePushCell
+                notificationsEnabled={this.state.notificationsEnabled}
+                handleNotificationsEnabled={this.handleNotificationsEnabled}
+              />
+            <View>
+              {channelcell}
+          </View>
+          <NamedUserManagerCell
+            namedUserText={this.state.namedUserText}
+            handleNamedUserSet={this.handleNamedUserSet}
+            handleUpdateNamedUserText={this.handleUpdateNamedUserText}
+            handleRenderNamedUser={this.handleRenderNamedUser}
+          />
+          <TagsManagerCell
+            tagText={this.state.tagText}
+            tagsDS={this.state.tagsDS}
+            handleTagAdd={this.handleTagAdd}
+            handleTagRemove={this.handleTagRemove}
+            handleUpdateTagText={this.handleUpdateTagText}
+          />
+          <EnableLocationCell
+            locationEnabled={this.state.locationEnabled}
+            handleLocationEnabled={this.handleLocationEnabled}
+          />
+          <Button
+             color='#0d6a83'
+             onPress={() => this.handleMessageCenterDisplay()}
+             title="Message Center"
+          />
+          <Text style={styles.instructions}>
+            Press Cmd+R to reload,{'\n'}
+            Cmd+D or shake for dev menu
+          </Text>
+        </ScrollView>
+    </View>
+
     );
   }
 }

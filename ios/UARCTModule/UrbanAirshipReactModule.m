@@ -5,6 +5,11 @@
 #import "UARCTDeepLinkAction.h"
 #import "UARCTAutopilot.h"
 #import "UARCTMessageCenter.h"
+#import "UARCTMessageViewController.h"
+
+@interface UrbanAirshipReactModule()
+@property (nonatomic, weak) UARCTMessageViewController *messageViewController;
+@end
 
 @implementation UrbanAirshipReactModule
 
@@ -324,6 +329,12 @@ RCT_EXPORT_METHOD(displayMessageCenter) {
     });
 }
 
+RCT_EXPORT_METHOD(dismissMessageCenter) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UAirship defaultMessageCenter] dismiss];
+    });
+}
+
 RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
                  overlay:(BOOL *)overlay
@@ -342,8 +353,34 @@ RCT_REMAP_METHOD(displayMessage,
         if (overlay) {
             [UAOverlayViewController showMessage:message];
         } else {
-            [[UAirship defaultMessageCenter] displayMessage:message animated:true];
+            UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAirship resources]];
+            [mvc loadMessage:message onlyIfChanged:true];
+            
+            UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
+            
+            self.messageViewController = mvc;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
+            });
         }
+    }
+}
+
+RCT_REMAP_METHOD(dismissMessage,
+                 overlay:(BOOL *)overlay
+                 dismissMessage_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    if (overlay) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UAOverlayViewController closeAll:YES];
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.messageViewController dismissViewControllerAnimated:YES completion:nil];
+            self.messageViewController = nil;
+        });
     }
 }
 

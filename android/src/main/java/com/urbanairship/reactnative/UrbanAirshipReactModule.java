@@ -69,6 +69,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String QUIET_TIME_END_MINUTE = "endMinute";
 
     static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
+    static final String CLOSE_MESSAGE_CENTER = "CLOSE";
 
     /**
      * Default constructor.
@@ -457,13 +458,22 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         promise.resolve(0);
     }
 
-
     /**
      * Displays the default message center.
      */
     @ReactMethod
     public void displayMessageCenter() {
         UAirship.shared().getInbox().startInboxActivity();
+    }
+
+    /**
+     * Dismisses the default message center.
+     */
+    @ReactMethod
+    public void dismissMessageCenter() {
+        Intent intent = new Intent(this.getCurrentActivity(), CustomMessageCenterActivity.class)
+                .setAction(CLOSE_MESSAGE_CENTER);
+        this.getCurrentActivity().startActivity(intent);
     }
 
     /**
@@ -481,7 +491,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
         } else {
             if (overlay == true) {
-                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), LandingPageActivity.class)
+                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomLandingPageActivity.class)
                         .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
                         .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
                         .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
@@ -489,8 +499,34 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
                 this.getReactApplicationContext().startActivity(intent);
             } else {
-                UAirship.shared().getInbox().startMessageActivity(messageId);
+                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
+                        .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
+                        .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
+                        .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                
+                this.getReactApplicationContext().startActivity(intent);
             }
+        }
+    }
+    
+    /**
+     * Dismisses the currently displayed inbox message.
+     *
+     * @param overlay Dismiss the message from an overlay.
+     */
+    @ReactMethod
+    public void dismissMessage(boolean overlay) {
+        if (overlay){
+            Intent intent = new Intent(this.getCurrentActivity(), CustomLandingPageActivity.class)
+                    .setAction(CLOSE_MESSAGE_CENTER)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            this.getCurrentActivity().startActivity(intent);
+        } else {
+            Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
+                    .setAction(CLOSE_MESSAGE_CENTER)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            this.getCurrentActivity().startActivity(intent);
         }
     }
 

@@ -447,6 +447,13 @@ class UrbanAirship {
   }
 
   /**
+   * Dismisses the default message center.
+   */
+  static dismissMessageCenter() {
+    UrbanAirshipModule.dismissMessageCenter();
+  }
+
+  /**
    * Displays an inbox message.
    *
    * @param {string} messageId The id of the message to be displayed.
@@ -455,6 +462,15 @@ class UrbanAirship {
    */
   static displayMessage(messageId: string, overlay: ?boolean): Promise<boolean> {
     return UrbanAirshipModule.displayMessage(messageId, overlay);
+  }
+
+  /**
+   * Dismisses the currently displayed inbox message. 
+   *
+   * @param {boolean} [overlay=false] Dismisses the message in an overlay.
+   */
+  static dismissMessage(overlay: ?boolean) {
+    UrbanAirshipModule.dismissMessage(overlay);
   }
 
   /**
