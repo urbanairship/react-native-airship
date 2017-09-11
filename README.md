@@ -17,6 +17,7 @@ We accept pull requests! If you would like to submit a pull request, please fill
 Please visit https://support.urbanairship.com/ for any issues integrating or using this module.
 
 ### Requirements:
+ - Xcode 8.3+
  - React Native >= 0.44.0
  - React Native cli >= 2.0.1
 
