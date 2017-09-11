@@ -1,5 +1,10 @@
+Version 1.2.1 - September 11, 2017
+==================================
+- Added support for React Native >=.47
+- Fixed quiet time
+
 Version 1.2.0 - August 18, 2017
-=============================
+===============================
 - Added support for dismissing messages from outside the Message Center
 - Added support for Carthage
 - Updated Urban Airship Android SDK to 8.8.2
