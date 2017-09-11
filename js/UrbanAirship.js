@@ -401,7 +401,7 @@ class UrbanAirship {
    * @param {boolean} enabled true to enable quiet time, false to disable.
    */
   static setQuietTimeEnabled(enabled: boolean) {
-    UrbanAirshipModule.setUserNotificationsEnabled(enabled);
+    UrbanAirshipModule.setQuietTimeEnabled(enabled);
   }
 
   /**
@@ -410,7 +410,7 @@ class UrbanAirship {
    * @return {Promise.<boolean>} A promise with the result.
    */
   static isQuietTimeEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isUserNotificationsEnabled();
+    return UrbanAirshipModule.isQuietTimeEnabled();
   }
 
   /**
