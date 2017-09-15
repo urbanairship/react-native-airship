@@ -77,25 +77,32 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 -(void)deepLinkReceived:(NSString *)deepLink {
     id body = @{ @"deepLink" : deepLink };
-    if ([self sendEventWithName:UARCTDeepLinkEventName body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEventName, @"body": body}];
+
+    if (![self sendEventWithName:UARCTDeepLinkEventName body:body]) {
+        [self.pendingEvents addObject:@{ @"name": UARCTDeepLinkEventName, @"body": body}];
     }
 }
 
 #pragma mark -
 #pragma mark UAPushDelegate
 
--(void)receivedForegroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)())completionHandler {
+-(void)receivedForegroundNotification:(UANotificationContent *)notificationContent
+                    completionHandler:(void (^)(void))completionHandler {
+
     [self sendEventWithName:UARCTPushReceivedEventName body:[self eventBodyForNotificationContent:notificationContent]];
     completionHandler();
 }
 
--(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+-(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent
+                    completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+
     [self sendEventWithName:UARCTPushReceivedEventName body:[self eventBodyForNotificationContent:notificationContent]];
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
--(void)receivedNotificationResponse:(UANotificationResponse *)notificationResponse completionHandler:(void (^)())completionHandler {
+-(void)receivedNotificationResponse:(UANotificationResponse *)notificationResponse
+                  completionHandler:(void (^)(void))completionHandler {
+
     // Ignore dismisses for now
     if ([notificationResponse.actionIdentifier isEqualToString:UANotificationDismissActionIdentifier]) {
         completionHandler();
