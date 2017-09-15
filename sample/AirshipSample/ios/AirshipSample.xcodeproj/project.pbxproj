@@ -20,7 +20,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		47F45E53476E418F1F5289E9 /* Pods_AirshipSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09800642C34D8BF8D3E02A5B /* Pods_AirshipSample.framework */; };
 		4D8799C1A114A2785DEE38C6 /* Pods_AirshipSample_Cocoapods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79C098CD57EB62B19AA03F9F /* Pods_AirshipSample_Cocoapods.framework */; };
 		4DC4687A363E05E974C5AA6B /* Pods_ServiceExtension_Cocoapods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20D7FF0B10BC854CFD8CC8A /* Pods_ServiceExtension_Cocoapods.framework */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
@@ -52,7 +51,6 @@
 		99912C4D1ECB77A500295C67 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 99912C4C1ECB77A500295C67 /* NotificationService.m */; };
 		99912C511ECB77A500295C67 /* ServiceExtension Cocoapods.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 99912C491ECB77A500295C67 /* ServiceExtension Cocoapods.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C4AFD9952B954B7D9B5ACC6F /* libUARCTModule.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB190E2D822D493D9C6446CB /* libUARCTModule.a */; };
-		F585A7885736C35A3E105A59 /* Pods_ServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D678DF918FCAA33BE9000AE0 /* Pods_ServiceExtension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -350,7 +348,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				C4AFD9952B954B7D9B5ACC6F /* libUARCTModule.a in Frameworks */,
-				47F45E53476E418F1F5289E9 /* Pods_AirshipSample.framework in Frameworks */,
 				4D8799C1A114A2785DEE38C6 /* Pods_AirshipSample_Cocoapods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,7 +384,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F585A7885736C35A3E105A59 /* Pods_ServiceExtension.framework in Frameworks */,
 				4DC4687A363E05E974C5AA6B /* Pods_ServiceExtension_Cocoapods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,6 +507,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		6E08B7501F6C8C8300E5A8C4 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				AB190E2D822D493D9C6446CB /* libUARCTModule.a */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		6E42C7BC1EBA956900C85B3A /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -567,6 +571,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				E31125E263967966FB2FAF00 /* Pods */,
 				2297A5C6A17907EDA3C1A0A5 /* Frameworks */,
+				6E08B7501F6C8C8300E5A8C4 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
