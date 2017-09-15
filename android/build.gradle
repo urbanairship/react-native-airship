@@ -14,5 +14,5 @@ dependencies {
     compile 'com.facebook.react:react-native:[0.40,)'
     compile 'com.google.android.gms:play-services-gcm:[11.0.1,)'
 
-    compile 'com.urbanairship.android:urbanairship-sdk:8.8.2'
+    compile 'com.urbanairship.android:urbanairship-sdk:8.8.3'
 }
