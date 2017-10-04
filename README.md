@@ -30,7 +30,7 @@ react-native install urbanairship-react-native
 react-native link urbanairship-react-native
 ```
 
-2) Install AirshipKit by following (installation guide)[https://docs.urbanairship.com/platform/ios/#sdk-installation].
+2) Install AirshipKit by following [installation guide](https://docs.urbanairship.com/platform/ios/#sdk-installation).
 The react module will do its best to find the `AirshipKit` path, but if it's unable to find it for your project due to a
 non-standard install path or manual installation, you can set `AIRSHIP_SEARCH_PATH` variable with the
 location of the framework.
