@@ -1,5 +1,10 @@
+Version 1.2.3 - October 30, 2017
+================================
+- Changed Android Message Center title to be "Message Center" instead of the app name
+- Updated Urban Airship Android SDK to 8.9.4
+
 Version 1.2.2 - September 15, 2017
-==============================
+==================================
 - Fixed Airship library linking
 - Fixed iOS deep linking on cold start
 
