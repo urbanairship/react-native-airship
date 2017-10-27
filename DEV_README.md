@@ -10,12 +10,12 @@ npm install -g react-native-cli
 brew install watchman
 ```
 
-1) In the root module directory, link the development module:
+2) In the root module directory, link the development module:
 ```
 npm link
 ```
 
-2) In `sample/AirshipSample` prepare the sample:
+3) In `sample/AirshipSample` prepare the sample:
 ```
 npm link urbanairship-react-native
 npm install
