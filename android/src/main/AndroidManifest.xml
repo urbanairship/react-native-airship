@@ -19,6 +19,7 @@
 
         <activity
             android:name="com.urbanairship.reactnative.CustomMessageCenterActivity"
+            android:label="@string/ua_message_center_title"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.DeviceDefault.Light">
             <intent-filter>
@@ -37,7 +38,7 @@
         </activity>
 
         <activity android:name="com.urbanairship.reactnative.CustomLandingPageActivity"
-            android:exported="false" 
+            android:exported="false"
             android:theme="@style/LandingPageStyle">
             <meta-data android:name="com.urbanairship.action.LANDING_PAGE_VIEW"
                 android:resource="@layout/ua_activity_landing_page"/>
