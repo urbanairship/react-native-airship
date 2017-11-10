@@ -4,6 +4,7 @@ package com.urbanairship.reactnative;
 
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 
 import com.urbanairship.Autopilot;
 import com.urbanairship.UAirship;
@@ -14,9 +15,12 @@ import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.DeepLinkAction;
 import com.urbanairship.actions.OpenRichPushInboxAction;
 import com.urbanairship.actions.OverlayRichPushMessageAction;
+import com.urbanairship.push.PushManager;
 import com.urbanairship.reactnative.events.DeepLinkEvent;
 import com.urbanairship.reactnative.events.InboxUpdatedEvent;
 import com.urbanairship.richpush.RichPushInbox;
+import com.urbanairship.push.notifications.DefaultNotificationFactory;
+import com.urbanairship.push.PushMessage;
 
 import static com.urbanairship.reactnative.UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER;
 
@@ -78,6 +82,24 @@ public class ReactAutopilot extends Autopilot {
                         return true;
                     }
                 });
+
+
+        DefaultNotificationFactory notificationFactory = new DefaultNotificationFactory(UAirship.getApplicationContext()) {
+            @Override
+            public NotificationCompat.Builder extendBuilder(@NonNull NotificationCompat.Builder builder, @NonNull PushMessage message, int notificationId) {
+                builder.getExtras().putBundle("push_message", message.getPushBundle());
+                return builder;
+            }
+        };
+
+        if (airship.getAirshipConfigOptions().notificationIcon != 0) {
+            notificationFactory.setSmallIconId(airship.getAirshipConfigOptions().notificationIcon);
+        }
+
+        notificationFactory.setColor(airship.getAirshipConfigOptions().notificationAccentColor);
+        notificationFactory.setNotificationChannel(airship.getAirshipConfigOptions().notificationChannel);
+
+        airship.getPushManager().setNotificationFactory(notificationFactory);
     }
 
 }

@@ -22,7 +22,6 @@ public class NotificationResponseEvent implements Event {
     private static final String RESPONSE_FOREGROUND = "isForeground";
     private static final String RESPONSE_NOTIFICATION = "notification";
 
-
     private final AirshipReceiver.NotificationInfo notificationInfo;
     private final AirshipReceiver.ActionButtonInfo actionButtonInfo;
 
@@ -56,8 +55,7 @@ public class NotificationResponseEvent implements Event {
     @Override
     public WritableMap getBody() {
         WritableMap map = Arguments.createMap();
-        map.putMap(RESPONSE_NOTIFICATION, new PushReceivedEvent(notificationInfo.getMessage()).getBody());
-
+        map.putMap(RESPONSE_NOTIFICATION, new PushReceivedEvent(notificationInfo).getBody());
 
         if (actionButtonInfo != null) {
             map.putString(RESPONSE_ACTION_ID, actionButtonInfo.getButtonId());
@@ -65,6 +63,7 @@ public class NotificationResponseEvent implements Event {
         } else {
             map.putBoolean(RESPONSE_FOREGROUND, true);
         }
+
 
         return map;
     }

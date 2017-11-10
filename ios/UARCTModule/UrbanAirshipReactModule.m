@@ -15,6 +15,9 @@
 
 NSString * const UARCTErrorDomain = @"com.urbanairship.react";
 
+NSString *const UARCTStatusUnavailable = @"UNAVAILABLE";
+
+
 #pragma mark -
 #pragma mark Module setup
 
@@ -62,8 +65,8 @@ RCT_REMAP_METHOD(isUserNotificationsOptedIn,
 }
 
 RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {
-  namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  [UAirship namedUser].identifier = namedUser.length ? namedUser : nil;
+    namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    [UAirship namedUser].identifier = namedUser.length ? namedUser : nil;
 }
 
 RCT_REMAP_METHOD(getNamedUser,
@@ -340,14 +343,14 @@ RCT_REMAP_METHOD(displayMessage,
                  overlay:(BOOL *)overlay
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
-    
+
     if (!message) {
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
                                               code:UARCTErrorCodeMessageNotFound
                                           userInfo:@{NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound}];
-        
+
         reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
     } else {
         if (overlay) {
@@ -355,11 +358,11 @@ RCT_REMAP_METHOD(displayMessage,
         } else {
             UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAirship resources]];
             [mvc loadMessage:message onlyIfChanged:true];
-            
+
             UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
-            
+
             self.messageViewController = mvc;
-            
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
             });
@@ -371,7 +374,7 @@ RCT_REMAP_METHOD(dismissMessage,
                  overlay:(BOOL *)overlay
                  dismissMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     if (overlay) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [UAOverlayViewController closeAll:YES];
@@ -385,16 +388,16 @@ RCT_REMAP_METHOD(dismissMessage,
 }
 
 RCT_REMAP_METHOD(getInboxMessages,
-                  getInboxMessages_resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+                 getInboxMessages_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
     NSMutableArray *messages = [NSMutableArray array];
     for (UAInboxMessage *message in [UAirship inbox].messageList.messages) {
-        
+
         NSDictionary *icons = [message.rawMessageObject objectForKey:@"icons"];
         NSString *iconUrl = [icons objectForKey:@"list_icon"];
         NSNumber *sentDate = @([message.messageSent timeIntervalSince1970] * 1000);
-    
+
         NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
         [messageInfo setValue:message.title forKey:@"title"];
         [messageInfo setValue:message.messageID forKey:@"id"];
@@ -403,7 +406,7 @@ RCT_REMAP_METHOD(getInboxMessages,
         [messageInfo setValue:message.unread ? @NO : @YES  forKey:@"isRead"];
         [messageInfo setValue:message.extra forKey:@"extras"];
         [messageInfo setObject:message.deleted ? @NO : @YES forKey:@"isDeleted"];
-        
+
         [messages addObject:messageInfo];
     }
 
@@ -414,14 +417,14 @@ RCT_REMAP_METHOD(deleteInboxMessage,
                  messageId:(NSString *)messageId
                  deleteMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
-    
+
     if (!message) {
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
                                               code:UARCTErrorCodeMessageNotFound
                                           userInfo:@{NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound}];
-        
+
         reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
     } else {
         [[UAirship inbox].messageList markMessagesDeleted:@[message] completionHandler:^(){
@@ -434,14 +437,14 @@ RCT_REMAP_METHOD(markInboxMessageRead,
                  messageId:(NSString *)messageId
                  markMessageRead_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
-    
+
     if (!message) {
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
                                               code:UARCTErrorCodeMessageNotFound
                                           userInfo:@{NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound}];
-        
+
         reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
     } else {
         [[UAirship inbox].messageList markMessagesRead:@[message] completionHandler:^(){
@@ -453,7 +456,7 @@ RCT_REMAP_METHOD(markInboxMessageRead,
 RCT_REMAP_METHOD(refreshInbox,
                  refreshInbox_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:^(){
         resolve(@YES);
     } withFailureBlock:^(){
@@ -469,4 +472,42 @@ RCT_EXPORT_METHOD(setAutoLaunchDefaultMessageCenter:(BOOL)enabled) {
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+RCT_EXPORT_METHOD(clearNotifications) {
+    if (@available(iOS 10.0, *)) {
+        [[UNUserNotificationCenter currentNotificationCenter] removeAllDeliveredNotifications];
+    }
+}
+
+RCT_EXPORT_METHOD(clearNotification:(NSString *)identifier) {
+    if (@available(iOS 10.0, *)) {
+        if (identifier) {
+            [[UNUserNotificationCenter currentNotificationCenter] removeDeliveredNotificationsWithIdentifiers:@[identifier]];
+        }
+    }
+}
+
+RCT_REMAP_METHOD(getActiveNotifications,
+                 getNotifications_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    if (@available(iOS 10.0, *)) {
+        [[UNUserNotificationCenter currentNotificationCenter] getDeliveredNotificationsWithCompletionHandler:^(NSArray<UNNotification *> * _Nonnull notifications) {
+
+            NSMutableArray *result = [NSMutableArray array];
+            for(UNNotification *unnotification in notifications) {
+                UANotificationContent *content = [UANotificationContent notificationWithUNNotification:unnotification];
+                [result addObject:[UARCTEventEmitter eventBodyForNotificationContent:content]];
+            }
+
+            resolve(result);
+        }];
+    } else {
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:0
+                                          userInfo:@{NSLocalizedDescriptionKey:@"Only available on iOS 10+"}];
+
+        reject(UARCTStatusUnavailable, @"Only available on iOS 10+", error);
+    }
+}
 @end
+

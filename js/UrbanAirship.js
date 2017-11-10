@@ -58,6 +58,7 @@ export type UAEventName = $Enum<{
  * @param {object} notification The notification.
  * @param {string} notification.alert The notification alert.
  * @param {string} notification.title The notification title.
+ * @param {string} notification.notificationId The notification ID.
  * @param {object} notification.extras Any push extras.
  * @param {string=} actionId The ID of the notification action button if available.
  * @param {boolean} isForeground Will always be true if the user taps the main notification. Otherwise its defined by the notificaiton action button.
@@ -70,7 +71,9 @@ export type UAEventName = $Enum<{
  * @type {object}
  * @param {string} alert The notification alert.
  * @param {string} title The notification title.
+ * @param {string} notification.notificationId The notification ID.
  * @param {object} extras Any push extras.
+
  */
 
 /**
@@ -465,7 +468,7 @@ class UrbanAirship {
   }
 
   /**
-   * Dismisses the currently displayed inbox message. 
+   * Dismisses the currently displayed inbox message.
    *
    * @param {boolean} [overlay=false] Dismisses the message in an overlay.
    */
@@ -528,6 +531,39 @@ class UrbanAirship {
    */
   static setAutoLaunchDefaultMessageCenter(enabled: boolean) {
     UrbanAirshipModule.setAutoLaunchDefaultMessageCenter(enabled);
+  }
+
+  /**
+   * Gets all the active notifications for the application.
+   * Supported on Android Marshmallow (23)+ and iOS 10+.
+   *
+   * @return {Promise.<Array>} A promise with the result.
+   */
+  static getActiveNotifications(): Promise<Array> {
+    return UrbanAirshipModule.getActiveNotifications();
+  }
+
+  /**
+   * Clears all notificaitons for the application.
+   * Supported on Android and iOS 10+. For older iOS devices, you can set
+   * the badge number to 0 to clear notificaitons.
+   *
+   * @param {boolean} [enabled=true] true to automatically launch the default message center, false to disable.
+   */
+  static clearNotifications() {
+    UrbanAirshipModule.clearNotifications();
+  }
+
+  /**
+   * Clears a specific notification.
+   * Supported on Android and iOS 10+.
+   *
+   * @param {string} identifier The notification identifier. The identifier will
+   * available in the pushReceived event and in the active notificaiton response
+   * under the "notificationId" field.
+   */
+  static clearNotification(identifier: string) {
+    UrbanAirshipModule.clearNotification(identifier)
   }
 }
 

@@ -48,4 +48,12 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
  */
 - (void)inboxUpdated;
 
+/**
+ * Creates a push map for a given notification content.
+ * @param content The notification content.
+ * @return Push map.
+ */
++ (NSMutableDictionary *)eventBodyForNotificationContent:(UANotificationContent *)content;
+
+
 @end
