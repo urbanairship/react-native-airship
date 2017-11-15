@@ -3,6 +3,7 @@
 package com.urbanairship.reactnative;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,9 +12,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.os.AsyncTaskCompat;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
@@ -34,10 +38,13 @@ import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
 import com.urbanairship.actions.LandingPageActivity;
 import com.urbanairship.analytics.AssociatedIdentifiers;
+import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.TagGroupsEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
+import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.richpush.RichPushInbox;
 import com.urbanairship.richpush.RichPushMessage;
+import com.urbanairship.util.UAStringUtil;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -598,11 +605,83 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void clearNotifications() {
+        NotificationManagerCompat.from(UAirship.getApplicationContext()).cancelAll();
+    }
+
+    @ReactMethod
+    public void clearNotification(String identifier) {
+        if (UAStringUtil.isEmpty(identifier)) {
+            return;
+        }
+
+        String[] parts = identifier.split(":", 2);
+        if (parts.length == 0) {
+            Log.e(getName(), "Invalid identifier: " + identifier);
+            return;
+        }
+
+        int id;
+        String tag = null;
+        try {
+            id = Integer.valueOf(parts[0]);
+        } catch (NumberFormatException e) {
+            Log.e(getName(), "Invalid identifier: " + identifier);
+            return;
+        }
+
+        if (parts.length == 2) {
+            tag = parts[1];
+        }
+
+
+        NotificationManagerCompat.from(UAirship.getApplicationContext()).cancel(tag, id);
+    }
+
+
+
     /**
-     * Forces the inbox to refresh. This is normally not needed as the inbox will automatically refresh on foreground or when a push arrives thats associated with a message.
+     * Retrieves the current inbox messages.
      *
      * @param promise The JS promise.
      */
+    @ReactMethod
+    public void getActiveNotifications(Promise promise) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            WritableArray notifications = Arguments.createArray();
+
+            NotificationManager notificationManager = (NotificationManager) UAirship.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            StatusBarNotification[] statusBarNotifications = notificationManager.getActiveNotifications();
+
+            for (StatusBarNotification statusBarNotification : statusBarNotifications) {
+                int id = statusBarNotification.getId();
+                String tag = statusBarNotification.getTag();
+
+                PushMessage pushMessage;
+                Bundle extras = statusBarNotification.getNotification().extras;
+                if (extras != null && extras.containsKey("push_message")) {
+                    pushMessage = new PushMessage(extras.getBundle("push_message"));
+                } else {
+                    pushMessage = new PushMessage(new Bundle());
+                }
+
+                notifications.pushMap(new PushReceivedEvent(pushMessage, id, tag).getBody());
+            }
+
+            promise.resolve(notifications);
+        } else {
+            promise.reject("UNSUPPORTED", "Getting active notifications is only supported on Marshmallow and newer devices.");
+        }
+    }
+
+
+
+        /**
+         * Forces the inbox to refresh. This is normally not needed as the inbox will automatically refresh on foreground or when a push arrives thats associated with a message.
+         *
+         * @param promise The JS promise.
+         */
     @ReactMethod
     public  void refreshInbox(final Promise promise)  {
         UAirship.shared().getInbox().fetchMessages(new RichPushInbox.FetchMessagesCallback() {

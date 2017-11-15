@@ -1,3 +1,7 @@
+Version 1.3.0 - November 15, 2017
+=================================
+- Added APIs to manage active notifications.
+
 Version 1.2.3 - October 30, 2017
 ================================
 - Changed Android Message Center title to be "Message Center" instead of the app name

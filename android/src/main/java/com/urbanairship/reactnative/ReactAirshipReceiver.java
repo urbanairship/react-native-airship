@@ -37,9 +37,18 @@ public class ReactAirshipReceiver extends AirshipReceiver {
         UrbanAirshipReactModule.checkOptIn(context);
     }
 
+
     @Override
     protected void onPushReceived(@NonNull Context context, @NonNull PushMessage message, boolean notificationPosted) {
-        Event event = new PushReceivedEvent(message);
+        if (!notificationPosted) {
+            Event event = new PushReceivedEvent(message);
+            EventEmitter.shared().sendEvent(context, event);
+        }
+    }
+
+    @Override
+    protected void onNotificationPosted(@NonNull Context context, @NonNull NotificationInfo notificationInfo) {
+        Event event = new PushReceivedEvent(notificationInfo);
         EventEmitter.shared().sendEvent(context, event);
     }
 

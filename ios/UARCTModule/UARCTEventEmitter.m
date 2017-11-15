@@ -89,14 +89,14 @@ static UARCTEventEmitter *sharedEventEmitter_;
 -(void)receivedForegroundNotification:(UANotificationContent *)notificationContent
                     completionHandler:(void (^)(void))completionHandler {
 
-    [self sendEventWithName:UARCTPushReceivedEventName body:[self eventBodyForNotificationContent:notificationContent]];
+    [self sendEventWithName:UARCTPushReceivedEventName body:[UARCTEventEmitter eventBodyForNotificationContent:notificationContent]];
     completionHandler();
 }
 
 -(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent
                     completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 
-    [self sendEventWithName:UARCTPushReceivedEventName body:[self eventBodyForNotificationContent:notificationContent]];
+    [self sendEventWithName:UARCTPushReceivedEventName body:[UARCTEventEmitter eventBodyForNotificationContent:notificationContent]];
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
@@ -176,7 +176,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (NSMutableDictionary *)eventBodyForNotificationResponse:(UANotificationResponse *)notificationResponse {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
-    [body setValue:[self eventBodyForNotificationContent:notificationResponse.notificationContent] forKey:@"notification"];
+    [body setValue:[UARCTEventEmitter eventBodyForNotificationContent:notificationResponse.notificationContent] forKey:@"notification"];
 
     if ([notificationResponse.actionIdentifier isEqualToString:UANotificationDefaultActionIdentifier]) {
         [body setValue:@(YES) forKey:@"isForeground"];
@@ -192,7 +192,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
     return body;
 }
 
-- (NSMutableDictionary *)eventBodyForNotificationContent:(UANotificationContent *)content {
++ (NSMutableDictionary *)eventBodyForNotificationContent:(UANotificationContent *)content {
     NSMutableDictionary *pushBody = [NSMutableDictionary dictionary];
     [pushBody setValue:content.alertBody forKey:@"alert"];
     [pushBody setValue:content.alertTitle forKey:@"title"];
@@ -210,6 +210,11 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
     if (extras.count) {
         [pushBody setValue:extras forKey:@"extras"];
+    }
+
+    if (@available(iOS 10.0, *)) {
+        NSString *identifier = content.notification.request.identifier;
+        [pushBody setValue:identifier forKey:@"notificationId"];
     }
 
     return pushBody;
