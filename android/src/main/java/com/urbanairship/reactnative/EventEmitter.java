@@ -37,7 +37,7 @@ class EventEmitter {
 
     /**
      * Increases the event listener count.
-     * Invokes any pending events.
+     * Sends any pending events.
      *
      * @param context The application context.
      */
