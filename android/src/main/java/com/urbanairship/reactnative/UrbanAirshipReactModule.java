@@ -710,6 +710,22 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Adds an event listener.
+     */
+    @ReactMethod
+    public void addListener() {
+        EventEmitter.shared().addListener(UAirship.getApplicationContext());
+    }
+
+    /**
+     * Removes an event listener.
+     */
+    @ReactMethod
+    public void removeListener() {
+        EventEmitter.shared().removeListener();
+    }
+
+    /**
      * Helper method to apply tag group changes.
      *
      * @param editor     The tag group editor.

@@ -352,10 +352,13 @@ class UrbanAirship {
    *
    * @param {string} eventName The event name. Either notificationResponse, pushReceived,
    * register, deepLink, or notificationOptInStatus.
-   * @param {Function} listener The event listner.
+   * @param {Function} listener The event listener.
    * @return {EmitterSubscription} An emitter subscription.
    */
   static addListener(eventName: UAEventName, listener: Function): EmitterSubscription {
+    if (Platform.OS === 'android') {
+      UrbanAirshipModule.addListener();
+    }
     var name = convertEventEnum(eventName);
     return AirshipNotificationEmitter.addListener(name, listener);
   }
@@ -365,9 +368,12 @@ class UrbanAirship {
    *
    * @param {string} eventName The event name. Either notificationResponse, pushReceived,
    * register, deepLink, or notificationOptInStatus.
-   * @param {Function} listener The event listner.
+   * @param {Function} listener The event listener.
    */
   static removeListener(eventName: AirshipEventName, listener: Function) {
+    if (Platform.OS === 'android') {
+      UrbanAirshipModule.removeListener();
+    }
     var name = convertEventEnum(eventName);
     AirshipNotificationEmitter.removeListener(name, listener);
   }
