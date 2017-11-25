@@ -710,19 +710,19 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Adds an event listener.
+     * Increases the event listener count.
      */
     @ReactMethod
-    public void addListener() {
-        EventEmitter.shared().addListener(UAirship.getApplicationContext());
+    public void increaseListenerCount() {
+        EventEmitter.shared().increaseListenerCount(UAirship.getApplicationContext());
     }
 
     /**
-     * Removes an event listener.
+     * Decreases the event listener count.
      */
     @ReactMethod
-    public void removeListener() {
-        EventEmitter.shared().removeListener();
+    public void decreaseListenerCount() {
+        EventEmitter.shared().decreaseListenerCount();
     }
 
     /**

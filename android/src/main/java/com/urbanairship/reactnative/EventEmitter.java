@@ -36,11 +36,12 @@ class EventEmitter {
     }
 
     /**
-     * Adds an event listener.
+     * Increases the event listener count.
+     * Invokes any pending events.
      *
      * @param context The application context.
      */
-    void addListener(Context context) {
+    void increaseListenerCount(Context context) {
         listenerCount++;
         if (listenerCount > 0 && pendingEvents.size() > 0) {
             for (Event event : pendingEvents) {
@@ -51,9 +52,9 @@ class EventEmitter {
     }
 
     /**
-     * Removes an event listener.
+     * Decreases the event listener count.
      */
-    void removeListener() {
+    void decreaseListenerCount() {
         listenerCount = Math.max(listenerCount - 1, 0);
     }
 

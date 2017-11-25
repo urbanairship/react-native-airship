@@ -357,7 +357,7 @@ class UrbanAirship {
    */
   static addListener(eventName: UAEventName, listener: Function): EmitterSubscription {
     if (Platform.OS === 'android') {
-      UrbanAirshipModule.addListener();
+      UrbanAirshipModule.increaseListenerCount();
     }
     var name = convertEventEnum(eventName);
     return AirshipNotificationEmitter.addListener(name, listener);
@@ -372,7 +372,7 @@ class UrbanAirship {
    */
   static removeListener(eventName: AirshipEventName, listener: Function) {
     if (Platform.OS === 'android') {
-      UrbanAirshipModule.removeListener();
+      UrbanAirshipModule.decreaseListenerCount();
     }
     var name = convertEventEnum(eventName);
     AirshipNotificationEmitter.removeListener(name, listener);
