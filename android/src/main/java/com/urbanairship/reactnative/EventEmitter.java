@@ -13,6 +13,9 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.urbanairship.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Emits events to listeners in the JS layer.
  */
@@ -20,6 +23,8 @@ class EventEmitter {
 
     private static EventEmitter sharedInstance = new EventEmitter();
     private ReactInstanceManager reactInstanceManager;
+    private List<Event> pendingEvents = new ArrayList<>();
+    private int listenerCount = 0;
 
     /**
      * Returns the shared {@link EventEmitter} instance.
@@ -28,6 +33,29 @@ class EventEmitter {
      */
     static EventEmitter shared() {
         return sharedInstance;
+    }
+
+    /**
+     * Increases the event listener count.
+     * Sends any pending events.
+     *
+     * @param context The application context.
+     */
+    void increaseListenerCount(Context context) {
+        listenerCount++;
+        if (listenerCount > 0 && pendingEvents.size() > 0) {
+            for (Event event : pendingEvents) {
+                sendEvent(context, event);
+            }
+            pendingEvents.clear();
+        }
+    }
+
+    /**
+     * Decreases the event listener count.
+     */
+    void decreaseListenerCount() {
+        listenerCount = Math.max(listenerCount - 1, 0);
     }
 
     /**
@@ -47,6 +75,11 @@ class EventEmitter {
                 }
             });
 
+            return;
+        }
+
+        if (listenerCount == 0) {
+            pendingEvents.add(event);
             return;
         }
 
