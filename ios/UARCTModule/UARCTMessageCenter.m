@@ -26,13 +26,13 @@ int const UARCTErrorCodeInboxRefreshFailed = 1;
 #pragma mark UAInboxDelegate
 
 - (void)showInboxMessage:(UAInboxMessage *)message {
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:UARCTAutoLaunchMessageCenterKey]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
         [[UAirship defaultMessageCenter] displayMessage:message];
     }
 }
 
 - (void)showInbox {
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:UARCTAutoLaunchMessageCenterKey]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
         [[UAirship defaultMessageCenter] display];
     }
 }

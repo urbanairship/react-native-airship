@@ -1,3 +1,7 @@
+Version 1.3.1 - December 22, 2017
+=================================
+- Fixed bug in iOS that caused message center to launch with auto launch disabled.
+
 Version 1.3.0 - November 15, 2017
 =================================
 - Added APIs to manage active notifications.
