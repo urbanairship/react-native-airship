@@ -5,13 +5,18 @@ package com.urbanairship.reactnative;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.urbanairship.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Emits events to listeners in the JS layer.
@@ -19,7 +24,9 @@ import com.urbanairship.Logger;
 class EventEmitter {
 
     private static EventEmitter sharedInstance = new EventEmitter();
+    private final List<Event> pendingEvents = new ArrayList<>();
     private ReactInstanceManager reactInstanceManager;
+    private boolean isEnabled;
 
     /**
      * Returns the shared {@link EventEmitter} instance.
@@ -28,6 +35,30 @@ class EventEmitter {
      */
     static EventEmitter shared() {
         return sharedInstance;
+    }
+
+
+    /**
+     * Enables/disables the event emitter.
+     *
+     * @param context The application context.
+     * @param isEnabled {@code true} to enable, {@code false} to disable.
+     */
+    void setEnabled(@NonNull Context context, boolean isEnabled) {
+        if (this.isEnabled == isEnabled) {
+            return;
+        }
+
+        this.isEnabled = isEnabled;
+        synchronized (pendingEvents) {
+            if (isEnabled) {
+                for (Event event : pendingEvents) {
+                    sendEvent(context, event);
+                }
+
+                pendingEvents.clear();
+            }
+        }
     }
 
     /**
@@ -46,6 +77,16 @@ class EventEmitter {
                     sendEvent(applicationContext, event);
                 }
             });
+
+            return;
+        }
+
+        if (!isEnabled) {
+            if (event.isCritical()) {
+                synchronized (pendingEvents) {
+                    pendingEvents.add(event);
+                }
+            }
 
             return;
         }
