@@ -31,6 +31,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
@@ -78,6 +79,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
     static final String CLOSE_MESSAGE_CENTER = "CLOSE";
 
+    private long listenerCount;
+
     /**
      * Default constructor.
      *
@@ -114,6 +117,36 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "UrbanAirshipReactModule";
+    }
+
+    /**
+     * Called when a new listener is added for a specified event name.
+     *
+     * @param eventName The event name.
+     */
+    @ReactMethod
+    public void addAndroidListener(String eventName) {
+        Logger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
+        listenerCount++;
+        EventEmitter.shared().setEnabled(getReactApplicationContext(), true);
+    }
+
+    /**
+     * Called when listeners are removed.
+     *
+     * @param count The count of listeners.
+     */
+    @ReactMethod
+    public void removeAndroidListeners(int count) {
+        Logger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
+        listenerCount -= count;
+        if (listenerCount < 0) {
+            listenerCount = 0;
+        }
+
+        if (listenerCount == 0) {
+            EventEmitter.shared().setEnabled(getReactApplicationContext(), false);
+        }
     }
 
     /**

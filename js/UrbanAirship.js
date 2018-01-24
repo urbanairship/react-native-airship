@@ -2,16 +2,16 @@
 'use strict';
 
 import {
-  NativeEventEmitter,
   NativeModules,
   Platform
 } from 'react-native';
 
 import UACustomEvent from './UACustomEvent.js'
 import TagGroupEditor from './TagGroupEditor.js'
+import UAEventEmitter from './UAEventEmitter.js'
 
 const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
-const AirshipNotificationEmitter = new NativeEventEmitter(UrbanAirshipModule);
+const EventEmitter = new UAEventEmitter();
 
 const CHANNEL_REGISTRATION_EVENT = "com.urbanairship.registration";
 const NOTIFICATION_RESPONSE_EVENT = "com.urbanairship.notification_response";
@@ -19,7 +19,6 @@ const PUSH_RECEIVED_EVENT = "com.urbanairship.push_received";
 const DEEP_LINK_EVENT = "com.urbanairship.deep_link";
 const INBOX_UPDATED_EVENT = "com.urbanairship.inbox_updated";
 const NOTIFICATION_OPT_IN_STATUS = "com.urbanairship.notification_opt_in_status";
-
 
 /**
  * @private
@@ -29,7 +28,7 @@ function convertEventEnum(type: UAEventName): ?string {
     return NOTIFICATION_RESPONSE_EVENT;
   } else if (type === 'pushReceived') {
     return PUSH_RECEIVED_EVENT;
-  } else if (type === 'register') {
+  } else if (type === 'register' || type === 'registration') {
     return CHANNEL_REGISTRATION_EVENT;
   } else if (type == 'deepLink') {
     return DEEP_LINK_EVENT;
@@ -38,7 +37,7 @@ function convertEventEnum(type: UAEventName): ?string {
   } else if (type == 'inboxUpdated') {
     return INBOX_UPDATED_EVENT;
   }
-  return "";
+  throw new Error("Invalid event name: " + type);
 }
 
 export type UAEventName = $Enum<{
@@ -48,7 +47,6 @@ export type UAEventName = $Enum<{
   deepLink: string,
   notificationOptInStatus: string
 }>;
-
 
 /**
  * Fired when a user responds to a notification.
@@ -357,7 +355,7 @@ class UrbanAirship {
    */
   static addListener(eventName: UAEventName, listener: Function): EmitterSubscription {
     var name = convertEventEnum(eventName);
-    return AirshipNotificationEmitter.addListener(name, listener);
+    return EventEmitter.addListener(name, listener);
   }
 
   /**
@@ -369,7 +367,7 @@ class UrbanAirship {
    */
   static removeListener(eventName: AirshipEventName, listener: Function) {
     var name = convertEventEnum(eventName);
-    AirshipNotificationEmitter.removeListener(name, listener);
+    EventEmitter.removeListener(name, listener);
   }
 
   /**
