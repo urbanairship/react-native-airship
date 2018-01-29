@@ -1,3 +1,7 @@
+Version 1.3.2 - January 29, 2018
+=================================
+- Fixed a bug in Android that caused delayed event emission.
+
 Version 1.3.1 - December 22, 2017
 =================================
 - Fixed bug in iOS that caused message center to launch with auto launch disabled.
