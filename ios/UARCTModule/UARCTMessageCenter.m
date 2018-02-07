@@ -27,7 +27,7 @@ int const UARCTErrorCodeInboxRefreshFailed = 1;
 
 - (void)showInboxMessage:(UAInboxMessage *)message {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
-        [[UAirship defaultMessageCenter] displayMessage:message];
+        [[UAirship defaultMessageCenter] displayMessageForID:message.messageID];
     }
 }
 
