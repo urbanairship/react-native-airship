@@ -1,3 +1,8 @@
+Version 1.4.0 - February 7, 2018
+=================================
+- Updated Urban Airship iOS SDK to 9.0.1
+- Updated Urban Airship Android SDK to 9.0.0
+
 Version 1.3.2 - January 29, 2018
 =================================
 - Fixed a bug in Android that caused delayed event emission.

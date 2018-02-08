@@ -2,6 +2,7 @@ use_frameworks!
 project 'AirshipSample.xcodeproj'
 
 target 'AirshipSample Cocoapods' do
+platform :ios, '9.0'
   # Required for Urban Airship
   pod 'UrbanAirship-iOS-SDK'
 end
