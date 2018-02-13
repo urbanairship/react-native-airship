@@ -253,7 +253,7 @@ export default class AirshipSample extends Component {
 
     UrbanAirship.addListener("registration", (event) => {
       console.log('registration:', JSON.stringify(event));
-      this.state.channelId = channelId;
+      this.state.channelId = event.channelId;
       this.setState(this.state);
     });
 

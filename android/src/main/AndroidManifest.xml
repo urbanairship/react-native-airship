@@ -39,7 +39,7 @@
 
         <activity android:name="com.urbanairship.reactnative.CustomLandingPageActivity"
             android:exported="false"
-            android:theme="@style/LandingPageStyle">
+            android:theme="@style/UrbanAirship.LandingPageActivity">
             <meta-data android:name="com.urbanairship.action.LANDING_PAGE_VIEW"
                 android:resource="@layout/ua_activity_landing_page"/>
             <meta-data android:name="com.urbanairship.push.iam.EXCLUDE_FROM_AUTO_SHOW"
