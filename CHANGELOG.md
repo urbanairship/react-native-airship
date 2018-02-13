@@ -1,5 +1,6 @@
 Version 1.4.2 - February 13, 2018
 =================================
+- Updated Urban Airship Android SDK to 9.0.1
 - Fixed compatibility issues with Android SDK 9.0
 
 Version 1.4.1 - February 12, 2018
