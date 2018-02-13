@@ -27,13 +27,13 @@ int const UARCTErrorCodeInboxRefreshFailed = 1;
 
 - (void)showInboxMessage:(UAInboxMessage *)message {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
-        [[UAirship defaultMessageCenter] displayMessageForID:message.messageID];
+        [[UAirship messageCenter] displayMessageForID:message.messageID];
     }
 }
 
 - (void)showInbox {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
-        [[UAirship defaultMessageCenter] display];
+        [[UAirship messageCenter] display];
     }
 }
 

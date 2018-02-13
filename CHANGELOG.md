@@ -1,3 +1,8 @@
+Version 1.4.1 - February 12, 2018
+=================================
+- Updated Urban Airship iOS SDK to 9.0.2
+- Fixed compatibility issues with iOS SDK 9.0
+
 Version 1.4.0 - February 7, 2018
 =================================
 - Updated Urban Airship iOS SDK to 9.0.1

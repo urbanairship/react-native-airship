@@ -1,13 +1,12 @@
 /* Copyright 2017 Urban Airship and Contributors */
 
-
 #import "UARCTAutopilot.h"
 #import "UARCTEventEmitter.h"
 #import "UARCTDeepLinkAction.h"
 #import "UARCTMessageCenter.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
-NSString *const UARCTAirshipKitRecommendedVersion = @"9.0.1";
+NSString *const UARCTAirshipKitRecommendedVersion = @"9.0.2";
 
 @implementation UARCTAutopilot
 
@@ -39,7 +38,7 @@ NSString *const UARCTAirshipKitRecommendedVersion = @"9.0.1";
     if (presentationOptions) {
         [[UAirship push] setDefaultPresentationOptions:presentationOptions];
     }
-    
+
     if ([[NSUserDefaults standardUserDefaults] objectForKey:UARCTAutoLaunchMessageCenterKey] == nil) {
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:UARCTAutoLaunchMessageCenterKey];
         [[NSUserDefaults standardUserDefaults] synchronize];

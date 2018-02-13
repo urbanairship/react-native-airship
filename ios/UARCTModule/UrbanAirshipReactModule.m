@@ -328,13 +328,13 @@ RCT_REMAP_METHOD(getBadgeNumber,
 
 RCT_EXPORT_METHOD(displayMessageCenter) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAirship defaultMessageCenter] display];
+        [[UAirship messageCenter] display];
     });
 }
 
 RCT_EXPORT_METHOD(dismissMessageCenter) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAirship defaultMessageCenter] dismiss];
+        [[UAirship messageCenter] dismiss];
     });
 }
 
@@ -510,4 +510,3 @@ RCT_REMAP_METHOD(getActiveNotifications,
     }
 }
 @end
-
