@@ -1,6 +1,7 @@
 /* Copyright 2017 Urban Airship and Contributors */
 
 #import "UARCTMessageCenter.h"
+#import "UARCTEventEmitter.h"
 
 @implementation UARCTMessageCenter
 static UARCTMessageCenter *sharedMessageCenterDelegate_;
@@ -25,15 +26,19 @@ int const UARCTErrorCodeInboxRefreshFailed = 1;
 
 #pragma mark UAInboxDelegate
 
-- (void)showInboxMessage:(UAInboxMessage *)message {
+- (void)showMessageForID:(NSString *)messageID {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
-        [[UAirship messageCenter] displayMessageForID:message.messageID];
+        [[UAirship messageCenter] displayMessageForID:messageID];
+    } else {
+        [[UARCTEventEmitter shared] showInboxMessage:messageID];
     }
 }
 
 - (void)showInbox {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
         [[UAirship messageCenter] display];
+    } else {
+        [[UARCTEventEmitter shared] showInbox];
     }
 }
 

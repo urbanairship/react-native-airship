@@ -18,9 +18,11 @@ import com.urbanairship.actions.OverlayRichPushMessageAction;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.reactnative.events.DeepLinkEvent;
 import com.urbanairship.reactnative.events.InboxUpdatedEvent;
+import com.urbanairship.reactnative.events.ShowInboxEvent;
 import com.urbanairship.richpush.RichPushInbox;
 import com.urbanairship.push.notifications.DefaultNotificationFactory;
 import com.urbanairship.push.PushMessage;
+import com.urbanairship.util.UAStringUtil;
 
 import static com.urbanairship.reactnative.UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER;
 
@@ -56,32 +58,14 @@ public class ReactAutopilot extends Autopilot {
             }
         });
 
-        // Set predicates on message center actions to control auto launch behavior
+        // Replace the message center actions to control auto launch behavior
         airship.getActionRegistry()
                 .getEntry(OverlayRichPushMessageAction.DEFAULT_REGISTRY_NAME)
-                .setPredicate(new ActionRegistry.Predicate() {
-                    @Override
-                    public boolean apply(ActionArguments actionArguments) {
-                        if (actionArguments.getSituation() == Action.SITUATION_PUSH_OPENED) {
-                            return PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true);
-                        }
-
-                        return true;
-                    }
-                });
+                .setDefaultAction(new CustomOverlayRichPushMessageAction());
 
         airship.getActionRegistry()
                 .getEntry(OpenRichPushInboxAction.DEFAULT_REGISTRY_NAME)
-                .setPredicate(new ActionRegistry.Predicate() {
-                    @Override
-                    public boolean apply(ActionArguments actionArguments) {
-                        if (actionArguments.getSituation() == Action.SITUATION_PUSH_OPENED) {
-                            return PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true);
-                        }
-
-                        return true;
-                    }
-                });
+                .setDefaultAction(new CustomOpenRichPushMessageAction());
 
 
         DefaultNotificationFactory notificationFactory = new DefaultNotificationFactory(UAirship.getApplicationContext()) {
@@ -102,4 +86,47 @@ public class ReactAutopilot extends Autopilot {
         airship.getPushManager().setNotificationFactory(notificationFactory);
     }
 
+    private static void sendShowInboxEvent(ActionArguments arguments) {
+        String messageId = arguments.getValue().getString();
+
+        if (messageId.equalsIgnoreCase(OverlayRichPushMessageAction.MESSAGE_ID_PLACEHOLDER)) {
+            PushMessage pushMessage = arguments.getMetadata().getParcelable(ActionArguments.PUSH_MESSAGE_METADATA);
+            if (pushMessage != null && pushMessage.getRichPushMessageId() != null) {
+                messageId = pushMessage.getRichPushMessageId();
+            } else if (arguments.getMetadata().containsKey(ActionArguments.RICH_PUSH_ID_METADATA)) {
+                messageId = arguments.getMetadata().getString(ActionArguments.RICH_PUSH_ID_METADATA);
+            } else {
+                messageId = null;
+            }
+        }
+
+        Event event = new ShowInboxEvent(messageId);
+        EventEmitter.shared().sendEvent(UAirship.getApplicationContext(), event);
+    }
+
+    public static class CustomOverlayRichPushMessageAction extends OverlayRichPushMessageAction {
+        @NonNull
+        @Override
+        public ActionResult perform(@NonNull ActionArguments arguments) {
+            if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
+                return super.perform(arguments);
+            } else {
+                sendShowInboxEvent(arguments);
+                return ActionResult.newEmptyResult();
+            }
+        }
+    }
+
+    public static class CustomOpenRichPushMessageAction extends OpenRichPushInboxAction {
+        @NonNull
+        @Override
+        public ActionResult perform(@NonNull ActionArguments arguments) {
+            if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
+                return super.perform(arguments);
+            } else {
+                sendShowInboxEvent(arguments);
+                return ActionResult.newEmptyResult();
+            }
+        }
+    }
 }
