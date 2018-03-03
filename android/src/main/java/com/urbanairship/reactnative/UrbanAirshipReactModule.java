@@ -190,6 +190,17 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Returns the registration token.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void getRegistrationToken(Promise promise) {
+        promise.resolve(UAirship.shared().getPushManager().getRegistrationToken());
+    }
+
+
+    /**
      * Sets the named user.
      *
      * @param namedUser The named user ID.

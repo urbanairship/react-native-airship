@@ -112,6 +112,12 @@ RCT_REMAP_METHOD(getChannelId,
     resolve([UAirship push].channelID);
 }
 
+RCT_REMAP_METHOD(getRegistrationToken,
+                 getRegistrationToken_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve([UAirship push].deviceToken);
+}
+
 RCT_REMAP_METHOD(associateIdentifier,
                  key:(NSString *)key
                  identifier:(NSString *)identifier) {
