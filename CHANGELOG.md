@@ -1,3 +1,12 @@
+
+Version 1.5.0 - March 5, 2018
+=================================
+- Updated Urban Airship iOS SDK to 9.0.3
+- Updated Urban Airship Android SDK to 9.0.2
+- Added method to get the current registration token
+- Added show inbox event when disabling the default message center
+- Allow clearing named user with an empty string
+
 Version 1.4.2 - February 13, 2018
 =================================
 - Updated Urban Airship Android SDK to 9.0.1
