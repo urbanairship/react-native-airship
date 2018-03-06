@@ -207,6 +207,14 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setNamedUser(String namedUser) {
+        if (namedUser != null) {
+            namedUser = namedUser.trim();
+        }
+
+        if (UAStringUtil.isEmpty(namedUser)) {
+            namedUser = null;
+        }
+
         UAirship.shared().getNamedUser().setId(namedUser);
     }
 
