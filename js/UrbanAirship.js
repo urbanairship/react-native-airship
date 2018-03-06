@@ -19,6 +19,7 @@ const PUSH_RECEIVED_EVENT = "com.urbanairship.push_received";
 const DEEP_LINK_EVENT = "com.urbanairship.deep_link";
 const INBOX_UPDATED_EVENT = "com.urbanairship.inbox_updated";
 const NOTIFICATION_OPT_IN_STATUS = "com.urbanairship.notification_opt_in_status";
+const SHOW_INBOX_EVENT = "com.urbanairship.show_inbox";
 
 /**
  * @private
@@ -36,6 +37,8 @@ function convertEventEnum(type: UAEventName): ?string {
     return NOTIFICATION_OPT_IN_STATUS;
   } else if (type == 'inboxUpdated') {
     return INBOX_UPDATED_EVENT;
+  } else if (type == 'showInbox') {
+    return SHOW_INBOX_EVENT;
   }
   throw new Error("Invalid event name: " + type);
 }
@@ -45,7 +48,9 @@ export type UAEventName = $Enum<{
   pushReceived: string,
   register: string,
   deepLink: string,
-  notificationOptInStatus: string
+  notificationOptInStatus: string,
+  inboxUpdated: string,
+  showInbox: string
 }>;
 
 /**
@@ -103,14 +108,23 @@ export type UAEventName = $Enum<{
  * @param {boolean} notificationOptions.badge If the user is opted into badge updates.
  */
 
- /**
-  * Event fired when the inbox is updated.
-  *
-  * @event UrbanAirship#inboxUpdated
-  * @type {object}
-  * @param {number} messageUnreadCount The message unread count.
-  * @param {number} messageCount THe total message count.
-  */
+/**
+ * Event fired when the inbox is updated.
+ *
+ * @event UrbanAirship#inboxUpdated
+ * @type {object}
+ * @param {number} messageUnreadCount The message unread count.
+ * @param {number} messageCount The total message count.
+ */
+
+/**
+ * Event fired when the inbox needs to be displayed. This event is only emitted if
+ * auto launch message center is disabled.
+ *
+ * @event UrbanAirship#showInbox
+ * @type {object}
+ * @param {string} [messageId] The optional message ID.
+ */
 
 /**
  * The main Urban Airship API.

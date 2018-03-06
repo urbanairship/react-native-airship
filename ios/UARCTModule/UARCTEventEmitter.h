@@ -49,6 +49,17 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 - (void)inboxUpdated;
 
 /**
+ * Sends an show inbox event.
+ */
+- (void)showInbox;
+
+/**
+ * Sends an show inbox message event.
+ * @param messageID The message ID.
+ */
+- (void)showInboxMessage:(NSString *)messageID;
+
+/**
  * Creates a push map for a given notification content.
  * @param content The notification content.
  * @return Push map.

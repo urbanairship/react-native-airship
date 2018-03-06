@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+ /* Copyright 2017 Urban Airship and Contributors */
 
 package com.urbanairship.reactnative.events;
 
