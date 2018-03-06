@@ -246,6 +246,15 @@ class UrbanAirship {
   }
 
   /**
+   * Gets the registration token.
+   *
+   * @return {Promise.<string>} A promise with the result.
+   */
+  static getRegistrationToken(): Promise<?string> {
+    return UrbanAirshipModule.getRegistrationToken();
+  }
+
+  /**
    * Associates an identifier for the Connect data stream.
    *
    * @param {string} key The identifier's key.
