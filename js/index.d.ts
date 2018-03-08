@@ -30,11 +30,9 @@ declare interface Operation {
     tags: Array<string>,
 }
 
-declare type Listener = (operations: Array<Operation>) => any;
-
 /** Editor for tag groups. **/
 declare class TagGroupEditor {
-    constructor(onApply: Listener);
+    constructor(onApply: (operations: Array<Operation>) => any);
     /**
      * Adds tags to a tag group.
      *
@@ -63,14 +61,14 @@ declare class TagGroupEditor {
     apply(): void;
 }
 
-declare enum UAEventName {
-    notificationResponse = 'notificationResponse',
-    pushReceived = 'pushReceived',
-    register = 'register',
-    deepLink = 'deepLink',
+export enum UAEventName {
+    notificationResponse = 'com.urbanairship.notification_response',
+    pushReceived = 'com.urbanairship.push_received',
+    register = 'com.urbanairship.registration',
+    deepLink = 'com.urbanairship.deep_link',
     notificationOptInStatus = 'notificationOptInStatus',
-    inboxUpdated = 'inboxUpdated',
-    showInbox = 'showInbox',
+    inboxUpdated = 'com.urbanairship.inbox_updated',
+    showInbox = 'com.urbanairship.show_inbox',
 }
 
 declare interface Message {
@@ -89,6 +87,8 @@ declare interface Message {
     /** String to String map of any message extras. **/
     extras: Map<string, any>;
 }
+
+declare type Listener = (response: any) => void;
 
 /**
  * The main Urban Airship API.
