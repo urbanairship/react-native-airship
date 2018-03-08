@@ -1,10 +1,10 @@
-declare module 'urbanairship-react-native' {
-    declare type Listener = (operations: Array) => any;
+import { EmitterSubscription } from 'react-native';
 
+declare module 'urbanairship-react-native' {
     /**
      * Urban Airship Custom events
      **/
-    declare class UACustomEvent {
+    class UACustomEvent {
         /**
          * Custom event constructor.
          *
@@ -15,20 +15,26 @@ declare module 'urbanairship-react-native' {
         /**
          * The event's transaction ID.
         */
-        get transactionId(): string | undefined;
-        set transactionId(value?: string);
+        transactionId(value?: string): string | undefined;
         /**
          * Adds a property to the custom event.
          *
          * @param {string} name The property name.
          * @param {string|number|boolean|string[]} value The property value.
          */
-        addProperty(name: string, value: string | number | boolean | Array<string>);
+        addProperty(name: string, value: string | number | boolean | Array<string>): void;
     }
 
+    interface Operation {
+        operationType: string,
+        group: string,
+        tags: Array<string>,
+    }
+
+    type Listener = (operations: Array<Operation>) => any;
 
     /** Editor for tag groups. **/
-    declare class TagGroupEditor {
+    class TagGroupEditor {
         constructor(onApply: Listener);
         /**
          * Adds tags to a tag group.
@@ -55,10 +61,10 @@ declare module 'urbanairship-react-native' {
          * @memberof TagGroupEditor
          * @function apply
          */
-        apply();
+        apply(): void;
     }
 
-    declare enum UAEventName {
+    enum UAEventName {
         notificationResponse = 'notificationResponse',
         pushReceived = 'pushReceived',
         register = 'register',
@@ -66,12 +72,29 @@ declare module 'urbanairship-react-native' {
         notificationOptInStatus = 'notificationOptInStatus',
         inboxUpdated = 'inboxUpdated',
         showInbox = 'showInbox',
-    };
+    }
+
+    interface Message {
+        /** The messages ID.Needed to display, mark as read, or delete the message. **/
+        id: string;
+        /** The message title. **/
+        title: string;
+        /** The message sent date in milliseconds. **/
+        sentDate: number;
+        /** ptional - The icon url for the message. **/
+        listIconUrl: string;
+        /** The unread / read status of the message. **/
+        isRead: boolean;
+        /** The deleted status of the message. **/
+        isDeleted: boolean;
+        /** String to String map of any message extras. **/
+        extras: Map<string, any>;
+    }
 
     /**
      * The main Urban Airship API.
      */
-    declare class UrbanAirship {
+    class UrbanAirship {
         /**
          * Sets user notifications enabled. The first time user notifications are enabled
          * on iOS, it will prompt the user for notification permissions.
@@ -107,7 +130,7 @@ declare module 'urbanairship-react-native' {
          *
          * @return {Promise.<string>} A promise with the result.
          */
-        static getNamedUser(): Promise<?string>;
+        static getNamedUser(): Promise<string | undefined>;
 
         /**
          * Adds a channel tag.
@@ -168,14 +191,14 @@ declare module 'urbanairship-react-native' {
          *
          * @return {Promise.<string>} A promise with the result.
          */
-        static getChannelId(): Promise<?string>;
+        static getChannelId(): Promise<string | undefined>;
 
         /**
          * Gets the registration token.
          *
          * @return {Promise.<string>} A promise with the result.
          */
-        static getRegistrationToken(): Promise<?string>;
+        static getRegistrationToken(): Promise<string | undefined>;
 
         /**
          * Associates an identifier for the Connect data stream.
@@ -183,7 +206,7 @@ declare module 'urbanairship-react-native' {
          * @param {string} key The identifier's key.
          * @param {string} value The identifier's value.
          */
-        static associateIdentifier(key: string, id: ?string): void;
+        static associateIdentifier(key: string, id?: string): void;
 
         /**
          * Adds a custom event.
@@ -192,7 +215,7 @@ declare module 'urbanairship-react-native' {
          * @return {Promise.<null, Error>}  A promise that returns null if resolved, or an Error if the
          * custom event is rejected.
          */
-        static addCustomEvent(event: UACustomEvent): Promise;
+        static addCustomEvent(event: UACustomEvent): Promise<void>;
 
         /**
          * Enables or disables Urban Airship location services.
@@ -230,7 +253,7 @@ declare module 'urbanairship-react-native' {
          * @return {Promise.<*, Error>}  A promise that returns the action result if the action
          * successfully runs, or the Error if the action was unable to be run.
          */
-        static runAction(name: string, value: ?any): Promise<any>;
+        static runAction(name: string, value?: any): Promise<any>;
 
         /**
          * Sets the foregorund presentation options for iOS.
@@ -262,7 +285,7 @@ declare module 'urbanairship-react-native' {
          * register, deepLink, or notificationOptInStatus.
          * @param {Function} listener The event listner.
          */
-        static removeListener(eventName: AirshipEventName, listener: Listener);
+        static removeListener(eventName: UAEventName, listener: Listener): void;
 
         /**
            * Sets the quiet time.
@@ -332,28 +355,20 @@ declare module 'urbanairship-react-native' {
          * @param {boolean} [overlay=false] Display the message in an overlay.
          * @return {Promise.<boolean>} A promise with the result.
          */
-        static displayMessage(messageId: string, overlay: ?boolean): Promise<boolean>;
+        static displayMessage(messageId: string, overlay?: boolean): Promise<boolean>;
 
         /**
          * Dismisses the currently displayed inbox message.
          *
          * @param {boolean} [overlay=false] Dismisses the message in an overlay.
          */
-        static dismissMessage(overlay: ?boolean): void;
+        static dismissMessage(overlay?: boolean): void;
 
         /**
-         * Retrieves the current inbox messages. Each message will have the following properties:
-         * "id": string - The messages ID. Needed to display, mark as read, or delete the message.
-         * "title": string - The message title.
-         * "sentDate": number - The message sent date in milliseconds.
-         * "listIconUrl": string, optional - The icon url for the message.
-         * "isRead": boolean - The unread/read status of the message.
-         * "isDeleted": boolean - The deleted status of the message.
-         * "extras": object - String to String map of any message extras.
-         *
+         * Retrieves the current inbox messages.
          * @return {Promise.<Array>} A promise with the result.
          */
-        static getInboxMessages(): Promise<Array>;
+        static getInboxMessages(): Promise<Array<Message>>;
 
         /**
          * Deletes an inbox message.
@@ -394,7 +409,7 @@ declare module 'urbanairship-react-native' {
          *
          * @return {Promise.<Array>} A promise with the result.
          */
-        static getActiveNotifications(): Promise<Array>;
+        static getActiveNotifications(): Promise<Array<any>>;
 
         /**
          * Clears all notificaitons for the application.
