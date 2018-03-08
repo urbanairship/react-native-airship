@@ -27,5 +27,6 @@
     "type": "git",
     "url": "git+https://github.com/urbanairship/react-native-module.git"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "typings": "./js/index.d.ts"
 }
