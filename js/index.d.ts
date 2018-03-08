@@ -61,16 +61,6 @@ declare class TagGroupEditor {
     apply(): void;
 }
 
-export enum UAEventName {
-    notificationResponse = 'com.urbanairship.notification_response',
-    pushReceived = 'com.urbanairship.push_received',
-    register = 'com.urbanairship.registration',
-    deepLink = 'com.urbanairship.deep_link',
-    notificationOptInStatus = 'notificationOptInStatus',
-    inboxUpdated = 'com.urbanairship.inbox_updated',
-    showInbox = 'com.urbanairship.show_inbox',
-}
-
 declare interface Message {
     /** The messages ID.Needed to display, mark as read, or delete the message. **/
     id: string;
@@ -93,7 +83,7 @@ declare type Listener = (response: any) => void;
 /**
  * The main Urban Airship API.
  */
-declare class UrbanAirship {
+export class UrbanAirship {
     /**
      * Sets user notifications enabled. The first time user notifications are enabled
      * on iOS, it will prompt the user for notification permissions.
@@ -275,7 +265,7 @@ declare class UrbanAirship {
      * @param {Function} listener The event listner.
      * @return {EmitterSubscription} An emitter subscription.
      */
-    static addListener(eventName: UAEventName, listener: Listener): EmitterSubscription;
+    static addListener(eventName: string, listener: Listener): EmitterSubscription;
 
     /**
      * Removes a listener for an Urban Airship event.
@@ -284,7 +274,7 @@ declare class UrbanAirship {
      * register, deepLink, or notificationOptInStatus.
      * @param {Function} listener The event listner.
      */
-    static removeListener(eventName: UAEventName, listener: Listener): void;
+    static removeListener(eventName: string, listener: Listener): void;
 
     /**
          * Sets the quiet time.
@@ -428,4 +418,16 @@ declare class UrbanAirship {
      * under the "notificationId" field.
      */
     static clearNotification(identifier: string): void;
+}
+
+export module UrbanAirship {
+    export enum Event {
+        notificationResponse = 'notificationResponse',
+        pushReceived = 'pushReceived',
+        register = 'register',
+        deepLink = 'deepLink',
+        notificationOptInStatus = 'notificationOptInStatus',
+        inboxUpdated = 'inboxUpdated',
+        showInbox = 'showInbox',
+    }
 }
