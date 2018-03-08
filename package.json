@@ -21,9 +21,6 @@
     "jsdoc-babel": "0.3.0",
     "minami": "1.2.3"
   },
-  "peerDependencies": {
-    "react-native": "0.50.3"
-  },
   "scripts": {
     "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.conf.json"
   },
