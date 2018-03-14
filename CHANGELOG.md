@@ -1,4 +1,9 @@
 
+Version 1.6.0 - March 14, 2018
+==============================
+- Updated Urban Airship Android SDK to 9.0.3
+- Added method to disable the iOS plugin integration at runtime
+
 Version 1.5.0 - March 5, 2018
 =================================
 - Updated Urban Airship iOS SDK to 9.0.3
