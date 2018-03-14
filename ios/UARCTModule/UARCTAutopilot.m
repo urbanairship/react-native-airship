@@ -10,12 +10,22 @@ NSString *const UARCTAirshipKitRecommendedVersion = @"9.0.3";
 
 @implementation UARCTAutopilot
 
+static BOOL disabled = NO;
+
++ (void)disable {
+    disabled = YES;
+}
+
 + (void)load {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:[UARCTAutopilot class] selector:@selector(performTakeOff:) name:UIApplicationDidFinishLaunchingNotification object:nil];
 }
 
 + (void)performTakeOff:(NSNotification *)notification {
+    if (disabled) {
+        return;
+    }
+
     [UAirship takeOff];
 
     [UAirship push].pushNotificationDelegate = [UARCTEventEmitter shared];
