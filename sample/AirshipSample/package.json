@@ -1,6 +1,6 @@
 {
   "name": "AirshipSample",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
@@ -8,7 +8,7 @@
   "dependencies": {
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
-    "urbanairship-react-native": "^1.2.2"
+    "urbanairship-react-native": "^1.6.0"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
