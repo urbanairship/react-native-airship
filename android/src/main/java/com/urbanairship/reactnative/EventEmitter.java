@@ -82,10 +82,8 @@ class EventEmitter {
         }
 
         if (!isEnabled) {
-            if (event.isCritical()) {
-                synchronized (pendingEvents) {
-                    pendingEvents.add(event);
-                }
+            synchronized (pendingEvents) {
+                pendingEvents.add(event);
             }
 
             return;
@@ -100,7 +98,7 @@ class EventEmitter {
         ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
         if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
             emit(reactContext, event.getName(), event.getBody());
-        } else if (event.isCritical() || reactInstanceManager.hasStartedCreatingInitialContext()) {
+        } else if (reactInstanceManager.hasStartedCreatingInitialContext()) {
             reactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
                 public void onReactContextInitialized(ReactContext reactContext) {
                     emit(reactContext, event.getName(), event.getBody());
