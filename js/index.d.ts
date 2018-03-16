@@ -75,7 +75,7 @@ declare interface Message {
     /** The deleted status of the message. **/
     isDeleted: boolean;
     /** String to String map of any message extras. **/
-    extras: Map<string, any>;
+    extras: Map<string, string>;
 }
 
 declare type Listener = (response: any) => void;
