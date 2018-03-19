@@ -112,7 +112,7 @@ export class UrbanAirship {
      *
      * @param {?string} namedUser The named user string or null to clear the named user.
      */
-    static setNamedUser(namedUser?: string): void;
+    static setNamedUser(namedUser: string | null): void;
 
     /**
      * Gets the named user.
@@ -204,7 +204,7 @@ export class UrbanAirship {
      * @return {Promise.<null, Error>}  A promise that returns null if resolved, or an Error if the
      * custom event is rejected.
      */
-    static addCustomEvent(event: UACustomEvent): Promise<void>;
+    static addCustomEvent(event: UACustomEvent): Promise<null | Error>;
 
     /**
      * Enables or disables Urban Airship location services.
