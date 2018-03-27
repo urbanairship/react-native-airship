@@ -18,10 +18,14 @@ Please visit https://support.urbanairship.com/ for any issues integrating or usi
 
 ### Requirements:
  - Xcode 8.3+
+ - iOS: Urban Airship SDK 9.0+
  - React Native >= 0.44.0
  - React Native cli >= 2.0.1
 
+
 ## iOS Installation
+
+The react plugin is unable to package the Urban Airship iOS SDK, therefore it must be installed as a separate step. When updating the plugin, update the SDK as well.
 
 1) Install and link the module:
 
