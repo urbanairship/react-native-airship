@@ -1,4 +1,8 @@
 
+Version 1.6.1 - April 3, 2018
+==============================
+- Fixed search paths for Carthage build
+
 Version 1.6.0 - March 14, 2018
 ==============================
 - Updated Urban Airship Android SDK to 9.0.3
