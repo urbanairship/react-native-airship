@@ -1,4 +1,11 @@
 
+Version 1.6.1 - April 3, 2018
+==============================
+- Fixed search paths for Carthage build
+- Updated Urban Airship Android SDK to 9.0.6
+- Updated Urban Airship iOS SDK to 9.0.5
+- Removed android:theme from CustomMessageCenterActivity and CustomMessageActivity, so developers can customize the Message Center.
+
 Version 1.6.0 - March 14, 2018
 ==============================
 - Updated Urban Airship Android SDK to 9.0.3

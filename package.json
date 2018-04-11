@@ -1,6 +1,6 @@
 {
   "name": "urbanairship-react-native",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Urban Airship plugin for React Native apps.",
   "main": "./js/index.js",
   "author": "Urban Airship",
@@ -29,5 +29,8 @@
     "url": "git+https://github.com/urbanairship/react-native-module.git"
   },
   "license": "Apache-2.0",
-  "typings": "./js/index.d.ts"
+  "typings": "./js/index.d.ts",
+  "dependencies": {
+    "npm": "^5.8.0"
+  }
 }
