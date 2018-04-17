@@ -93,12 +93,6 @@ public class PushReceivedEvent implements Event {
         return map;
     }
 
-    @Override
-    public boolean isCritical() {
-        return false;
-    }
-
-
     static String getNotificationdId(int notificationId, String notificationTag) {
         String id = String.valueOf(notificationId);
         if (!UAStringUtil.isEmpty(notificationTag)) {

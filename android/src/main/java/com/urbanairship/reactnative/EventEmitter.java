@@ -3,17 +3,13 @@
 package com.urbanairship.reactnative;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
-import com.urbanairship.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +20,8 @@ import java.util.List;
 class EventEmitter {
 
     private static EventEmitter sharedInstance = new EventEmitter();
-    private final List<Event> pendingEvents = new ArrayList<>();
-    private ReactInstanceManager reactInstanceManager;
-    private boolean isEnabled;
+    private final Object pendingEventsMonitor = new Object();
+    private List<Event> pendingEvents = new ArrayList<>();
 
     /**
      * Returns the shared {@link EventEmitter} instance.
@@ -39,25 +34,19 @@ class EventEmitter {
 
 
     /**
-     * Enables/disables the event emitter.
-     *
-     * @param context The application context.
-     * @param isEnabled {@code true} to enable, {@code false} to disable.
+     * Dispatch pending events (if any) to the JS layer
      */
-    void setEnabled(@NonNull Context context, boolean isEnabled) {
-        if (this.isEnabled == isEnabled) {
-            return;
-        }
-
-        this.isEnabled = isEnabled;
-        synchronized (pendingEvents) {
-            if (isEnabled) {
-                for (Event event : pendingEvents) {
-                    sendEvent(context, event);
-                }
-
-                pendingEvents.clear();
+    void dispatchEnqueuedEvents(@NonNull Context context) {
+        List<Event> eventsToDispatch;
+        synchronized (pendingEventsMonitor) {
+            if (pendingEvents.isEmpty()) {
+                return;
             }
+            eventsToDispatch = pendingEvents;
+            pendingEvents = new ArrayList<>();
+        }
+        for (Event event : eventsToDispatch) {
+            sendEvent(context, event);
         }
     }
 
@@ -67,48 +56,31 @@ class EventEmitter {
      * @param context The application context.
      * @param event   The event.
      */
-    void sendEvent(Context context, final Event event) {
+    void sendEvent(Context context, Event event) {
         // Force the call to be on the main thread
-        if (Looper.getMainLooper() != Looper.myLooper()) {
-            final Context applicationContext = context.getApplicationContext();
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    sendEvent(applicationContext, event);
-                }
-            });
-
-            return;
-        }
-
-        if (!isEnabled) {
-            if (event.isCritical()) {
-                synchronized (pendingEvents) {
-                    pendingEvents.add(event);
-                }
+        if (!tryEmit(context, event)) {
+            synchronized (pendingEventsMonitor) {
+                pendingEvents.add(event);
             }
-
-            return;
         }
+    }
 
-        final ReactInstanceManager reactInstanceManager = getReactInstanceManager(context);
+    private boolean tryEmit(Context context, Event event) {
+        ReactInstanceManager reactInstanceManager = getReactInstanceManager(context);
         if (reactInstanceManager == null) {
-            Logger.error("Unable to emit events. React Instance Manager is unavailable.");
-            return;
+            return false;
         }
 
         ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
         if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
-            emit(reactContext, event.getName(), event.getBody());
-        } else if (event.isCritical() || reactInstanceManager.hasStartedCreatingInitialContext()) {
-            reactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
-                public void onReactContextInitialized(ReactContext reactContext) {
-                    emit(reactContext, event.getName(), event.getBody());
-                    reactInstanceManager.removeReactInstanceEventListener(this);
-                }
-            });
+            if (reactContext.getNativeModule(UrbanAirshipReactModule.class).hasListeners()) {
+                emit(reactContext, event.getName(), event.getBody());
+                return true;
+            }
         }
+        return false;
     }
+
 
     /**
      * Helper method to emit data.
@@ -127,14 +99,7 @@ class EventEmitter {
      * @param context The application context.
      * @return The ReactInstanceManager, or null if its unable to be retrieved.
      */
-    @Nullable
-    ReactInstanceManager getReactInstanceManager(Context context) {
-        if (reactInstanceManager == null) {
-            if (context.getApplicationContext() instanceof ReactApplication) {
-                reactInstanceManager = ((ReactApplication) context.getApplicationContext()).getReactNativeHost().getReactInstanceManager();
-            }
-        }
-
-        return reactInstanceManager;
+    static @Nullable ReactInstanceManager getReactInstanceManager(Context context) {
+        return ((ReactApplication) context.getApplicationContext()).getReactNativeHost().getReactInstanceManager();
     }
 }

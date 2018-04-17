@@ -6,7 +6,6 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -37,7 +36,6 @@ import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
-import com.urbanairship.actions.LandingPageActivity;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.TagGroupsEditor;
@@ -119,6 +117,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         return "UrbanAirshipReactModule";
     }
 
+    public boolean hasListeners() {
+        return listenerCount > 0;
+    }
+
     /**
      * Called when a new listener is added for a specified event name.
      *
@@ -128,7 +130,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void addAndroidListener(String eventName) {
         Logger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
         listenerCount++;
-        EventEmitter.shared().setEnabled(getReactApplicationContext(), true);
+        EventEmitter.shared().dispatchEnqueuedEvents(getReactApplicationContext());
     }
 
     /**
@@ -142,10 +144,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         listenerCount -= count;
         if (listenerCount < 0) {
             listenerCount = 0;
-        }
-
-        if (listenerCount == 0) {
-            EventEmitter.shared().setEnabled(getReactApplicationContext(), false);
         }
     }
 

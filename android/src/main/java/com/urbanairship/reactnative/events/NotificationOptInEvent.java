@@ -41,9 +41,4 @@ public class NotificationOptInEvent implements Event {
         map.putBoolean(OPT_IN, optInStatus);
         return map;
     }
-
-    @Override
-    public boolean isCritical() {
-        return false;
-    }
 }
