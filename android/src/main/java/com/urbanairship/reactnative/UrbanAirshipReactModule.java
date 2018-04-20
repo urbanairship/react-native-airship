@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,7 +17,6 @@ import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.os.AsyncTaskCompat;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
@@ -351,8 +351,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                     }
                 }
             });
-
-            AsyncTaskCompat.executeParallel(task, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             UAirship.shared().getLocationManager().setLocationUpdatesEnabled(enabled);
         }
@@ -563,12 +562,12 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                         .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
                         .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                
+
                 this.getReactApplicationContext().startActivity(intent);
             }
         }
     }
-    
+
     /**
      * Dismisses the currently displayed inbox message.
      *
