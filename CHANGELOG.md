@@ -1,4 +1,8 @@
 
+Version 1.6.2 - April 20, 2018
+==============================
+- Remove use of AsyncTaskCompat to be compatible with Android Support Library 27
+
 Version 1.6.1 - April 3, 2018
 ==============================
 - Fixed search paths for Carthage build
