@@ -70,6 +70,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     private static final String TAG_OPERATION_ADD = "add";
     private static final String TAG_OPERATION_REMOVE = "remove";
+    private static final String TAG_OPERATION_SET = "set";
 
     private static final String QUIET_TIME_START_HOUR = "startHour";
     private static final String QUIET_TIME_START_MINUTE = "startMinute";
@@ -793,6 +794,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 editor.addTags(group, tagSet);
             } else if (TAG_OPERATION_REMOVE.equals(operationType)) {
                 editor.removeTags(group, tagSet);
+            } else if (TAG_OPERATION_SET.equals(operationType)) {
+                editor.setTags(group, tagSet);
             }
         }
 
