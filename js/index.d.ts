@@ -53,15 +53,15 @@ declare class TagGroupEditor {
      */
     removeTags(group: string, tags: Array<string>): TagGroupEditor;
     /**
-  	* Overwrite the current set of tags on the Tag Group
-  	* @instance
-  	* @memberof TagGroupEditor
-  	* @function setTags
-  	*
-  	* @param {string} tagGroup The tag group.
-  	* @param {array<string>} tags Tags to set.
-  	* @return {TagGroupEditor} The tag group editor instance.
-  	*/
+     * Overwrite the current set of tags on the Tag Group
+     * @instance
+     * @memberof TagGroupEditor
+     * @function setTags
+     *
+     * @param {string} tagGroup The tag group.
+     * @param {array<string>} tags Tags to set.
+     * @return {TagGroupEditor} The tag group editor instance.
+     */
     setTags(group: string, tags: Array<string>): TagGroupEditor;
     /**
      * Applies the tag changes.
