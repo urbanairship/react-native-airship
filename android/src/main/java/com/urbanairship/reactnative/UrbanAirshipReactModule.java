@@ -47,6 +47,7 @@ import com.urbanairship.richpush.RichPushInbox;
 import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.util.UAStringUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -78,8 +79,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
     static final String CLOSE_MESSAGE_CENTER = "CLOSE";
-
-    private long listenerCount;
 
     /**
      * Default constructor.
@@ -127,7 +126,21 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addAndroidListener(String eventName) {
         Logger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
-        listenerCount++;
+        EventEmitter.shared().listenerCount++;
+
+        ArrayList<Event> pending = EventEmitter.shared().pendingEvents;
+
+        if (pending.size() > 0) {
+            for (Event event: pending) {
+                if (event.getName() == eventName) {
+                    EventEmitter.shared().sendEvent(getReactApplicationContext(), event);
+                    synchronized (EventEmitter.shared().pendingEvents) {
+                        EventEmitter.shared().pendingEvents.remove(event);
+                    }
+                }
+            }
+        }
+
         EventEmitter.shared().setEnabled(getReactApplicationContext(), true);
     }
 
@@ -139,12 +152,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeAndroidListeners(int count) {
         Logger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
-        listenerCount -= count;
-        if (listenerCount < 0) {
-            listenerCount = 0;
+
+        EventEmitter.shared().listenerCount -= count;
+        if (EventEmitter.shared().listenerCount < 0) {
+            EventEmitter.shared().listenerCount = 0;
         }
 
-        if (listenerCount == 0) {
+        if (EventEmitter.shared().listenerCount == 0) {
             EventEmitter.shared().setEnabled(getReactApplicationContext(), false);
         }
     }

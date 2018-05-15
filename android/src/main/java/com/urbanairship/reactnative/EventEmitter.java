@@ -23,8 +23,12 @@ import java.util.List;
  */
 class EventEmitter {
 
+
+    long listenerCount;
+    List<Event> pendingEvents = new ArrayList<>();
+
     private static EventEmitter sharedInstance = new EventEmitter();
-    private final List<Event> pendingEvents = new ArrayList<>();
+
     private ReactInstanceManager reactInstanceManager;
     private boolean isEnabled;
 
@@ -36,7 +40,6 @@ class EventEmitter {
     static EventEmitter shared() {
         return sharedInstance;
     }
-
 
     /**
      * Enables/disables the event emitter.
@@ -74,19 +77,16 @@ class EventEmitter {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    sendEvent(applicationContext, event);
+                    if (listenerCount > 0) {
+                        sendEvent(applicationContext, event);
+                    } else {
+                        synchronized (pendingEvents) {
+                            pendingEvents.add(event);
+                        }
+                    }
+
                 }
             });
-
-            return;
-        }
-
-        if (!isEnabled) {
-            if (event.isCritical()) {
-                synchronized (pendingEvents) {
-                    pendingEvents.add(event);
-                }
-            }
 
             return;
         }
@@ -100,7 +100,7 @@ class EventEmitter {
         ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
         if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
             emit(reactContext, event.getName(), event.getBody());
-        } else if (event.isCritical() || reactInstanceManager.hasStartedCreatingInitialContext()) {
+        } else if (reactInstanceManager.hasStartedCreatingInitialContext()) {
             reactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
                 public void onReactContextInitialized(ReactContext reactContext) {
                     emit(reactContext, event.getName(), event.getBody());
