@@ -41,6 +41,22 @@ class TagGroupEditor {
   }
 
   /**
+   * Overwrite the current set of tags on the Tag Group
+   * @instance
+   * @memberof TagGroupEditor
+   * @function setTags
+   *
+   * @param {string} tagGroup The tag group.
+   * @param {array<string>} tags Tags to set.
+   * @return {TagGroupEditor} The tag group editor instance.
+   */
+  setTags(group: string, tags: Array<string>): TagGroupEditor {
+    var operation = { "operationType": "set", "group": group, "tags": tags }
+    this.operations.push(operation)
+    return this;
+  }
+
+  /**
    * Applies the tag changes.
    * @instance
    * @memberof TagGroupEditor

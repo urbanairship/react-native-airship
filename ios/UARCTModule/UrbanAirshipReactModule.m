@@ -216,6 +216,8 @@ RCT_EXPORT_METHOD(editNamedUserTagGroups:(NSArray *)operations) {
             [namedUser addTags:operation[@"tags"] group:group];
         } else if ([operation[@"operationType"] isEqualToString:@"remove"]) {
             [namedUser removeTags:operation[@"tags"] group:group];
+        } else if ([operation[@"operationType"] isEqualToString:@"set"]) {
+            [namedUser setTags:operation[@"tags"] group:group];
         }
     }
 
@@ -229,6 +231,8 @@ RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
             [[UAirship push] addTags:operation[@"tags"] group:group];
         } else if ([operation[@"operationType"] isEqualToString:@"remove"]) {
             [[UAirship push] removeTags:operation[@"tags"] group:group];
+        } else if ([operation[@"operationType"] isEqualToString:@"set"]) {
+            [[UAirship push] setTags:operation[@"tags"] group:group];
         }
     }
 
