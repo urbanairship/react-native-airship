@@ -41,27 +41,33 @@ static UARCTEventEmitter *sharedEventEmitter_;
     return self;
 }
 
-- (BOOL)sendEventWithName:(NSString *)eventName body:(id)body {
+- (void)sendEventWithName:(NSString *)eventName body:(id)body {
     if (self.bridge && self.isObserving) {
         [self.bridge enqueueJSCall:@"RCTDeviceEventEmitter"
                             method:@"emit"
                               args:body ? @[eventName, body] : @[eventName]
                         completion:NULL];
 
-        return YES;
+    } else {
+        [self.pendingEvents addObject:@{ @"name": eventName, @"body": body}];
     }
-
-    return NO;
 }
 
 - (void)addListener:(NSString *)eventName {
     self.listenerCount++;
-    if (self.listenerCount > 0) {
-        for (NSDictionary *event in self.pendingEvents) {
-            [self sendEventWithName:event[@"name"] body:event[@"body"]];
+    if (self.pendingEvents.count > 0) {
+        NSMutableArray *discardedItems = [NSMutableArray array];
+
+        // capture "count" before we start iterating in case one of the method adds new objects to the queue
+        for (NSUInteger i = 0, count = self.pendingEvents.count; i < count; i++) {
+            NSDictionary *event = [self.pendingEvents objectAtIndex:i];
+            if ([event[@"name"] isEqualToString:eventName]) {
+                [self sendEventWithName:event[@"name"] body:event[@"body"]];
+                [discardedItems addObject:event];
+            }
         }
 
-        [self.pendingEvents removeAllObjects];
+        [self.pendingEvents removeObjectsInArray:discardedItems];
     }
 }
 
@@ -79,9 +85,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 -(void)deepLinkReceived:(NSString *)deepLink {
     id body = @{ @"deepLink" : deepLink };
 
-    if (![self sendEventWithName:UARCTDeepLinkEventName body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTDeepLinkEventName, @"body": body}];
-    }
+    [self sendEventWithName:UARCTDeepLinkEventName body:body];
 }
 
 #pragma mark -
@@ -96,7 +100,6 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 -(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent
                     completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-
     [self sendEventWithName:UARCTPushReceivedEventName body:[UARCTEventEmitter eventBodyForNotificationContent:notificationContent]];
     completionHandler(UIBackgroundFetchResultNoData);
 }
@@ -110,12 +113,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
         return;
     }
 
-    NSDictionary *body = [self eventBodyForNotificationResponse:notificationResponse];
-
-    if (![self sendEventWithName:UARCTNotificationResponseEventName body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEventName, @"body": body }];
-    }
-
+    [self sendEventWithName:UARCTNotificationResponseEventName body:[self eventBodyForNotificationResponse:notificationResponse]];
     completionHandler();
 }
 
@@ -180,9 +178,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
     [body setValue:messageID forKey:@"messageId"];
 
-    if (![self sendEventWithName:UARCTShowInboxEventName body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTShowInboxEventName, @"body": body }];
-    }
+    [self sendEventWithName:UARCTShowInboxEventName body:body];
 }
 
 #pragma mark -
