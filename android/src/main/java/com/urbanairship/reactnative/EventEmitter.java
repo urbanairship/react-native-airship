@@ -16,7 +16,9 @@ import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.urbanairship.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Emits events to listeners in the JS layer.
@@ -26,6 +28,7 @@ class EventEmitter {
 
     long listenerCount;
     List<Event> pendingEvents = new ArrayList<>();
+    Set<String> knownListeners = new HashSet<>();
 
     private static EventEmitter sharedInstance = new EventEmitter();
 
@@ -77,7 +80,7 @@ class EventEmitter {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    if (listenerCount > 0) {
+                    if (listenerCount > 0 && knownListeners.contains(event)) {
                         sendEvent(applicationContext, event);
                     } else {
                         synchronized (pendingEvents) {
@@ -109,6 +112,23 @@ class EventEmitter {
             });
         }
     }
+
+    /**
+     * Helper method to add known listeners.
+     *
+     * @param eventName The event name identifying the listener.
+     */
+    void addKnownListener(String eventName) {
+        knownListeners.add(eventName);
+    }
+
+    /**
+     * Helper method to remove all known listeners.
+     */
+    void removeKnownListeners() {
+        knownListeners.removeAll(knownListeners);
+    }
+
 
     /**
      * Helper method to emit data.

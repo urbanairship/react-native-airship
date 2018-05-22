@@ -5,6 +5,7 @@
 @interface UARCTEventEmitter()
 @property(nonatomic, strong) NSMutableArray *pendingEvents;
 @property(atomic, assign) NSInteger listenerCount;
+@property(nonatomic, strong) NSMutableSet *knownListeners;
 @property(readonly) BOOL isObserving;
 @end
 
@@ -39,13 +40,14 @@ static UARCTEventEmitter *sharedEventEmitter_;
     self = [super init];
     if (self) {
         self.pendingEvents = [NSMutableArray array];
+        self.knownListeners = [NSMutableSet set];
     }
 
     return self;
 }
 
 - (void)sendEventWithName:(NSString *)eventName body:(id)body {
-    if (self.bridge && self.isObserving) {
+    if (self.bridge && self.isObserving && [self.knownListeners containsObject:eventName]) {
         [self.bridge enqueueJSCall:@"RCTDeviceEventEmitter"
                             method:@"emit"
                               args:body ? @[eventName, body] : @[eventName]
@@ -58,6 +60,9 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (void)addListener:(NSString *)eventName {
     self.listenerCount++;
+
+    [self.knownListeners addObject:eventName];
+
     if (self.pendingEvents.count > 0) {
         for (id event in [self.pendingEvents copy]) {
             if ([event[UARCTEventNameKey] isEqualToString:eventName]) {
@@ -70,6 +75,9 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (void)removeListeners:(NSInteger)count {
     self.listenerCount = MAX(self.listenerCount - count, 0);
+    if (self.listenerCount == 0) {
+        [self.knownListeners removeAllObjects];
+    }
 }
 
 - (BOOL)isObserving {

@@ -52,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -127,8 +128,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void addAndroidListener(String eventName) {
         Logger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
         EventEmitter.shared().listenerCount++;
+        EventEmitter.shared().addKnownListener(eventName);
 
-        ArrayList<Event> pending = EventEmitter.shared().pendingEvents;
+        List<Event> pending = EventEmitter.shared().pendingEvents;
 
         if (pending.size() > 0) {
             for (Event event: pending) {
@@ -160,6 +162,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
         if (EventEmitter.shared().listenerCount == 0) {
             EventEmitter.shared().setEnabled(getReactApplicationContext(), false);
+            EventEmitter.shared().removeKnownListeners();
         }
     }
 
@@ -742,11 +745,11 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
 
 
-        /**
-         * Forces the inbox to refresh. This is normally not needed as the inbox will automatically refresh on foreground or when a push arrives thats associated with a message.
-         *
-         * @param promise The JS promise.
-         */
+    /**
+     * Forces the inbox to refresh. This is normally not needed as the inbox will automatically refresh on foreground or when a push arrives thats associated with a message.
+     *
+     * @param promise The JS promise.
+     */
     @ReactMethod
     public  void refreshInbox(final Promise promise)  {
         UAirship.shared().getInbox().fetchMessages(new RichPushInbox.FetchMessagesCallback() {
@@ -755,7 +758,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 if (success) {
                     promise.resolve(true);
                 } else {
-                   promise.reject("STATUS_DID_NOT_REFRESH","Inbox failed to refresh");
+                    promise.reject("STATUS_DID_NOT_REFRESH","Inbox failed to refresh");
                 }
             }
         });
