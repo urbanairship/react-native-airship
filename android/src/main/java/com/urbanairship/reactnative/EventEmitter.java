@@ -80,7 +80,7 @@ class EventEmitter {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    if (listenerCount > 0 && knownListeners.contains(event)) {
+                    if (knownListeners.contains(event.getName())) {
                         sendEvent(applicationContext, event);
                     } else {
                         synchronized (pendingEvents) {

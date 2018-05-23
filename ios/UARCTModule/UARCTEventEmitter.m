@@ -54,16 +54,16 @@ static UARCTEventEmitter *sharedEventEmitter_;
                         completion:NULL];
 
     } else {
-        [self.pendingEvents addObject:@{ UARCTEventNameKey: eventName, UARCTEventBodyKey: body}];
+        @synchronized(self.pendingEvents) {
+            [self.pendingEvents addObject:@{ UARCTEventNameKey: eventName, UARCTEventBodyKey: body}];
+        }
     }
 }
 
 - (void)addListener:(NSString *)eventName {
     self.listenerCount++;
 
-    [self.knownListeners addObject:eventName];
-
-    if (self.pendingEvents.count > 0) {
+    @synchronized(self.pendingEvents) {
         for (id event in [self.pendingEvents copy]) {
             if ([event[UARCTEventNameKey] isEqualToString:eventName]) {
                 [self sendEventWithName:event[UARCTEventNameKey] body:event[UARCTEventBodyKey]];
@@ -71,12 +71,18 @@ static UARCTEventEmitter *sharedEventEmitter_;
             }
         }
     }
+
+    @synchronized(self.knownListeners) {
+        [self.knownListeners addObject:eventName];
+    }
 }
 
 - (void)removeListeners:(NSInteger)count {
     self.listenerCount = MAX(self.listenerCount - count, 0);
     if (self.listenerCount == 0) {
-        [self.knownListeners removeAllObjects];
+        @synchronized(self.knownListeners) {
+            [self.knownListeners removeAllObjects];
+        }
     }
 }
 
