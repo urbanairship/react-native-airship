@@ -47,41 +47,43 @@ static UARCTEventEmitter *sharedEventEmitter_;
 }
 
 - (void)sendEventWithName:(NSString *)eventName body:(id)body {
-    if (self.bridge && self.isObserving && [self.knownListeners containsObject:eventName]) {
-        [self.bridge enqueueJSCall:@"RCTDeviceEventEmitter"
-                            method:@"emit"
-                              args:body ? @[eventName, body] : @[eventName]
-                        completion:NULL];
+    @synchronized(self.knownListeners) {
+        if (self.bridge && self.isObserving && [self.knownListeners containsObject:eventName]) {
+            [self.bridge enqueueJSCall:@"RCTDeviceEventEmitter"
+                                method:@"emit"
+                                  args:body ? @[eventName, body] : @[eventName]
+                            completion:NULL];
 
-    } else {
-        @synchronized(self.pendingEvents) {
-            [self.pendingEvents addObject:@{ UARCTEventNameKey: eventName, UARCTEventBodyKey: body}];
+        } else {
+            @synchronized(self.pendingEvents) {
+                [self.pendingEvents addObject:@{ UARCTEventNameKey: eventName, UARCTEventBodyKey: body}];
+            }
         }
     }
 }
 
 - (void)addListener:(NSString *)eventName {
-    self.listenerCount++;
+    @synchronized(self.knownListeners) {
+        self.listenerCount++;
 
-    @synchronized(self.pendingEvents) {
         for (id event in [self.pendingEvents copy]) {
             if ([event[UARCTEventNameKey] isEqualToString:eventName]) {
                 [self sendEventWithName:event[UARCTEventNameKey] body:event[UARCTEventBodyKey]];
                 [self.pendingEvents removeObject:event];
             }
         }
-    }
 
-    @synchronized(self.knownListeners) {
         [self.knownListeners addObject:eventName];
     }
 }
 
 - (void)removeListeners:(NSInteger)count {
-    self.listenerCount = MAX(self.listenerCount - count, 0);
-    if (self.listenerCount == 0) {
-        @synchronized(self.knownListeners) {
-            [self.knownListeners removeAllObjects];
+    @synchronized(self.knownListeners) {
+        self.listenerCount = MAX(self.listenerCount - count, 0);
+        if (self.listenerCount == 0) {
+            @synchronized(self.knownListeners) {
+                [self.knownListeners removeAllObjects];
+            }
         }
     }
 }
