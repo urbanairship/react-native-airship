@@ -60,7 +60,6 @@ import static com.urbanairship.actions.ActionResult.STATUS_EXECUTION_ERROR;
 import static com.urbanairship.actions.ActionResult.STATUS_REJECTED_ARGUMENTS;
 import static com.urbanairship.reactnative.Utils.convertDynamic;
 import static com.urbanairship.reactnative.Utils.convertJsonValue;
-import static java.lang.Math.max;
 
 /**
  * React module for Urban Airship.
@@ -128,22 +127,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addAndroidListener(String eventName) {
         Logger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
-
-        List<Event> pending = EventEmitter.shared().pendingEvents;
-
-        synchronized (EventEmitter.shared().pendingEvents) {
-            for (Event event : pending) {
-                if (event.getName().equals(eventName)) {
-                    EventEmitter.shared().sendEvent(getReactApplicationContext(), event);
-                    EventEmitter.shared().pendingEvents.remove(event);
-                }
-            }
-
-            EventEmitter.shared().setEnabled(getReactApplicationContext(), true);
-        }
-
-        EventEmitter.shared().listenerCount++;
-        EventEmitter.shared().addKnownListener(eventName);
+        EventEmitter.shared().addAndroidListener(getReactApplicationContext(), eventName);
     }
 
     /**
@@ -154,14 +138,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeAndroidListeners(int count) {
         Logger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
-
-        long currentCount = EventEmitter.shared().listenerCount;
-        EventEmitter.shared().listenerCount = max(0, currentCount - count);
-
-        if (EventEmitter.shared().listenerCount == 0) {
-            EventEmitter.shared().setEnabled(getReactApplicationContext(), false);
-            EventEmitter.shared().removeKnownListeners();
-        }
+        EventEmitter.shared().removeAndroidListeners(getReactApplicationContext(), count);
     }
 
     /**

@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.urbanairship.Logger;
 
@@ -20,15 +19,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.lang.Math.max;
+
+
 /**
  * Emits events to listeners in the JS layer.
  */
 class EventEmitter {
 
 
-    long listenerCount;
-    List<Event> pendingEvents = new ArrayList<>();
-    Set<String> knownListeners = new HashSet<>();
+    private long listenerCount;
+    private final List<Event> pendingEvents = new ArrayList<>();
+    private Set<String> knownListeners = new HashSet<>();
 
     private static EventEmitter sharedInstance = new EventEmitter();
 
@@ -80,14 +82,13 @@ class EventEmitter {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    if (knownListeners.contains(event.getName())) {
-                        sendEvent(applicationContext, event);
-                    } else {
-                        synchronized (pendingEvents) {
+                    synchronized (knownListeners) {
+                        if (knownListeners.contains(event.getName())) {
+                            sendEvent(applicationContext, event);
+                        } else {
                             pendingEvents.add(event);
                         }
                     }
-
                 }
             });
 
@@ -114,21 +115,45 @@ class EventEmitter {
     }
 
     /**
-     * Helper method to add known listeners.
+     * Called when a new listener is added for a specified event name.
      *
-     * @param eventName The event name identifying the listener.
+     * @param eventName The event name.
      */
-    void addKnownListener(String eventName) {
-        knownListeners.add(eventName);
+    void addAndroidListener(ReactContext reactContext, String eventName) {
+        synchronized (knownListeners) {
+            List<Event> pending = pendingEvents;
+
+            for (Event event : pending) {
+                if (event.getName().equals(eventName)) {
+                    sendEvent(reactContext, event);
+                    pendingEvents.remove(event);
+                }
+            }
+
+            setEnabled(reactContext, true);
+
+
+            listenerCount++;
+            knownListeners.add(eventName);
+        }
     }
 
     /**
-     * Helper method to remove all known listeners.
+     * Called when listeners are removed.
+     *
+     * @param count The count of listeners.
      */
-    void removeKnownListeners() {
-        knownListeners.removeAll(knownListeners);
-    }
+    void removeAndroidListeners(ReactContext reactContext, int count) {
+        synchronized (knownListeners) {
+            long currentCount = listenerCount;
+            listenerCount = max(0, currentCount - count);
 
+            if (listenerCount == 0) {
+                setEnabled(reactContext, false);
+                knownListeners.removeAll(knownListeners);
+            }
+        }
+    }
 
     /**
      * Helper method to emit data.
