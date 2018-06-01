@@ -29,7 +29,7 @@ class EventEmitter {
 
 
     private long listenerCount;
-    private final List<Event> pendingEvents = new ArrayList<>();
+    private List<Event> pendingEvents = new ArrayList<>();
     private Set<String> knownListeners = new HashSet<>();
 
     private static EventEmitter sharedInstance = new EventEmitter();
@@ -121,17 +121,18 @@ class EventEmitter {
      */
     void addAndroidListener(ReactContext reactContext, String eventName) {
         synchronized (knownListeners) {
-            List<Event> pending = pendingEvents;
+            List<Event> pending = new ArrayList<>();
+            pending.addAll(pendingEvents);
 
-            for (Event event : pending) {
-                if (event.getName().equals(eventName)) {
+            for (Event event : pendingEvents) {
+                if (event.equals(eventName)) {
                     sendEvent(reactContext, event);
-                    pendingEvents.remove(event);
+                    pending.remove(event);
                 }
             }
 
-            setEnabled(reactContext, true);
-
+            pendingEvents.clear();
+            pendingEvents.addAll(pending);
 
             listenerCount++;
             knownListeners.add(eventName);
@@ -150,7 +151,7 @@ class EventEmitter {
 
             if (listenerCount == 0) {
                 setEnabled(reactContext, false);
-                knownListeners.removeAll(knownListeners);
+                knownListeners.clear();
             }
         }
     }
