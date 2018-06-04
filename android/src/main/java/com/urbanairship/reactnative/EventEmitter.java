@@ -47,29 +47,6 @@ class EventEmitter {
     }
 
     /**
-     * Enables/disables the event emitter.
-     *
-     * @param context The application context.
-     * @param isEnabled {@code true} to enable, {@code false} to disable.
-     */
-    void setEnabled(@NonNull Context context, boolean isEnabled) {
-        if (this.isEnabled == isEnabled) {
-            return;
-        }
-
-        this.isEnabled = isEnabled;
-        synchronized (pendingEvents) {
-            if (isEnabled) {
-                for (Event event : pendingEvents) {
-                    sendEvent(context, event);
-                }
-
-                pendingEvents.clear();
-            }
-        }
-    }
-
-    /**
      * Sends an event to the JS layer.
      *
      * @param context The application context.
@@ -121,19 +98,12 @@ class EventEmitter {
      */
     void addAndroidListener(ReactContext reactContext, String eventName) {
         synchronized (knownListeners) {
-            List<Event> pending = new ArrayList<>();
-            pending.addAll(pendingEvents);
-
-            for (Event event : pendingEvents) {
-                if (event.equals(eventName)) {
+            for (Event event : new ArrayList<>(pendingEvents)) {
+                if (event.getName().equals(eventName)) {
                     sendEvent(reactContext, event);
-                    pending.remove(event);
+                    pendingEvents.remove(event);
                 }
             }
-
-            pendingEvents.clear();
-            pendingEvents.addAll(pending);
-
             listenerCount++;
             knownListeners.add(eventName);
         }
@@ -150,7 +120,6 @@ class EventEmitter {
             listenerCount = max(0, currentCount - count);
 
             if (listenerCount == 0) {
-                setEnabled(reactContext, false);
                 knownListeners.clear();
             }
         }
