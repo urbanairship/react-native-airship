@@ -5,6 +5,7 @@
 @interface UARCTEventEmitter()
 @property(nonatomic, strong) NSMutableArray *pendingEvents;
 @property(atomic, assign) NSInteger listenerCount;
+@property(nonatomic, strong) NSMutableSet *knownListeners;
 @property(readonly) BOOL isObserving;
 @end
 
@@ -19,6 +20,9 @@ NSString *const UARCTShowInboxEventName = @"com.urbanairship.show_inbox";
 NSString *const UARCTNotificationPresentationAlertKey = @"alert";
 NSString *const UARCTNotificationPresentationBadgeKey = @"badge";
 NSString *const UARCTNotificationPresentationSoundKey = @"sound";
+
+NSString *const UARCTEventNameKey = @"name";
+NSString *const UARCTEventBodyKey = @"body";
 
 @implementation UARCTEventEmitter
 
@@ -36,37 +40,52 @@ static UARCTEventEmitter *sharedEventEmitter_;
     self = [super init];
     if (self) {
         self.pendingEvents = [NSMutableArray array];
+        self.knownListeners = [NSMutableSet set];
     }
 
     return self;
 }
 
-- (BOOL)sendEventWithName:(NSString *)eventName body:(id)body {
-    if (self.bridge && self.isObserving) {
-        [self.bridge enqueueJSCall:@"RCTDeviceEventEmitter"
-                            method:@"emit"
-                              args:body ? @[eventName, body] : @[eventName]
-                        completion:NULL];
+- (void)sendEventWithName:(NSString *)eventName body:(id)body {
+    @synchronized(self.knownListeners) {
+        if (self.bridge && self.isObserving && [self.knownListeners containsObject:eventName]) {
+            [self.bridge enqueueJSCall:@"RCTDeviceEventEmitter"
+                                method:@"emit"
+                                  args:body ? @[eventName, body] : @[eventName]
+                            completion:NULL];
 
-        return YES;
+        } else {
+            @synchronized(self.pendingEvents) {
+                [self.pendingEvents addObject:@{ UARCTEventNameKey: eventName, UARCTEventBodyKey: body}];
+            }
+        }
     }
-
-    return NO;
 }
 
 - (void)addListener:(NSString *)eventName {
-    self.listenerCount++;
-    if (self.listenerCount > 0) {
-        for (NSDictionary *event in self.pendingEvents) {
-            [self sendEventWithName:event[@"name"] body:event[@"body"]];
+    @synchronized(self.knownListeners) {
+        self.listenerCount++;
+
+        for (id event in [self.pendingEvents copy]) {
+            if ([event[UARCTEventNameKey] isEqualToString:eventName]) {
+                [self sendEventWithName:event[UARCTEventNameKey] body:event[UARCTEventBodyKey]];
+                [self.pendingEvents removeObject:event];
+            }
         }
 
-        [self.pendingEvents removeAllObjects];
+        [self.knownListeners addObject:eventName];
     }
 }
 
 - (void)removeListeners:(NSInteger)count {
-    self.listenerCount = MAX(self.listenerCount - count, 0);
+    @synchronized(self.knownListeners) {
+        self.listenerCount = MAX(self.listenerCount - count, 0);
+        if (self.listenerCount == 0) {
+            @synchronized(self.knownListeners) {
+                [self.knownListeners removeAllObjects];
+            }
+        }
+    }
 }
 
 - (BOOL)isObserving {
@@ -79,9 +98,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 -(void)deepLinkReceived:(NSString *)deepLink {
     id body = @{ @"deepLink" : deepLink };
 
-    if (![self sendEventWithName:UARCTDeepLinkEventName body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTDeepLinkEventName, @"body": body}];
-    }
+    [self sendEventWithName:UARCTDeepLinkEventName body:body];
 }
 
 #pragma mark -
@@ -96,7 +113,6 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 -(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent
                     completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-
     [self sendEventWithName:UARCTPushReceivedEventName body:[UARCTEventEmitter eventBodyForNotificationContent:notificationContent]];
     completionHandler(UIBackgroundFetchResultNoData);
 }
@@ -110,12 +126,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
         return;
     }
 
-    NSDictionary *body = [self eventBodyForNotificationResponse:notificationResponse];
-
-    if (![self sendEventWithName:UARCTNotificationResponseEventName body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTNotificationResponseEventName, @"body": body }];
-    }
-
+    [self sendEventWithName:UARCTNotificationResponseEventName body:[self eventBodyForNotificationResponse:notificationResponse]];
     completionHandler();
 }
 
@@ -180,9 +191,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
     [body setValue:messageID forKey:@"messageId"];
 
-    if (![self sendEventWithName:UARCTShowInboxEventName body:body]) {
-        [self.pendingEvents addObject:@{ @"name": UARCTShowInboxEventName, @"body": body }];
-    }
+    [self sendEventWithName:UARCTShowInboxEventName body:body];
 }
 
 #pragma mark -

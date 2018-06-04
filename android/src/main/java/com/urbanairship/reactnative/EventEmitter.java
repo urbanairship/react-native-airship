@@ -11,20 +11,29 @@ import android.support.annotation.Nullable;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.urbanairship.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static java.lang.Math.max;
+
 
 /**
  * Emits events to listeners in the JS layer.
  */
 class EventEmitter {
 
+
+    private long listenerCount;
+    private List<Event> pendingEvents = new ArrayList<>();
+    private Set<String> knownListeners = new HashSet<>();
+
     private static EventEmitter sharedInstance = new EventEmitter();
-    private final List<Event> pendingEvents = new ArrayList<>();
+
     private ReactInstanceManager reactInstanceManager;
     private boolean isEnabled;
 
@@ -35,30 +44,6 @@ class EventEmitter {
      */
     static EventEmitter shared() {
         return sharedInstance;
-    }
-
-
-    /**
-     * Enables/disables the event emitter.
-     *
-     * @param context The application context.
-     * @param isEnabled {@code true} to enable, {@code false} to disable.
-     */
-    void setEnabled(@NonNull Context context, boolean isEnabled) {
-        if (this.isEnabled == isEnabled) {
-            return;
-        }
-
-        this.isEnabled = isEnabled;
-        synchronized (pendingEvents) {
-            if (isEnabled) {
-                for (Event event : pendingEvents) {
-                    sendEvent(context, event);
-                }
-
-                pendingEvents.clear();
-            }
-        }
     }
 
     /**
@@ -74,19 +59,15 @@ class EventEmitter {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    sendEvent(applicationContext, event);
+                    synchronized (knownListeners) {
+                        if (knownListeners.contains(event.getName())) {
+                            sendEvent(applicationContext, event);
+                        } else {
+                            pendingEvents.add(event);
+                        }
+                    }
                 }
             });
-
-            return;
-        }
-
-        if (!isEnabled) {
-            if (event.isCritical()) {
-                synchronized (pendingEvents) {
-                    pendingEvents.add(event);
-                }
-            }
 
             return;
         }
@@ -100,13 +81,47 @@ class EventEmitter {
         ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
         if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
             emit(reactContext, event.getName(), event.getBody());
-        } else if (event.isCritical() || reactInstanceManager.hasStartedCreatingInitialContext()) {
+        } else if (reactInstanceManager.hasStartedCreatingInitialContext()) {
             reactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
                 public void onReactContextInitialized(ReactContext reactContext) {
                     emit(reactContext, event.getName(), event.getBody());
                     reactInstanceManager.removeReactInstanceEventListener(this);
                 }
             });
+        }
+    }
+
+    /**
+     * Called when a new listener is added for a specified event name.
+     *
+     * @param eventName The event name.
+     */
+    void addAndroidListener(ReactContext reactContext, String eventName) {
+        synchronized (knownListeners) {
+            for (Event event : new ArrayList<>(pendingEvents)) {
+                if (event.getName().equals(eventName)) {
+                    sendEvent(reactContext, event);
+                    pendingEvents.remove(event);
+                }
+            }
+            listenerCount++;
+            knownListeners.add(eventName);
+        }
+    }
+
+    /**
+     * Called when listeners are removed.
+     *
+     * @param count The count of listeners.
+     */
+    void removeAndroidListeners(ReactContext reactContext, int count) {
+        synchronized (knownListeners) {
+            long currentCount = listenerCount;
+            listenerCount = max(0, currentCount - count);
+
+            if (listenerCount == 0) {
+                knownListeners.clear();
+            }
         }
     }
 
