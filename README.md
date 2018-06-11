@@ -91,6 +91,28 @@ notificationIcon = ic_notification
 notificationAccentColor = #ff0000
 ```
 
+## Android FCM Setup
+
+Adding FCM to your react-native project can be accomplished with the following steps:
+
+1: Add the google-services gradle plugin dependency to the `build.gradle` file in project root directory:
+
+```
+classpath 'com.google.gms:google-services:3.0.0'
+```
+
+2: Apply the google-services plugin inside the build.gradle file in the `app/` directory:
+
+```
+apply plugin: 'com.google.gms.google-services'
+```
+
+3: Download your `google-services.json` file. This can be accomplished by following [`google-services.json` help documentation](https://support.google.com/firebase/answer/7015592):
+
+4. Add the downloaded `google-service.json` file to the `app/` directory of your project. For more information
+on adding the configuration file please see the [google services plugin guide](https://developers.google.com/android/guides/google-services-plugin#adding_the_json_file )
+
+
 ## Enabling Notifications
 
 Notifications by default are disabled to avoid prompting the user for permissions
