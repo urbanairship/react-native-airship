@@ -98,10 +98,20 @@ Adding FCM to your react-native project can be accomplished with the following s
 1: Add the google-services gradle plugin dependency to the `build.gradle` file in project root directory:
 
 ```
-classpath 'com.google.gms:google-services:3.0.0'
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath 'com.google.gms:google-services:4.0.1'
+    }
+}
 ```
 
-2: Apply the google-services plugin inside the build.gradle file in the `app/` directory:
+2: Apply the google-services plugin *at the end* of the `build.gradle` file in the `app/` directory. The plugin directive specifically needs to be included at
+the *end* of the `build.gradle` file to prevent potential dependency collisions. For more information, see the [plugin documentation](https://developers.google.com/android/guides/google-services-plugin).
 
 ```
 apply plugin: 'com.google.gms.google-services'
