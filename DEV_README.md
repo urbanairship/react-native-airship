@@ -44,8 +44,10 @@ workspace.
 
 2) Create the `airshipconfig.properties` file in `src/main/assets`
 
-3) Start the webserver by running `react-native start` in `sample/AirshipSample`
+3) If using FCM, add your `google-services.json` file in `sample/AirshipSample/Android/app`
 
-4) Build and run the sample
+4) Start the webserver by running `react-native start` in `sample/AirshipSample`
+
+5) Build and run the sample
 
 You should now be able to modify the Android plugin source directly in the Android Studio.
