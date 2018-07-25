@@ -629,7 +629,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				FF905C99F424B3813F7A98C6 /* [CP] Embed Pods Frameworks */,
-				9D331DA0422AAA6755480151 /* [CP] Copy Pods Resources */,
 				99912C6F1ECB77A500295C67 /* Embed App Extensions */,
 			);
 			buildRules = (
@@ -689,7 +688,6 @@
 				99912C451ECB77A500295C67 /* Sources */,
 				99912C461ECB77A500295C67 /* Frameworks */,
 				99912C471ECB77A500295C67 /* Resources */,
-				A08F3684C094E551F3DDF453 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1129,36 +1127,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		9D331DA0422AAA6755480151 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirshipSample Cocoapods/Pods-AirshipSample Cocoapods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A08F3684C094E551F3DDF453 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ServiceExtension Cocoapods/Pods-ServiceExtension Cocoapods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		FF905C99F424B3813F7A98C6 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

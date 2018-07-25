@@ -64,7 +64,7 @@ export type UAEventName = $Enum<{
  * @param {string} notification.notificationId The notification ID.
  * @param {object} notification.extras Any push extras.
  * @param {string=} actionId The ID of the notification action button if available.
- * @param {boolean} isForeground Will always be true if the user taps the main notification. Otherwise its defined by the notificaiton action button.
+ * @param {boolean} isForeground Will always be true if the user taps the main notification. Otherwise its defined by the notification action button.
  */
 
 /**
@@ -102,10 +102,13 @@ export type UAEventName = $Enum<{
  * @event UrbanAirship#notificationOptInStatus
  * @type {object}
  * @param {boolean} optIn If the user is opted in or not to user notifications.
- * @param {object} [notificationOptions] iOS only. A map of opted in options.
- * @param {boolean} notificationOptions.alert If the user is opted into alerts.
- * @param {boolean} notificationOptions.sound If the user is opted into sounds.
- * @param {boolean} notificationOptions.badge If the user is opted into badge updates.
+ * @param {object} [authorizedNotificationSettings] iOS only. A map of authorized settings.
+ * @param {boolean} authorizedNotificationSettings.alert If alerts are authorized.
+ * @param {boolean} authorizedNotificationSettings.sound If sounds are authorized.
+ * @param {boolean} authorizedNotificationSettings.badge If badges are authorized.
+ * @param {boolean} authorizedNotificationSettings.carPlay If car play is authorized.
+ * @param {boolean} authorizedNotificationSettings.lockScreen If the lock screen is authorized.
+ * @param {boolean} authorizedNotificationSettings.notificationCenter If the notification center is authorized.
  */
 
 /**
@@ -565,9 +568,9 @@ class UrbanAirship {
   }
 
   /**
-   * Clears all notificaitons for the application.
+   * Clears all notifications for the application.
    * Supported on Android and iOS 10+. For older iOS devices, you can set
-   * the badge number to 0 to clear notificaitons.
+   * the badge number to 0 to clear notifications.
    *
    * @param {boolean} [enabled=true] true to automatically launch the default message center, false to disable.
    */
@@ -580,7 +583,7 @@ class UrbanAirship {
    * Supported on Android and iOS 10+.
    *
    * @param {string} identifier The notification identifier. The identifier will
-   * available in the pushReceived event and in the active notificaiton response
+   * available in the pushReceived event and in the active notification response
    * under the "notificationId" field.
    */
   static clearNotification(identifier: string) {

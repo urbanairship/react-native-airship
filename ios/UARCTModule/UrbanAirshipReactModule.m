@@ -60,7 +60,7 @@ RCT_REMAP_METHOD(isUserNotificationsEnabled,
 RCT_REMAP_METHOD(isUserNotificationsOptedIn,
                  isUserNotificationsOptedIn_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    BOOL optedIn = [UAirship push].authorizedNotificationOptions != 0;
+    BOOL optedIn = [UAirship push].authorizedNotificationSettings != 0;
     resolve(@(optedIn));
 }
 
