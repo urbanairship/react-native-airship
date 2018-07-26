@@ -21,6 +21,13 @@ NSString *const UARCTNotificationPresentationAlertKey = @"alert";
 NSString *const UARCTNotificationPresentationBadgeKey = @"badge";
 NSString *const UARCTNotificationPresentationSoundKey = @"sound";
 
+NSString *const UARCTAuthorizedNotificationSettingsAlertKey = UARCTNotificationPresentationAlertKey;
+NSString *const UARCTAuthorizedNotificationSettingsBadgeKey = UARCTNotificationPresentationBadgeKey;
+NSString *const UARCTAuthorizedNotificationSettingsSoundKey = UARCTNotificationPresentationSoundKey;
+NSString *const UARCTAuthorizedNotificationSettingsCarPlayKey = @"carPlay";
+NSString *const UARCTAuthorizedNotificationSettingsLockScreenKey = @"lockScreen";
+NSString *const UARCTAuthorizedNotificationSettingsNotificationCenterKey = @"notificationCenter";
+
 NSString *const UARCTEventNameKey = @"name";
 NSString *const UARCTEventBodyKey = @"body";
 
@@ -140,34 +147,56 @@ static UARCTEventEmitter *sharedEventEmitter_;
     [self sendEventWithName:UARCTRegistrationEventName body:registrationBody];
 }
 
-- (void)notificationAuthorizedOptionsDidChange:(UANotificationOptions)options {
+- (void)notificationAuthorizedSettingsDidChange:(UAAuthorizedNotificationSettings)authorizedSettings {
     BOOL optedIn = NO;
 
     BOOL alertBool = NO;
     BOOL badgeBool = NO;
     BOOL soundBool = NO;
+    BOOL carPlayBool = NO;
+    BOOL lockScreenBool = NO;
+    BOOL notificationCenterBool = NO;
 
-    if (options & UANotificationOptionAlert) {
+    if (authorizedSettings & UAAuthorizedNotificationSettingsAlert) {
         alertBool = YES;
     }
 
-    if (options & UANotificationOptionBadge) {
+    if (authorizedSettings & UAAuthorizedNotificationSettingsBadge) {
         badgeBool = YES;
     }
 
-    if (options & UANotificationOptionSound) {
+    if (authorizedSettings & UAAuthorizedNotificationSettingsSound) {
         soundBool = YES;
     }
 
-    optedIn = alertBool || badgeBool || soundBool;
+    if (authorizedSettings & UAAuthorizedNotificationSettingsCarPlay) {
+        carPlayBool = YES;
+    }
+
+    if (authorizedSettings & UAAuthorizedNotificationSettingsLockScreen) {
+        lockScreenBool = YES;
+    }
+
+    if (authorizedSettings & UAAuthorizedNotificationSettingsNotificationCenter) {
+        notificationCenterBool = YES;
+    }
+
+    optedIn = authorizedSettings != UAAuthorizedNotificationSettingsNone;
 
     NSDictionary *body = @{  @"optIn": @(optedIn),
                              @"notificationOptions" : @{
-                                     UARCTNotificationPresentationAlertKey : @(alertBool),
-                                     UARCTNotificationPresentationBadgeKey : @(badgeBool),
-                                     UARCTNotificationPresentationSoundKey : @(soundBool) }
-                             };
-
+                                     UARCTAuthorizedNotificationSettingsAlertKey : @(alertBool),
+                                     UARCTAuthorizedNotificationSettingsBadgeKey : @(badgeBool),
+                                     UARCTAuthorizedNotificationSettingsSoundKey : @(soundBool)
+                             },
+                             @"authorizedNotificationSettings" : @{
+                                     UARCTAuthorizedNotificationSettingsAlertKey : @(alertBool),
+                                     UARCTAuthorizedNotificationSettingsBadgeKey : @(badgeBool),
+                                     UARCTAuthorizedNotificationSettingsSoundKey : @(soundBool),
+                                     UARCTAuthorizedNotificationSettingsCarPlayKey : @(carPlayBool),
+                                     UARCTAuthorizedNotificationSettingsLockScreenKey : @(lockScreenBool),
+                                     UARCTAuthorizedNotificationSettingsNotificationCenterKey : @(notificationCenterBool)
+                             }};
 
     [self sendEventWithName:UARCTOptInStatusChangedEventName body:body];
 }
