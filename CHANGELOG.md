@@ -1,4 +1,11 @@
 
+Version 2.0.0 - July 27, 2018
+=============================
+- Added support for authorized notification settings on iOS
+- Android SDK now defaults to FCM, and depends on firebase-core
+- Updated iOS SDK to 9.3.3
+- Update Android SDK to 9.4.1
+
 Version 1.6.2 - April 20, 2018
 ==============================
 - Remove use of AsyncTaskCompat to be compatible with Android Support Library 27
