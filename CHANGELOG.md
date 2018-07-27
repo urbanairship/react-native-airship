@@ -1,4 +1,10 @@
 
+Version 1.7.0 - July 26, 2018
+=============================
+- Added support for authorized notification settings on iOS
+- Updated iOS SDK to 9.3.3
+- Update Android SDK to 9.4.1
+
 Version 1.6.2 - April 20, 2018
 ==============================
 - Remove use of AsyncTaskCompat to be compatible with Android Support Library 27
