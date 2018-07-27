@@ -1,7 +1,8 @@
 
-Version 1.7.0 - July 26, 2018
+Version 2.0.0 - July 27, 2018
 =============================
 - Added support for authorized notification settings on iOS
+- Android SDK now defaults to FCM, and depends on firebase-core
 - Updated iOS SDK to 9.3.3
 - Update Android SDK to 9.4.1
 
