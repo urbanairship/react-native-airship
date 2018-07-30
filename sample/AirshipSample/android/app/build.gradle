@@ -86,7 +86,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        applicationId "com.airshipsample"
+        applicationId "com.urbanairship.sample"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
