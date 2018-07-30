@@ -13,5 +13,5 @@ android {
 dependencies {
     compile 'com.facebook.react:react-native:[0.40,)'
     compile 'com.urbanairship.android:urbanairship-fcm:9.4.1'
-    compile 'com.google.firebase:firebase-core:16.0.0'
+    compile 'com.google.firebase:firebase-core:16.0.1'
 }
