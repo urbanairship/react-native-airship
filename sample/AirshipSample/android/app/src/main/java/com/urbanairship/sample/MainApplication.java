@@ -1,8 +1,9 @@
-package com.airshipsample;
+package com.urbanairship.sample;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.urbanairship.reactnative.BuildConfig;
 import com.urbanairship.reactnative.ReactAirshipPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
