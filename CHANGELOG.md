@@ -1,3 +1,6 @@
+Version 2.0.1 - July 30, 2018
+=============================
+- Fix firebase-core dependency (now 16.0.1)
 
 Version 2.0.0 - July 27, 2018
 =============================
