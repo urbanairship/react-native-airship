@@ -75,7 +75,7 @@ react-native install urbanairship-react-native
 react-native link urbanairship-react-native
 ```
 
-2) Create the `airshipconfig.properties` file in the applications `main/assets`:
+2) Create the `airshipconfig.properties` file in the application's `main/assets`:
 ```
 developmentAppKey = Your Development App Key
 developmentAppSecret = Your Development App Secret
@@ -95,7 +95,7 @@ notificationAccentColor = #ff0000
 
 Adding FCM to your react-native project can be accomplished with the following steps:
 
-1: Add the google-services gradle plugin dependency to the `build.gradle` file in project root directory:
+1) Add the google-services gradle plugin dependency to the `build.gradle` file in project root directory:
 
 ```
 buildscript {
@@ -110,16 +110,16 @@ buildscript {
 }
 ```
 
-2: Apply the google-services plugin *at the end* of the `build.gradle` file in the `app/` directory. The plugin directive specifically needs to be included at
+2) Apply the google-services plugin *at the end* of the `build.gradle` file in the `app/` directory. The plugin directive specifically needs to be included at
 the *end* of the `build.gradle` file to prevent potential dependency collisions. For more information, see the [plugin documentation](https://developers.google.com/android/guides/google-services-plugin).
 
 ```
 apply plugin: 'com.google.gms.google-services'
 ```
 
-3: Download your `google-services.json` file. This can be accomplished by following [`google-services.json` help documentation](https://support.google.com/firebase/answer/7015592):
+3) Download your `google-services.json` file. This can be accomplished by following [`google-services.json` help documentation](https://support.google.com/firebase/answer/7015592):
 
-4. Add the downloaded `google-service.json` file to the `app/` directory of your project. For more information
+4) Add the downloaded `google-service.json` file to the `app/` directory of your project. For more information
 on adding the configuration file please see the [google services plugin guide](https://developers.google.com/android/guides/google-services-plugin#adding_the_json_file )
 
 
