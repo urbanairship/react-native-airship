@@ -27,8 +27,8 @@ eval set -- "$OPTS"
 while true; do
   case "$1" in
     -h  ) echo -ne "-a to run Android CI tasks.\n-i to run iOS CI tasks.\n  Defaults to both. \n"; exit 0;;
-    -a  ) ANDROID=true; break;;
-    -i  ) IOS=true; break;;
+    -a  ) ANDROID=true;;
+    -i  ) IOS=true;;
     --  ) ANDROID=true; IOS=true; break;;
     *   ) break ;;
   esac
@@ -36,7 +36,7 @@ while true; do
 done
 
 # install tools not present on raw machine
-if $BITRISE_IO; then
+if [ "$BITRISE_IO" = "true" ]; then
     npm install -g react-native-cli
 fi
 
