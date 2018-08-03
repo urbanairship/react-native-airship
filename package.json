@@ -15,10 +15,10 @@
   ],
   "devDependencies": {
     "@types/react-native": "^0.50.7",
-    "babel-core": "6.24.1",
+    "babel-core": "6.26.3",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "jsdoc": "3.5.5",
-    "jsdoc-babel": "0.3.0",
+    "jsdoc-babel": "0.4.0",
     "minami": "1.2.3"
   },
   "scripts": {
@@ -30,7 +30,5 @@
   },
   "license": "Apache-2.0",
   "typings": "./js/index.d.ts",
-  "dependencies": {
-    "npm": "^5.8.0"
-  }
+  "dependencies": {}
 }
