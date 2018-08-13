@@ -184,6 +184,7 @@
 					"$(SRCROOT)/../../../ios/Carthage/Build/iOS/AirshipKit.framework/**",
 					"$(AIRSHIP_SEARCH_PATH)/AirshipKit.framework/**",
 					"$(AIRSHIP_SEARCH_PATH)/**",
+					"$(SRCROOT)/../../../ios/Pods/Headers/Public/React/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -218,6 +219,7 @@
 					"$(SRCROOT)/../../../ios/Carthage/Build/iOS/AirshipKit.framework/**",
 					"$(AIRSHIP_SEARCH_PATH)/AirshipKit.framework/**",
 					"$(AIRSHIP_SEARCH_PATH)/**",
+					"$(SRCROOT)/../../../ios/Pods/Headers/Public/React/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
