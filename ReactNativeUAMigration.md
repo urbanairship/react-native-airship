@@ -62,8 +62,8 @@ import {
 
 ReactNativeUA methods                               |  UrbanAirship methods
 --------------------------------------------------- | ---------------------------------------------
-static enable_notification()                        | static setUserNotifcationsEnabled(true)
-static disable_notification()                       | static setUserNotifcationsEnabled(false)
+static enable_notification()                        | static setUserNotificationsEnabled(true)
+static disable_notification()                       | static setUserNotificationsEnabled(false)
 static are_notifications_enabled(Function): Promise | static isUserNotificationsEnabled(): Promise
 static enable_geolocation()                         | static setLocationEnabled(enabled: boolean)
 static add_tag(tag: string)                         | static addTag(tag: string)
