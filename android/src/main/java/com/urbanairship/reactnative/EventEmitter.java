@@ -27,34 +27,21 @@ import static java.lang.Math.max;
  */
 class EventEmitter {
 
-    private static EventEmitter sharedInstance;
+    private static EventEmitter sharedInstance = new EventEmitter();
 
     private final List<Event> pendingEvents = new ArrayList<>();
     private final Set<String> knownListeners = new HashSet<>();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    private final Context context;
 
     private long listenerCount;
     private ReactContext reactContext;
-
-    private EventEmitter(Context context) {
-        this.context = context.getApplicationContext();
-    }
 
     /**
      * Returns the shared {@link EventEmitter} instance.
      *
      * @return The shared {@link EventEmitter} instance.
      */
-    static EventEmitter shared(Context context) {
-        if (sharedInstance == null) {
-            synchronized (EventEmitter.class) {
-                if (sharedInstance == null) {
-                    sharedInstance = new EventEmitter(context);
-                }
-            }
-        }
-
+    static EventEmitter shared() {
         return sharedInstance;
     }
 

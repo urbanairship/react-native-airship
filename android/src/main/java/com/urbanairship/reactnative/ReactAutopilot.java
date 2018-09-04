@@ -42,7 +42,7 @@ public class ReactAutopilot extends Autopilot {
                 String deepLink = arguments.getValue().getString();
                 if (deepLink != null) {
                     Event event = new DeepLinkEvent(deepLink);
-                    EventEmitter.shared(UAirship.getApplicationContext()).sendEvent(event);
+                    EventEmitter.shared().sendEvent(event);
                 }
                 return ActionResult.newResult(arguments.getValue());
             }
@@ -53,7 +53,7 @@ public class ReactAutopilot extends Autopilot {
             @Override
             public void onInboxUpdated() {
                 Event event = new InboxUpdatedEvent(UAirship.shared().getInbox().getUnreadCount(), UAirship.shared().getInbox().getCount());
-                EventEmitter.shared(UAirship.getApplicationContext()).sendEvent(event);
+                EventEmitter.shared().sendEvent(event);
             }
         });
 
@@ -100,7 +100,7 @@ public class ReactAutopilot extends Autopilot {
         }
 
         Event event = new ShowInboxEvent(messageId);
-        EventEmitter.shared(UAirship.getApplicationContext()).sendEvent(event);
+        EventEmitter.shared().sendEvent(event);
     }
 
     public static class CustomOverlayRichPushMessageAction extends OverlayRichPushMessageAction {

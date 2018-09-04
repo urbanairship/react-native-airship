@@ -22,7 +22,7 @@ public class ReactAirshipReceiver extends AirshipReceiver {
     @Override
     protected void onChannelCreated(@NonNull Context context, @NonNull String channelId) {
         Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
-        EventEmitter.shared(context).sendEvent(event);
+        EventEmitter.shared().sendEvent(event);
 
         // If the opt-in status changes send an event
         UrbanAirshipReactModule.checkOptIn(context);
@@ -31,7 +31,7 @@ public class ReactAirshipReceiver extends AirshipReceiver {
     @Override
     protected void onChannelUpdated(@NonNull Context context, @NonNull String channelId) {
         Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
-        EventEmitter.shared(context).sendEvent(event);
+        EventEmitter.shared().sendEvent(event);
 
         // If the opt-in status changes send an event
         UrbanAirshipReactModule.checkOptIn(context);
@@ -42,27 +42,27 @@ public class ReactAirshipReceiver extends AirshipReceiver {
     protected void onPushReceived(@NonNull Context context, @NonNull PushMessage message, boolean notificationPosted) {
         if (!notificationPosted) {
             Event event = new PushReceivedEvent(message);
-            EventEmitter.shared(context).sendEvent(event);
+            EventEmitter.shared().sendEvent(event);
         }
     }
 
     @Override
     protected void onNotificationPosted(@NonNull Context context, @NonNull NotificationInfo notificationInfo) {
         Event event = new PushReceivedEvent(notificationInfo);
-        EventEmitter.shared(context).sendEvent(event);
+        EventEmitter.shared().sendEvent(event);
     }
 
     @Override
     protected boolean onNotificationOpened(@NonNull Context context, @NonNull NotificationInfo notificationInfo, @NonNull ActionButtonInfo actionButtonInfo) {
         Event event = new NotificationResponseEvent(notificationInfo, actionButtonInfo);
-        EventEmitter.shared(context).sendEvent(event);
+        EventEmitter.shared().sendEvent(event);
         return false;
     }
 
     @Override
     protected boolean onNotificationOpened(@NonNull Context context, @NonNull NotificationInfo notificationInfo) {
         Event event = new NotificationResponseEvent(notificationInfo);
-        EventEmitter.shared(context).sendEvent(event);
+        EventEmitter.shared().sendEvent(event);
         return false;
     }
 }
