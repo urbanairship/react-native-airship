@@ -79,23 +79,16 @@ class EventEmitter {
      * @param event The event.
      */
     void sendEvent(final Event event) {
-        // Force the call to be on the main thread
-        if (Looper.getMainLooper() != Looper.myLooper()) {
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    sendEvent(event);
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (knownListeners) {
+                    if (!knownListeners.contains(event.getName()) || !emit(event)) {
+                        pendingEvents.add(event);
+                    }
                 }
-            });
-
-            return;
-        }
-
-        synchronized (knownListeners) {
-            if (!knownListeners.contains(event.getName()) || !emit(event)) {
-                pendingEvents.add(event);
             }
-        }
+        });
     }
 
     /**
@@ -137,11 +130,10 @@ class EventEmitter {
      */
     @MainThread
     private void sendPendingEvents() {
-        for (Event event : new ArrayList<>(pendingEvents)) {
-            synchronized (knownListeners) {
-                if (!knownListeners.contains(event.getName())) {
+        synchronized (knownListeners) {
+            for (Event event : new ArrayList<>(pendingEvents)) {
+                if (knownListeners.contains(event.getName())) {
                     pendingEvents.remove(event);
-
                     // Send event will add the event back as pending
                     sendEvent(event);
                 }
@@ -151,6 +143,7 @@ class EventEmitter {
 
     /**
      * Helper method to emit data.
+     *
      * @param event The event.
      * @return {@code true} if the event was emitted, otherwise {@code false}.
      */
