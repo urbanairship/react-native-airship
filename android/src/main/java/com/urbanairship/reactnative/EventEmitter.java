@@ -150,7 +150,7 @@ class EventEmitter {
     @MainThread
     private boolean emit(final Event event) {
         ReactContext reactContext = this.reactContext;
-        if (reactContext == null || reactContext.hasActiveCatalystInstance()) {
+        if (reactContext == null || !reactContext.hasActiveCatalystInstance()) {
             return false;
         }
 
