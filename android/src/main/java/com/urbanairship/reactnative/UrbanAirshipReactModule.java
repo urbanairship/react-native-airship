@@ -95,6 +95,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void initialize() {
         super.initialize();
 
+
         getReactApplicationContext().addLifecycleEventListener(new LifecycleEventListener() {
             @Override
             public void onHostResume() {
@@ -113,6 +114,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             }
 
         });
+
+        EventEmitter.shared(getReactApplicationContext()).attachReactContext(getReactApplicationContext());
     }
 
     @Override
@@ -128,7 +131,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addAndroidListener(String eventName) {
         Logger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
-        EventEmitter.shared().addAndroidListener(getReactApplicationContext(), eventName);
+        EventEmitter.shared(getReactApplicationContext()).addAndroidListener(eventName);
     }
 
     /**
@@ -139,7 +142,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeAndroidListeners(int count) {
         Logger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
-        EventEmitter.shared().removeAndroidListeners(getReactApplicationContext(), count);
+        EventEmitter.shared(getReactApplicationContext()).removeAndroidListeners(count);
     }
 
     /**
@@ -541,7 +544,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         if (message == null) {
             promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
         } else {
-            if (overlay == true) {
+            if (overlay) {
                 Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomLandingPageActivity.class)
                         .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
                         .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
@@ -820,7 +823,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             ReactAirshipPreferences.shared().setOptInStatus(optIn, context);
 
             Event optInEvent = new NotificationOptInEvent(optIn);
-            EventEmitter.shared().sendEvent(context, optInEvent);
+            EventEmitter.shared(context).sendEvent(optInEvent);
         }
     }
 

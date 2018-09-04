@@ -24,12 +24,4 @@ public interface Event {
      */
     @NonNull
     WritableMap getBody();
-
-    /**
-     * If the event is critical. Critical events will be stored as a pending event until the
-     * react context is ready.
-     *
-     * @return {@code true} if the event is critical, otherwise {@code false}.
-     */
-    boolean isCritical();
 }
