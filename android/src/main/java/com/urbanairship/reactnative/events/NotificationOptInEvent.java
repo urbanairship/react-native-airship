@@ -42,8 +42,4 @@ public class NotificationOptInEvent implements Event {
         return map;
     }
 
-    @Override
-    public boolean isCritical() {
-        return false;
-    }
 }

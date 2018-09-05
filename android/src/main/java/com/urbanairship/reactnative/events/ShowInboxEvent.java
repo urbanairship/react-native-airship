@@ -41,9 +41,4 @@ public class ShowInboxEvent implements Event {
         map.putString(MESSAGE_ID, messageId);
         return map;
     }
-
-    @Override
-    public boolean isCritical() {
-        return true;
-    }
 }
