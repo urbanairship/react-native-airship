@@ -1,6 +1,13 @@
+Version 2.0.2 - September 5, 2018
+=================================
+- Fixed Android pending events.
+- Updated Android SDK to 9.5.0.
+- Updated recommmended iOS SDK to 9.4.0.
+- Updated header search paths for ExpoKit.
+
 Version 2.0.1 - July 30, 2018
 =============================
-- Fix firebase-core dependency (now 16.0.1)
+- Fixed firebase-core dependency (now 16.0.1)
 
 Version 2.0.0 - July 27, 2018
 =============================
