@@ -120,8 +120,9 @@ class EventEmitter {
         synchronized (knownListeners) {
             for (Event event : new ArrayList<>(pendingEvents)) {
                 if (knownListeners.contains(event.getName())) {
+                    // Remove the event first before attempting to send. If it fails to
+                    // send it will get added back to pendingEvents.
                     pendingEvents.remove(event);
-                    // Send event will add the event back as pending
                     sendEvent(event);
                 }
             }
