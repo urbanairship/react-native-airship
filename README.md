@@ -19,8 +19,8 @@ One of our engineers will verify receipt of the agreement before approving your 
 Please visit https://support.urbanairship.com/ for any issues integrating or using this module.
 
 ### Requirements:
- - Xcode 8.3+
- - iOS: Urban Airship SDK 9.4+
+ - Xcode 10+
+ - iOS: Urban Airship SDK 10+
  - React Native >= 0.44.0
  - React Native cli >= 2.0.1
 

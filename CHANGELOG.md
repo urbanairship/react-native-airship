@@ -1,3 +1,10 @@
+Version 2.1.0 - September 20, 2018
+=================================
+- Added support for enabling notifications with a resulting promise.
+- Fixed iOS event addition bug.
+- Updated Android SDK to 9.5.2.
+- Updated iOS SDK to 10.0.0.
+
 Version 2.0.2 - September 5, 2018
 =================================
 - Fixed Android pending events.
