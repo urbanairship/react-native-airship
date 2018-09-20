@@ -8,7 +8,6 @@
 # Options:
 #   -a to run Android CI tasks.
 #   -i to run iOS CI tasks.
-#   Defaults to both.
 #####################################################
 
 set -o pipefail
@@ -29,7 +28,6 @@ while true; do
     -h  ) echo -ne "-a to run Android CI tasks.\n-i to run iOS CI tasks.\n  Defaults to both. \n"; exit 0;;
     -a  ) ANDROID=true;;
     -i  ) IOS=true;;
-    --  ) ANDROID=true; IOS=true; break;;
     *   ) break ;;
   esac
   shift
