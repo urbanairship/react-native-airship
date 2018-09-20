@@ -153,6 +153,17 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Enables user notifications.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void enableUserPushNotifications(Promise promise) {
+      UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
+      promise.resolve(true);
+    }
+
+    /**
      * Checks if user notifications are enabled.
      *
      * @param promise The JS promise.
