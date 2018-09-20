@@ -111,6 +111,14 @@ export class UrbanAirship {
     static isUserNotificationsEnabled(): Promise<boolean>;
 
     /**
+     * Enables user push notifications.
+     *
+     * @return {Promise.<boolean>} A promise that returns true if enablement was authorized
+     * or false if enablement was rejected.
+     */
+     static enableUserPushNotifications(): Promise<boolean>
+
+    /**
      * Checks if app notifications are enabled or not. Its possible to have `userNotificationsEnabled`
      * but app notifications being disabled if the user opted out of notifications.
      *
