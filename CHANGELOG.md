@@ -1,3 +1,7 @@
+Version 2.1.1 - October 1, 2018
+=================================
+- Reverted Android firebase-core dependency back to 16.0.1 to avoid bug in 16.0.3.
+
 Version 2.1.0 - September 20, 2018
 =================================
 - Added support for enabling notifications with a resulting promise.
