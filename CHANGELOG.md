@@ -9,6 +9,11 @@ Version 2.1.0 - September 20, 2018
 - Updated Android SDK to 9.5.2.
 - Updated iOS SDK to 10.0.0.
 
+Version 2.0.3 - October 1, 2018
+===============================
+- Fixed iOS pending event (backported from 2.1.0).
+- Updated Android SDK to 9.5.2.
+
 Version 2.0.2 - September 5, 2018
 =================================
 - Fixed Android pending events.
