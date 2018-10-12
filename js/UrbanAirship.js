@@ -93,7 +93,10 @@ export type UAEventName = $Enum<{
  * @event UrbanAirship#register
  * @type {object}
  * @param {string} channelId The channel ID.
- * @param {string} [registrationToken] The registration token.
+ * @param {string} [registrationToken] The registration token. The registration token
+ * might be undefined if registration currently in progress, if the app is not setup properly
+ * for remote notifications, if running on an iOS simulator, or if running on an Android
+ * device that has an outdated or missing version of Google Play Services.
  */
 
 /**
@@ -275,7 +278,10 @@ class UrbanAirship {
   /**
    * Gets the registration token.
    *
-   * @return {Promise.<string>} A promise with the result.
+   * @return {Promise.<string>} A promise with the result. The registration token
+   * might be undefined if registration currently in progress, if the app is not setup properly
+   * for remote notifications, if running on an iOS simulator, or if running on an Android
+   * device that has an outdated or missing version of Google Play Services.
    */
   static getRegistrationToken(): Promise<?string> {
     return UrbanAirshipModule.getRegistrationToken();
