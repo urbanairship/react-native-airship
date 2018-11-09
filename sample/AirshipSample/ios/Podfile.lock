@@ -1,6 +1,6 @@
 PODS:
-  - UrbanAirship-iOS-AppExtensions (10.0.0)
-  - UrbanAirship-iOS-SDK (10.0.0)
+  - UrbanAirship-iOS-AppExtensions (10.0.3)
+  - UrbanAirship-iOS-SDK (10.0.3)
 
 DEPENDENCIES:
   - UrbanAirship-iOS-AppExtensions
@@ -12,8 +12,8 @@ SPEC REPOS:
     - UrbanAirship-iOS-SDK
 
 SPEC CHECKSUMS:
-  UrbanAirship-iOS-AppExtensions: b717704be3e93639229841b65075d61521ff48d0
-  UrbanAirship-iOS-SDK: 49d6f0f960f5b631af049522102fc5502111290f
+  UrbanAirship-iOS-AppExtensions: 132efc474435d2e879c74af73365f4f2e299886c
+  UrbanAirship-iOS-SDK: 1ae7e6533a0b4798f0085eff5895a63df96efc9e
 
 PODFILE CHECKSUM: d0d76b3321e154fe7bea8196de441b6d56d63efe
 

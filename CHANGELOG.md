@@ -1,3 +1,8 @@
+Version 2.1.2 - November 14, 2018
+=================================
+- Updated Android SDK to 9.5.5.
+- Updated iOS SDK to 10.0.3.
+
 Version 2.1.1 - October 1, 2018
 =================================
 - Reverted Android firebase-core dependency back to 16.0.1 to avoid bug in 16.0.3.
