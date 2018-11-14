@@ -204,7 +204,10 @@ export class UrbanAirship {
     /**
      * Gets the registration token.
      *
-     * @return {Promise.<string>} A promise with the result.
+     * @return {Promise.<string>} A promise with the result. The registration token
+     * might be undefined if registration currently in progress, if the app is not setup properly
+     * for remote notifications, if running on an iOS simulator, or if running on an Android
+     * device that has an outdated or missing version of Google Play Services.
      */
     static getRegistrationToken(): Promise<string | undefined>;
 

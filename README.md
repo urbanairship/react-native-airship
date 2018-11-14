@@ -24,7 +24,6 @@ Please visit https://support.urbanairship.com/ for any issues integrating or usi
  - React Native >= 0.44.0
  - React Native cli >= 2.0.1
 
-
 ## iOS Installation
 
 The react plugin is unable to package the Urban Airship iOS SDK, therefore it must be installed as a separate step. When updating the plugin, update the SDK as well.
@@ -125,6 +124,8 @@ on adding the configuration file please see the [google services plugin guide](h
 Notifications by default are disabled to avoid prompting the user for permissions
 at an inopportune time. For testing purposes, you probably want to enable Notifications
 immediately to verify push is working:
+
+ *Note: Push notifications are not supported on iOS simulators.*
 
 ```
 import {
