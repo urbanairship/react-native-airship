@@ -1,3 +1,7 @@
+Version 2.1.3 - November 20, 2018
+=================================
+- Updated Android SDK to 9.5.6.
+
 Version 2.1.2 - November 14, 2018
 =================================
 - Updated Android SDK to 9.5.5.
