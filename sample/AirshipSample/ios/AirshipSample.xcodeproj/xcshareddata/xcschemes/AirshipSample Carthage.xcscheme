@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0830"
+   LastUpgradeVersion = "1010"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "NO"
@@ -14,21 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83CBBA2D1A601D0E00E9B192"
-               BuildableName = "libReact.a"
-               BlueprintName = "React"
-               ReferencedContainer = "container:../node_modules/react-native/React/React.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6E00F1441F268F4E0048B6F4"
+               BlueprintIdentifier = "45E9E0A021ACC46B00376F1D"
                BuildableName = "AirshipSample Carthage.app"
                BlueprintName = "AirshipSample Carthage"
                ReferencedContainer = "container:AirshipSample.xcodeproj">
@@ -46,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6E00F1441F268F4E0048B6F4"
+            BlueprintIdentifier = "45E9E0A021ACC46B00376F1D"
             BuildableName = "AirshipSample Carthage.app"
             BlueprintName = "AirshipSample Carthage"
             ReferencedContainer = "container:AirshipSample.xcodeproj">
@@ -69,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6E00F1441F268F4E0048B6F4"
+            BlueprintIdentifier = "45E9E0A021ACC46B00376F1D"
             BuildableName = "AirshipSample Carthage.app"
             BlueprintName = "AirshipSample Carthage"
             ReferencedContainer = "container:AirshipSample.xcodeproj">
@@ -88,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6E00F1441F268F4E0048B6F4"
+            BlueprintIdentifier = "45E9E0A021ACC46B00376F1D"
             BuildableName = "AirshipSample Carthage.app"
             BlueprintName = "AirshipSample Carthage"
             ReferencedContainer = "container:AirshipSample.xcodeproj">
