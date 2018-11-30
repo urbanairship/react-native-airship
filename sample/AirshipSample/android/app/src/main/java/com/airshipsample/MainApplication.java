@@ -1,4 +1,4 @@
-package com.airshipsample;
+package com.urbanairship.sample;
 
 import android.app.Application;
 
