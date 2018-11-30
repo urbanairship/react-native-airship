@@ -518,8 +518,8 @@
 		458E090C219F940D0048B729 /* UARCTModule.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UARCTModule.xcodeproj; path = "../node_modules/urbanairship-react-native/ios/UARCTModule.xcodeproj"; sourceTree = "<group>"; };
 		45E9E0E621ACC46B00376F1D /* AirshipSample Carthage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AirshipSample Carthage.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		45E9E10521ACC47300376F1D /* ServiceExtension Carthage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ServiceExtension Carthage.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		45E9E14A21ACC7FB00376F1D /* AirshipSample Cocoapods-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "AirshipSample Cocoapods-Info.plist"; path = "AirshipSample/AirshipSample Cocoapods-Info.plist"; sourceTree = SOURCE_ROOT; };
-		45E9E14C21ACC80400376F1D /* AirshipSample Carthage-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "AirshipSample Carthage-Info.plist"; path = "AirshipSample/AirshipSample Carthage-Info.plist"; sourceTree = SOURCE_ROOT; };
+		45E9E14A21ACC7FB00376F1D /* AirshipSample Cocoapods-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AirshipSample Cocoapods-Info.plist"; sourceTree = SOURCE_ROOT; };
+		45E9E14C21ACC80400376F1D /* AirshipSample Carthage-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AirshipSample Carthage-Info.plist"; sourceTree = SOURCE_ROOT; };
 		45E9E14E21ACCAEB00376F1D /* AirshipConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		45E9E15321ACCC5600376F1D /* ServiceExtension Carthage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ServiceExtension Carthage.entitlements"; sourceTree = "<group>"; };
 		45E9E15421ACCC6000376F1D /* ServiceExtension Cocoapods.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ServiceExtension Cocoapods.entitlements"; sourceTree = "<group>"; };
@@ -681,6 +681,8 @@
 		13B07FAE1A68108700A75B9A /* AirshipSample */ = {
 			isa = PBXGroup;
 			children = (
+				45E9E14A21ACC7FB00376F1D /* AirshipSample Cocoapods-Info.plist */,
+				45E9E14C21ACC80400376F1D /* AirshipSample Carthage-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -738,8 +740,6 @@
 			children = (
 				45F1C86B219F80CF00F60E0E /* NotificationService.h */,
 				45F1C86C219F80CF00F60E0E /* NotificationService.m */,
-				45E9E14A21ACC7FB00376F1D /* AirshipSample Cocoapods-Info.plist */,
-				45E9E14C21ACC80400376F1D /* AirshipSample Carthage-Info.plist */,
 			);
 			path = ServiceExtension;
 			sourceTree = "<group>";

@@ -1,7 +1,8 @@
 /* Copyright 2017 Urban Airship and Contributors */
 
-#import <UserNotifications/UserNotifications.h>
+// NotificationService.h
+@import AirshipAppExtensions;
 
-@interface NotificationService : UNNotificationServiceExtension
+@interface NotificationService : UAMediaAttachmentExtension
 
 @end
