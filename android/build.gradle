@@ -16,6 +16,9 @@ def safeExtGet (prop, fallback) {
 
 dependencies {
     implementation 'com.facebook.react:react-native:[0.40,)'
-    implementation 'com.urbanairship.android:urbanairship-fcm:9.5.6'
+    implementation 'com.urbanairship.android:urbanairship-fcm:9.5.6' {
+      exclude group: 'com.google.firebase', module: 'firebase-messaging'
+    }
+    implementation "com.google.firebase:firebase-messaging':${safeExtGet('firebaseMessagingVersion', '17.3.4')}"
     implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '16.0.5')}"
 }
