@@ -20,5 +20,5 @@ dependencies {
       exclude group: 'com.google.firebase', module: 'firebase-messaging'
     }
     implementation "com.google.firebase:firebase-messaging':${safeExtGet('firebaseMessagingVersion', '17.3.4')}"
-    implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '16.0.5')}"
+    implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '16.0.6')}"
 }
