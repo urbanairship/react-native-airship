@@ -17,5 +17,5 @@ def safeExtGet (prop, fallback) {
 dependencies {
     implementation 'com.facebook.react:react-native:[0.40,)'
     implementation 'com.urbanairship.android:urbanairship-fcm:9.5.6'
-    implementation 'com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '16.0.5')}'
+    implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '16.0.5')}"
 }
