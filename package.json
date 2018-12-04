@@ -1,5 +1,5 @@
 {
-  "name": "urbanairship-react-native-jj",
+  "name": "urbanairship-react-native",
   "version": "2.1.4",
   "description": "Urban Airship plugin for React Native apps.",
   "main": "./js/index.js",
