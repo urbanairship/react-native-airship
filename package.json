@@ -3,7 +3,7 @@
   "version": "2.1.4-alpha",
   "description": "Urban Airship plugin for React Native apps.",
   "main": "./js/index.js",
-  "author": "Urban Airship, Josh Jahans",
+  "author": "Urban Airship",
   "homepage": "https://github.com/urbanairship/react-native-module",
   "keywords": [
     "react",
