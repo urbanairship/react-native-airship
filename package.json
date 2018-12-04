@@ -1,6 +1,6 @@
 {
   "name": "urbanairship-react-native-jj",
-  "version": "2.1.4-alpha",
+  "version": "2.1.4",
   "description": "Urban Airship plugin for React Native apps.",
   "main": "./js/index.js",
   "author": "Urban Airship",
