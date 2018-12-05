@@ -587,8 +587,6 @@ class UrbanAirship {
    * Clears all notifications for the application.
    * Supported on Android and iOS 10+. For older iOS devices, you can set
    * the badge number to 0 to clear notifications.
-   *
-   * @param {boolean} [enabled=true] true to automatically launch the default message center, false to disable.
    */
   static clearNotifications() {
     UrbanAirshipModule.clearNotifications();
