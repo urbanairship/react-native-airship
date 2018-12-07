@@ -337,7 +337,7 @@ class EnablePushCell extends Component {
           Enable Push
         </Text>
         <Switch
-          onTintColor='#0d6a83'
+          trackColor={{true: "#0d6a83", false: null}}
           onValueChange={(value) => this.props.handleNotificationsEnabled(value)}
           value={this.props.notificationsEnabled}
         />
@@ -354,7 +354,7 @@ class EnableLocationCell extends Component {
           Enable Location
         </Text>
         <Switch
-          onTintColor='#0d6a83'
+          trackColor={{true: "#0d6a83", false: null}}
           onValueChange={(value) => this.props.handleLocationEnabled(value)}
           value={this.props.locationEnabled}
         />

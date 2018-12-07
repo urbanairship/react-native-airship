@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1010"
-   version = "1.3">
+   wasCreatedForAppExtension = "YES"
+   version = "2.0">
    <BuildAction
       parallelizeBuildables = "NO"
       buildImplicitDependencies = "YES">
@@ -14,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83CBBA2D1A601D0E00E9B192"
-               BuildableName = "libReact.a"
-               BlueprintName = "React"
-               ReferencedContainer = "container:../node_modules/react-native/React/React.xcodeproj">
+               BlueprintIdentifier = "45E9E0FB21ACC47300376F1D"
+               BuildableName = "ServiceExtension Carthage.appex"
+               BlueprintName = "ServiceExtension Carthage"
+               ReferencedContainer = "container:AirshipSample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,23 +29,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "58B511DA1A9E6C8500147676"
-               BuildableName = "libRCTSettings.a"
-               BlueprintName = "RCTSettings"
-               ReferencedContainer = "container:../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "45F1C84B219F7F0D00F60E0E"
-               BuildableName = "AirshipSample.app"
-               BlueprintName = "AirshipSample Cocoapods"
+               BlueprintIdentifier = "45E9E0A021ACC46B00376F1D"
+               BuildableName = "AirshipSample Carthage.app"
+               BlueprintName = "AirshipSample Carthage"
                ReferencedContainer = "container:AirshipSample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -60,9 +47,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "45F1C84B219F7F0D00F60E0E"
-            BuildableName = "AirshipSample.app"
-            BlueprintName = "AirshipSample Cocoapods"
+            BlueprintIdentifier = "45E9E0FB21ACC47300376F1D"
+            BuildableName = "ServiceExtension Carthage.appex"
+            BlueprintName = "ServiceExtension Carthage"
             ReferencedContainer = "container:AirshipSample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -71,21 +58,22 @@
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "YES"
+      launchAutomaticallySubstyle = "2">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "45F1C84B219F7F0D00F60E0E"
-            BuildableName = "AirshipSample.app"
-            BlueprintName = "AirshipSample Cocoapods"
+            BlueprintIdentifier = "45E9E0A021ACC46B00376F1D"
+            BuildableName = "AirshipSample Carthage.app"
+            BlueprintName = "AirshipSample Carthage"
             ReferencedContainer = "container:AirshipSample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -97,14 +85,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES">
+      debugDocumentVersioning = "YES"
+      launchAutomaticallySubstyle = "2">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "45F1C84B219F7F0D00F60E0E"
-            BuildableName = "AirshipSample.app"
-            BlueprintName = "AirshipSample Cocoapods"
+            BlueprintIdentifier = "45E9E0A021ACC46B00376F1D"
+            BuildableName = "AirshipSample Carthage.app"
+            BlueprintName = "AirshipSample Carthage"
             ReferencedContainer = "container:AirshipSample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -47,13 +47,13 @@ if [[ "$BITRISE_SOURCE_DIR" != "" ]]; then
 else
     REPO_PATH=`dirname "${0}"`/../../
 fi
+
 cd $REPO_PATH
 pwd
 npm link
 cd sample/AirshipSample
-npm link urbanairship-react-native
 npm install
-react-native link urbanairship-react-native
+npm link urbanairship-react-native
 
 # Android
 if $ANDROID ; then
