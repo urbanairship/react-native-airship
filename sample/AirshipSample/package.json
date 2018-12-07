@@ -6,7 +6,6 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "npm": "^6.4.1",
     "react": "16.6.1",
     "react-native": "0.57.5",
     "urbanairship-react-native": "^2.0.0"
