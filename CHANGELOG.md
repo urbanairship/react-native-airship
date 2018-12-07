@@ -1,3 +1,10 @@
+Version 2.2.0 - December 7, 2018
+================================
+- Updated ANdroid SDK to 9.6.0.
+- Android now requires compiling against API 28 (compileSdkVersion 28)
+- Firebase core and messaging dependency versions can be overridden with `firebaseMessagingVersion` and `firebaseCoreVersion` gradle properties.
+- Updated the sample to use latest React Native.
+
 Version 2.1.3 - November 20, 2018
 =================================
 - Updated Android SDK to 9.5.6.

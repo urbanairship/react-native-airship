@@ -17,8 +17,8 @@ npm link
 
 3) In `sample/AirshipSample` prepare the sample:
 ```
-npm link urbanairship-react-native
 npm install
+npm link urbanairship-react-native
 react-native link urbanairship-react-native
 ```
 

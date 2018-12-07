@@ -21,6 +21,7 @@ Please visit https://support.urbanairship.com/ for any issues integrating or usi
 ### Requirements:
  - Xcode 10+
  - iOS: Urban Airship SDK 10+
+ - Android: minSdkVersion 16+, compileSdkVersion 28+
  - React Native >= 0.44.0
  - React Native cli >= 2.0.1
 
@@ -118,6 +119,18 @@ apply plugin: 'com.google.gms.google-services'
 4) Add the downloaded `google-service.json` file to the `app/` directory of your project. For more information
 on adding the configuration file please see the [google services plugin guide](https://developers.google.com/android/guides/google-services-plugin#adding_the_json_file )
 
+### Overriding Firebase Dependency Versions
+
+Firebase core and messaging dependencies versions can be overriden by setting the `firebaseCoreVersion` and `firebaseMessagingVersion` in the project's build.gradle file:
+
+```
+ext {
+    firebaseCoreVersion "VERSION"
+    // Requires 17.1.0+
+    firebaseMessagingVersion "VERSION"
+}
+```
+
 
 ## Enabling Notifications
 
@@ -145,3 +158,4 @@ export default class Sample extends Component {
   ...
 }
 ```
+
