@@ -1,3 +1,10 @@
+Version 2.2.1 - March 14, 2019
+==============================
+Fixed a security issue within Android Urban Airship SDK, that could allow trusted
+URL redirects in certain edge cases. All applications that are using
+urbanairship-react-native version 1.4.0 - 2.2.0 on Android should update as soon as possible.
+For more details, please email security@urbanairship.com.
+
 Version 2.2.0 - December 7, 2018
 ================================
 - Updated Android SDK to 9.6.0.
