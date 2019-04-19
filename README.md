@@ -20,7 +20,7 @@ Please visit https://support.urbanairship.com/ for any issues integrating or usi
 
 ### Requirements:
  - Xcode 10+
- - iOS: Urban Airship SDK 10+
+ - iOS: Urban Airship SDK 10.2.2+
  - Android: minSdkVersion 16+, compileSdkVersion 28+
  - React Native >= 0.44.0
  - React Native cli >= 2.0.1

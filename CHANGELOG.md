@@ -1,3 +1,7 @@
+Version 2.2.2 - April 19, 2019
+==============================
+- Bump the recommended Airship iOS SDK version to 10.2.2
+
 Version 2.2.1 - March 14, 2019
 ==============================
 Fixed a security issue within Android Urban Airship SDK, that could allow trusted
