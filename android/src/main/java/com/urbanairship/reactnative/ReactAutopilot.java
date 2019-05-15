@@ -2,11 +2,14 @@
 
 package com.urbanairship.reactnative;
 
+import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.XmlRes;
 import android.support.v4.app.NotificationCompat;
 
 import com.urbanairship.Autopilot;
+import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.Action;
 import com.urbanairship.actions.ActionArguments;
@@ -34,6 +37,8 @@ public class ReactAutopilot extends Autopilot {
     @Override
     public void onAirshipReady(UAirship airship) {
         super.onAirshipReady(airship);
+
+        Context context = UAirship.getApplicationContext();
 
         // Modify the deep link action to emit events
         airship.getActionRegistry().getEntry(DeepLinkAction.DEFAULT_REGISTRY_NAME).setDefaultAction(new DeepLinkAction() {
@@ -67,7 +72,7 @@ public class ReactAutopilot extends Autopilot {
                 .setDefaultAction(new CustomOpenRichPushMessageAction());
 
 
-        DefaultNotificationFactory notificationFactory = new DefaultNotificationFactory(UAirship.getApplicationContext()) {
+        DefaultNotificationFactory notificationFactory = new DefaultNotificationFactory(context) {
             @Override
             public NotificationCompat.Builder extendBuilder(@NonNull NotificationCompat.Builder builder, @NonNull PushMessage message, int notificationId) {
                 builder.getExtras().putBundle("push_message", message.getPushBundle());
@@ -83,6 +88,18 @@ public class ReactAutopilot extends Autopilot {
         notificationFactory.setNotificationChannel(airship.getAirshipConfigOptions().notificationChannel);
 
         airship.getPushManager().setNotificationFactory(notificationFactory);
+
+        loadCustomNotificationButtonGroups(context, airship);
+    }
+
+    private void loadCustomNotificationButtonGroups(Context context, UAirship airship) {
+        String packageName = UAirship.shared().getPackageName();
+        @XmlRes int resId = context.getResources().getIdentifier("ua_custom_notification_buttons", "xml", packageName);
+
+        if (resId != 0) {
+            Logger.debug("Loading custom notification button groups");
+            airship.getPushManager().addNotificationActionButtonGroups(context, resId);
+        }
     }
 
     private static void sendShowInboxEvent(ActionArguments arguments) {

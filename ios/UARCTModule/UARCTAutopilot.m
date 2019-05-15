@@ -58,7 +58,18 @@ static BOOL disabled = NO;
          UA_LIMPERR(@"Current version of AirshipKit is below the recommended version. Current version: %@ Recommended version: %@", [UAirshipVersion get], UARCTAirshipKitRecommendedVersion);
     }
 
+    [self loadCustomNotificationCategories];
+}
 
++ (void)loadCustomNotificationCategories {
+    NSString *categoriesPath = [[NSBundle mainBundle] pathForResource:@"UACustomNotificationCategories" ofType:@"plist"];
+    NSSet *customNotificationCategories = [UANotificationCategories createCategoriesFromFile:categoriesPath];
+
+    if (customNotificationCategories.count) {
+        UA_LDEBUG(@"Registering custom notification categories: %@", customNotificationCategories);
+        [UAirship push].customCategories = customNotificationCategories;
+        [[UAirship push] updateRegistration];
+    }
 }
 
 @end
