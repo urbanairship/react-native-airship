@@ -136,23 +136,23 @@ RCT_REMAP_METHOD(associateIdentifier,
 }
 
 RCT_EXPORT_METHOD(setLocationEnabled:(BOOL)enabled) {
-    [UAirship location].locationUpdatesEnabled = enabled;
+    [UAirship shared].locationProviderDelegate.locationUpdatesEnabled = enabled;
 }
 
 RCT_REMAP_METHOD(isLocationEnabled,
                  isLocationEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve(@([UAirship location].isLocationUpdatesEnabled));
+    resolve(@([UAirship shared].locationProviderDelegate.isLocationUpdatesEnabled));
 }
 
 RCT_REMAP_METHOD(isBackgroundLocationAllowed,
                  isBackgroundLocationAllowed_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve(@([UAirship location].isBackgroundLocationUpdatesAllowed));
+    resolve(@([UAirship shared].locationProviderDelegate.isBackgroundLocationUpdatesAllowed));
 }
 
 RCT_EXPORT_METHOD(setBackgroundLocationAllowed:(BOOL)enabled) {
-    [UAirship location].backgroundLocationUpdatesAllowed = enabled;
+    [UAirship shared].locationProviderDelegate.backgroundLocationUpdatesAllowed = enabled;
 }
 
 RCT_REMAP_METHOD(runAction,
