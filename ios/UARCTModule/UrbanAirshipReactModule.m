@@ -359,7 +359,7 @@ RCT_EXPORT_METHOD(dismissMessageCenter) {
 
 RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
-                 overlay:(BOOL *)overlay
+                 overlay:(BOOL)overlay
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
@@ -372,9 +372,11 @@ RCT_REMAP_METHOD(displayMessage,
 
         reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
     } else {
+        /*
         if (overlay) {
             [UAOverlayViewController showMessage:message];
         } else {
+        */
             UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAirship resources]];
             [mvc loadMessageForID:message.messageID onlyIfChanged:YES onError:nil];
 
@@ -385,25 +387,27 @@ RCT_REMAP_METHOD(displayMessage,
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
             });
-        }
+        //}
     }
 }
 
 RCT_REMAP_METHOD(dismissMessage,
-                 overlay:(BOOL *)overlay
+                 overlay:(BOOL)overlay
                  dismissMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-
+/*
     if (overlay) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [UAOverlayViewController closeAll:YES];
         });
+ 
     } else {
+ */
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.messageViewController dismissViewControllerAnimated:YES completion:nil];
             self.messageViewController = nil;
         });
-    }
+    //}
 }
 
 RCT_REMAP_METHOD(getInboxMessages,
