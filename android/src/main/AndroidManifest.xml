@@ -5,18 +5,6 @@
       <meta-data android:name="com.urbanairship.autopilot"
                 android:value="com.urbanairship.reactnative.ReactAutopilot"/>
 
-        <receiver
-            android:name="com.urbanairship.reactnative.ReactAirshipReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.urbanairship.push.CHANNEL_UPDATED" />
-                <action android:name="com.urbanairship.push.OPENED" />
-                <action android:name="com.urbanairship.push.RECEIVED" />
-                <action android:name="com.urbanairship.push.DISMISSED" />
-                <category android:name="${applicationId}"/>
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name="com.urbanairship.reactnative.CustomMessageCenterActivity"
             android:label="@string/ua_message_center_title"
