@@ -554,6 +554,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         if (message == null) {
             promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
         } else {
+            /*
             if (overlay) {
                 Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomLandingPageActivity.class)
                         .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
@@ -563,6 +564,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
                 this.getReactApplicationContext().startActivity(intent);
             } else {
+            */
                 Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
                         .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
                         .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
@@ -570,7 +572,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                 this.getReactApplicationContext().startActivity(intent);
-            }
+            //}
         }
     }
 
@@ -581,17 +583,19 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void dismissMessage(boolean overlay) {
+        /*
         if (overlay){
             Intent intent = new Intent(this.getCurrentActivity(), CustomLandingPageActivity.class)
                     .setAction(CLOSE_MESSAGE_CENTER)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             this.getCurrentActivity().startActivity(intent);
         } else {
+        */
             Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
                     .setAction(CLOSE_MESSAGE_CENTER)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             this.getCurrentActivity().startActivity(intent);
-        }
+        //}
     }
 
     /**
