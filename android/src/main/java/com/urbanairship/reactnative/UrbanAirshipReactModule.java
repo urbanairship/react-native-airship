@@ -37,7 +37,6 @@ import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
-import com.urbanairship.actions.LandingPageActivity;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.TagGroupsEditor;
