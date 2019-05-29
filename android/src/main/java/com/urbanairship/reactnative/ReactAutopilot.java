@@ -13,7 +13,7 @@ import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionResult;
-import com.urbanairship.actions.DeepLinkAction;
+import com.urbanairship.actions.DeepLinkListener;
 import com.urbanairship.actions.OpenRichPushInboxAction;
 import com.urbanairship.actions.OverlayRichPushMessageAction;
 import com.urbanairship.push.NotificationActionButtonInfo;
@@ -44,16 +44,12 @@ public class ReactAutopilot extends Autopilot {
 
         final Context context = UAirship.getApplicationContext();
 
-        // Modify the deep link action to emit events
-        airship.getActionRegistry().getEntry(DeepLinkAction.DEFAULT_REGISTRY_NAME).setDefaultAction(new DeepLinkAction() {
+        airship.setDeepLinkListener(new DeepLinkListener() {
             @Override
-            public ActionResult perform(@NonNull ActionArguments arguments) {
-                String deepLink = arguments.getValue().getString();
-                if (deepLink != null) {
-                    Event event = new DeepLinkEvent(deepLink);
-                    EventEmitter.shared().sendEvent(event);
-                }
-                return ActionResult.newResult(arguments.getValue());
+            public boolean onDeepLink(@NonNull String deepLink) {
+                Event event = new DeepLinkEvent(deepLink);
+                EventEmitter.shared().sendEvent(event);
+                return true;
             }
         });
 
