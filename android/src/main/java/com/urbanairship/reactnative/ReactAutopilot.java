@@ -11,21 +11,25 @@ import android.support.v4.app.NotificationCompat;
 import com.urbanairship.Autopilot;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
-import com.urbanairship.actions.Action;
 import com.urbanairship.actions.ActionArguments;
-import com.urbanairship.actions.ActionRegistry;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.DeepLinkAction;
 import com.urbanairship.actions.OpenRichPushInboxAction;
 import com.urbanairship.actions.OverlayRichPushMessageAction;
-import com.urbanairship.push.PushManager;
+import com.urbanairship.push.NotificationActionButtonInfo;
+import com.urbanairship.push.NotificationInfo;
+import com.urbanairship.push.NotificationListener;
+import com.urbanairship.push.PushListener;
+import com.urbanairship.push.PushMessage;
+import com.urbanairship.push.RegistrationListener;
+import com.urbanairship.push.notifications.DefaultNotificationFactory;
 import com.urbanairship.reactnative.events.DeepLinkEvent;
 import com.urbanairship.reactnative.events.InboxUpdatedEvent;
+import com.urbanairship.reactnative.events.NotificationResponseEvent;
+import com.urbanairship.reactnative.events.PushReceivedEvent;
+import com.urbanairship.reactnative.events.RegistrationEvent;
 import com.urbanairship.reactnative.events.ShowInboxEvent;
 import com.urbanairship.richpush.RichPushInbox;
-import com.urbanairship.push.notifications.DefaultNotificationFactory;
-import com.urbanairship.push.PushMessage;
-import com.urbanairship.util.UAStringUtil;
 
 import static com.urbanairship.reactnative.UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER;
 
@@ -38,7 +42,7 @@ public class ReactAutopilot extends Autopilot {
     public void onAirshipReady(UAirship airship) {
         super.onAirshipReady(airship);
 
-        Context context = UAirship.getApplicationContext();
+        final Context context = UAirship.getApplicationContext();
 
         // Modify the deep link action to emit events
         airship.getActionRegistry().getEntry(DeepLinkAction.DEFAULT_REGISTRY_NAME).setDefaultAction(new DeepLinkAction() {
@@ -52,9 +56,73 @@ public class ReactAutopilot extends Autopilot {
                 return ActionResult.newResult(arguments.getValue());
             }
         });
+
+        airship.getPushManager().addPushListener(new PushListener() {
+            @Override
+            public void onPushReceived(@NonNull PushMessage pushMessage, boolean notificationPosted) {
+                if (!notificationPosted) {
+                    Event event = new PushReceivedEvent(pushMessage);
+                    EventEmitter.shared().sendEvent(event);
+                }
+            }
+        });
+
+        airship.getPushManager().addRegistrationListener(new RegistrationListener() {
+            @Override
+            public void onChannelCreated(@NonNull String channelId) {
+                Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
+                EventEmitter.shared().sendEvent(event);
+
+                // If the opt-in status changes send an event
+                UrbanAirshipReactModule.checkOptIn(context);
+            }
+
+            @Override
+            public void onChannelUpdated(@NonNull String channelId) {
+                Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
+                EventEmitter.shared().sendEvent(event);
+
+                // If the opt-in status changes send an event
+                UrbanAirshipReactModule.checkOptIn(context);
+            }
+
+            @Override
+            public void onPushTokenUpdated(@NonNull String s) {}
+        });
+
+        airship.getPushManager().setNotificationListener(new NotificationListener() {
+            @Override
+            public void onNotificationPosted(@NonNull NotificationInfo notificationInfo) {
+                Event event = new PushReceivedEvent(notificationInfo);
+                EventEmitter.shared().sendEvent(event);
+            }
+
+            @Override
+            public boolean onNotificationOpened(@NonNull NotificationInfo notificationInfo) {
+                Event event = new NotificationResponseEvent(notificationInfo);
+                EventEmitter.shared().sendEvent(event);
+                return false;
+            }
+
+            @Override
+            public boolean onNotificationForegroundAction(@NonNull NotificationInfo notificationInfo, @NonNull NotificationActionButtonInfo notificationActionButtonInfo) {
+                Event event = new NotificationResponseEvent(notificationInfo, notificationActionButtonInfo);
+                EventEmitter.shared().sendEvent(event);
+                return false;
+            }
+
+            @Override
+            public void onNotificationBackgroundAction(@NonNull NotificationInfo notificationInfo, @NonNull NotificationActionButtonInfo notificationActionButtonInfo) {
+                Event event = new NotificationResponseEvent(notificationInfo, notificationActionButtonInfo);
+                EventEmitter.shared().sendEvent(event);
+            }
+
+            @Override
+            public void onNotificationDismissed(@NonNull NotificationInfo notificationInfo) {}
+        });
         
         // Register a listener for inbox update event
-        UAirship.shared().getInbox().addListener(new RichPushInbox.Listener() {
+        airship.getInbox().addListener(new RichPushInbox.Listener() {
             @Override
             public void onInboxUpdated() {
                 Event event = new InboxUpdatedEvent(UAirship.shared().getInbox().getUnreadCount(), UAirship.shared().getInbox().getCount());

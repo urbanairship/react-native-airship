@@ -2,14 +2,13 @@
 
 package com.urbanairship.reactnative.events;
 
-import android.app.Notification;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.urbanairship.push.NotificationInfo;
 import com.urbanairship.push.PushMessage;
-import com.urbanairship.AirshipReceiver;
 import com.urbanairship.reactnative.Event;
 import com.urbanairship.util.UAStringUtil;
 
@@ -44,7 +43,7 @@ public class PushReceivedEvent implements Event {
      *
      * @param notificationInfo The posted notification info.
      */
-    public PushReceivedEvent(@NonNull AirshipReceiver.NotificationInfo notificationInfo) {
+    public PushReceivedEvent(@NonNull NotificationInfo notificationInfo) {
         this.message = notificationInfo.getMessage();
         this.notificationId = notificationInfo.getNotificationId();
         this.notificationTag = notificationInfo.getNotificationTag();
