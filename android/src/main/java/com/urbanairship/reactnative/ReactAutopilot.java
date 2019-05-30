@@ -5,17 +5,15 @@ package com.urbanairship.reactnative;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.XmlRes;
 import android.support.v4.app.NotificationCompat;
 
 import com.urbanairship.Autopilot;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
-import com.urbanairship.actions.ActionArguments;
-import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.DeepLinkListener;
-import com.urbanairship.actions.OpenRichPushInboxAction;
-import com.urbanairship.actions.OverlayRichPushMessageAction;
+import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.NotificationActionButtonInfo;
 import com.urbanairship.push.NotificationInfo;
 import com.urbanairship.push.NotificationListener;
@@ -126,14 +124,17 @@ public class ReactAutopilot extends Autopilot {
             }
         });
 
-        // Replace the message center actions to control auto launch behavior
-        airship.getActionRegistry()
-                .getEntry(OverlayRichPushMessageAction.DEFAULT_REGISTRY_NAME)
-                .setDefaultAction(new CustomOverlayRichPushMessageAction());
-
-        airship.getActionRegistry()
-                .getEntry(OpenRichPushInboxAction.DEFAULT_REGISTRY_NAME)
-                .setDefaultAction(new CustomOpenRichPushMessageAction());
+        airship.getMessageCenter().setOnShowMessageCenterListener(new MessageCenter.OnShowMessageCenterListener() {
+            @Override
+            public boolean onShowMessageCenter(@Nullable String messageId) {
+                if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
+                    return false;
+                } else {
+                    sendShowInboxEvent(messageId);
+                    return true;
+                }
+            }
+        });
 
 
         DefaultNotificationFactory notificationFactory = new DefaultNotificationFactory(context) {
@@ -166,47 +167,8 @@ public class ReactAutopilot extends Autopilot {
         }
     }
 
-    private static void sendShowInboxEvent(ActionArguments arguments) {
-        String messageId = arguments.getValue().getString();
-
-        if (messageId.equalsIgnoreCase(OverlayRichPushMessageAction.MESSAGE_ID_PLACEHOLDER)) {
-            PushMessage pushMessage = arguments.getMetadata().getParcelable(ActionArguments.PUSH_MESSAGE_METADATA);
-            if (pushMessage != null && pushMessage.getRichPushMessageId() != null) {
-                messageId = pushMessage.getRichPushMessageId();
-            } else if (arguments.getMetadata().containsKey(ActionArguments.RICH_PUSH_ID_METADATA)) {
-                messageId = arguments.getMetadata().getString(ActionArguments.RICH_PUSH_ID_METADATA);
-            } else {
-                messageId = null;
-            }
-        }
-
+    private static void sendShowInboxEvent(@Nullable String messageId) {
         Event event = new ShowInboxEvent(messageId);
         EventEmitter.shared().sendEvent(event);
-    }
-
-    public static class CustomOverlayRichPushMessageAction extends OverlayRichPushMessageAction {
-        @NonNull
-        @Override
-        public ActionResult perform(@NonNull ActionArguments arguments) {
-            if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
-                return super.perform(arguments);
-            } else {
-                sendShowInboxEvent(arguments);
-                return ActionResult.newEmptyResult();
-            }
-        }
-    }
-
-    public static class CustomOpenRichPushMessageAction extends OpenRichPushInboxAction {
-        @NonNull
-        @Override
-        public ActionResult perform(@NonNull ActionArguments arguments) {
-            if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
-                return super.perform(arguments);
-            } else {
-                sendShowInboxEvent(arguments);
-                return ActionResult.newEmptyResult();
-            }
-        }
     }
 }
