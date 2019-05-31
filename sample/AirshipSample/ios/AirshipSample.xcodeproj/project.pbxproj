@@ -1458,7 +1458,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-AirshipSample Cocoapods/Pods-AirshipSample Cocoapods-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-AirshipSample Cocoapods/Pods-AirshipSample Cocoapods-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/UrbanAirship-iOS-SDK/AirshipKit.framework",
 				"${BUILT_PRODUCTS_DIR}/UrbanAirship-iOS-AppExtensions/AirshipAppExtensions.framework",
 			);
@@ -1469,7 +1469,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AirshipSample Cocoapods/Pods-AirshipSample Cocoapods-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AirshipSample Cocoapods/Pods-AirshipSample Cocoapods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
