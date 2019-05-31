@@ -584,10 +584,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void dismissMessage(boolean overlay) {
         if (overlay){
             List<Activity> resumedActivities = GlobalActivityMonitor.shared(getReactApplicationContext()).getResumedActivities();
-            ListIterator iterator = resumedActivities.listIterator(resumedActivities.size());
 
-            while(iterator.hasPrevious()) {
-                Activity activity = (Activity) iterator.previous();
+            for (Activity activity : resumedActivities) {
                 if (activity instanceof HtmlActivity) {
                     activity.finish();
                 }
