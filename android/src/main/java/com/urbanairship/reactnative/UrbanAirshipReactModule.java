@@ -3,6 +3,7 @@
 package com.urbanairship.reactnative;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +37,10 @@ import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
+import com.urbanairship.actions.OverlayRichPushMessageAction;
 import com.urbanairship.analytics.AssociatedIdentifiers;
+import com.urbanairship.app.GlobalActivityMonitor;
+import com.urbanairship.iam.html.HtmlActivity;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.TagGroupsEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
@@ -49,6 +53,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
+import java.util.ListIterator;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -551,17 +557,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         if (message == null) {
             promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
         } else {
-            /*
-            if (overlay) {
-                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomLandingPageActivity.class)
-                        .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
-                        .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
-                        .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                this.getReactApplicationContext().startActivity(intent);
+            if (overlay) {
+                ActionRunRequest.createRequest(OverlayRichPushMessageAction.DEFAULT_REGISTRY_NAME)
+                        .setValue(messageId)
+                        .run();
             } else {
-            */
+
                 Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
                         .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
                         .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
@@ -569,7 +571,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                 this.getReactApplicationContext().startActivity(intent);
-            //}
+            }
         }
     }
 
@@ -580,19 +582,22 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void dismissMessage(boolean overlay) {
-        /*
         if (overlay){
-            Intent intent = new Intent(this.getCurrentActivity(), CustomLandingPageActivity.class)
-                    .setAction(CLOSE_MESSAGE_CENTER)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            this.getCurrentActivity().startActivity(intent);
+            List<Activity> resumedActivities = GlobalActivityMonitor.shared(getReactApplicationContext()).getResumedActivities();
+            ListIterator iterator = resumedActivities.listIterator(resumedActivities.size());
+
+            while(iterator.hasPrevious()) {
+                Activity activity = (Activity) iterator.previous();
+                if (activity instanceof HtmlActivity) {
+                    activity.finish();
+                }
+            }
         } else {
-        */
             Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
                     .setAction(CLOSE_MESSAGE_CENTER)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             this.getCurrentActivity().startActivity(intent);
-        //}
+        }
     }
 
     /**
