@@ -4,29 +4,40 @@ package com.urbanairship.reactnative;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.app.NotificationCompat;
 
 import com.urbanairship.AirshipConfigOptions;
+import com.urbanairship.Logger;
+import com.urbanairship.UAirship;
+import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.notifications.AirshipNotificationProvider;
 import com.urbanairship.push.notifications.NotificationArguments;
 
 public class ReactNotificationProvider extends AirshipNotificationProvider {
 
-    private Context context;
-
     public ReactNotificationProvider(@NonNull Context context, @NonNull AirshipConfigOptions configOptions) {
         super(context, configOptions);
-        this.context = context;
     }
 
-    @Override
     @NonNull
-    public String getDefaultNotificationChannelId() {
+    @Override
+    public NotificationArguments onCreateNotificationArguments(@NonNull Context context, @NonNull PushMessage message) {
         String defaultChannelId = ReactAirshipPreferences.shared().getDefaultNotificationChannelId(context);
-        return defaultChannelId != null ? defaultChannelId : super.getDefaultNotificationChannelId();
+
+        if (defaultChannelId == null) {
+            defaultChannelId = getDefaultNotificationChannelId();
+        }
+
+        String requestedChannelId = message.getNotificationChannel(defaultChannelId);
+        String activeChannelId = getActiveChannel(requestedChannelId, DEFAULT_NOTIFICATION_CHANNEL);
+
+        return NotificationArguments.newBuilder(message)
+                .setNotificationChannelId(activeChannelId)
+                .setNotificationId(message.getNotificationTag(), getNextId(context, message))
+                .build();
     }
 
     @WorkerThread
@@ -57,9 +68,35 @@ public class ReactNotificationProvider extends AirshipNotificationProvider {
         }
 
         if (accentHexColor != null) {
-            builder.setColor(Utils.getHexColor(accentHexColor, Color.GRAY));
+            int reactColor = Utils.getHexColor(accentHexColor, getDefaultAccentColor());
+            builder.setColor(arguments.getMessage().getIconColor(reactColor));
         }
 
         return builder;
+    }
+
+    /**
+     * Returns the provided channel if it exists or the default channel.
+     *
+     * @param channelId The notification channel.
+     * @param defaultChannel The default notification channel.
+     * @return The channelId if it exists, or the default channel.
+     */
+    @NonNull
+    private String getActiveChannel(@Nullable String channelId, @NonNull String defaultChannel) {
+        if (channelId == null) {
+            return defaultChannel;
+        }
+
+        if (defaultChannel.equals(channelId)) {
+            return channelId;
+        }
+
+        if (UAirship.shared().getPushManager().getNotificationChannelRegistry().getNotificationChannelSync(channelId) == null) {
+            Logger.error("Notification channel %s does not exist. Falling back to %s", channelId, defaultChannel);
+            return defaultChannel;
+        }
+
+        return channelId;
     }
 }
