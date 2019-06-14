@@ -4,6 +4,7 @@ package com.urbanairship.reactnative;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
 import com.urbanairship.UAirship;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
@@ -21,6 +22,11 @@ public class ReactAirshipPreferences {
 
     private static final String NOTIFICATIONS_OPT_IN_KEY = "NOTIFICATIONS_OPT_IN_KEY";
 
+    private static final String NOTIFICATION_ICON_KEY = "notification_icon";
+    private static final String NOTIFICATION_LARGE_ICON_KEY = "notification_large_icon";
+    private static final String NOTIFICATION_ACCENT_COLOR_KEY = "notification_accent_color";
+    private static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "default_notification_channel_id";
+
     /**
      * Returns the shared {@link ReactAirshipPreferences} instance.
      *
@@ -36,6 +42,82 @@ public class ReactAirshipPreferences {
         }
 
         return preferences;
+    }
+
+    /**
+     * Sets a custom notification icon resource name.
+     * @param context The application context.
+     * @param value The value.
+     */
+    public void setNotificationIcon(Context context, @Nullable String value) {
+        getPreferences(context).edit().putString(NOTIFICATION_ICON_KEY, value).apply();
+    }
+
+    /**
+     * Gets the custom notification icon resource name.
+     * @param context The application context.
+     * @return The icon name.
+     */
+    @Nullable
+    public String getNotificationIcon(Context context) {
+        return getPreferences(context).getString(NOTIFICATION_ICON_KEY, null);
+    }
+
+    /**
+     * Sets the custom large notification icon resource name.
+     * @param context The application context.
+     * @param value The value.
+     */
+    public void setNotificationLargeIcon(Context context, @Nullable String value) {
+        getPreferences(context).edit().putString(NOTIFICATION_LARGE_ICON_KEY, value).apply();
+    }
+
+    /**
+     * Gets the custom large notification icon resource name.
+     * @param context The application context.
+     * @return The large icon name.
+     */
+    @Nullable
+    public String getNotificationLargeIcon(Context context) {
+        return getPreferences(context).getString(NOTIFICATION_LARGE_ICON_KEY, null);
+    }
+
+    /**
+     * Sets the notification accent color resource name.
+     * @param context The application context.
+     * @param value The value.
+     */
+    public void setNotificationAccentColor(Context context, @Nullable String value) {
+        getPreferences(context).edit().putString(NOTIFICATION_ACCENT_COLOR_KEY, value).apply();
+    }
+
+    /**
+     * Gets the notification accent color resource name.
+     * @param context The application context.
+     * @return The accent color.
+     */
+    @Nullable
+    public String getNotificationAccentColor(Context context) {
+        return getPreferences(context).getString(NOTIFICATION_ACCENT_COLOR_KEY, null);
+    }
+
+    /**
+     * Sets the default notification channel ID.
+     * @param context The application context.
+     * @param value The value.
+     */
+    public void setDefaultNotificationChannelId(Context context, @Nullable String value) {
+        getPreferences(context).edit().putString(DEFAULT_NOTIFICATION_CHANNEL_ID, value).apply();
+    }
+
+    /**
+     * Gets the default notification channel ID.
+     * @param context The application context.
+     * @return The default notifiation channel ID.
+     */
+    @Nullable
+    public String getDefaultNotificationChannelId(Context context) {
+        return getPreferences(context).getString(DEFAULT_NOTIFICATION_CHANNEL_ID, null);
     }
 
     /**

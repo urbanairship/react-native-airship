@@ -81,6 +81,11 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String QUIET_TIME_END_HOUR = "endHour";
     private static final String QUIET_TIME_END_MINUTE = "endMinute";
 
+    private static final String NOTIFICATION_ICON_KEY = "icon";
+    private static final String NOTIFICATION_LARGE_ICON_KEY = "largeIcon";
+    private static final String ACCENT_COLOR_KEY = "accentColor";
+    private static final String DEFAULT_CHANNEL_ID_KEY = "defaultChannelId";
+
     static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
     static final String CLOSE_MESSAGE_CENTER = "CLOSE";
 
@@ -145,6 +150,24 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void removeAndroidListeners(int count) {
         Logger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
         EventEmitter.shared().removeAndroidListeners(count);
+    }
+
+    @ReactMethod
+    public void setAndroidNotificationConfig(ReadableMap map) {
+        Context context = getReactApplicationContext();
+        ReactAirshipPreferences prefs = ReactAirshipPreferences.shared();
+
+        prefs.setNotificationIcon(context,
+                map.hasKey(NOTIFICATION_ICON_KEY) ? map.getString(NOTIFICATION_ICON_KEY) : null);
+
+        prefs.setNotificationLargeIcon(context,
+                map.hasKey(NOTIFICATION_LARGE_ICON_KEY) ? map.getString(NOTIFICATION_LARGE_ICON_KEY) : null);
+
+        prefs.setNotificationAccentColor(context,
+                map.hasKey(ACCENT_COLOR_KEY) ? map.getString(ACCENT_COLOR_KEY) : null);
+
+        prefs.setDefaultNotificationChannelId(context,
+                map.hasKey(DEFAULT_CHANNEL_ID_KEY) ? map.getString(DEFAULT_CHANNEL_ID_KEY) : null);
     }
 
     /**

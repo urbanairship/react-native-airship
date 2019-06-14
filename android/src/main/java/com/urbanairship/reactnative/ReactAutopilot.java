@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.XmlRes;
-import android.support.v4.app.NotificationCompat;
 
 import com.urbanairship.Autopilot;
 import com.urbanairship.Logger;
@@ -20,7 +19,6 @@ import com.urbanairship.push.NotificationListener;
 import com.urbanairship.push.PushListener;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.RegistrationListener;
-import com.urbanairship.push.notifications.DefaultNotificationFactory;
 import com.urbanairship.reactnative.events.DeepLinkEvent;
 import com.urbanairship.reactnative.events.InboxUpdatedEvent;
 import com.urbanairship.reactnative.events.NotificationResponseEvent;
@@ -136,23 +134,9 @@ public class ReactAutopilot extends Autopilot {
             }
         });
 
-
-        DefaultNotificationFactory notificationFactory = new DefaultNotificationFactory(context) {
-            @Override
-            public NotificationCompat.Builder extendBuilder(@NonNull NotificationCompat.Builder builder, @NonNull PushMessage message, int notificationId) {
-                builder.getExtras().putBundle("push_message", message.getPushBundle());
-                return builder;
-            }
-        };
-
-        if (airship.getAirshipConfigOptions().notificationIcon != 0) {
-            notificationFactory.setSmallIconId(airship.getAirshipConfigOptions().notificationIcon);
-        }
-
-        notificationFactory.setColor(airship.getAirshipConfigOptions().notificationAccentColor);
-        notificationFactory.setNotificationChannel(airship.getAirshipConfigOptions().notificationChannel);
-
-        airship.getPushManager().setNotificationFactory(notificationFactory);
+        // Set our custom notification provider
+        ReactNotificationProvider notificationProvider = new ReactNotificationProvider(context, airship.getAirshipConfigOptions());
+        airship.getPushManager().setNotificationProvider(notificationProvider);
 
         loadCustomNotificationButtonGroups(context, airship);
     }
