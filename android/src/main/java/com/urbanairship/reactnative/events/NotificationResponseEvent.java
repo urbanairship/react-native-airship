@@ -7,7 +7,8 @@ import android.support.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
-import com.urbanairship.AirshipReceiver;
+import com.urbanairship.push.NotificationActionButtonInfo;
+import com.urbanairship.push.NotificationInfo;
 import com.urbanairship.reactnative.Event;
 
 
@@ -22,8 +23,8 @@ public class NotificationResponseEvent implements Event {
     private static final String RESPONSE_FOREGROUND = "isForeground";
     private static final String RESPONSE_NOTIFICATION = "notification";
 
-    private final AirshipReceiver.NotificationInfo notificationInfo;
-    private final AirshipReceiver.ActionButtonInfo actionButtonInfo;
+    private final NotificationInfo notificationInfo;
+    private final NotificationActionButtonInfo actionButtonInfo;
 
 
     /**
@@ -31,7 +32,7 @@ public class NotificationResponseEvent implements Event {
      *
      * @param notificationInfo The notification info.
      */
-    public NotificationResponseEvent(@NonNull AirshipReceiver.NotificationInfo notificationInfo) {
+    public NotificationResponseEvent(@NonNull NotificationInfo notificationInfo) {
         this(notificationInfo, null);
     }
 
@@ -40,7 +41,7 @@ public class NotificationResponseEvent implements Event {
      *
      * @param notificationInfo The notification info.
      */
-    public NotificationResponseEvent(@NonNull AirshipReceiver.NotificationInfo notificationInfo, @Nullable AirshipReceiver.ActionButtonInfo actionButtonInfo) {
+    public NotificationResponseEvent(@NonNull NotificationInfo notificationInfo, @Nullable NotificationActionButtonInfo actionButtonInfo) {
         this.notificationInfo = notificationInfo;
         this.actionButtonInfo = actionButtonInfo;
     }

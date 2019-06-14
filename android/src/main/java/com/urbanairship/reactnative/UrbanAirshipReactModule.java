@@ -3,10 +3,10 @@
 package com.urbanairship.reactnative;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -37,8 +37,10 @@ import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
-import com.urbanairship.actions.LandingPageActivity;
+import com.urbanairship.actions.OverlayRichPushMessageAction;
 import com.urbanairship.analytics.AssociatedIdentifiers;
+import com.urbanairship.app.GlobalActivityMonitor;
+import com.urbanairship.iam.html.HtmlActivity;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.TagGroupsEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
@@ -47,12 +49,12 @@ import com.urbanairship.richpush.RichPushInbox;
 import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.util.UAStringUtil;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -78,6 +80,11 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String QUIET_TIME_START_MINUTE = "startMinute";
     private static final String QUIET_TIME_END_HOUR = "endHour";
     private static final String QUIET_TIME_END_MINUTE = "endMinute";
+
+    private static final String NOTIFICATION_ICON_KEY = "icon";
+    private static final String NOTIFICATION_LARGE_ICON_KEY = "largeIcon";
+    private static final String ACCENT_COLOR_KEY = "accentColor";
+    private static final String DEFAULT_CHANNEL_ID_KEY = "defaultChannelId";
 
     static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
     static final String CLOSE_MESSAGE_CENTER = "CLOSE";
@@ -143,6 +150,24 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void removeAndroidListeners(int count) {
         Logger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
         EventEmitter.shared().removeAndroidListeners(count);
+    }
+
+    @ReactMethod
+    public void setAndroidNotificationConfig(ReadableMap map) {
+        Context context = getReactApplicationContext();
+        ReactAirshipPreferences prefs = ReactAirshipPreferences.shared();
+
+        prefs.setNotificationIcon(context,
+                map.hasKey(NOTIFICATION_ICON_KEY) ? map.getString(NOTIFICATION_ICON_KEY) : null);
+
+        prefs.setNotificationLargeIcon(context,
+                map.hasKey(NOTIFICATION_LARGE_ICON_KEY) ? map.getString(NOTIFICATION_LARGE_ICON_KEY) : null);
+
+        prefs.setNotificationAccentColor(context,
+                map.hasKey(ACCENT_COLOR_KEY) ? map.getString(ACCENT_COLOR_KEY) : null);
+
+        prefs.setDefaultNotificationChannelId(context,
+                map.hasKey(DEFAULT_CHANNEL_ID_KEY) ? map.getString(DEFAULT_CHANNEL_ID_KEY) : null);
     }
 
     /**
@@ -555,15 +580,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         if (message == null) {
             promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
         } else {
-            if (overlay) {
-                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomLandingPageActivity.class)
-                        .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
-                        .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
-                        .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                this.getReactApplicationContext().startActivity(intent);
+            if (overlay) {
+                ActionRunRequest.createRequest(OverlayRichPushMessageAction.DEFAULT_REGISTRY_NAME)
+                        .setValue(messageId)
+                        .run();
             } else {
+
                 Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
                         .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
                         .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
@@ -583,10 +606,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void dismissMessage(boolean overlay) {
         if (overlay){
-            Intent intent = new Intent(this.getCurrentActivity(), CustomLandingPageActivity.class)
-                    .setAction(CLOSE_MESSAGE_CENTER)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            this.getCurrentActivity().startActivity(intent);
+            List<Activity> resumedActivities = GlobalActivityMonitor.shared(getReactApplicationContext()).getResumedActivities();
+
+            for (Activity activity : resumedActivities) {
+                if (activity instanceof HtmlActivity) {
+                    activity.finish();
+                }
+            }
         } else {
             Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
                     .setAction(CLOSE_MESSAGE_CENTER)

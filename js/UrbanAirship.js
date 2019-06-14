@@ -138,6 +138,19 @@ export type UAEventName = $Enum<{
 class UrbanAirship {
 
   /**
+   * Sets the Android notification config. Values not set will fallback to any values set in the airship config options.
+   *
+   * @param {Object} config The notification config object.
+   * @param {string} config.icon The icon resource name.
+   * @param {string} config.largeIcon The large icon resource name.
+   * @param {string} config.accentColor The accent color in hex format (#AARRGGBB).
+   * @param {string} config.defaultChannelId The default channel ID.
+   */
+  static setAndroidNotificationConfig(config: {icon?: string, largeIcon?: string, accentColor?: string, defaultChannelId?: string }) {
+    UrbanAirshipModule.setAndroidNotificationConfig(config);
+  }
+
+  /**
    * Sets user notifications enabled. The first time user notifications are enabled
    * on iOS, it will prompt the user for notification permissions.
    *
