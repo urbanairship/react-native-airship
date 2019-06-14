@@ -8,7 +8,7 @@
   "dependencies": {
     "react": "16.6.1",
     "react-native": "0.57.5",
-    "urbanairship-react-native": "^3.0.0"
+    "urbanairship-react-native": "file:../.."
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
