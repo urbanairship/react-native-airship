@@ -138,7 +138,18 @@ public class ReactAutopilot extends Autopilot {
         ReactNotificationProvider notificationProvider = new ReactNotificationProvider(context, airship.getAirshipConfigOptions());
         airship.getPushManager().setNotificationProvider(notificationProvider);
 
+        loadCustomNotificationChannels(context, airship);
         loadCustomNotificationButtonGroups(context, airship);
+    }
+
+    private void loadCustomNotificationChannels(Context context, UAirship airship) {
+        String packageName = UAirship.shared().getPackageName();
+        @XmlRes int resId = context.getResources().getIdentifier("ua_custom_notification_channels", "xml", packageName);
+
+        if (resId != 0) {
+            Logger.debug("Loading custom notification channels");
+            airship.getPushManager().getNotificationChannelRegistry().createNotificationChannels(resId);
+        }
     }
 
     private void loadCustomNotificationButtonGroups(Context context, UAirship airship) {
