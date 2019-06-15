@@ -52,7 +52,7 @@ cd $REPO_PATH
 pwd
 npm link
 cd sample/AirshipSample
-npm install
+npm install ../../
 npm link urbanairship-react-native
 
 # Android

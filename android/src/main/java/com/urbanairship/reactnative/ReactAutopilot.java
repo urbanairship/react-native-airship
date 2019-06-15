@@ -5,27 +5,27 @@ package com.urbanairship.reactnative;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.XmlRes;
-import android.support.v4.app.NotificationCompat;
 
 import com.urbanairship.Autopilot;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
-import com.urbanairship.actions.Action;
-import com.urbanairship.actions.ActionArguments;
-import com.urbanairship.actions.ActionRegistry;
-import com.urbanairship.actions.ActionResult;
-import com.urbanairship.actions.DeepLinkAction;
-import com.urbanairship.actions.OpenRichPushInboxAction;
-import com.urbanairship.actions.OverlayRichPushMessageAction;
-import com.urbanairship.push.PushManager;
+import com.urbanairship.actions.DeepLinkListener;
+import com.urbanairship.messagecenter.MessageCenter;
+import com.urbanairship.push.NotificationActionButtonInfo;
+import com.urbanairship.push.NotificationInfo;
+import com.urbanairship.push.NotificationListener;
+import com.urbanairship.push.PushListener;
+import com.urbanairship.push.PushMessage;
+import com.urbanairship.push.RegistrationListener;
 import com.urbanairship.reactnative.events.DeepLinkEvent;
 import com.urbanairship.reactnative.events.InboxUpdatedEvent;
+import com.urbanairship.reactnative.events.NotificationResponseEvent;
+import com.urbanairship.reactnative.events.PushReceivedEvent;
+import com.urbanairship.reactnative.events.RegistrationEvent;
 import com.urbanairship.reactnative.events.ShowInboxEvent;
 import com.urbanairship.richpush.RichPushInbox;
-import com.urbanairship.push.notifications.DefaultNotificationFactory;
-import com.urbanairship.push.PushMessage;
-import com.urbanairship.util.UAStringUtil;
 
 import static com.urbanairship.reactnative.UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER;
 
@@ -38,23 +38,83 @@ public class ReactAutopilot extends Autopilot {
     public void onAirshipReady(UAirship airship) {
         super.onAirshipReady(airship);
 
-        Context context = UAirship.getApplicationContext();
+        final Context context = UAirship.getApplicationContext();
 
-        // Modify the deep link action to emit events
-        airship.getActionRegistry().getEntry(DeepLinkAction.DEFAULT_REGISTRY_NAME).setDefaultAction(new DeepLinkAction() {
+        airship.setDeepLinkListener(new DeepLinkListener() {
             @Override
-            public ActionResult perform(@NonNull ActionArguments arguments) {
-                String deepLink = arguments.getValue().getString();
-                if (deepLink != null) {
-                    Event event = new DeepLinkEvent(deepLink);
+            public boolean onDeepLink(@NonNull String deepLink) {
+                Event event = new DeepLinkEvent(deepLink);
+                EventEmitter.shared().sendEvent(event);
+                return true;
+            }
+        });
+
+        airship.getPushManager().addPushListener(new PushListener() {
+            @Override
+            public void onPushReceived(@NonNull PushMessage pushMessage, boolean notificationPosted) {
+                if (!notificationPosted) {
+                    Event event = new PushReceivedEvent(pushMessage);
                     EventEmitter.shared().sendEvent(event);
                 }
-                return ActionResult.newResult(arguments.getValue());
             }
+        });
+
+        airship.getPushManager().addRegistrationListener(new RegistrationListener() {
+            @Override
+            public void onChannelCreated(@NonNull String channelId) {
+                Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
+                EventEmitter.shared().sendEvent(event);
+
+                // If the opt-in status changes send an event
+                UrbanAirshipReactModule.checkOptIn(context);
+            }
+
+            @Override
+            public void onChannelUpdated(@NonNull String channelId) {
+                Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
+                EventEmitter.shared().sendEvent(event);
+
+                // If the opt-in status changes send an event
+                UrbanAirshipReactModule.checkOptIn(context);
+            }
+
+            @Override
+            public void onPushTokenUpdated(@NonNull String s) {}
+        });
+
+        airship.getPushManager().setNotificationListener(new NotificationListener() {
+            @Override
+            public void onNotificationPosted(@NonNull NotificationInfo notificationInfo) {
+                Event event = new PushReceivedEvent(notificationInfo);
+                EventEmitter.shared().sendEvent(event);
+            }
+
+            @Override
+            public boolean onNotificationOpened(@NonNull NotificationInfo notificationInfo) {
+                Event event = new NotificationResponseEvent(notificationInfo);
+                EventEmitter.shared().sendEvent(event);
+                return false;
+            }
+
+            @Override
+            public boolean onNotificationForegroundAction(@NonNull NotificationInfo notificationInfo, @NonNull NotificationActionButtonInfo notificationActionButtonInfo) {
+                Event event = new NotificationResponseEvent(notificationInfo, notificationActionButtonInfo);
+                EventEmitter.shared().sendEvent(event);
+                return false;
+            }
+
+            @Override
+            public void onNotificationBackgroundAction(@NonNull NotificationInfo notificationInfo, @NonNull NotificationActionButtonInfo notificationActionButtonInfo) {
+                Event event = new NotificationResponseEvent(notificationInfo, notificationActionButtonInfo);
+                EventEmitter.shared().sendEvent(event);
+            }
+
+            @Override
+            public void onNotificationDismissed(@NonNull NotificationInfo notificationInfo) {}
         });
         
         // Register a listener for inbox update event
-        UAirship.shared().getInbox().addListener(new RichPushInbox.Listener() {
+        airship.getInbox().addListener(new RichPushInbox.Listener() {
             @Override
             public void onInboxUpdated() {
                 Event event = new InboxUpdatedEvent(UAirship.shared().getInbox().getUnreadCount(), UAirship.shared().getInbox().getCount());
@@ -62,34 +122,34 @@ public class ReactAutopilot extends Autopilot {
             }
         });
 
-        // Replace the message center actions to control auto launch behavior
-        airship.getActionRegistry()
-                .getEntry(OverlayRichPushMessageAction.DEFAULT_REGISTRY_NAME)
-                .setDefaultAction(new CustomOverlayRichPushMessageAction());
-
-        airship.getActionRegistry()
-                .getEntry(OpenRichPushInboxAction.DEFAULT_REGISTRY_NAME)
-                .setDefaultAction(new CustomOpenRichPushMessageAction());
-
-
-        DefaultNotificationFactory notificationFactory = new DefaultNotificationFactory(context) {
+        airship.getMessageCenter().setOnShowMessageCenterListener(new MessageCenter.OnShowMessageCenterListener() {
             @Override
-            public NotificationCompat.Builder extendBuilder(@NonNull NotificationCompat.Builder builder, @NonNull PushMessage message, int notificationId) {
-                builder.getExtras().putBundle("push_message", message.getPushBundle());
-                return builder;
+            public boolean onShowMessageCenter(@Nullable String messageId) {
+                if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
+                    return false;
+                } else {
+                    sendShowInboxEvent(messageId);
+                    return true;
+                }
             }
-        };
+        });
 
-        if (airship.getAirshipConfigOptions().notificationIcon != 0) {
-            notificationFactory.setSmallIconId(airship.getAirshipConfigOptions().notificationIcon);
-        }
+        // Set our custom notification provider
+        ReactNotificationProvider notificationProvider = new ReactNotificationProvider(context, airship.getAirshipConfigOptions());
+        airship.getPushManager().setNotificationProvider(notificationProvider);
 
-        notificationFactory.setColor(airship.getAirshipConfigOptions().notificationAccentColor);
-        notificationFactory.setNotificationChannel(airship.getAirshipConfigOptions().notificationChannel);
-
-        airship.getPushManager().setNotificationFactory(notificationFactory);
-
+        loadCustomNotificationChannels(context, airship);
         loadCustomNotificationButtonGroups(context, airship);
+    }
+
+    private void loadCustomNotificationChannels(Context context, UAirship airship) {
+        String packageName = UAirship.shared().getPackageName();
+        @XmlRes int resId = context.getResources().getIdentifier("ua_custom_notification_channels", "xml", packageName);
+
+        if (resId != 0) {
+            Logger.debug("Loading custom notification channels");
+            airship.getPushManager().getNotificationChannelRegistry().createNotificationChannels(resId);
+        }
     }
 
     private void loadCustomNotificationButtonGroups(Context context, UAirship airship) {
@@ -102,47 +162,8 @@ public class ReactAutopilot extends Autopilot {
         }
     }
 
-    private static void sendShowInboxEvent(ActionArguments arguments) {
-        String messageId = arguments.getValue().getString();
-
-        if (messageId.equalsIgnoreCase(OverlayRichPushMessageAction.MESSAGE_ID_PLACEHOLDER)) {
-            PushMessage pushMessage = arguments.getMetadata().getParcelable(ActionArguments.PUSH_MESSAGE_METADATA);
-            if (pushMessage != null && pushMessage.getRichPushMessageId() != null) {
-                messageId = pushMessage.getRichPushMessageId();
-            } else if (arguments.getMetadata().containsKey(ActionArguments.RICH_PUSH_ID_METADATA)) {
-                messageId = arguments.getMetadata().getString(ActionArguments.RICH_PUSH_ID_METADATA);
-            } else {
-                messageId = null;
-            }
-        }
-
+    private static void sendShowInboxEvent(@Nullable String messageId) {
         Event event = new ShowInboxEvent(messageId);
         EventEmitter.shared().sendEvent(event);
-    }
-
-    public static class CustomOverlayRichPushMessageAction extends OverlayRichPushMessageAction {
-        @NonNull
-        @Override
-        public ActionResult perform(@NonNull ActionArguments arguments) {
-            if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
-                return super.perform(arguments);
-            } else {
-                sendShowInboxEvent(arguments);
-                return ActionResult.newEmptyResult();
-            }
-        }
-    }
-
-    public static class CustomOpenRichPushMessageAction extends OpenRichPushInboxAction {
-        @NonNull
-        @Override
-        public ActionResult perform(@NonNull ActionArguments arguments) {
-            if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
-                return super.perform(arguments);
-            } else {
-                sendShowInboxEvent(arguments);
-                return ActionResult.newEmptyResult();
-            }
-        }
     }
 }

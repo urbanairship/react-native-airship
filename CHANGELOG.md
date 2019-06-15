@@ -1,3 +1,10 @@
+Version 3.0.0 - June 14, 2019
+=============================
+- Updated iOS SDK to 11.0.0.
+- Updated Android SDK to 10.0.1.
+- iOS integration now requires AirshipLocationKit for location services.
+- Added ability to configure android notification options.
+
 Version 2.2.1 - March 14, 2019
 ==============================
 Fixed a security issue within Android Urban Airship SDK, that could allow trusted

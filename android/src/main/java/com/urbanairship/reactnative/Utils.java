@@ -1,5 +1,10 @@
 package com.urbanairship.reactnative;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
@@ -9,10 +14,13 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.json.JsonMap;
 import com.urbanairship.json.JsonValue;
+import com.urbanairship.util.UAStringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.urbanairship.Logger;
 
 /**
  * Module utils.
@@ -67,6 +75,45 @@ class Utils {
             default:
                 return JsonValue.NULL;
         }
+    }
+
+    /**
+     * Gets a resource value by name.
+     *
+     * @param context The context.
+     * @param resourceName The resource name.
+     * @param resourceFolder The resource folder.
+     * @return The resource ID or 0 if not found.
+     */
+    public static int getNamedResource(Context context, @NonNull String resourceName, @NonNull String resourceFolder) {
+        if (!UAStringUtil.isEmpty(resourceName)) {
+            int id = context.getResources().getIdentifier(resourceName, resourceFolder, context.getPackageName());
+            if (id != 0) {
+                return id;
+            } else {
+                Logger.error("Unable to find resource with name: %s", resourceName);
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Gets a hex color as a color int.
+     *
+     * @param hexColor The hex color.
+     * @param defaultColor Default value if the conversion was not successful.
+     * @return The color int.
+     */
+    @ColorInt
+    public static int getHexColor(@NonNull String hexColor, @ColorInt int defaultColor) {
+        if (!UAStringUtil.isEmpty(hexColor)) {
+            try {
+                return Color.parseColor(hexColor);
+            } catch (IllegalArgumentException e) {
+                Logger.error( e, "Unable to parse color: %s", hexColor);
+            }
+        }
+        return defaultColor;
     }
 
 

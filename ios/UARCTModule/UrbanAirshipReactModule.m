@@ -9,6 +9,8 @@
 
 @interface UrbanAirshipReactModule()
 @property (nonatomic, weak) UARCTMessageViewController *messageViewController;
+@property (nonatomic, weak) UAInAppMessageHTMLAdapter *htmlAdapter;
+@property (nonatomic, assign) BOOL factoryBlockAssigned;
 @end
 
 @implementation UrbanAirshipReactModule
@@ -136,23 +138,23 @@ RCT_REMAP_METHOD(associateIdentifier,
 }
 
 RCT_EXPORT_METHOD(setLocationEnabled:(BOOL)enabled) {
-    [UAirship location].locationUpdatesEnabled = enabled;
+    [UAirship shared].locationProviderDelegate.locationUpdatesEnabled = enabled;
 }
 
 RCT_REMAP_METHOD(isLocationEnabled,
                  isLocationEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve(@([UAirship location].isLocationUpdatesEnabled));
+    resolve(@([UAirship shared].locationProviderDelegate.isLocationUpdatesEnabled));
 }
 
 RCT_REMAP_METHOD(isBackgroundLocationAllowed,
                  isBackgroundLocationAllowed_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve(@([UAirship location].isBackgroundLocationUpdatesAllowed));
+    resolve(@([UAirship shared].locationProviderDelegate.isBackgroundLocationUpdatesAllowed));
 }
 
 RCT_EXPORT_METHOD(setBackgroundLocationAllowed:(BOOL)enabled) {
-    [UAirship location].backgroundLocationUpdatesAllowed = enabled;
+    [UAirship shared].locationProviderDelegate.backgroundLocationUpdatesAllowed = enabled;
 }
 
 RCT_REMAP_METHOD(runAction,
@@ -359,7 +361,7 @@ RCT_EXPORT_METHOD(dismissMessageCenter) {
 
 RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
-                 overlay:(BOOL *)overlay
+                 overlay:(BOOL)overlay
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
@@ -373,7 +375,7 @@ RCT_REMAP_METHOD(displayMessage,
         reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
     } else {
         if (overlay) {
-            [UAOverlayViewController showMessage:message];
+            [self displayOverlayMessage:message];
         } else {
             UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAirship resources]];
             [mvc loadMessageForID:message.messageID onlyIfChanged:YES onError:nil];
@@ -390,14 +392,14 @@ RCT_REMAP_METHOD(displayMessage,
 }
 
 RCT_REMAP_METHOD(dismissMessage,
-                 overlay:(BOOL *)overlay
+                 overlay:(BOOL)overlay
                  dismissMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-
     if (overlay) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [UAOverlayViewController closeAll:YES];
+            [self closeOverlayMessage];
         });
+ 
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.messageViewController dismissViewControllerAnimated:YES completion:nil];
@@ -528,4 +530,38 @@ RCT_REMAP_METHOD(getActiveNotifications,
         reject(UARCTStatusUnavailable, @"Only available on iOS 10+", error);
     }
 }
+
+#pragma mark -
+#pragma mark Helper methods
+
+- (void)displayOverlayMessage:(UAInboxMessage *)message {
+    if (!self.factoryBlockAssigned) {
+        [[UAirship inAppMessageManager] setFactoryBlock:^id<UAInAppMessageAdapterProtocol> _Nonnull(UAInAppMessage * _Nonnull message) {
+            UAInAppMessageHTMLAdapter *adapter = [UAInAppMessageHTMLAdapter adapterForMessage:message];
+            UAInAppMessageHTMLDisplayContent *displayContent = (UAInAppMessageHTMLDisplayContent *) message.displayContent;
+            NSURL *url = [NSURL URLWithString:displayContent.url];
+
+            if ([url.scheme isEqualToString:@"message"]) {
+                self.htmlAdapter = adapter;
+            }
+
+            return adapter;
+        } forDisplayType:UAInAppMessageDisplayTypeHTML];
+
+        self.factoryBlockAssigned = YES;
+    }
+
+    [UAActionRunner runActionWithName:kUAOverlayInboxMessageActionDefaultRegistryName
+                                value:message.messageID
+                            situation:UASituationManualInvocation];
+}
+
+- (void)closeOverlayMessage {
+    UIViewController *vc = [self.htmlAdapter valueForKey:@"htmlViewController"];
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    [vc performSelector:NSSelectorFromString(@"dismissWithoutResolution")];
+# pragma clang diagnostic pop
+}
+
 @end

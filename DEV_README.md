@@ -18,7 +18,7 @@ npm link
 3) In `sample/AirshipSample` prepare the sample:
 ```
 npm install
-npm link urbanairship-react-native
+npm link ../../
 react-native link urbanairship-react-native
 ```
 
@@ -51,3 +51,11 @@ workspace.
 5) Build and run the sample
 
 You should now be able to modify the Android plugin source directly in the Android Studio.
+
+## Known Issues
+
+Metro does not support symlinks, which complicates monorepo development. If you
+see an error message such as "urbanairship-react-native does not exist in the
+Haste module map", you may need to remove urbanairship-react-native from the
+node_modules subdirectory of AirshipSample, and copy the folder over directly.
+

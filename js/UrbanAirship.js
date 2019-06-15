@@ -138,6 +138,19 @@ export type UAEventName = $Enum<{
 class UrbanAirship {
 
   /**
+   * Sets the Android notification config. Values not set will fallback to any values set in the airship config options.
+   *
+   * @param {Object} config The notification config object.
+   * @param {string} config.icon The icon resource name.
+   * @param {string} config.largeIcon The large icon resource name.
+   * @param {string} config.accentColor The accent color in hex format (#AARRGGBB).
+   * @param {string} config.defaultChannelId The default channel ID.
+   */
+  static setAndroidNotificationConfig(config: {icon?: string, largeIcon?: string, accentColor?: string, defaultChannelId?: string }) {
+    UrbanAirshipModule.setAndroidNotificationConfig(config);
+  }
+
+  /**
    * Sets user notifications enabled. The first time user notifications are enabled
    * on iOS, it will prompt the user for notification permissions.
    *
@@ -325,6 +338,10 @@ class UrbanAirship {
   /**
    * Enables or disables Urban Airship location services.
    *
+   * Note: On iOS, location services require an additional dependency
+   * on AirshipLocationKit. For more information see
+   * https://docs.airship.com/platform/react-native/location/
+   *
    * @param {boolean} enabled true to enable location, false to disable.
    */
   static setLocationEnabled(enabled: boolean) {
@@ -333,6 +350,10 @@ class UrbanAirship {
 
   /**
    * Allows or disallows location services to continue in the background.
+   *
+   * Note: On iOS, location services require an additional dependency
+   * on AirshipLocationKit. For more information see
+   * https://docs.airship.com/platform/react-native/location/
    *
    * @param {boolean} allowed true to allow background location, false to disallow.
    */
@@ -343,6 +364,10 @@ class UrbanAirship {
   /**
    * Checks if location is enabled or not.
    *
+   * Note: On iOS, location services require an additional dependency
+   * on AirshipLocationKit. For more information see
+   * https://docs.airship.com/platform/react-native/location/
+   *
    * @return {Promise.<boolean>} A promise with the result.
    */
   static isLocationEnabled(): Promise<boolean> {
@@ -351,6 +376,10 @@ class UrbanAirship {
 
   /**
    * Checks if background location is allowed or not.
+   *
+   * Note: On iOS, location services require an additional dependency
+   * on AirshipLocationKit. For more information see
+   * https://docs.airship.com/platform/react-native/location/
    *
    * @return {Promise.<boolean>} A promise with the result.
    */
