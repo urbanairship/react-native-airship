@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "react": "16.6.1",
-    "react-native": "0.57.5",
+    "react-native": "^0.59.9",
     "urbanairship-react-native": "file:../.."
   },
   "devDependencies": {
