@@ -14,11 +14,16 @@
     "urbanairship"
   ],
   "devDependencies": {
-    "babel-core": "6.26.3",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "@babel/core": "^7.4.5",
+    "@babel/runtime": "^7.4.5",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
     "jsdoc": "^3.6.2",
     "jsdoc-babel": "0.4.0",
     "minami": "1.2.3"
+  },
+  "peerDependencies": {
+    "react": "^16.0",
+    "react-native": ">=0.44.0 <0.60"
   },
   "scripts": {
     "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.conf.json"

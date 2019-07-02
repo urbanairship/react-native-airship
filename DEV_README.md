@@ -1,5 +1,8 @@
 # Urban Airship React Native development
 
+The sample is setup to pull the Airship module from the root directory. To accomplish this, the metro.config.js file was updated to look for the module, and the Android and iOS projects were modified with a local path instead of looking in the node_modules. This allows us to work
+on the module without having to copy files over. Any changes to module will require a rebuild.
+
 1) Install the react command line tools and watchman, if necessary:
 
 ```
@@ -10,16 +13,10 @@ npm install -g react-native-cli
 brew install watchman
 ```
 
-2) In the root module directory, link the development module:
-```
-npm link
-```
 
-3) In `sample/AirshipSample` prepare the sample:
+2) In `sample/AirshipSample` prepare the sample:
 ```
 npm install
-npm link ../../
-react-native link urbanairship-react-native
 ```
 
 ## iOS
@@ -34,9 +31,8 @@ react-native link urbanairship-react-native
 
 5) Build and run the sample
 
-You should now be able to modify the iOS plugin source directly in the sample's
-workspace.
-
+You should now be able to modify the iOS plugin source
+directly in the sample's workspace.
 
 ## Android
 
@@ -52,10 +48,4 @@ workspace.
 
 You should now be able to modify the Android plugin source directly in the Android Studio.
 
-## Known Issues
-
-Metro does not support symlinks, which complicates monorepo development. If you
-see an error message such as "urbanairship-react-native does not exist in the
-Haste module map", you may need to remove urbanairship-react-native from the
-node_modules subdirectory of AirshipSample, and copy the folder over directly.
 
