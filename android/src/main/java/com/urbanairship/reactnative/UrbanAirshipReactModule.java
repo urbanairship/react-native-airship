@@ -181,6 +181,15 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * If `channelCreationDelayEnabled` is enabled in the config, apps must call
+     * this method to enable channel creation.
+     */
+    @ReactMethod
+    public void enableChannelCreation() {
+        UAirship.shared().getPushManager().enableChannelCreation();
+    }
+
+    /**
      * Enables user notifications.
      *
      * @param promise The JS promise.
