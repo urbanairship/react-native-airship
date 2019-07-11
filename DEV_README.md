@@ -1,7 +1,9 @@
 # Urban Airship React Native development
 
-The sample is setup to pull the Airship module from the root directory. To accomplish this, the metro.config.js file was updated to look for the module, and the Android and iOS projects were modified with a local path instead of looking in the node_modules. This allows us to work
-on the module without having to copy files over. Any changes to module will require a rebuild.
+The sample is set up to pull the Airship module from the root directory. To accomplish this,
+the metro.config.js file was updated to look for the module, and the Android and iOS projects
+were modified with a local path instead of looking in the node_modules. This allows us to work
+on the module without having to copy files over. Any changes to the module will require a rebuild.
 
 1) Install the react command line tools and watchman, if necessary:
 
