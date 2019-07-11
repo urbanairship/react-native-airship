@@ -52,6 +52,11 @@ RCT_EXPORT_METHOD(setUserNotificationsEnabled:(BOOL)enabled) {
     [UAirship push].userPushNotificationsEnabled = enabled;
 }
 
+
+RCT_EXPORT_METHOD(enableChannelCreation) {
+    [[UAirship push] enableChannelCreation];
+}
+
 RCT_REMAP_METHOD(isUserNotificationsEnabled,
                  isUserNotificationsEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
@@ -399,7 +404,7 @@ RCT_REMAP_METHOD(dismissMessage,
         dispatch_async(dispatch_get_main_queue(), ^{
             [self closeOverlayMessage];
         });
- 
+
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.messageViewController dismissViewControllerAnimated:YES completion:nil];

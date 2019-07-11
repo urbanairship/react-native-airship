@@ -180,6 +180,15 @@ class UrbanAirship {
   }
 
   /**
+   * Enables channel creation if `channelCreationDelayEnabled` was
+   * enabled in the config.
+   *
+   */
+  static enableChannelCreation() {
+    UrbanAirshipModule.enableChannelCreation();
+  }
+
+  /**
    * Checks if app notifications are enabled or not. Its possible to have `userNotificationsEnabled`
    * but app notifications being disabled if the user opted out of notifications.
    *
