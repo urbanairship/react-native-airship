@@ -1,7 +1,6 @@
-Version 3.1.0 - June 11, 2019
+Version 3.1.1 - June 11, 2019
 =============================
-- Added the ability to do delayed channel registration.
-- Added podspec for iOS cocoapod integration.
+- Fixed package including a .git directory in the release.
 
 Version 3.0.0 - June 14, 2019
 =============================
