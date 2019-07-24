@@ -1,6 +1,16 @@
-Version 3.1.1 - June 11, 2019
+Version 3.1.2 - July 24, 2019
+=============================
+- Fixed crash on iOS when calling `displayMessage` without the second optional parameter.
+- Fixed not marking a message as read on iOS when calling `displayMessage` in an overlay.
+
+Version 3.1.1 - July 15, 2019
 =============================
 - Fixed package including a .git directory in the release.
+
+Version 3.1.0 - July 12, 2019
+=============================
+- Added the ability to do delayed channel registration.
+- Added podspec for iOS cocoapod integration.
 
 Version 3.0.0 - June 14, 2019
 =============================

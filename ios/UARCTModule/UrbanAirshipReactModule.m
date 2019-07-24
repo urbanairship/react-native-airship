@@ -559,7 +559,11 @@ RCT_REMAP_METHOD(getActiveNotifications,
     [UAActionRunner runActionWithName:kUAOverlayInboxMessageActionDefaultRegistryName
                                 value:message.messageID
                             situation:UASituationManualInvocation];
+
+    // TODO: Remove this once its fixed in the SDK
+    [message markMessageReadWithCompletionHandler:nil];
 }
+
 
 - (void)closeOverlayMessage {
     UIViewController *vc = [self.htmlAdapter valueForKey:@"htmlViewController"];
