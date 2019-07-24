@@ -415,11 +415,11 @@ class UrbanAirship {
    * will no-op.
    *
    * @param {Object} options The a map of options.
-   * @param {boolean} [options.alert=false] True to display an alert when a notification is received in the foreground, otherwise false.
-   * @param {boolean} [options.sound=false] True to play a sound when a notification is received in the foreground, otherwise false.
-   * @param {boolean} [options.badge=false] True to update the badge when a notification is received in the foreground, otherwise false.
+   * @param {boolean} [options.alert] True to display an alert when a notification is received in the foreground, otherwise false.
+   * @param {boolean} [options.sound] True to play a sound when a notification is received in the foreground, otherwise false.
+   * @param {boolean} [options.badge] True to update the badge when a notification is received in the foreground, otherwise false.
    */
-  static setForegroundPresentationOptions(options: { alert?: boolean, badge?: boolean, sound?: boolean}) {
+  static setForegroundPresentationOptions(options: { alert: ?boolean, badge: ?boolean, sound: ?boolean}) {
     if (Platform.OS == 'ios') {
       return UrbanAirshipModule.setForegroundPresentationOptions(options);
     }
@@ -541,7 +541,7 @@ class UrbanAirship {
    * @param {boolean} [overlay=false] Display the message in an overlay.
    * @return {Promise.<boolean>} A promise with the result.
    */
-  static displayMessage(messageId: string, overlay: ?boolean): Promise<boolean> {
+  static displayMessage(messageId: string, overlay: boolean = false): Promise<boolean> {
     return UrbanAirshipModule.displayMessage(messageId, overlay);
   }
 
@@ -550,7 +550,7 @@ class UrbanAirship {
    *
    * @param {boolean} [overlay=false] Dismisses the message in an overlay.
    */
-  static dismissMessage(overlay: ?boolean) {
+  static dismissMessage(overlay: boolean = false) {
     UrbanAirshipModule.dismissMessage(overlay);
   }
 
