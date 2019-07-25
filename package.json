@@ -14,19 +14,26 @@
     "urbanairship"
   ],
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/runtime": "^7.4.5",
+    "@babel/core": "7.5.4",
+    "@babel/runtime": "7.5.4",
+    "@react-native-community/eslint-config": "0.0.5",
     "@babel/plugin-transform-flow-strip-types": "^7.4.4",
-    "jsdoc": "^3.6.2",
-    "jsdoc-babel": "0.4.0",
-    "minami": "1.2.3"
+    "metro-react-native-babel-preset": "0.55.0",
+    "react": "16.8.6",
+    "react-native": "0.60.4"
   },
   "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start:android": "react-native run-android --root example/",
     "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.conf.json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/urbanairship/react-native-module.git"
+  },
+  "peerDependencies": {
+    "react": "^16.8",
+    "react-native": ">=0.60"
   },
   "license": "Apache-2.0",
   "typings": "./js/index.d.ts",
