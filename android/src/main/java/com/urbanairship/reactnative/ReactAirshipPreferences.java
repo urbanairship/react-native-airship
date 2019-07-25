@@ -4,10 +4,8 @@ package com.urbanairship.reactnative;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
 
-import com.urbanairship.UAirship;
-import com.urbanairship.reactnative.events.NotificationOptInEvent;
+import androidx.annotation.Nullable;
 
 /**
  * Stores shared preferences and checks preference-dependent state.

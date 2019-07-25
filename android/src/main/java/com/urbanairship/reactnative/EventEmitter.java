@@ -2,24 +2,19 @@
 
 package com.urbanairship.reactnative;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 
-import com.facebook.react.ReactApplication;
+import androidx.annotation.MainThread;
+
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
-import com.urbanairship.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static java.lang.Math.max;
 
 
 /**
@@ -145,7 +140,7 @@ class EventEmitter {
         try {
             reactContext.getJSModule(RCTNativeAppEventEmitter.class).emit(event.getName(), event.getBody());
         } catch (Exception e) {
-            Logger.info("UrbanAirshipReactModule - Failed to emit event", e);
+            Log.d("UrbanAirshipReactModule", "Failed to emit event", e);
             return false;
         }
 

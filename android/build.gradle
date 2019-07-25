@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 16
@@ -15,10 +14,10 @@ def safeExtGet (prop, fallback) {
 }
 
 dependencies {
-    implementation 'com.facebook.react:react-native:[0.40,)'
-    implementation ('com.urbanairship.android:urbanairship-fcm:10.0.1') {
+    implementation 'com.facebook.react:react-native:+'
+    implementation ('com.urbanairship.android:urbanairship-fcm:11.0.0') {
       exclude group: 'com.google.firebase', module: 'firebase-messaging'
     }
-    implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '18.0.0')}"
-    implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '16.0.9')}"
+    implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '19.0.1')}"
+    implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '17.0.1')}"
 }

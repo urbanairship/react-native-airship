@@ -2,8 +2,8 @@ package com.urbanairship.reactnative;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.urbanairship.Logger;
+
+import static com.facebook.react.bridge.ReadableType.Null;
 
 /**
  * Module utils.
