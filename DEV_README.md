@@ -1,9 +1,6 @@
 # Urban Airship React Native development
 
-The sample is set up to pull the Airship module from the root directory. To accomplish this,
-the metro.config.js file was updated to look for the module, and the Android and iOS projects
-were modified with a local path instead of looking in the node_modules. This allows us to work
-on the module without having to copy files over. Any changes to the module will require a rebuild.
+The example is set up to pull the Airship module from the root directory.
 
 1) Install the react command line tools and watchman, if necessary:
 
@@ -15,21 +12,21 @@ npm install -g react-native-cli
 brew install watchman
 ```
 
+2) Install modules
 
-2) In `sample/AirshipSample` prepare the sample:
 ```
-npm install
+yarn install or npm install
 ```
 
 ## iOS
 
-1) Run `pod install` in `sample/AirshipSample/iOS`
+1) Run `pod install` in `example/ios`
 
-2) Open the `.xcworkspace` Project
+2) Open the `example/ios/AirshipSample.xcworkspace` Project
 
 3) Create the `AirshipConfig.plist` file
 
-4) Start the webserver by running `react-native start` in `sample/AirshipSample`
+4) Start the webserver in the root by running `react-native start`
 
 5) Build and run the sample
 
@@ -38,13 +35,13 @@ directly in the sample's workspace.
 
 ## Android
 
-1) Open `sample/AirshipSample/android` in Android Studio
+1) Open `example/android` in Android Studio
 
-2) Create the `airshipconfig.properties` file in `src/main/assets`
+2) Create the `airshipconfig.properties` file in `example/android/src/main/assets`
 
-3) If using FCM, add your `google-services.json` file in `sample/AirshipSample/android/app`
+3) If using FCM, add your `google-services.json` file in `example/android/app`
 
-4) Start the webserver by running `react-native start` in `sample/AirshipSample`
+4) Start the webserver in the root by running `react-native start`
 
 5) Build and run the sample
 
