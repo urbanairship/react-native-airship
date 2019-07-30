@@ -2,7 +2,7 @@
 
 A React Native module for Urban Airship's iOS and Android SDK.
 
-### Resources:
+### Resources
 
 * [Getting started guide](http://docs.urbanairship.com/platform/react-native/)
 * [API docs](http://docs.urbanairship.com/reference/libraries/react-native/latest/index.html)
@@ -13,32 +13,33 @@ Please visit https://support.urbanairship.com/ for any issues integrating or usi
 
 ### Requirements:
  - Xcode 10+
- - iOS: Urban Airship SDK 10+
+ - iOS: Deployment target 10.0+
  - Android: minSdkVersion 16+, compileSdkVersion 28+
- - React Native >= 0.44.0
+ - React Native >= 0.60.0
  - React Native cli >= 2.0.1
 
-## iOS Installation
-
-The react plugin is unable to package the Urban Airship iOS SDK, therefore it must be installed as a separate step. When updating the plugin, update the SDK as well.
-
-1) Install and link the module:
+## Install
 
 ```
-react-native install urbanairship-react-native
-react-native link urbanairship-react-native
+# using yarn
+yarn add urbanairship-react-native
+
+# using npm
+npm install urbanairship-react-native --save
 ```
 
-2) Install AirshipKit by following [installation guide](https://docs.urbanairship.com/platform/ios/#sdk-installation).
-The react module will do its best to find the `AirshipKit` path, but if it's unable to find it for your project due to a
-non-standard install path or manual installation, you can set `AIRSHIP_SEARCH_PATH` variable with the
-location of the framework.
+## iOS Setup
 
-3) Add the following capabilities for your application target:
+1) Install pods
+```
+cd ios && pod install
+```
+
+2) Add the following capabilities for your application target:
   - Push Notification
   - Background Modes > Remote Notifications
 
-4) Create a plist `AirshipConfig.plist` and include it in your application’s target:
+3) Create a plist `AirshipConfig.plist` and include it in your application’s target:
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -56,19 +57,13 @@ location of the framework.
 </plist>
 ```
 
-5) Optional. In order to take advantage of iOS 10 notification attachments, such as images, animated gifs, and
-video, you will need to create a notification service extension by following the [iOS Notification Service Extension Guide](https://docs.urbanairship.com/platform/reference/ios-extension/)
+4) Optional. In order to take advantage of iOS 10 notification attachments,
+such as images, animated gifs, and video, you will need to create a notification
+service extension by following the [iOS Notification Service Extension Guide](https://docs.urbanairship.com/platform/reference/ios-extension/)
 
+## Android Setup
 
-## Android Installation
-
-1) Install and link the module:
-```
-react-native install urbanairship-react-native
-react-native link urbanairship-react-native
-```
-
-2) Create the `airshipconfig.properties` file in the application's `main/assets`:
+1) Create the `airshipconfig.properties` file in the application's `app/src/main/assets`:
 ```
 developmentAppKey = Your Development App Key
 developmentAppSecret = Your Development App Secret
@@ -81,7 +76,7 @@ notificationIcon = ic_notification
 notificationAccentColor = #ff0000
 ```
 
-## Android FCM Setup
+### Android FCM Setup
 
 Adding FCM to your react-native project can be accomplished with the following steps:
 
@@ -94,8 +89,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.1'
-        classpath 'com.google.gms:google-services:4.0.1'
+        ...
+        classpath 'com.google.gms:google-services:4.2.0'
     }
 }
 ```
@@ -118,12 +113,13 @@ Firebase core and messaging dependencies versions can be overriden by setting th
 
 ```
 ext {
+    // Requires 17.0.0+
     firebaseCoreVersion "VERSION"
-    // Requires 17.1.0+
+
+    // Requires 19.0.0+
     firebaseMessagingVersion "VERSION"
 }
 ```
-
 
 ## Enabling Notifications
 

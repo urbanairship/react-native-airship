@@ -2,8 +2,9 @@ package com.urbanairship.reactnative;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
@@ -12,6 +13,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.urbanairship.Logger;
 import com.urbanairship.json.JsonMap;
 import com.urbanairship.json.JsonValue;
 import com.urbanairship.util.UAStringUtil;
@@ -19,8 +21,6 @@ import com.urbanairship.util.UAStringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.urbanairship.Logger;
 
 /**
  * Module utils.
@@ -80,8 +80,8 @@ class Utils {
     /**
      * Gets a resource value by name.
      *
-     * @param context The context.
-     * @param resourceName The resource name.
+     * @param context        The context.
+     * @param resourceName   The resource name.
      * @param resourceFolder The resource folder.
      * @return The resource ID or 0 if not found.
      */
@@ -100,7 +100,7 @@ class Utils {
     /**
      * Gets a hex color as a color int.
      *
-     * @param hexColor The hex color.
+     * @param hexColor     The hex color.
      * @param defaultColor Default value if the conversion was not successful.
      * @return The color int.
      */
@@ -110,7 +110,7 @@ class Utils {
             try {
                 return Color.parseColor(hexColor);
             } catch (IllegalArgumentException e) {
-                Logger.error( e, "Unable to parse color: %s", hexColor);
+                Logger.error(e, "Unable to parse color: %s", hexColor);
             }
         }
         return defaultColor;
