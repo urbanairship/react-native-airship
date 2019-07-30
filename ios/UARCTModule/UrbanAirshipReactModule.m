@@ -372,27 +372,19 @@ RCT_REMAP_METHOD(displayMessage,
 
     UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
 
-    if (!message) {
-        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
-                                              code:UARCTErrorCodeMessageNotFound
-                                          userInfo:@{NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound}];
-
-        reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
+    if (overlay) {
+        [self displayOverlayMessage:messageId];
     } else {
-        if (overlay) {
-            [self displayOverlayMessage:message];
-        } else {
-            UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAirship resources]];
-            [mvc loadMessageForID:message.messageID onlyIfChanged:YES onError:nil];
+        UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAirship resources]];
+        [mvc loadMessageForID:messageId onlyIfChanged:YES onError:nil];
 
-            UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
+        UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
 
-            self.messageViewController = mvc;
+        self.messageViewController = mvc;
 
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
-            });
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
+        });
     }
 }
 
@@ -539,7 +531,7 @@ RCT_REMAP_METHOD(getActiveNotifications,
 #pragma mark -
 #pragma mark Helper methods
 
-- (void)displayOverlayMessage:(UAInboxMessage *)message {
+- (void)displayOverlayMessage:(NSString *)messageId {
     if (!self.factoryBlockAssigned) {
         [[UAirship inAppMessageManager] setFactoryBlock:^id<UAInAppMessageAdapterProtocol> _Nonnull(UAInAppMessage * _Nonnull message) {
             UAInAppMessageHTMLAdapter *adapter = [UAInAppMessageHTMLAdapter adapterForMessage:message];
@@ -557,11 +549,8 @@ RCT_REMAP_METHOD(getActiveNotifications,
     }
 
     [UAActionRunner runActionWithName:kUAOverlayInboxMessageActionDefaultRegistryName
-                                value:message.messageID
+                                value:messageId
                             situation:UASituationManualInvocation];
-
-    // TODO: Remove this once its fixed in the SDK
-    [message markMessageReadWithCompletionHandler:nil];
 }
 
 
