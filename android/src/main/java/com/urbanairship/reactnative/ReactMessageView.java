@@ -53,10 +53,11 @@ public class ReactMessageView extends UAWebView {
 
             if (error != null) {
                 notifyLoadError(message.getMessageId(), ERROR_MESSAGE_LOAD_FAILED, false);
-            } else {
-                message.markRead();
-                notifyLoadFinished(message.getMessageId());
+                return;
             }
+
+            message.markRead();
+            notifyLoadFinished(message.getMessageId());
         }
 
         @Override

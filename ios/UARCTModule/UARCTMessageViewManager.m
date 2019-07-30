@@ -6,7 +6,6 @@
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 
-
 @implementation UARCTMessageViewManager
 
 RCT_EXPORT_VIEW_PROPERTY(onLoadStarted, RCTDirectEventBlock)
