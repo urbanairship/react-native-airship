@@ -23,26 +23,5 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.urbanairship.reactnative.CustomLandingPageActivity"
-            android:exported="false"
-            android:theme="@style/UrbanAirship.LandingPageActivity">
-            <meta-data android:name="com.urbanairship.action.LANDING_PAGE_VIEW"
-                android:resource="@layout/ua_activity_landing_page"/>
-            <meta-data android:name="com.urbanairship.push.iam.EXCLUDE_FROM_AUTO_SHOW"
-                android:value="true"/>
-            <intent-filter>
-                <action android:name="com.urbanairship.actions.SHOW_LANDING_PAGE_INTENT_ACTION"/>
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
-                <data android:scheme="message"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
-
-        <activity
-            xmlns:tools="http://schemas.android.com/tools"
-            tools:node="remove"
-            android:name="com.urbanairship.actions.LandingPageActivity" />
-
     </application>
 </manifest>

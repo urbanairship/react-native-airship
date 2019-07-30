@@ -14,3 +14,5 @@ exports.TagGroupEditor = require('./TagGroupEditor.js');
 
 /** UrbanAirship **/
 exports.UrbanAirship = require('./UrbanAirship.js');
+
+exports.UAMessageView = require('./UAMessageView.js');
