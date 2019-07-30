@@ -370,8 +370,6 @@ RCT_REMAP_METHOD(displayMessage,
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
-
     if (overlay) {
         [self displayOverlayMessage:messageId];
     } else {
@@ -379,7 +377,6 @@ RCT_REMAP_METHOD(displayMessage,
         [mvc loadMessageForID:messageId onlyIfChanged:YES onError:nil];
 
         UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
-
         self.messageViewController = mvc;
 
         dispatch_async(dispatch_get_main_queue(), ^{
