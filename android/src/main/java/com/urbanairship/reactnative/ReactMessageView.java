@@ -33,7 +33,6 @@ public class ReactMessageView extends UAWebView {
     private static final String RETRYABLE_KEY = "retryable";
     private static final String ERROR_KEY = "error";
 
-
     private static final String ERROR_MESSAGE_NOT_AVAILABLE = "MESSAGE_NOT_AVAILABLE";
     private static final String ERROR_FAILED_TO_FETCH_MESSAGE = "FAILED_TO_FETCH_MESSAGE";
     private static final String ERROR_MESSAGE_LOAD_FAILED = "MESSAGE_LOAD_FAILED";
@@ -53,7 +52,7 @@ public class ReactMessageView extends UAWebView {
             }
 
             if (error != null) {
-                notifyError(message.getMessageId(), ERROR_MESSAGE_LOAD_FAILED, false);
+                notifyLoadError(message.getMessageId(), ERROR_MESSAGE_LOAD_FAILED, false);
             } else {
                 message.markRead();
                 notifyLoadFinished(message.getMessageId());
@@ -106,26 +105,25 @@ public class ReactMessageView extends UAWebView {
                 public void onFinished(boolean success) {
                     RichPushMessage message = UAirship.shared().getInbox().getMessage(messageId);
                     if (!success) {
-                        notifyError(messageId, ERROR_FAILED_TO_FETCH_MESSAGE, true);
+                        notifyLoadError(messageId, ERROR_FAILED_TO_FETCH_MESSAGE, true);
                         return;
                     } else if (message == null || message.isExpired()) {
-                        notifyError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
+                        notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
                         return;
                     }
-
                     loadRichPushMessage(message);
                 }
             });
         } else {
             if (this.message.isExpired()) {
-                notifyError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
+                notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
                 return;
             }
             loadRichPushMessage(this.message);
         }
     }
 
-    private void notifyError(String messageId, String error, boolean retryable) {
+    private void notifyLoadError(String messageId, String error, boolean retryable) {
         WritableMap event = Arguments.createMap();
         event.putString(MESSAGE_ID_KEY, messageId);
         event.putBoolean(RETRYABLE_KEY, retryable);

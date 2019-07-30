@@ -36,7 +36,6 @@ class UAMessageView extends React.Component {
     this.props.onLoadError(event.nativeEvent);
   }
 
-
   _onClose = (event) => {
     if (!this.props.onClose) {
       return;
@@ -76,7 +75,6 @@ UAMessageView.propTypes = {
    */
   messageId: PropTypes.string
 };
-
 
 var UARCTMessageView = requireNativeComponent('UARCTMessageView', UAMessageView);
 module.exports = UAMessageView

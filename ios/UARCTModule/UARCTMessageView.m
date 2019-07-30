@@ -17,7 +17,6 @@ NSString *const UARCTMessageViewMessageKey = @"message";
 NSString *const UARCTMessageViewRetryableKey = @"retryable";
 NSString *const UARCTMessageViewErrorKey = @"error";
 
-
 @implementation UARCTMessageView
 
 - (instancetype) init {
@@ -35,8 +34,8 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 }
 
 - (void)layoutSubviews {
-  [super layoutSubviews];
-  self.webView.frame = self.bounds;
+    [super layoutSubviews];
+    self.webView.frame = self.bounds;
 }
 
 - (void)setMessageID:(NSString *)messageID {
@@ -103,7 +102,6 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 }
 
 - (void)webView:(WKWebView *)wv decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
-
     if ([navigationResponse.response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)navigationResponse.response;
         NSInteger status = httpResponse.statusCode;
@@ -141,7 +139,6 @@ NSString *const UARCTMessageViewErrorKey = @"error";
         [self.webView evaluateJavaScript:@"document.body.style.webkitTouchCallout='none';" completionHandler:nil];
     }
 
-    // Mark message as read after it has finished loading
     if (self.message.unread) {
         [self.message markMessageReadWithCompletionHandler:nil];
     }
