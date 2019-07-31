@@ -29,7 +29,7 @@ public class ReactMessageView extends UAWebView {
     static final String EVENT_LOAD_ERROR = "onLoadError";
     static final String EVENT_CLOSE = "onClose";
 
-    private static final String MESSAGE_ID_KEY = "message";
+    private static final String MESSAGE_ID_KEY = "messageId";
     private static final String RETRYABLE_KEY = "retryable";
     private static final String ERROR_KEY = "error";
 
