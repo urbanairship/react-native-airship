@@ -13,7 +13,7 @@ NSString *const UARCTMessageViewErrorMessageNotAvailable = @"MESSAGE_NOT_AVAILAB
 NSString *const UARCTMessageViewErrorFailedToFetchMessage = @"FAILED_TO_FETCH_MESSAGE";
 NSString *const UARCTMessageViewErrorMessageLoadFailed = @"MESSAGE_LOAD_FAILED";
 
-NSString *const UARCTMessageViewMessageKey = @"message";
+NSString *const UARCTMessageViewMessageIDKey = @"messageId";
 NSString *const UARCTMessageViewRetryableKey = @"retryable";
 NSString *const UARCTMessageViewErrorKey = @"error";
 
@@ -51,7 +51,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 - (void)loadMessage {
     NSString *messageID = self.messageID;
     if (self.onLoadStarted) {
-        self.onLoadStarted(@{ UARCTMessageViewMessageKey: messageID });
+        self.onLoadStarted(@{ UARCTMessageViewMessageIDKey: messageID });
     }
 
     UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageID];
@@ -71,7 +71,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
                 [self requestMessageBody:message];
             } else {
                 if (self.onLoadError) {
-                    self.onLoadError(@{ UARCTMessageViewMessageKey: messageID,
+                    self.onLoadError(@{ UARCTMessageViewMessageIDKey: messageID,
                                         UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageNotAvailable,
                                         UARCTMessageViewRetryableKey: @(NO) });
                 }
@@ -79,7 +79,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
         });
     } withFailureBlock:^{
         if (self.onLoadError) {
-            self.onLoadError(@{ UARCTMessageViewMessageKey: messageID,
+            self.onLoadError(@{ UARCTMessageViewMessageIDKey: messageID,
                                 UARCTMessageViewErrorKey: UARCTMessageViewErrorFailedToFetchMessage,
                                 UARCTMessageViewRetryableKey: @(YES) });
         }
@@ -109,19 +109,19 @@ NSString *const UARCTMessageViewErrorKey = @"error";
             decisionHandler(WKNavigationResponsePolicyCancel);
             if (status >= 500) {
                 if (self.onLoadError) {
-                    self.onLoadError(@{ UARCTMessageViewMessageKey: self.message.messageID,
+                    self.onLoadError(@{ UARCTMessageViewMessageIDKey: self.message.messageID,
                                         UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageLoadFailed,
                                         UARCTMessageViewRetryableKey: @(YES) });
                 }
             } else if (status == 410) {
                 if (self.onLoadError) {
-                    self.onLoadError(@{ UARCTMessageViewMessageKey: self.message.messageID,
+                    self.onLoadError(@{ UARCTMessageViewMessageIDKey: self.message.messageID,
                                         UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageNotAvailable,
                                         UARCTMessageViewRetryableKey: @(NO) });
                 }
             } else {
                 if (self.onLoadError) {
-                    self.onLoadError(@{ UARCTMessageViewMessageKey: self.message.messageID,
+                    self.onLoadError(@{ UARCTMessageViewMessageIDKey: self.message.messageID,
                                         UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageLoadFailed,
                                         UARCTMessageViewRetryableKey: @(NO) });
                 }
@@ -144,7 +144,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
     }
 
     if (self.onLoadFinished) {
-        self.onLoadFinished(@{ UARCTMessageViewMessageKey: self.message.messageID });
+        self.onLoadFinished(@{ UARCTMessageViewMessageIDKey: self.message.messageID });
     }
 }
 
@@ -154,7 +154,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
     }
 
     if (self.onLoadError) {
-        self.onLoadError(@{ UARCTMessageViewMessageKey: self.message.messageID,
+        self.onLoadError(@{ UARCTMessageViewMessageIDKey: self.message.messageID,
                             UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageLoadFailed,
                             UARCTMessageViewRetryableKey: @(YES) });
     }
@@ -166,7 +166,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 
 - (void)closeWindowAnimated:(BOOL)animated {
     if (self.onClose) {
-        self.onClose(@{ UARCTMessageViewMessageKey: self.message.messageID });
+        self.onClose(@{ UARCTMessageViewMessageIDKey: self.message.messageID });
     }
 }
 
