@@ -2,7 +2,9 @@
 
 package com.urbanairship.reactnative;
 
+
 import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -12,8 +14,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
 
 public class ReactMessageViewManager extends SimpleViewManager<ReactMessageView> {
 
