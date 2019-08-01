@@ -26,7 +26,7 @@ public class ReactMessageViewManager extends SimpleViewManager<ReactMessageView>
 
     @Nonnull
     @Override
-    protected ReactMessageView createViewInstance(@Nonnull ThemedReactContext reactContext) {
+    protected ReactMessageView createViewInstance(@NonNull ThemedReactContext reactContext) {
         return new ReactMessageView(reactContext);
     }
 
