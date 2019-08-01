@@ -41,6 +41,8 @@ import com.urbanairship.actions.OverlayRichPushMessageAction;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.app.GlobalActivityMonitor;
 import com.urbanairship.iam.html.HtmlActivity;
+import com.urbanairship.messagecenter.MessageCenter;
+import com.urbanairship.messagecenter.MessageCenterActivity;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.TagGroupsEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
@@ -584,26 +586,18 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void displayMessage(String messageId, boolean overlay, Promise promise) {
-        RichPushMessage message = UAirship.shared().getInbox().getMessage(messageId);
-
-        if (message == null) {
-            promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
+        if (overlay) {
+            ActionRunRequest.createRequest(OverlayRichPushMessageAction.DEFAULT_REGISTRY_NAME)
+                    .setValue(messageId)
+                    .run();
         } else {
+            Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
+                    .setAction(MessageCenter.VIEW_MESSAGE_INTENT_ACTION)
+                    .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
+                    .setData(Uri.fromParts(MessageCenter.MESSAGE_DATA_SCHEME, messageId, null))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-            if (overlay) {
-                ActionRunRequest.createRequest(OverlayRichPushMessageAction.DEFAULT_REGISTRY_NAME)
-                        .setValue(messageId)
-                        .run();
-            } else {
-
-                Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
-                        .setAction(RichPushInbox.VIEW_MESSAGE_INTENT_ACTION)
-                        .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
-                        .setData(Uri.fromParts(RichPushInbox.MESSAGE_DATA_SCHEME, messageId, null))
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                this.getReactApplicationContext().startActivity(intent);
-            }
+            this.getReactApplicationContext().startActivity(intent);
         }
     }
 
