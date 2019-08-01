@@ -1,3 +1,8 @@
+Version 4.0.0 - August 1, 2019
+==============================
+- Updated Android SDK to 11.0.2.
+- Requires ReactNative version to 0.6
+
 Version 3.2.0 - August 1, 2019
 ==============================
 - Fixed `isDeleted` erroneously being set to true for iOS inbox messages.
