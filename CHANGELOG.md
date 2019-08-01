@@ -1,6 +1,6 @@
 Version 3.2.0 - August 1, 2019
 ==============================
-- Fixed `isDeleted` always true for iOS inbox messages.
+- Fixed `isDeleted` erroneously being set to true for iOS inbox messages.
 - Displaying an inbox message will now refresh the message listing if the inbox is out of date.
 - Added UAMessageView to display an inbox message within the React Native view.
 - Updated Android SDK to 10.1.0
