@@ -2,7 +2,8 @@
 
 package com.urbanairship.reactnative;
 
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;

@@ -6,7 +6,7 @@
 #import "UARCTMessageCenter.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
-NSString *const UARCTAirshipKitRecommendedVersion = @"11.0.0";
+NSString *const UARCTAirshipKitRecommendedVersion = @"11.1.1";
 
 @implementation UARCTAutopilot
 

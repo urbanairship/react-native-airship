@@ -8,8 +8,8 @@ import android.os.Looper;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
