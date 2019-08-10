@@ -1,3 +1,7 @@
+Version 3.2.1 - August 9, 2019
+==============================
+- Updated Android SDK to 10.1.1
+
 Version 3.2.0 - August 1, 2019
 ==============================
 - Fixed `isDeleted` erroneously being set to true for iOS inbox messages.
