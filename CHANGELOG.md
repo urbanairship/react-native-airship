@@ -1,3 +1,11 @@
+Version 4.0.1 - August 9, 2019
+==============================
+- Updated Android SDK to 11.0.3.
+
+Version 3.2.1 - August 9, 2019
+==============================
+- Updated Android SDK to 10.1.1
+
 Version 4.0.0 - August 1, 2019
 ==============================
 - Updated Android SDK to 11.0.2.
