@@ -20,12 +20,13 @@
     "@babel/plugin-transform-flow-strip-types": "^7.4.4",
     "metro-react-native-babel-preset": "0.55.0",
     "react": "16.8.6",
-    "react-native": "0.60.4"
+    "react-native": "0.60.4",
+    "documentation": "12.1.1"
   },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "start:android": "react-native run-android --root example/",
-    "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.conf.json"
+    "generate-docs": "node_modules/.bin/documentation --config documentation.yml build js/** -f html -o out"
   },
   "repository": {
     "type": "git",

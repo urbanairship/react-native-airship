@@ -57,21 +57,29 @@ class UAMessageView extends React.Component {
 UAMessageView.propTypes = {
   /**
    * A callback when the view starts loading a message.
+   * @memberof UAMessageView
+   * @instance
    */
   onLoadStarted: PropTypes.func,
 
   /**
    * A callback when the view finishes loading a message.
+   * @memberof UAMessageView
+   * @instance
    */
   onLoadFinished: PropTypes.func,
 
   /**
    * A callback when the view fails to load a message with an error.
+   * @memberof UAMessageView
+   * @instance
    */
   onLoadError:  PropTypes.func,
 
   /**
    * The ID of a message to load.
+   * @memberof UAMessageView
+   * @instance
    */
   messageId: PropTypes.string
 };
