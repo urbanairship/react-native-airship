@@ -7,11 +7,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 
 import android.support.annotation.Nullable;
 import android.support.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
@@ -22,7 +24,7 @@ import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.widget.UAWebView;
 import com.urbanairship.widget.UAWebViewClient;
 
-public class ReactMessageView extends UAWebView {
+public class ReactMessageView extends FrameLayout implements LifecycleEventListener {
 
     static final String EVENT_LOAD_STARTED = "onLoadStarted";
     static final String EVENT_LOAD_FINISHED = "onLoadFinished";
@@ -39,6 +41,7 @@ public class ReactMessageView extends UAWebView {
 
     private RichPushMessage message;
     private Cancelable fetchMessageRequest;
+    private UAWebView webView;
 
     private WebViewClient webViewClient = new UAWebViewClient() {
         private Integer error = null;
@@ -79,21 +82,20 @@ public class ReactMessageView extends UAWebView {
 
     public ReactMessageView(@NonNull Context context) {
         super(context);
-        setWebViewClient(webViewClient);
     }
 
     public void loadMessage(final String messageId) {
+        if (webView == null) {
+            webView = new UAWebView(getContext());
+            webView.setWebViewClient(webViewClient);
+            addView(webView);
+        }
+
         if (fetchMessageRequest != null) {
             fetchMessageRequest.cancel();
         }
         this.message = null;
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                startLoading(messageId);
-            }
-        });
+        startLoading(messageId);
     }
 
     void startLoading(final String messageId) {
@@ -112,7 +114,7 @@ public class ReactMessageView extends UAWebView {
                         notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
                         return;
                     }
-                    loadRichPushMessage(message);
+                    webView.loadRichPushMessage(message);
                 }
             });
         } else {
@@ -120,7 +122,7 @@ public class ReactMessageView extends UAWebView {
                 notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
                 return;
             }
-            loadRichPushMessage(this.message);
+            webView.loadRichPushMessage(this.message);
         }
     }
 
@@ -156,5 +158,32 @@ public class ReactMessageView extends UAWebView {
                 getId(),
                 eventName,
                 event);
+    }
+
+    @Override
+    public void onHostResume() {
+        if (webView != null) {
+            webView.onResume();
+        }
+    }
+
+    @Override
+    public void onHostPause() {
+        if (webView != null) {
+            webView.onPause();
+        }
+    }
+
+    @Override
+    public void onHostDestroy() {
+        cleanup();
+    }
+
+    public void cleanup() {
+        if (webView != null) {
+            webView.setWebViewClient(null);
+            webView.destroy();
+            webView = null;
+        }
     }
 }
