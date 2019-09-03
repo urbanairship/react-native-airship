@@ -15,7 +15,7 @@ brew install watchman
 2) Install modules
 
 ```
-yarn install or npm install
+npm install
 ```
 
 ## iOS
