@@ -17,9 +17,11 @@ import java.util.Map;
 
 public class ReactMessageViewManager extends SimpleViewManager<ReactMessageView> {
 
+    @NonNull
     public static final String REACT_CLASS = "UARCTMessageView";
 
     @Override
+    @NonNull
     public String getName() {
         return REACT_CLASS;
     }
@@ -27,14 +29,24 @@ public class ReactMessageViewManager extends SimpleViewManager<ReactMessageView>
     @NonNull
     @Override
     protected ReactMessageView createViewInstance(@NonNull ThemedReactContext reactContext) {
-        return new ReactMessageView(reactContext);
+        ReactMessageView messageView = new ReactMessageView(reactContext);
+        reactContext.addLifecycleEventListener(messageView);
+        return messageView;
+    }
+
+    @Override
+    public void onDropViewInstance(@NonNull ReactMessageView messageView) {
+        super.onDropViewInstance(messageView);
+        ((ThemedReactContext) messageView.getContext()).removeLifecycleEventListener(messageView);
+        messageView.cleanup();
     }
 
     @ReactProp(name = "messageId")
-    public void setMessageId(ReactMessageView view, @Nullable String messageId) {
+    public void setMessageId(@NonNull ReactMessageView view, @Nullable String messageId) {
         view.loadMessage(messageId);
     }
 
+    @NonNull
     public Map getExportedCustomBubblingEventTypeConstants() {
         List<String> events = Arrays.asList(ReactMessageView.EVENT_CLOSE,
                 ReactMessageView.EVENT_LOAD_ERROR,

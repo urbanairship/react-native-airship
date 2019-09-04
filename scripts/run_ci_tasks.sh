@@ -36,7 +36,6 @@ done
 # install tools not present on raw machine
 if [ "$BITRISE_IO" = "true" ]; then
     npm install -g react-native-cli
-    npm install -g yarn
 fi
 
 # verify react-native CLI is installed
@@ -51,7 +50,7 @@ fi
 
 cd $REPO_PATH
 pwd
-yarn install
+npm install
 
 # Android
 if $ANDROID ; then

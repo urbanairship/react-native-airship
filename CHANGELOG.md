@@ -1,3 +1,14 @@
+Version 4.0.2 - September 3, 2019
+=================================
+- Updated Android SDK to 11.0.4.
+- Updated iOS SDK to 11.1.2.
+- Fixed display issues with UAMessageView.
+
+Version 3.2.2 - September 3, 2019
+=================================
+- Updated Android SDK to 10.1.2.
+- Fixed display issues with UAMessageView.
+
 Version 4.0.1 - August 9, 2019
 ==============================
 - Updated Android SDK to 11.0.3.
