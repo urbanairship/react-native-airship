@@ -27,8 +27,17 @@ public class ReactMessageViewManager extends SimpleViewManager<ReactMessageView>
 
     @Nonnull
     @Override
-    protected ReactMessageView createViewInstance(@Nonnull ThemedReactContext reactContext) {
-        return new ReactMessageView(reactContext);
+    protected ReactMessageView createViewInstance(@NonNull ThemedReactContext reactContext) {
+        ReactMessageView messageView = new ReactMessageView(reactContext);
+        reactContext.addLifecycleEventListener(messageView);
+        return messageView;
+    }
+
+    @Override
+    public void onDropViewInstance(ReactMessageView messageView) {
+        super.onDropViewInstance(messageView);
+        ((ThemedReactContext) messageView.getContext()).removeLifecycleEventListener(messageView);
+        messageView.cleanup();
     }
 
     @ReactProp(name = "messageId")
