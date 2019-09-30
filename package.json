@@ -23,10 +23,10 @@
     "acorn-jsx": "^5.0.2",
     "documentation": "12.1.1",
     "eslint": "^5.16.0",
+    "jest": "^24.9.0",
     "metro-react-native-babel-preset": "0.55.0",
     "react": "16.10.1",
-    "react-native": "0.61.1",
-    "documentation": "12.1.1"
+    "react-native": "0.61.1"
   },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
