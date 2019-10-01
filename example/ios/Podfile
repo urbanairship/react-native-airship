@@ -34,3 +34,9 @@ target 'AirshipSample' do
 
   use_native_modules!("../..")
 end
+
+target 'ServiceExtension' do
+  platform :ios, '10.0'
+  # Pods for Service Extension
+  pod 'UrbanAirship-iOS-AppExtensions', '11.1.2'
+end

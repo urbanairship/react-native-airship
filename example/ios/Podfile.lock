@@ -217,6 +217,7 @@ PODS:
     - React-cxxreact (= 0.61.1)
     - React-jsi (= 0.61.1)
     - ReactCommon/jscallinvoker (= 0.61.1)
+  - UrbanAirship-iOS-AppExtensions (11.1.2)
   - UrbanAirship-iOS-SDK (11.1.2)
   - UrbanAirship-React-Native-Module (4.0.2):
     - React
@@ -250,12 +251,14 @@ DEPENDENCIES:
   - React-RCTText (from `../../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../../node_modules/react-native/ReactCommon`)
+  - UrbanAirship-iOS-AppExtensions (= 11.1.2)
   - UrbanAirship-React-Native-Module (from `../../.`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - boost-for-react-native
+    - UrbanAirship-iOS-AppExtensions
     - UrbanAirship-iOS-SDK
 
 EXTERNAL SOURCES:
@@ -338,10 +341,11 @@ SPEC CHECKSUMS:
   React-RCTText: 81b62b4e7f11531a5154e4daa5617670d5a2d5de
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
+  UrbanAirship-iOS-AppExtensions: 2ce11f6072e96480b50d18d3225d9bf908781fee
   UrbanAirship-iOS-SDK: bd236d9bc00e3c1c5e1682d8ed780d615a115811
   UrbanAirship-React-Native-Module: e2d2e00a23307dfd01dd2debaa6ff6e3a3a6aa9d
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: a09eeb5860164b7c0aa67017ca347f278aca4edf
+PODFILE CHECKSUM: f39ee7c4170d34c85837ed2387d50b87f3386d7e
 
 COCOAPODS: 1.7.5
