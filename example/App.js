@@ -28,6 +28,8 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 const styles = StyleSheet.create({
   backgroundContainer: {
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
 const notificationsEnabledKey = "com.urbanairship.notificationsEnabled"
 const locationEnabledKey = "com.urbanairship.locationEnabled"
 
-export default class AirshipSample extends Component {
+class SettingsScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -303,10 +305,6 @@ export default class AirshipSample extends Component {
              onPress={() => this.handleMessageCenterDisplay()}
              title="Message Center"
           />
-          <Text style={styles.instructions}>
-            Press Cmd+R to reload,{'\n'}
-            Cmd+D or shake for dev menu
-          </Text>
         </ScrollView>
     </View>
 
@@ -464,3 +462,29 @@ class TagInputCell extends Component {
     );
   }
 }
+
+class HomeScreen extends Component {
+  render() {
+    return (
+        <View style={styles.backgroundContainer}>
+          <ScrollView contentContainerStyle={styles.contentContainer}>
+            <Image
+              style={{width: 300, height: 38, marginTop:50, alignItems:'center'}}
+              source={require('./img/urban-airship-sidebyside.png')}
+            />
+            <Text style={styles.instructions}>
+              Press Cmd+R to reload,{'\n'}
+              Cmd+D or shake for dev menu
+            </Text>
+          </ScrollView>
+      </View>
+    );
+  }
+}
+
+const TabNavigator = createBottomTabNavigator({
+  Home: HomeScreen,
+  Settings: SettingsScreen,
+});
+
+export default createAppContainer(TabNavigator);
