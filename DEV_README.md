@@ -37,7 +37,7 @@ directly in the sample's workspace.
 
 1) Open `example/android` in Android Studio
 
-2) Create the `airshipconfig.properties` file in `AirshipSample/android/app/src/main/assets` 
+2) Create the `airshipconfig.properties` file in `example/android/app/src/main/assets`
 
 3) If using FCM, add your `google-services.json` file in `example/android/app`
 
