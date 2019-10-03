@@ -27,8 +27,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "start:android": "react-native run-android --root example/",
-    "generate-docs": "node_modules/.bin/documentation --config documentation.yml build js/** -f html -o out",
-    "postinstall": "jetifier -r"
+    "generate-docs": "node_modules/.bin/documentation --config documentation.yml build js/** -f html -o out"
   },
   "repository": {
     "type": "git",
