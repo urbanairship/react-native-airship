@@ -87,10 +87,13 @@ const styles = StyleSheet.create({
   },
   instructions: {
     fontSize: 11,
-    marginTop: 40,
     textAlign: 'center',
-    color: '#0d6a83',
-    marginBottom: 5,
+    color: '#0d6a83'
+  },
+  bottom: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 36
   },
   textInput: {
     flex:1,
@@ -130,7 +133,6 @@ class SettingsScreen extends Component {
     super(props);
 
     this.state = {
-      channelId: "",
       notificationsEnabled: false,
       locationEnabled: false,
       tags: [],
@@ -222,10 +224,6 @@ class SettingsScreen extends Component {
   }
 
   componentDidMount() {
-    UrbanAirship.getChannelId().then((channelId) => {
-      this.setState({channelId:channelId})
-    });
-
     UrbanAirship.isUserNotificationsEnabled().then ((enabled) => {
       this.setState({notificationsEnabled:enabled})
     })
@@ -262,11 +260,6 @@ class SettingsScreen extends Component {
 
   render() {
 
-    let channelcell = null
-    if (this.state.channelId) {
-      channelcell = <ChannelCell channelId={this.state.channelId}/>;
-    }
-
     return (
       <View style={styles.backgroundContainer}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -281,7 +274,6 @@ class SettingsScreen extends Component {
                 handleNotificationsEnabled={this.handleNotificationsEnabled}
               />
             <View>
-              {channelcell}
           </View>
           <NamedUserManagerCell
             namedUserText={this.state.namedUserText}
@@ -464,7 +456,26 @@ class TagInputCell extends Component {
 }
 
 class HomeScreen extends Component {
+
+  constructor(props) {
+    super (props);
+    this.state = {
+      channelId: ""
+    }
+  }
+
+  componentDidMount() {
+    UrbanAirship.getChannelId().then((channelId) => {
+      this.setState({channelId:channelId})
+    });
+  }
+
   render() {
+    let channelcell = null
+    if (this.state.channelId) {
+      channelcell = <ChannelCell channelId={this.state.channelId}/>;
+    }
+
     return (
         <View style={styles.backgroundContainer}>
           <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -472,12 +483,17 @@ class HomeScreen extends Component {
               style={{width: 300, height: 38, marginTop:50, alignItems:'center'}}
               source={require('./img/urban-airship-sidebyside.png')}
             />
+            <View style={{height:75}}>
+            </View>
+            {channelcell}
+          </ScrollView>
+          <View style={styles.bottom}>
             <Text style={styles.instructions}>
               Press Cmd+R to reload,{'\n'}
               Cmd+D or shake for dev menu
             </Text>
-          </ScrollView>
-      </View>
+          </View>
+        </View>
     );
   }
 }
