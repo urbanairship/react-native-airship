@@ -75,6 +75,8 @@ if $ANDROID ; then
       cp -np ${PROJECT_PLATFORM_PATH}/app/src/main/assets/airshipconfig.properties.sample ${PROJECT_PLATFORM_PATH}/app/src/main/assets/airshipconfig.properties || true
     fi
 
+    npm run postinstall
+    
     # Build sample
     ./gradlew app:assembleDebug
 
