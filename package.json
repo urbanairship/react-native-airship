@@ -26,7 +26,8 @@
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "0.55.0",
     "react": "16.10.1",
-    "react-native": "0.61.1"
+    "react-native": "0.61.1",
+    "typescript": "^3.6.3"
   },
   "jest": {
     "preset": "react-native"
@@ -47,7 +48,5 @@
   },
   "license": "Apache-2.0",
   "typings": "./js/index.d.ts",
-  "dependencies": {
-    "typescript": "^3.6.3"
-  }
+  "dependencies": {}
 }
