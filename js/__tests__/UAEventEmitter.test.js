@@ -1,27 +1,16 @@
 /* Copyright Airship and Contributors */
 
-const EventEmitter = require("EventEmitter");
-const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
-
-/**
- * Redefine the NativeEventEmitter as a regular old EventEmitter for testing
- *
- * Note: The Mock prefix here is semantically significant, and tells jest that test variables
- * may be lazily bound to this object within their local scope.
- */
-class MockNativeEventEmitter extends EventEmitter {
-    constructor() {
-      super(RCTDeviceEventEmitter.sharedSubscriber);
-    }
+class MockEventEmitter  {
+    constructor() {}
+    listeners(eventType) { return [] }
+    addListener(eventType, listener, context) {}
+    removeAllListeners(eventType) {}
+    removeSubscription(subscription) {}
 }
 
-describe("UAEventEmitter Tests", () => {
-    var UAEventEmitter;
-    var MockPlatform;
-    var MockUrbanairshipModule;
-    var MockNativeModules;
-    var emitter;
+class MockNativeEventEmitter extends MockEventEmitter {}
 
+describe("UAEventEmitter Tests", () => {
     beforeEach(() => {
         jest.resetModules();
 
@@ -45,6 +34,7 @@ describe("UAEventEmitter Tests", () => {
         }));
 
         // Spy on super calls for later verification
+
         jest.spyOn(MockNativeEventEmitter.prototype, 'addListener');
         jest.spyOn(MockNativeEventEmitter.prototype, 'removeAllListeners');
         jest.spyOn(MockNativeEventEmitter.prototype, 'removeSubscription');
@@ -86,8 +76,9 @@ describe("UAEventEmitter Tests", () => {
     test('removeAllListenersAndroid', () => {
         MockPlatform.OS = 'android';
 
-        emitter.addListener("foo", () => {}, {"cool" : "rad"});
-        emitter.addListener("foo", () => {}, {"such" : "as"});
+        MockNativeEventEmitter.prototype.listeners = jest.fn().mockImplementation((eventType) => {
+            return [() => {}, () => {}];
+        });
 
         emitter.removeAllListeners("foo");
 
