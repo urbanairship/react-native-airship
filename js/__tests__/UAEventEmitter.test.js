@@ -98,7 +98,7 @@ describe("UAEventEmitter Tests", () => {
     test('removeSubscriptionAndroid', () => {
         MockPlatform.OS = 'android';
 
-        var subcription = emitter.addListener("foo", () => {}, {"cool" : "rad"});
+        var subcription = {"fake" : "subscription"};
 
         emitter.removeSubscription(subcription);
 
@@ -109,7 +109,7 @@ describe("UAEventEmitter Tests", () => {
     test('removeSubscriptioniOS', () => {
         MockPlatform.OS = 'ios';
 
-        var subcription = emitter.addListener("foo", () => {}, {"cool" : "rad"});
+        var subcription = {"another fake" : "subscription"};
 
         emitter.removeSubscription(subcription);
 
