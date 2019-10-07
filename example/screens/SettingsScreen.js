@@ -168,7 +168,7 @@ export default class SettingsScreen extends Component {
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <Image
             style={{width: 300, height: 38, marginTop:50, alignItems:'center'}}
-            source={require('./img/urban-airship-sidebyside.png')}
+            source={require('./../img/urban-airship-sidebyside.png')}
           />
           <View style={{height:75}}>
             </View>
