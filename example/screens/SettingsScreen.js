@@ -1,6 +1,7 @@
 /**
  * Sample React Native App
- * @flow
+ *
+ * SettingsScreen: Contains the application settings such as enable/disable push, Enable/disable location, add tags, add named user...
  */
 'use strict';
 

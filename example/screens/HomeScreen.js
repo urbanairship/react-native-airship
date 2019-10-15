@@ -1,6 +1,7 @@
 /**
  * Sample React Native App
- * @flow
+ *
+ * HomeScreen: Contains only the channelId for the moment.
  */
 'use strict';
 
