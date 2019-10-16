@@ -1,5 +1,5 @@
 use_frameworks!
-platform :ios, '10.0'
+platform :ios, '11.0'
 require_relative '../../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'AirshipSample' do
@@ -36,7 +36,7 @@ target 'AirshipSample' do
 end
 
 target 'ServiceExtension' do
-  platform :ios, '10.0'
+  platform :ios, '11.0'
   # Pods for Service Extension
-  pod 'UrbanAirship-iOS-AppExtensions', '11.1.2'
+  pod 'UrbanAirship-iOS-AppExtensions', '12.0.0'
 end

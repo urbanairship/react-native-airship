@@ -48,6 +48,11 @@ static UARCTEventEmitter *sharedEventEmitter_;
     if (self) {
         self.pendingEvents = [NSMutableArray array];
         self.knownListeners = [NSMutableSet set];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(channelRegistrationSucceeded:)
+                                                     name:UAChannelUpdatedEvent
+                                                   object:nil];
     }
 
     return self;
@@ -135,15 +140,21 @@ static UARCTEventEmitter *sharedEventEmitter_;
     completionHandler();
 }
 
-#pragma mark -
-#pragma mark UARegistrationDelegate
+#pragma mark Channel Registration Events
 
-- (void)registrationSucceededForChannelID:(NSString *)channelID deviceToken:(NSString *)deviceToken {
+- (void)channelRegistrationSucceeded:(NSNotification *)notification {
     NSMutableDictionary *registrationBody = [NSMutableDictionary dictionary];
+
+    NSString *channelID = notification.userInfo[UAChannelUpdatedEventChannelKey];
+    NSString *deviceToken = [UAirship push].deviceToken;
+
     [registrationBody setValue:channelID forKey:@"channelId"];
     [registrationBody setValue:deviceToken forKey:@"registrationToken"];
     [self sendEventWithName:UARCTRegistrationEventName body:registrationBody];
 }
+
+#pragma mark -
+#pragma mark UARegistrationDelegate
 
 - (void)notificationAuthorizedSettingsDidChange:(UAAuthorizedNotificationSettings)authorizedSettings {
     BOOL optedIn = NO;
