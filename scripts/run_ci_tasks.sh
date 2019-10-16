@@ -78,7 +78,7 @@ if $ANDROID ; then
     # Build sample
     ./gradlew app:assembleDebug
 
-    cd ..
+    cd ../../
 fi
 
 # iOS
@@ -89,7 +89,7 @@ if $IOS; then
     PROJECT_PLATFORM_PATH="$(pwd)"
     DERIVED_DATA=$(mktemp -d /tmp/ci-derived-data-XXXXX)
     TARGET_SDK='iphonesimulator'
-    TEST_DESTINATION='platform=iOS Simulator,OS=latest,name=iPhone SE'
+    TEST_DESTINATION='platform=iOS Simulator,OS=latest,name=iPhone Xʀ'
 
     # install the SDK
     if [ "$BITRISE_IO" = "true" ]; then
@@ -101,7 +101,7 @@ if $IOS; then
     cp -np ${PROJECT_PLATFORM_PATH}/AirshipConfig.plist.sample ${PROJECT_PLATFORM_PATH}/AirshipConfig.plist || true
 
     # Use Debug configurations and a simulator SDK so the build process doesn't attempt to sign the output
-    xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipSample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipSample Cocoapods" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
+    xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipSample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipSample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
 
     cd ..
 fi
