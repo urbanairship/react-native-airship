@@ -1,3 +1,9 @@
+
+Version 5.0.0 - October 16, 2019
+================================
+- Updated iOS SDK to 12.0.0
+- Updated iOS minimum deployment target to 11.0
+
 Version 4.0.2 - September 3, 2019
 =================================
 - Updated Android SDK to 11.0.4.

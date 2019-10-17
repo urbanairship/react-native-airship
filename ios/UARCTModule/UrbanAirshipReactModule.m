@@ -54,7 +54,7 @@ RCT_EXPORT_METHOD(setUserNotificationsEnabled:(BOOL)enabled) {
 
 
 RCT_EXPORT_METHOD(enableChannelCreation) {
-    [[UAirship push] enableChannelCreation];
+    [[UAirship channel] enableChannelCreation];
 }
 
 RCT_REMAP_METHOD(isUserNotificationsEnabled,
@@ -94,22 +94,22 @@ RCT_REMAP_METHOD(getNamedUser,
 
 RCT_EXPORT_METHOD(addTag:(NSString *)tag) {
     if (tag) {
-        [[UAirship push] addTag:tag];
-        [[UAirship push] updateRegistration];
+        [[UAirship channel] addTag:tag];
+        [[UAirship channel] updateRegistration];
     }
 }
 
 RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
     if (tag) {
-        [[UAirship push] removeTag:tag];
-        [[UAirship push] updateRegistration];
+        [[UAirship channel] removeTag:tag];
+        [[UAirship channel] updateRegistration];
     }
 }
 
 RCT_REMAP_METHOD(getTags,
                  getTags_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve([UAirship push].tags ?: [NSArray array]);
+    resolve([UAirship channel].tags ?: [NSArray array]);
 }
 
 RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
@@ -125,7 +125,7 @@ RCT_REMAP_METHOD(isAnalyticsEnabled,
 RCT_REMAP_METHOD(getChannelId,
                  getChannelId_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve([UAirship push].channelID);
+    resolve([UAirship channel].identifier);
 }
 
 RCT_REMAP_METHOD(getRegistrationToken,
@@ -244,11 +244,11 @@ RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
     for (NSDictionary *operation in operations) {
         NSString *group = [operation objectForKey:@"group"];
         if ([operation[@"operationType"] isEqualToString:@"add"]) {
-            [[UAirship push] addTags:operation[@"tags"] group:group];
+            [[UAirship channel] addTags:operation[@"tags"] group:group];
         } else if ([operation[@"operationType"] isEqualToString:@"remove"]) {
-            [[UAirship push] removeTags:operation[@"tags"] group:group];
+            [[UAirship channel] removeTags:operation[@"tags"] group:group];
         } else if ([operation[@"operationType"] isEqualToString:@"set"]) {
-            [[UAirship push] setTags:operation[@"tags"] group:group];
+            [[UAirship channel] setTags:operation[@"tags"] group:group];
         }
     }
 
