@@ -497,7 +497,7 @@ class UrbanAirship {
   /**
    * Enables or disables autobadging on iOS. Badging is not supported for Android.
    * 
-   * @param {boolean} enabled Whether or not to enable Autobadging.
+   * @param {boolean} enabled Whether or not to enable autobadging.
    */
   static setAutobadgeEnabled(enabled: boolean) {
     if (Platform.OS == 'ios') {
