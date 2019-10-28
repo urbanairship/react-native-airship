@@ -508,7 +508,7 @@ class UrbanAirship {
 }
 
   /**
-   * Checks to see if Autobadging on iOS is enabled. Badging is not supported for Android.
+   * Checks to see if autobadging on iOS is enabled. Badging is not supported for Android.
    * 
    * @return {Promise.<boolean>} A promise with the result, either true or false.
    */
