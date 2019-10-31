@@ -342,6 +342,17 @@ RCT_EXPORT_METHOD(setQuietTime:(NSDictionary *)quietTime) {
     [[UAirship push] updateRegistration];
 }
 
+RCT_EXPORT_METHOD(setAutobadgeEnabled:(BOOL)enabled) {
+    [UAirship push].autobadgeEnabled = enabled;
+}
+
+RCT_REMAP_METHOD(isAutobadgeEnabled,
+                 isAutobadgeEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    resolve(@([UAirship push].isAutobadgeEnabled));
+}
+
 RCT_EXPORT_METHOD(setBadgeNumber:(NSInteger)badgeNumber) {
     [[UAirship push] setBadgeNumber:badgeNumber];
 }

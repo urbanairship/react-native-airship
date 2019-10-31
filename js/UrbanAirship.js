@@ -495,6 +495,33 @@ class UrbanAirship {
   }
 
   /**
+   * Enables or disables autobadging on iOS. Badging is not supported for Android.
+   * 
+   * @param {boolean} enabled Whether or not to enable autobadging.
+   */
+  static setAutobadgeEnabled(enabled: boolean) {
+    if (Platform.OS == 'ios') {
+      UrbanAirshipModule.setAutobadgeEnabled(enabled);
+    } else {
+      console.log("This feature is not supported on this platform.")
+    }
+}
+
+  /**
+   * Checks to see if autobadging on iOS is enabled. Badging is not supported for Android.
+   * 
+   * @return {Promise.<boolean>} A promise with the result, either true or false.
+   */
+  static isAutobadgeEnabled(): Promise<boolean> {
+    if (Platform.OS == 'ios') {
+      return UrbanAirshipModule.isAutobadgeEnabled();
+    } else {
+      console.log("This feature is not supported on this platform.");
+      return new Promise(resolve => resolve(false));
+    }
+  }
+
+  /**
    * Sets the badge number for iOS. Badging is not supported for Android.
    *
    * @param {number} badgeNumber specified badge to set.
