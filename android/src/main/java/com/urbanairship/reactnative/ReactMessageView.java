@@ -106,7 +106,7 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
             fetchMessageRequest = UAirship.shared().getInbox().fetchMessages(new RichPushInbox.FetchMessagesCallback() {
                 @Override
                 public void onFinished(boolean success) {
-                    RichPushMessage message = UAirship.shared().getInbox().getMessage(messageId);
+                    message = UAirship.shared().getInbox().getMessage(messageId);
                     if (!success) {
                         notifyLoadError(messageId, ERROR_FAILED_TO_FETCH_MESSAGE, true);
                         return;
