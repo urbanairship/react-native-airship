@@ -1,4 +1,15 @@
 
+Version 5.0.1 - December 9, 2019
+================================
+Patch release to fix a bug affecting loss tags on iOS during app
+migration to plugin 5.0.0. This patch release fixes the bug
+by combining previous tags with tags that have been set since
+the update to 5.0.0. Applications using 5.0.0 should update.
+
+Changes
+-------
+- Updated iOS SDK to 12.1.2
+
 Version 5.0.0 - October 16, 2019
 ================================
 - Updated iOS SDK to 12.0.0

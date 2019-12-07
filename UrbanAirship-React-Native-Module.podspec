@@ -13,5 +13,5 @@ require "json"
   s.source       = { :git => "https://github.com/urbanairship/react-native-module.git", :tag => "{s.version}" }
   s.source_files  = "ios/**/*.{h,m}"
   s.dependency "React"
-  s.dependency "UrbanAirship-iOS-SDK", "12.0.0"
+  s.dependency "UrbanAirship-iOS-SDK", "12.1.2"
 end
