@@ -43,9 +43,9 @@ import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.app.GlobalActivityMonitor;
 import com.urbanairship.iam.html.HtmlActivity;
 import com.urbanairship.messagecenter.MessageCenter;
-import com.urbanairship.messagecenter.MessageCenterActivity;
 import com.urbanairship.push.PushMessage;
-import com.urbanairship.push.TagGroupsEditor;
+import com.urbanairship.channel.TagGroupsEditor;
+import com.urbanairship.channel.AttributeEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.richpush.RichPushInbox;
@@ -57,7 +57,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -74,10 +73,15 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String TAG_OPERATION_GROUP_NAME = "group";
     private static final String TAG_OPERATION_TYPE = "operationType";
     private static final String TAG_OPERATION_TAGS = "tags";
-
     private static final String TAG_OPERATION_ADD = "add";
     private static final String TAG_OPERATION_REMOVE = "remove";
     private static final String TAG_OPERATION_SET = "set";
+
+    private static final String ATTRIBUTE_OPERATION_KEY = "key";
+    private static final String ATTRIBUTE_OPERATION_VALUE = "value";
+    private static final String ATTRIBUTE_OPERATION_ACTION = "action";
+    private static final String ATTRIBUTE_OPERATION_SET = "set";
+    private static final String ATTRIBUTE_OPERATION_REMOVE = "remove";
 
     private static final String QUIET_TIME_START_HOUR = "startHour";
     private static final String QUIET_TIME_START_MINUTE = "startMinute";
@@ -337,6 +341,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void editNamedUserTagGroups(ReadableArray operations) {
         applyTagGroupOperations(UAirship.shared().getNamedUser().editTagGroups(), operations);
+    }
+
+    /**
+     * Edits the channel attributes.
+     * Operations should each be a map with the following:
+     * - action: Either set or remove
+     * - value: The group to modify
+     * - key: The tags to add or remove.
+     *
+     * @param operations An array of operations.
+     */
+    @ReactMethod
+    public void editChannelAttributes(ReadableArray operations) {
+        applyAttributeOperations(UAirship.shared().getChannel().editAttributes(), operations);
     }
 
     /**
@@ -832,6 +850,37 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 editor.removeTags(group, tagSet);
             } else if (TAG_OPERATION_SET.equals(operationType)) {
                 editor.setTags(group, tagSet);
+            }
+        }
+
+        editor.apply();
+    }
+
+    /**
+     * Helper method to apply attribute changes.
+     *
+     * @param editor     The attribute editor.
+     * @param operations A list of attribute operations.
+     */
+    private static void applyAttributeOperations(@NonNull AttributeEditor editor, @NonNull ReadableArray operations) {
+        for (int i = 0; i < operations.size(); i++) {
+            ReadableMap operation = operations.getMap(i);
+            if (operation == null) {
+                continue;
+            }
+
+            String action = operation.getString(ATTRIBUTE_OPERATION_ACTION);
+            String key = operation.getString(ATTRIBUTE_OPERATION_KEY);
+            String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
+
+            if (action == null || key == null || value == null) {
+                continue;
+            }
+
+            if (ATTRIBUTE_OPERATION_SET.equals(action)) {
+                editor.setAttribute(key, value);
+            } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
+                editor.setAttribute(key, value);
             }
         }
 
