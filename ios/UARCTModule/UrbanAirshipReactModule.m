@@ -52,7 +52,6 @@ RCT_EXPORT_METHOD(setUserNotificationsEnabled:(BOOL)enabled) {
     [UAirship push].userPushNotificationsEnabled = enabled;
 }
 
-
 RCT_EXPORT_METHOD(enableChannelCreation) {
     [[UAirship channel] enableChannelCreation];
 }
@@ -253,6 +252,26 @@ RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
     }
 
     [[UAirship push] updateRegistration];
+}
+
+RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
+    UAAttributeMutations *mutations = [UAAttributeMutations mutations];
+
+    for (NSDictionary *operation in operations) {
+        NSString *action = operation[@"action"];
+
+        // Only strings are currently supported
+        NSString *name = operation[@"key"];
+        NSString *value = operation[@"value"];
+
+        if ([action isEqualToString:@"set"]) {
+            [mutations setString:value forAttribute:name];
+        } else if ([action isEqualToString:@"remove"]) {
+            [mutations removeAttribute:name];
+        }
+    }
+
+    [[UAirship channel] applyAttributeMutations:mutations];
 }
 
 RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {

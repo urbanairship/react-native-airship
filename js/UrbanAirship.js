@@ -8,6 +8,8 @@ import {
 
 import UACustomEvent from './UACustomEvent.js'
 import TagGroupEditor from './TagGroupEditor.js'
+import AttributeEditor from './AttributeEditor.js'
+
 import UAEventEmitter from './UAEventEmitter.js'
 
 const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
@@ -266,6 +268,17 @@ class UrbanAirship {
   }
 
   /**
+   * Creates an editor to modify the channel attributes.
+   *
+   * @return {AttributeEditor} A attribute editor instance.
+   */
+  static editChannelAttributes(): AttributeEditor {
+    return new AttributeEditor((operations) => {
+      UrbanAirshipModule.editChannelAttributes(operations);
+    });
+  }
+
+  /**
    * Enables or disables analytics.
    *
    * Disabling analytics will delete any locally stored events
@@ -496,7 +509,7 @@ class UrbanAirship {
 
   /**
    * Enables or disables autobadging on iOS. Badging is not supported for Android.
-   * 
+   *
    * @param {boolean} enabled Whether or not to enable autobadging.
    */
   static setAutobadgeEnabled(enabled: boolean) {
@@ -509,7 +522,7 @@ class UrbanAirship {
 
   /**
    * Checks to see if autobadging on iOS is enabled. Badging is not supported for Android.
-   * 
+   *
    * @return {Promise.<boolean>} A promise with the result, either true or false.
    */
   static isAutobadgeEnabled(): Promise<boolean> {
