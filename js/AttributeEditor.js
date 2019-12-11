@@ -21,7 +21,7 @@ class AttributeEditor {
    * @param {string} name The attribute name.
    * @return {AttributeEditor} The attribute editor instance.
    */
-  setString(value: string, name: String): AttributeEditor {
+  set(value: string, name: string): AttributeEditor {
     var operation = { "action": "set", "value": value, "key": name }
     this.operations.push(operation)
     return this;

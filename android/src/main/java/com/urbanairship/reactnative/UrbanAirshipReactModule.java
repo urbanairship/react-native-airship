@@ -79,7 +79,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     private static final String ATTRIBUTE_OPERATION_KEY = "key";
     private static final String ATTRIBUTE_OPERATION_VALUE = "value";
-    private static final String ATTRIBUTE_OPERATION_ACTION = "action";
+    private static final String ATTRIBUTE_OPERATION_TYPE = "action";
     private static final String ATTRIBUTE_OPERATION_SET = "set";
     private static final String ATTRIBUTE_OPERATION_REMOVE = "remove";
 
@@ -869,7 +869,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 continue;
             }
 
-            String action = operation.getString(ATTRIBUTE_OPERATION_ACTION);
+            String action = operation.getString(ATTRIBUTE_OPERATION_TYPE);
             String key = operation.getString(ATTRIBUTE_OPERATION_KEY);
             String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
 
@@ -880,7 +880,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             if (ATTRIBUTE_OPERATION_SET.equals(action)) {
                 editor.setAttribute(key, value);
             } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
-                editor.setAttribute(key, value);
+                editor.removeAttribute(key);
             }
         }
 
