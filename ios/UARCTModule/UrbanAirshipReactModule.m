@@ -7,6 +7,8 @@
 #import "UARCTMessageCenter.h"
 #import "UARCTMessageViewController.h"
 
+@import Airship;
+
 @interface UrbanAirshipReactModule()
 @property (nonatomic, weak) UARCTMessageViewController *messageViewController;
 @property (nonatomic, weak) UAInAppMessageHTMLAdapter *htmlAdapter;
@@ -142,23 +144,23 @@ RCT_REMAP_METHOD(associateIdentifier,
 }
 
 RCT_EXPORT_METHOD(setLocationEnabled:(BOOL)enabled) {
-    [UAirship shared].locationProviderDelegate.locationUpdatesEnabled = enabled;
+    [UALocation shared].locationUpdatesEnabled = enabled;
 }
 
 RCT_REMAP_METHOD(isLocationEnabled,
                  isLocationEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve(@([UAirship shared].locationProviderDelegate.isLocationUpdatesEnabled));
+    resolve(@([UALocation shared].isLocationUpdatesEnabled));
 }
 
 RCT_REMAP_METHOD(isBackgroundLocationAllowed,
                  isBackgroundLocationAllowed_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve(@([UAirship shared].locationProviderDelegate.isBackgroundLocationUpdatesAllowed));
+    resolve(@([UALocation shared].isBackgroundLocationUpdatesAllowed));
 }
 
 RCT_EXPORT_METHOD(setBackgroundLocationAllowed:(BOOL)enabled) {
-    [UAirship shared].locationProviderDelegate.backgroundLocationUpdatesAllowed = enabled;
+    [UALocation shared].backgroundLocationUpdatesAllowed = enabled;
 }
 
 RCT_REMAP_METHOD(runAction,
@@ -384,13 +386,13 @@ RCT_REMAP_METHOD(getBadgeNumber,
 
 RCT_EXPORT_METHOD(displayMessageCenter) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAirship messageCenter] display];
+        [[UAMessageCenter shared] display];
     });
 }
 
 RCT_EXPORT_METHOD(dismissMessageCenter) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAirship messageCenter] dismiss];
+        [[UAMessageCenter shared] dismiss];
     });
 }
 
@@ -399,37 +401,26 @@ RCT_REMAP_METHOD(displayMessage,
                  overlay:(BOOL)overlay
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAMessageCenterResources bundle]];
+    [mvc loadMessageForID:messageId onlyIfChanged:YES onError:nil];
 
-    if (overlay) {
-        [self displayOverlayMessage:messageId];
-    } else {
-        UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAirship resources]];
-        [mvc loadMessageForID:messageId onlyIfChanged:YES onError:nil];
+    UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
+    self.messageViewController = mvc;
 
-        UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
-        self.messageViewController = mvc;
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
+    });
 }
 
 RCT_REMAP_METHOD(dismissMessage,
                  overlay:(BOOL)overlay
                  dismissMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    if (overlay) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self closeOverlayMessage];
-        });
 
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.messageViewController dismissViewControllerAnimated:YES completion:nil];
-            self.messageViewController = nil;
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.messageViewController dismissViewControllerAnimated:YES completion:nil];
+        self.messageViewController = nil;
+    });
 }
 
 RCT_REMAP_METHOD(getInboxMessages,
@@ -437,7 +428,7 @@ RCT_REMAP_METHOD(getInboxMessages,
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
     NSMutableArray *messages = [NSMutableArray array];
-    for (UAInboxMessage *message in [UAirship inbox].messageList.messages) {
+    for (UAInboxMessage *message in [UAMessageCenter shared].messageList.messages) {
 
         NSDictionary *icons = [message.rawMessageObject objectForKey:@"icons"];
         NSString *iconUrl = [icons objectForKey:@"list_icon"];
@@ -463,7 +454,7 @@ RCT_REMAP_METHOD(deleteInboxMessage,
                  deleteMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
+    UAInboxMessage *message = [[UAMessageCenter shared].messageList messageForID:messageId];
 
     if (!message) {
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
@@ -472,7 +463,7 @@ RCT_REMAP_METHOD(deleteInboxMessage,
 
         reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
     } else {
-        [[UAirship inbox].messageList markMessagesDeleted:@[message] completionHandler:^(){
+        [[UAMessageCenter shared].messageList markMessagesDeleted:@[message] completionHandler:^(){
             resolve(@YES);
         }];
     }
@@ -483,7 +474,7 @@ RCT_REMAP_METHOD(markInboxMessageRead,
                  markMessageRead_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageId];
+    UAInboxMessage *message = [[UAMessageCenter shared].messageList messageForID:messageId];
 
     if (!message) {
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
@@ -492,7 +483,7 @@ RCT_REMAP_METHOD(markInboxMessageRead,
 
         reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error);
     } else {
-        [[UAirship inbox].messageList markMessagesRead:@[message] completionHandler:^(){
+        [[UAMessageCenter shared].messageList markMessagesRead:@[message] completionHandler:^(){
             resolve(@YES);
         }];
     }
@@ -502,7 +493,7 @@ RCT_REMAP_METHOD(refreshInbox,
                  refreshInbox_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:^(){
+    [[UAMessageCenter shared].messageList retrieveMessageListWithSuccessBlock:^(){
         resolve(@YES);
     } withFailureBlock:^(){
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
@@ -518,75 +509,27 @@ RCT_EXPORT_METHOD(setAutoLaunchDefaultMessageCenter:(BOOL)enabled) {
 }
 
 RCT_EXPORT_METHOD(clearNotifications) {
-    if (@available(iOS 10.0, *)) {
-        [[UNUserNotificationCenter currentNotificationCenter] removeAllDeliveredNotifications];
-    }
+    [[UNUserNotificationCenter currentNotificationCenter] removeAllDeliveredNotifications];
 }
 
 RCT_EXPORT_METHOD(clearNotification:(NSString *)identifier) {
-    if (@available(iOS 10.0, *)) {
-        if (identifier) {
-            [[UNUserNotificationCenter currentNotificationCenter] removeDeliveredNotificationsWithIdentifiers:@[identifier]];
-        }
+    if (identifier) {
+        [[UNUserNotificationCenter currentNotificationCenter] removeDeliveredNotificationsWithIdentifiers:@[identifier]];
     }
 }
 
 RCT_REMAP_METHOD(getActiveNotifications,
                  getNotifications_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    [[UNUserNotificationCenter currentNotificationCenter] getDeliveredNotificationsWithCompletionHandler:^(NSArray<UNNotification *> * _Nonnull notifications) {
+        NSMutableArray *result = [NSMutableArray array];
+        for(UNNotification *unnotification in notifications) {
+            UANotificationContent *content = [UANotificationContent notificationWithUNNotification:unnotification];
+            [result addObject:[UARCTEventEmitter eventBodyForNotificationContent:content]];
+        }
 
-    if (@available(iOS 10.0, *)) {
-        [[UNUserNotificationCenter currentNotificationCenter] getDeliveredNotificationsWithCompletionHandler:^(NSArray<UNNotification *> * _Nonnull notifications) {
-
-            NSMutableArray *result = [NSMutableArray array];
-            for(UNNotification *unnotification in notifications) {
-                UANotificationContent *content = [UANotificationContent notificationWithUNNotification:unnotification];
-                [result addObject:[UARCTEventEmitter eventBodyForNotificationContent:content]];
-            }
-
-            resolve(result);
-        }];
-    } else {
-        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
-                                              code:0
-                                          userInfo:@{NSLocalizedDescriptionKey:@"Only available on iOS 10+"}];
-
-        reject(UARCTStatusUnavailable, @"Only available on iOS 10+", error);
-    }
-}
-
-#pragma mark -
-#pragma mark Helper methods
-
-- (void)displayOverlayMessage:(NSString *)messageId {
-    if (!self.factoryBlockAssigned) {
-        [[UAirship inAppMessageManager] setFactoryBlock:^id<UAInAppMessageAdapterProtocol> _Nonnull(UAInAppMessage * _Nonnull message) {
-            UAInAppMessageHTMLAdapter *adapter = [UAInAppMessageHTMLAdapter adapterForMessage:message];
-            UAInAppMessageHTMLDisplayContent *displayContent = (UAInAppMessageHTMLDisplayContent *) message.displayContent;
-            NSURL *url = [NSURL URLWithString:displayContent.url];
-
-            if ([url.scheme isEqualToString:@"message"]) {
-                self.htmlAdapter = adapter;
-            }
-
-            return adapter;
-        } forDisplayType:UAInAppMessageDisplayTypeHTML];
-
-        self.factoryBlockAssigned = YES;
-    }
-
-    [UAActionRunner runActionWithName:kUAOverlayInboxMessageActionDefaultRegistryName
-                                value:messageId
-                            situation:UASituationManualInvocation];
-}
-
-
-- (void)closeOverlayMessage {
-    UIViewController *vc = [self.htmlAdapter valueForKey:@"htmlViewController"];
-# pragma clang diagnostic push
-# pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    [vc performSelector:NSSelectorFromString(@"dismissWithoutResolution")];
-# pragma clang diagnostic pop
+        resolve(result);
+    }];
 }
 
 @end

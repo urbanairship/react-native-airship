@@ -2,13 +2,7 @@
 
 #import <Foundation/Foundation.h>
 
-
-#if __has_include("AirshipLib.h")
-#import "AirshipLib.h"
-#else
-@import AirshipKit;
-#endif
-
+@import Airship;
 
 extern NSString *const UARCTAutoLaunchMessageCenterKey;
 
@@ -20,7 +14,7 @@ extern NSString *const UARCTErrorDescriptionInboxRefreshFailed;
 extern int const UARCTErrorCodeMessageNotFound;
 extern int const UARCTErrorCodeInboxRefreshFailed;
 
-@interface UARCTMessageCenter : NSObject <UAInboxDelegate>
+@interface UARCTMessageCenter : NSObject <UAMessageCenterDisplayDelegate>
 
 /**
  * Returns the shared instance.

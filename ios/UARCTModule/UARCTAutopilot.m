@@ -6,7 +6,7 @@
 #import "UARCTMessageCenter.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
-NSString *const UARCTAirshipKitRecommendedVersion = @"12.0.0";
+NSString *const UARCTAirshipRecommendedVersion = @"13.0.1";
 
 @implementation UARCTAutopilot
 
@@ -30,7 +30,7 @@ static BOOL disabled = NO;
 
     [UAirship push].pushNotificationDelegate = [UARCTEventEmitter shared];
     [UAirship push].registrationDelegate = [UARCTEventEmitter shared];
-    [UAirship inbox].delegate = [UARCTMessageCenter shared];
+    [UAMessageCenter shared].displayDelegate  = [UARCTMessageCenter shared];
 
     // Register custom deep link action
     UARCTDeepLinkAction *dle = [[UARCTDeepLinkAction alloc] init];
@@ -54,8 +54,8 @@ static BOOL disabled = NO;
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
-    if (([UARCTAirshipKitRecommendedVersion compare:[UAirshipVersion get] options:NSNumericSearch] == NSOrderedDescending)) {
-         UA_LIMPERR(@"Current version of AirshipKit is below the recommended version. Current version: %@ Recommended version: %@", [UAirshipVersion get], UARCTAirshipKitRecommendedVersion);
+    if (([UARCTAirshipRecommendedVersion compare:[UAirshipVersion get] options:NSNumericSearch] == NSOrderedDescending)) {
+         UA_LIMPERR(@"Current version of Airship is below the recommended version. Current version: %@ Recommended version: %@", [UAirshipVersion get], UARCTAirshipRecommendedVersion);
     }
 
     [self loadCustomNotificationCategories];
