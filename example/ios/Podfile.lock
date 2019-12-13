@@ -230,7 +230,7 @@ PODS:
     - React-jsi (= 0.61.1)
     - ReactCommon/jscallinvoker (= 0.61.1)
   - UrbanAirship-iOS-AppExtensions (12.0.0)
-  - UrbanAirship-React-Native-Module (5.0.1):
+  - UrbanAirship-React-Native-Module (6.0.0):
     - Airship (= 13.0.1)
     - React
   - Yoga (1.14.0)
@@ -354,7 +354,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
   UrbanAirship-iOS-AppExtensions: 881db9825b7bdb872787d6aa5b249b38bea7fa67
-  UrbanAirship-React-Native-Module: b78e59be19d86f7496bd073a30dce21e727867ff
+  UrbanAirship-React-Native-Module: 1a6dfa887e23980bcd170b4aff861b9a67c96837
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
 PODFILE CHECKSUM: 1a1eaeba13969ed54a7dcc7c65fe57b885e80a19

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		457511BA23A41C7A00E4B1AD /* UARCTModuleVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 457511B823A41C7900E4B1AD /* UARCTModuleVersion.m */; };
 		6E42C7AF1EBA953100C85B3A /* UARCTAutopilot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C7AC1EBA953100C85B3A /* UARCTAutopilot.m */; };
 		6E42C7B01EBA953100C85B3A /* UrbanAirshipReactModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C7AE1EBA953100C85B3A /* UrbanAirshipReactModule.m */; };
 		6E42C8551EC0DD0900C85B3A /* UARCTEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */; };
@@ -30,6 +31,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		457511B823A41C7900E4B1AD /* UARCTModuleVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UARCTModuleVersion.m; path = UARCTModule/UARCTModuleVersion.m; sourceTree = "<group>"; };
+		457511B923A41C7A00E4B1AD /* UARCTModuleVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UARCTModuleVersion.h; path = UARCTModule/UARCTModuleVersion.h; sourceTree = "<group>"; };
 		6E42C7AB1EBA953100C85B3A /* UARCTAutopilot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UARCTAutopilot.h; path = UARCTModule/UARCTAutopilot.h; sourceTree = "<group>"; };
 		6E42C7AC1EBA953100C85B3A /* UARCTAutopilot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UARCTAutopilot.m; path = UARCTModule/UARCTAutopilot.m; sourceTree = "<group>"; };
 		6E42C7AD1EBA953100C85B3A /* UrbanAirshipReactModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UrbanAirshipReactModule.h; path = UARCTModule/UrbanAirshipReactModule.h; sourceTree = "<group>"; };
@@ -75,6 +78,8 @@
 				6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */,
 				6E42C7AB1EBA953100C85B3A /* UARCTAutopilot.h */,
 				6E42C7AC1EBA953100C85B3A /* UARCTAutopilot.m */,
+				457511B923A41C7A00E4B1AD /* UARCTModuleVersion.h */,
+				457511B823A41C7900E4B1AD /* UARCTModuleVersion.m */,
 				6E42C7AD1EBA953100C85B3A /* UrbanAirshipReactModule.h */,
 				6E42C7AE1EBA953100C85B3A /* UrbanAirshipReactModule.m */,
 				F8A9D23A1F3CF8870087D225 /* UARCTMessageViewController.m */,
@@ -166,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8A9D23B1F3CF8870087D225 /* UARCTMessageViewController.m in Sources */,
+				457511BA23A41C7A00E4B1AD /* UARCTModuleVersion.m in Sources */,
 				6E42C7AF1EBA953100C85B3A /* UARCTAutopilot.m in Sources */,
 				6ED67C292318812700169F5C /* UARCTMessageView.m in Sources */,
 				6E42C8551EC0DD0900C85B3A /* UARCTEventEmitter.m in Sources */,
