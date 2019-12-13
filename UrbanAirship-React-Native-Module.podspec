@@ -14,5 +14,4 @@ require "json"
   s.source_files  = "ios/**/*.{h,m}"
   s.dependency "React"
   s.dependency "Airship", "13.0.1"
-  s.dependency "Airship/Location", "13.0.1"
 end
