@@ -35,25 +35,20 @@ int const UARCTErrorCodeInboxRefreshFailed = 1;
 }
 
 - (void)displayMessageCenterAnimated:(BOOL)animated {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
-            [[UAMessageCenter shared].defaultUI displayMessageCenterAnimated:animated];
-        } else {
-            [[UARCTEventEmitter shared] showInbox];
-        }
-     });
-
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
+        [[UAMessageCenter shared].defaultUI displayMessageCenterAnimated:animated];
+    } else {
+        [[UARCTEventEmitter shared] showInbox];
+    }
 }
 
 - (void)displayMessageCenterForMessageID:(NSString *)messageID animated:(BOOL)animated {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
-            [[UAMessageCenter shared].defaultUI displayMessageCenterForMessageID:messageID animated:animated];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
+        [[UAMessageCenter shared].defaultUI displayMessageCenterForMessageID:messageID animated:animated];
 
-        } else {
-            [[UARCTEventEmitter shared] showInboxMessage:messageID];
-        }
-     });
+    } else {
+        [[UARCTEventEmitter shared] showInboxMessage:messageID];
+    }
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated {
