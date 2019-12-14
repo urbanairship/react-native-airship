@@ -1,12 +1,23 @@
 apply plugin: 'com.android.library'
 
+import groovy.json.JsonSlurper
+
 android {
     compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
+
+        buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
     }
+}
+
+def getModuleVersion() {
+    def jsonFile = file('../package.json')
+    def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+
+    return parsedJson["version"]
 }
 
 def safeExtGet (prop, fallback) {

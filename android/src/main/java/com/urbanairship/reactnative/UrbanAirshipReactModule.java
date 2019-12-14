@@ -39,6 +39,7 @@ import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
 import com.urbanairship.actions.OverlayRichPushMessageAction;
+import com.urbanairship.analytics.Analytics;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.app.GlobalActivityMonitor;
 import com.urbanairship.iam.html.HtmlActivity;
@@ -62,6 +63,7 @@ import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
 import static com.urbanairship.actions.ActionResult.STATUS_EXECUTION_ERROR;
 import static com.urbanairship.actions.ActionResult.STATUS_REJECTED_ARGUMENTS;
+import static com.urbanairship.reactnative.BuildConfig.MODULE_VERSION;
 import static com.urbanairship.reactnative.Utils.convertDynamic;
 import static com.urbanairship.reactnative.Utils.convertJsonValue;
 
@@ -109,7 +111,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void initialize() {
         super.initialize();
 
-
         getReactApplicationContext().addLifecycleEventListener(new LifecycleEventListener() {
             @Override
             public void onHostResume() {
@@ -130,6 +131,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         });
 
         EventEmitter.shared().attachReactContext(getReactApplicationContext());
+
+        UAirship.shared().getAnalytics().registerSDKExtension(Analytics.EXTENSION_REACT_NATIVE, MODULE_VERSION);
     }
 
     @Override
