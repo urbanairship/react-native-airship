@@ -398,7 +398,6 @@ RCT_EXPORT_METHOD(dismissMessageCenter) {
 
 RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
-                 overlay:(BOOL)overlay
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
     UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAMessageCenterResources bundle]];
@@ -413,7 +412,6 @@ RCT_REMAP_METHOD(displayMessage,
 }
 
 RCT_REMAP_METHOD(dismissMessage,
-                 overlay:(BOOL)overlay
                  dismissMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 

@@ -4,6 +4,7 @@
 
 @interface UARCTMessageView()
 @property (nonatomic, strong) UANativeBridge *nativeBridge;
+@property (nonatomic, strong) UAMessageCenterNativeBridgeExtension *nativeBridgeExtension;
 @property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) UAInboxMessage *message;
 @property (nonatomic, strong) UADisposable *fetchMessagesDisposable;
@@ -25,11 +26,14 @@ NSString *const UARCTMessageViewErrorKey = @"error";
         self.nativeBridge = [UANativeBridge nativeBridge];
         self.nativeBridge.forwardNavigationDelegate = self;
         self.nativeBridge.nativeBridgeDelegate = self;
+        self.nativeBridgeExtension = [[UAMessageCenterNativeBridgeExtension alloc] init];
+        self.nativeBridge.nativeBridgeExtensionDelegate = self.nativeBridgeExtension;
 
         self.webView = [[WKWebView alloc] initWithFrame:self.bounds];
         self.webView.navigationDelegate = self.nativeBridge;
         self.webView.allowsLinkPreview = ![UAMessageCenter shared].defaultUI.disableMessageLinkPreviewAndCallouts;
         self.webView.configuration.dataDetectorTypes = WKDataDetectorTypeAll;
+
         [self addSubview:self.webView];
     }
     return self;

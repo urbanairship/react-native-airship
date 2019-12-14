@@ -38,11 +38,8 @@ import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
-import com.urbanairship.actions.OverlayRichPushMessageAction;
 import com.urbanairship.analytics.Analytics;
 import com.urbanairship.analytics.AssociatedIdentifiers;
-import com.urbanairship.app.GlobalActivityMonitor;
-import com.urbanairship.iam.html.HtmlActivity;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.channel.TagGroupsEditor;
@@ -57,7 +54,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.List;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -603,47 +599,28 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * Display an inbox message in the default message center.
      *
      * @param messageId The id of the message to be displayed.
-     * @param overlay Display the message in an overlay.
      * @param promise The JS promise.
      */
     @ReactMethod
-    public void displayMessage(String messageId, boolean overlay, Promise promise) {
-        if (overlay) {
-            ActionRunRequest.createRequest(OverlayRichPushMessageAction.DEFAULT_REGISTRY_NAME)
-                    .setValue(messageId)
-                    .run();
-        } else {
-            Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
-                    .setAction(MessageCenter.VIEW_MESSAGE_INTENT_ACTION)
-                    .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
-                    .setData(Uri.fromParts(MessageCenter.MESSAGE_DATA_SCHEME, messageId, null))
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    public void displayMessage(String messageId, Promise promise) {
+        Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
+                .setAction(MessageCenter.VIEW_MESSAGE_INTENT_ACTION)
+                .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
+                .setData(Uri.fromParts(MessageCenter.MESSAGE_DATA_SCHEME, messageId, null))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-            this.getReactApplicationContext().startActivity(intent);
-        }
+        this.getReactApplicationContext().startActivity(intent);
     }
 
     /**
      * Dismisses the currently displayed inbox message.
-     *
-     * @param overlay Dismiss the message from an overlay.
      */
     @ReactMethod
-    public void dismissMessage(boolean overlay) {
-        if (overlay){
-            List<Activity> resumedActivities = GlobalActivityMonitor.shared(getReactApplicationContext()).getResumedActivities();
-
-            for (Activity activity : resumedActivities) {
-                if (activity instanceof HtmlActivity) {
-                    activity.finish();
-                }
-            }
-        } else {
-            Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
-                    .setAction(CLOSE_MESSAGE_CENTER)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            this.getCurrentActivity().startActivity(intent);
-        }
+    public void dismissMessage() {
+        Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
+                .setAction(CLOSE_MESSAGE_CENTER)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        this.getCurrentActivity().startActivity(intent);
     }
 
     /**
