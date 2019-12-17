@@ -12,8 +12,8 @@ A React Native module for Urban Airship's iOS and Android SDK.
 Please visit https://support.urbanairship.com/ for any issues integrating or using this module.
 
 ### Requirements:
- - Xcode 10+
- - iOS: Deployment target 10.0+
+ - Xcode 11+
+ - iOS: Deployment target 11.0+
  - Android: minSdkVersion 16+, compileSdkVersion 28+
  - React Native >= 0.60.0
  - React Native cli >= 2.0.1
