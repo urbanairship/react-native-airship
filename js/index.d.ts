@@ -396,17 +396,14 @@ export class UrbanAirship {
    * Displays an inbox message.
    *
    * @param {string} messageId The id of the message to be displayed.
-   * @param {boolean} [overlay=false] Display the message in an overlay.
    * @return {Promise.<boolean>} A promise with the result.
    */
-  static displayMessage(messageId: string, overlay?: boolean): Promise<boolean>;
+  static displayMessage(messageId: string): Promise<boolean>;
 
   /**
    * Dismisses the currently displayed inbox message.
-   *
-   * @param {boolean} [overlay=false] Dismisses the message in an overlay.
    */
-  static dismissMessage(overlay?: boolean): void;
+  static dismissMessage(): void;
 
   /**
    * Retrieves the current inbox messages.

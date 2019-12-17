@@ -4,12 +4,7 @@
 #import <React/RCTEventEmitter.h>
 #import "UARCTDeepLinkAction.h"
 
-#if __has_include("AirshipLib.h")
-#import "AirshipLib.h"
-#else
-@import AirshipKit;
-#endif
-
+@import Airship;
 
 extern NSString *const UARCTNotificationPresentationAlertKey;
 extern NSString *const UARCTNotificationPresentationBadgeKey;

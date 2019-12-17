@@ -1,4 +1,16 @@
 PODS:
+  - Airship (13.0.1):
+    - Airship/Automation (= 13.0.1)
+    - Airship/Core (= 13.0.1)
+    - Airship/ExtendedActions (= 13.0.1)
+    - Airship/MessageCenter (= 13.0.1)
+  - Airship/Automation (13.0.1):
+    - Airship/Core
+  - Airship/Core (13.0.1)
+  - Airship/ExtendedActions (13.0.1):
+    - Airship/Core
+  - Airship/MessageCenter (13.0.1):
+    - Airship/Core
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.1)
@@ -218,10 +230,9 @@ PODS:
     - React-jsi (= 0.61.1)
     - ReactCommon/jscallinvoker (= 0.61.1)
   - UrbanAirship-iOS-AppExtensions (12.0.0)
-  - UrbanAirship-iOS-SDK (12.1.2)
   - UrbanAirship-React-Native-Module (5.0.1):
+    - Airship (= 13.0.1)
     - React
-    - UrbanAirship-iOS-SDK (= 12.1.2)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -257,9 +268,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Airship
     - boost-for-react-native
     - UrbanAirship-iOS-AppExtensions
-    - UrbanAirship-iOS-SDK
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -316,6 +327,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  Airship: a7bfc1955ae81f684a45111cae6a07e0d1b4fc4a
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: 0846affdb2924b01093eb696766ecb0104e409e0
@@ -342,8 +354,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
   UrbanAirship-iOS-AppExtensions: 881db9825b7bdb872787d6aa5b249b38bea7fa67
-  UrbanAirship-iOS-SDK: bc0d7363f62ac572211ba0191ddeac712d4d4b1f
-  UrbanAirship-React-Native-Module: 5299de6615da6a9ec05d3b1a1bc6393060df63bd
+  UrbanAirship-React-Native-Module: b78e59be19d86f7496bd073a30dce21e727867ff
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
 PODFILE CHECKSUM: 1a1eaeba13969ed54a7dcc7c65fe57b885e80a19

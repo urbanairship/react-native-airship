@@ -24,22 +24,35 @@ int const UARCTErrorCodeInboxRefreshFailed = 1;
     return sharedMessageCenterDelegate_;
 }
 
-#pragma mark UAInboxDelegate
+#pragma mark UAMessageCenterDisplayDelegate
 
 - (void)showMessageForID:(NSString *)messageID {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
-        [[UAirship messageCenter] displayMessageForID:messageID];
+        [[UAMessageCenter shared].defaultUI displayMessageCenterForMessageID:messageID animated:true];
     } else {
         [[UARCTEventEmitter shared] showInboxMessage:messageID];
     }
 }
 
-- (void)showInbox {
+- (void)displayMessageCenterAnimated:(BOOL)animated {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
-        [[UAirship messageCenter] display];
+        [[UAMessageCenter shared].defaultUI displayMessageCenterAnimated:animated];
     } else {
         [[UARCTEventEmitter shared] showInbox];
     }
+}
+
+- (void)displayMessageCenterForMessageID:(NSString *)messageID animated:(BOOL)animated {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
+        [[UAMessageCenter shared].defaultUI displayMessageCenterForMessageID:messageID animated:animated];
+
+    } else {
+        [[UARCTEventEmitter shared] showInboxMessage:messageID];
+    }
+}
+
+- (void)dismissMessageCenterAnimated:(BOOL)animated {
+    // no-op
 }
 
 @end

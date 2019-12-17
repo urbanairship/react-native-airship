@@ -3,15 +3,10 @@
 @import Foundation;
 @import UIKit;
 
-#if __has_include("AirshipLib.h")
-#import "AirshipLib.h"
-#else
-@import AirshipKit;
-#endif
-
+@import Airship;
 
 extern NSString *const UARCTPresentationOptionsStorageKey;
-extern NSString *const UARCTAirshipKitRecommendedVersion;
+extern NSString *const UARCTAirshipRecommendedVersion;
 
 /**
  * Handles takeOff for the Urban Airship SDK.

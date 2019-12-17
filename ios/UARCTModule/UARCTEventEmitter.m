@@ -214,8 +214,8 @@ static UARCTEventEmitter *sharedEventEmitter_;
 #pragma mark Message Center
 
 - (void)inboxUpdated {
-    NSDictionary *body = @{ @"messageUnreadCount": @([UAirship inbox].messageList.unreadCount),
-                            @"messageCount": @([UAirship inbox].messageList.messageCount)
+    NSDictionary *body = @{ @"messageUnreadCount": @([UAMessageCenter shared].messageList.unreadCount),
+                            @"messageCount": @([UAMessageCenter shared].messageList.messageCount)
                             };
 
     [self sendEventWithName:UARCTInboxUpdatedEventName body:body];

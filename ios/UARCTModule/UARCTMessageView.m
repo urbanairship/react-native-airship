@@ -3,7 +3,8 @@
 #import "UARCTMessageView.h"
 
 @interface UARCTMessageView()
-@property (nonatomic, strong) UAWKWebViewNativeBridge *nativeBridge;
+@property (nonatomic, strong) UANativeBridge *nativeBridge;
+@property (nonatomic, strong) UAMessageCenterNativeBridgeExtension *nativeBridgeExtension;
 @property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) UAInboxMessage *message;
 @property (nonatomic, strong) UADisposable *fetchMessagesDisposable;
@@ -22,12 +23,17 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 - (instancetype) init {
     self = [super initWithFrame:CGRectZero];
     if (self) {
-        self.nativeBridge = [[UAWKWebViewNativeBridge alloc] init];
-        self.nativeBridge.forwardDelegate = self;
+        self.nativeBridge = [UANativeBridge nativeBridge];
+        self.nativeBridge.forwardNavigationDelegate = self;
+        self.nativeBridge.nativeBridgeDelegate = self;
+        self.nativeBridgeExtension = [[UAMessageCenterNativeBridgeExtension alloc] init];
+        self.nativeBridge.nativeBridgeExtensionDelegate = self.nativeBridgeExtension;
+
         self.webView = [[WKWebView alloc] initWithFrame:self.bounds];
         self.webView.navigationDelegate = self.nativeBridge;
-        self.webView.allowsLinkPreview = ![UAirship messageCenter].disableMessageLinkPreviewAndCallouts;
+        self.webView.allowsLinkPreview = ![UAMessageCenter shared].defaultUI.disableMessageLinkPreviewAndCallouts;
         self.webView.configuration.dataDetectorTypes = WKDataDetectorTypeAll;
+
         [self addSubview:self.webView];
     }
     return self;
@@ -54,7 +60,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
         self.onLoadStarted(@{ UARCTMessageViewMessageIDKey: messageID });
     }
 
-    UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageID];
+    UAInboxMessage *message = [[UAMessageCenter shared].messageList messageForID:messageID];
     if (message) {
         [self requestMessageBody:message];
         return;
@@ -62,11 +68,11 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 
     UA_WEAKIFY(self);
 
-    self.fetchMessagesDisposable = [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:^{
+    self.fetchMessagesDisposable = [[UAMessageCenter shared].messageList retrieveMessageListWithSuccessBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             UA_STRONGIFY(self)
 
-            UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageID];
+            UAInboxMessage *message = [[UAMessageCenter shared].messageList messageForID:messageID];
             if (message && !message.isExpired) {
                 [self requestMessageBody:message];
             } else {
@@ -93,9 +99,9 @@ NSString *const UARCTMessageViewErrorKey = @"error";
     request.timeoutInterval = 60;
 
     UA_WEAKIFY(self)
-    [[UAirship inboxUser] getUserData:^(UAUserData *userData) {
+    [[UAMessageCenter shared].user getUserData:^(UAUserData *userData) {
         UA_STRONGIFY(self)
-        NSString *auth = [UAUtils userAuthHeaderString:userData];
+        NSString *auth = [UAUtils authHeaderStringWithName:userData.username password:userData.password];
         [request setValue:auth forHTTPHeaderField:@"Authorization"];
         [self.webView loadRequest:request];
     } queue:dispatch_get_main_queue()];
@@ -135,7 +141,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 }
 
 - (void)webView:(WKWebView *)wv didFinishNavigation:(WKNavigation *)navigation {
-    if ([UAirship messageCenter].disableMessageLinkPreviewAndCallouts) {
+    if ([UAMessageCenter shared].defaultUI.disableMessageLinkPreviewAndCallouts) {
         [self.webView evaluateJavaScript:@"document.body.style.webkitTouchCallout='none';" completionHandler:nil];
     }
 
@@ -164,12 +170,12 @@ NSString *const UARCTMessageViewErrorKey = @"error";
     [self webView:webView didFailNavigation:navigation withError:error];
 }
 
-- (void)closeWindowAnimated:(BOOL)animated {
+- (void)close {
     if (self.onClose) {
         self.onClose(@{ UARCTMessageViewMessageIDKey: self.message.messageID });
     }
+    self.message = nil;
 }
-
 
 @end
 
