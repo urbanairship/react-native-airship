@@ -1,16 +1,17 @@
 PODS:
-  - Airship (13.0.1):
-    - Airship/Automation (= 13.0.1)
-    - Airship/Core (= 13.0.1)
-    - Airship/ExtendedActions (= 13.0.1)
-    - Airship/MessageCenter (= 13.0.1)
-  - Airship/Automation (13.0.1):
+  - Airship (13.0.3):
+    - Airship/Automation (= 13.0.3)
+    - Airship/Core (= 13.0.3)
+    - Airship/ExtendedActions (= 13.0.3)
+    - Airship/MessageCenter (= 13.0.3)
+  - Airship/Automation (13.0.3):
     - Airship/Core
-  - Airship/Core (13.0.1)
-  - Airship/ExtendedActions (13.0.1):
+  - Airship/Core (13.0.3)
+  - Airship/ExtendedActions (13.0.3):
     - Airship/Core
-  - Airship/MessageCenter (13.0.1):
+  - Airship/MessageCenter (13.0.3):
     - Airship/Core
+  - AirshipExtensions/NotificationService (13.0.3)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.1)
@@ -229,13 +230,19 @@ PODS:
     - React-cxxreact (= 0.61.1)
     - React-jsi (= 0.61.1)
     - ReactCommon/jscallinvoker (= 0.61.1)
-  - UrbanAirship-iOS-AppExtensions (12.0.0)
-  - UrbanAirship-React-Native-Module (5.0.1):
-    - Airship (= 13.0.1)
+  - RNGestureHandler (1.5.2):
+    - React
+  - RNReanimated (1.4.0):
+    - React
+  - RNScreens (2.0.0-alpha.20):
+    - React
+  - UrbanAirship-React-Native-Module (6.0.0):
+    - Airship (= 13.0.3)
     - React
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - AirshipExtensions/NotificationService
   - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../../node_modules/react-native/Libraries/FBReactNativeSpec`)
@@ -262,15 +269,17 @@ DEPENDENCIES:
   - React-RCTText (from `../../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../../node_modules/react-native/ReactCommon`)
-  - UrbanAirship-iOS-AppExtensions (= 12.0.0)
+  - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
+  - RNReanimated (from `../../node_modules/react-native-reanimated`)
+  - RNScreens (from `../../node_modules/react-native-screens`)
   - UrbanAirship-React-Native-Module (from `../../.`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - Airship
+    - AirshipExtensions
     - boost-for-react-native
-    - UrbanAirship-iOS-AppExtensions
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -321,13 +330,20 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../../node_modules/react-native/ReactCommon"
+  RNGestureHandler:
+    :path: "../../node_modules/react-native-gesture-handler"
+  RNReanimated:
+    :path: "../../node_modules/react-native-reanimated"
+  RNScreens:
+    :path: "../../node_modules/react-native-screens"
   UrbanAirship-React-Native-Module:
     :path: "../../."
   Yoga:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: a7bfc1955ae81f684a45111cae6a07e0d1b4fc4a
+  Airship: 7acdc11f2f8eb130908b85e7a359b9a66173a964
+  AirshipExtensions: 440e1f086e86491a540b8bc407a1a0aaf1694800
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: 0846affdb2924b01093eb696766ecb0104e409e0
@@ -353,10 +369,12 @@ SPEC CHECKSUMS:
   React-RCTText: 81b62b4e7f11531a5154e4daa5617670d5a2d5de
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
-  UrbanAirship-iOS-AppExtensions: 881db9825b7bdb872787d6aa5b249b38bea7fa67
-  UrbanAirship-React-Native-Module: b78e59be19d86f7496bd073a30dce21e727867ff
+  RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
+  RNScreens: 36f8c83e5e23b6bfd5b912148453d81e335573eb
+  UrbanAirship-React-Native-Module: 8013246134095a84925ed6651ea92581bf3094ab
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: 1a1eaeba13969ed54a7dcc7c65fe57b885e80a19
+PODFILE CHECKSUM: de1a3c7fbab8ecc2c3b4ec98dfb4723c3ebfdfd9
 
 COCOAPODS: 1.8.4
