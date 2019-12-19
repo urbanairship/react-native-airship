@@ -1,5 +1,5 @@
 
-Version 6.0.0 - December 18, 2019
+Version 6.0.0 - December 19, 2019
 =================================
 Major release to update iOS to modularized SDK 13.0.2, update Android SDK to 12.1.0,
 add cross-platform attribute support and modernize the Message Center Javascript
@@ -7,7 +7,7 @@ and Typescript interfaces.
 
 Changes
 -------
-- Updated iOS SDK to 13.0.2
+- Updated iOS SDK to 13.0.3
 - Updated Android SDK to 12.1.0
 - Added attributes support
 - Updated Message Center interfaces to reflect the removal of overlay Message Center views
