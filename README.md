@@ -1,15 +1,15 @@
-# Urban Airship React Native
+# Airship React Native
 
-A React Native module for Urban Airship's iOS and Android SDK.
+A React Native module for Airship's iOS and Android SDK.
 
 ### Resources
 
-* [Getting started guide](http://docs.urbanairship.com/platform/react-native/)
-* [API docs](http://docs.urbanairship.com/reference/libraries/react-native/latest/index.html)
+* [Getting started guide](http://docs.airship.com/platform/react-native/)
+* [API docs](http://docs.airship.com/reference/libraries/react-native/latest/index.html)
 
 ### Issues
 
-Please visit https://support.urbanairship.com/ for any issues integrating or using this module.
+Please visit https://support.airship.com/ for any issues integrating or using this module.
 
 ### Requirements:
  - Xcode 11+
@@ -59,7 +59,7 @@ cd ios && pod install
 
 4) Optional. In order to take advantage of iOS 10 notification attachments,
 such as images, animated gifs, and video, you will need to create a notification
-service extension by following the [iOS Notification Service Extension Guide](https://docs.urbanairship.com/platform/reference/ios-extension/)
+service extension by following the [iOS Notification Service Extension Guide](https://docs.airship.com/platform/reference/ios-extension/)
 
 ## Android Setup
 
