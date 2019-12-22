@@ -2,7 +2,12 @@
 
 #import <Foundation/Foundation.h>
 
+#if __has_include("AirshipLib.h")
+#import "UAMessageCenter.h"
+#import "UADefaultMessageCenterUI.h"
+#else
 @import Airship;
+#endif
 
 extern NSString *const UARCTAutoLaunchMessageCenterKey;
 

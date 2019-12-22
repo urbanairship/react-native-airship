@@ -3,7 +3,11 @@
 @import Foundation;
 @import UIKit;
 
+#if __has_include("AirshipLib.h")
+#import "AirshipLib.h"
+#else
 @import Airship;
+#endif
 
 extern NSString *const UARCTPresentationOptionsStorageKey;
 extern NSString *const UARCTAirshipRecommendedVersion;

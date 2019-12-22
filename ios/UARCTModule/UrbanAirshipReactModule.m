@@ -7,7 +7,13 @@
 #import "UARCTMessageCenter.h"
 #import "UARCTMessageViewController.h"
 
+#if __has_include("AirshipLib.h")
+#import "UAInAppMessageHTMLAdapter.h"
+#import "UAMessageCenterResources.h"
+#import "UAInboxMessage.h"
+#else
 @import Airship;
+#endif
 
 @interface UrbanAirshipReactModule()
 @property (nonatomic, weak) UARCTMessageViewController *messageViewController;

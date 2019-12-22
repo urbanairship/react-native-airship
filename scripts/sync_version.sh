@@ -11,4 +11,4 @@ if [ -z "$1" ]
 fi
 
 # Update UARCTModuleVersion.m for current install
-sed -i '' "s/\(versionString *= *@\)\".*\"/\1\"$VERSION\"/g" ios/UARCTModule/UARCTModuleVersion.m
+sed -i '' "s/\(moduleVersionString *= *@\)\".*\"/\1\"$VERSION\"/g" ios/UARCTModule/UARCTModuleVersion.m
