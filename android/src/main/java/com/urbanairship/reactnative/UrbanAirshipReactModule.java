@@ -3,7 +3,6 @@
 package com.urbanairship.reactnative;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -59,7 +58,6 @@ import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
 import static com.urbanairship.actions.ActionResult.STATUS_EXECUTION_ERROR;
 import static com.urbanairship.actions.ActionResult.STATUS_REJECTED_ARGUMENTS;
-import static com.urbanairship.reactnative.BuildConfig.MODULE_VERSION;
 import static com.urbanairship.reactnative.Utils.convertDynamic;
 import static com.urbanairship.reactnative.Utils.convertJsonValue;
 
@@ -127,8 +125,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         });
 
         EventEmitter.shared().attachReactContext(getReactApplicationContext());
-
-        UAirship.shared().getAnalytics().registerSDKExtension(Analytics.EXTENSION_REACT_NATIVE, MODULE_VERSION);
     }
 
     @Override
