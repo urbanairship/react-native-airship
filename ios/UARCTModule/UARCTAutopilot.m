@@ -1,12 +1,13 @@
-/* Copyright Urban Airship and Contributors */
+/* Copyright Airship and Contributors */
 
 #import "UARCTAutopilot.h"
 #import "UARCTEventEmitter.h"
 #import "UARCTDeepLinkAction.h"
 #import "UARCTMessageCenter.h"
+#import "UARCTModuleVersion.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
-NSString *const UARCTAirshipRecommendedVersion = @"13.0.1";
+NSString *const UARCTAirshipRecommendedVersion = @"13.0.4";
 
 @implementation UARCTAutopilot
 
@@ -27,6 +28,8 @@ static BOOL disabled = NO;
     }
 
     [UAirship takeOff];
+
+    [[UAirship analytics] registerSDKExtension:UASDKExtensionReactNative version:[UARCTModuleVersion get]];
 
     [UAirship push].pushNotificationDelegate = [UARCTEventEmitter shared];
     [UAirship push].registrationDelegate = [UARCTEventEmitter shared];

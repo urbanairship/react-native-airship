@@ -4,7 +4,12 @@
 #import <React/RCTEventEmitter.h>
 #import "UARCTDeepLinkAction.h"
 
+#if __has_include("AirshipLib.h")
+#import "UAMessageCenter.h"
+#import "UAInboxMessageList.h"
+#else
 @import Airship;
+#endif
 
 extern NSString *const UARCTNotificationPresentationAlertKey;
 extern NSString *const UARCTNotificationPresentationBadgeKey;

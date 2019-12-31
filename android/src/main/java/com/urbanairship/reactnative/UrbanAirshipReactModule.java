@@ -3,7 +3,6 @@
 package com.urbanairship.reactnative;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +37,7 @@ import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
+import com.urbanairship.analytics.Analytics;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.PushMessage;
@@ -104,7 +104,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @Override
     public void initialize() {
         super.initialize();
-
 
         getReactApplicationContext().addLifecycleEventListener(new LifecycleEventListener() {
             @Override

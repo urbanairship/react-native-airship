@@ -12,6 +12,7 @@ import com.urbanairship.Autopilot;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.DeepLinkListener;
+import com.urbanairship.analytics.Analytics;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.NotificationActionButtonInfo;
 import com.urbanairship.push.NotificationInfo;
@@ -27,6 +28,7 @@ import com.urbanairship.reactnative.events.RegistrationEvent;
 import com.urbanairship.reactnative.events.ShowInboxEvent;
 import com.urbanairship.richpush.RichPushInbox;
 
+import static com.urbanairship.reactnative.BuildConfig.MODULE_VERSION;
 import static com.urbanairship.reactnative.UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER;
 
 /**
@@ -112,7 +114,7 @@ public class ReactAutopilot extends Autopilot {
             @Override
             public void onNotificationDismissed(@NonNull NotificationInfo notificationInfo) {}
         });
-        
+
         // Register a listener for inbox update event
         airship.getInbox().addListener(new RichPushInbox.Listener() {
             @Override
@@ -137,6 +139,8 @@ public class ReactAutopilot extends Autopilot {
         // Set our custom notification provider
         ReactNotificationProvider notificationProvider = new ReactNotificationProvider(context, airship.getAirshipConfigOptions());
         airship.getPushManager().setNotificationProvider(notificationProvider);
+
+        airship.shared().getAnalytics().registerSDKExtension(Analytics.EXTENSION_REACT_NATIVE, MODULE_VERSION);
 
         loadCustomNotificationChannels(context, airship);
         loadCustomNotificationButtonGroups(context, airship);

@@ -1,12 +1,23 @@
 apply plugin: 'com.android.library'
 
+import groovy.json.JsonSlurper
+
 android {
     compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
+
+        buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
     }
+}
+
+def getModuleVersion() {
+    def jsonFile = file('../package.json')
+    def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+
+    return parsedJson["version"]
 }
 
 def safeExtGet (prop, fallback) {
@@ -15,7 +26,7 @@ def safeExtGet (prop, fallback) {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation ('com.urbanairship.android:urbanairship-fcm:12.0.0') {
+    implementation ('com.urbanairship.android:urbanairship-fcm:12.1.0') {
       exclude group: 'com.google.firebase', module: 'firebase-messaging'
     }
     implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '20.1.0')}"
