@@ -7,7 +7,7 @@ and Typescript interfaces.
 
 Changes
 -------
-- Updated iOS SDK to 13.0.3
+- Updated iOS SDK to 13.0.4
 - Updated Android SDK to 12.1.0
 - Added attributes support
 - Updated Message Center interfaces to reflect the removal of overlay Message Center views
