@@ -1,7 +1,8 @@
 
-Version 6.0.1 - January 2, 2020
+Version 6.0.1 - January 3, 2020
 =================================
-Patch release to fix npm installation issue.
+Patch release to fix an issue causing a necessary script to be
+excluded from the npm package. Applications using 6.0.0 should update.
 
 Changes
 -------
