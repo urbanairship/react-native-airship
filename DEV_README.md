@@ -1,4 +1,4 @@
-# Urban Airship React Native development
+# Airship React Native development
 
 The example is set up to pull the Airship module from the root directory.
 
