@@ -1,4 +1,13 @@
 
+Version 6.0.1 - January 3, 2020
+=================================
+Patch release to fix an issue causing a necessary script to be
+excluded from the npm package. Applications using 6.0.0 should update.
+
+Changes
+-------
+- Fixed npm configuration to include a required script.
+
 Version 6.0.0 - December 31, 2019
 =================================
 Major release to update iOS to modularized SDK 13.0.4, update Android SDK to 12.1.0,

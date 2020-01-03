@@ -1,6 +1,6 @@
-# Urban Airship React Native Sample
+# Airship React Native Sample
 
-A basic sample application that integrates the Urban Airship React Native module.
+A basic sample application that integrates the Airship React Native module.
 
 ## Setup
 

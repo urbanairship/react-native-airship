@@ -1,4 +1,4 @@
 example
 .github
-scripts
 js/__tests__
+scripts/run_ci_tasks.sh
