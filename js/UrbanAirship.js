@@ -302,6 +302,15 @@ class UrbanAirship {
   }
 
   /**
+    * Initiates screen tracking for a specific app screen, must be called once per tracked screen.
+    *
+    * @param {String} screen The screen's string identifier.
+    */
+  static trackScreen(screen: string) {
+    UrbanAirshipModule.trackScreen(screen);
+  }
+
+  /**
    * Gets the channel ID.
    *
    * @return {Promise.<string>} A promise with the result.

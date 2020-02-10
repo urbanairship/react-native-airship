@@ -129,6 +129,11 @@ RCT_REMAP_METHOD(isAnalyticsEnabled,
     resolve(@([UAirship shared].analytics.enabled));
 }
 
+RCT_EXPORT_METHOD(trackScreen:(NSString *)screen) {
+    [[UAirship shared].analytics trackScreen:screen]
+}
+
+
 RCT_REMAP_METHOD(getChannelId,
                  getChannelId_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
