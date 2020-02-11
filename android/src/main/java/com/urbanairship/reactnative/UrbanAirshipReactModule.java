@@ -393,6 +393,16 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Initiates screen tracking for a specific app screen, must be called once per tracked screen.
+     *
+     * @param {String} screen The screen's string identifier.
+     */
+    @ReactMethod
+    public void trackScreen(String screen) {
+        UAirship.shared().getAnalytics().trackScreen(screen);
+    }
+
+    /**
      * Enables/Disables location updates.
      *
      * @param enabled {@code true} to enable location updates, {@code false} to disable.
