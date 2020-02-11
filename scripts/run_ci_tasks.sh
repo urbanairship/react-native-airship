@@ -34,7 +34,7 @@ while true; do
 done
 
 # install tools not present on raw machine
-if [ "$BITRISE_IO" = "true" ]; then
+if [ "$GITHUB_ACTIONS" = "true" ]; then
     npm install -g react-native-cli
 fi
 
@@ -42,8 +42,8 @@ fi
 react-native -v
 
 # set up react-native project
-if [[ "$BITRISE_SOURCE_DIR" != "" ]]; then
-    REPO_PATH="${BITRISE_SOURCE_DIR}"
+if [[ "$GITHUB_WORKSPACE" != "" ]]; then
+    REPO_PATH="${GITHUB_WORKSPACE}"
 else
     REPO_PATH=`dirname "${0}"`/../
 fi
@@ -62,12 +62,8 @@ if $ANDROID ; then
     # Make sure google-services.json exists
     GOOGLE_SERVICES_FILE_PATH="${PROJECT_PLATFORM_PATH}/app/google-services.json"
     if [[ ! -f ${GOOGLE_SERVICES_FILE_PATH} ]]; then
-      if [[ "$GOOGLE_SERVICES_JSON" == "" ]]; then
         echo "ERROR: You must provide ${GOOGLE_SERVICES_FILE_PATH}."
         exit 1
-      else
-        echo $GOOGLE_SERVICES_JSON > ${GOOGLE_SERVICES_FILE_PATH}
-      fi
     fi
 
     # Make sure airshipconfig.properties exists
@@ -92,7 +88,7 @@ if $IOS; then
     TEST_DESTINATION='platform=iOS Simulator,OS=latest,name=iPhone Xʀ'
 
     # install the SDK
-    if [ "$BITRISE_IO" = "true" ]; then
+    if [ "$GITHUB_ACTIONS" = "true" ]; then
         pod repo update
     fi
     pod install
