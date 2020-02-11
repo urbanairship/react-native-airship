@@ -1,9 +1,9 @@
 {
   "name": "urbanairship-react-native",
-  "version": "6.0.1",
-  "description": "Urban Airship plugin for React Native apps.",
+  "version": "6.1.0",
+  "description": "Airship plugin for React Native apps.",
   "main": "./js/index.js",
-  "author": "Urban Airship",
+  "author": "Airship",
   "homepage": "https://github.com/urbanairship/react-native-module",
   "keywords": [
     "react",
