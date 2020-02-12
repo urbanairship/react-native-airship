@@ -14,6 +14,8 @@ set -o pipefail
 set -e
 set -x
 
+REPO_PATH=`dirname "${0}"`/../
+
 # get platforms
 ANDROID=false
 IOS=false
@@ -33,48 +35,35 @@ while true; do
   shift
 done
 
-# install tools not present on raw machine
-if [ "$GITHUB_ACTIONS" = "true" ]; then
-    sudo npm install -g react-native-cli
-fi
-
-# verify react-native CLI is installed
-react-native -v
-
-# set up react-native project
-if [[ "$GITHUB_WORKSPACE" != "" ]]; then
-    REPO_PATH="${GITHUB_WORKSPACE}"
-else
-    REPO_PATH=`dirname "${0}"`/../
-fi
-
 cd $REPO_PATH
-pwd
+
 npm install
+
+# Tests
+npm run test
 
 # Android
 if $ANDROID ; then
     cd example/android
 
-    # build Android
-    PROJECT_PLATFORM_PATH="$(pwd)"
-
     # Make sure google-services.json exists
-    GOOGLE_SERVICES_FILE_PATH="${PROJECT_PLATFORM_PATH}/app/google-services.json"
+    GOOGLE_SERVICES_FILE_PATH="android/app/google-services.json"
     if [[ ! -f ${GOOGLE_SERVICES_FILE_PATH} ]]; then
         echo "ERROR: You must provide ${GOOGLE_SERVICES_FILE_PATH}."
         exit 1
     fi
 
     # Make sure airshipconfig.properties exists
-    if [[ ! -f ${PROJECT_PLATFORM_PATH}/app/src/main/assets/airshipconfig.properties ]]; then
-      cp -np ${PROJECT_PLATFORM_PATH}/app/src/main/assets/airshipconfig.properties.sample ${PROJECT_PLATFORM_PATH}/app/src/main/assets/airshipconfig.properties || true
+    AIRSHIP_CONFIG_FILE_PATH="app/src/main/assets/airshipconfig.properties"
+    SAMPLE_AIRSHIP_CONFIG_FILE_PATH="app/src/main/assets/airshipconfig.properties.sample"
+    if [[ ! -f ${AIRSHIP_CONFIG_FILE_PATH} ]]; then
+      cp -np $SAMPLE_AIRSHIP_CONFIG_FILE_PATH $AIRSHIP_CONFIG_FILE_PATH || true
     fi
 
-    # Build sample
+    # Build
     ./gradlew app:assembleDebug
 
-    cd ../../
+    cd $REPO_PATH
 fi
 
 # iOS
@@ -87,10 +76,7 @@ if $IOS; then
     TARGET_SDK='iphonesimulator'
     TEST_DESTINATION='platform=iOS Simulator,OS=latest,name=iPhone 11 Pro'
 
-    # install the SDK
-    if [ "$GITHUB_ACTIONS" = "true" ]; then
-        pod repo update
-    fi
+    # Install the pods
     pod install
 
     # Make sure AirshipConfig.plist exists
@@ -99,5 +85,5 @@ if $IOS; then
     # Use Debug configurations and a simulator SDK so the build process doesn't attempt to sign the output
     xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipSample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipSample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
 
-    cd ..
+    cd $REPO_PATH
 fi
