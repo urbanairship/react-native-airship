@@ -30,7 +30,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    needs: [analyze, android, ios]
+    needs: [checkout, android, ios]
     steps:
       #- run: npm publish --access public
       - uses: codfish/semantic-release-action@master
