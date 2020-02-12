@@ -49,7 +49,7 @@ if $ANDROID ; then
     # Build
     ./gradlew app:assembleDebug
 
-    cd $REPO_PATH
+    cd -
 fi
 
 # iOS
@@ -71,5 +71,5 @@ if $IOS; then
     # Use Debug configurations and a simulator SDK so the build process doesn't attempt to sign the output
     xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipSample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipSample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
 
-    cd $REPO_PATH
+    cd -
 fi
