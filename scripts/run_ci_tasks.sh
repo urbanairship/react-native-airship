@@ -35,8 +35,7 @@ done
 
 # install tools not present on raw machine
 if [ "$GITHUB_ACTIONS" = "true" ]; then
-    chmod +w /usr/local/lib/node_modules/
-    npm install -g react-native-cli
+    sudo npm install -g react-native-cli
 fi
 
 # verify react-native CLI is installed
@@ -86,7 +85,7 @@ if $IOS; then
     PROJECT_PLATFORM_PATH="$(pwd)"
     DERIVED_DATA=$(mktemp -d /tmp/ci-derived-data-XXXXX)
     TARGET_SDK='iphonesimulator'
-    TEST_DESTINATION='platform=iOS Simulator,OS=latest,name=iPhone 11 Pro'
+    TEST_DESTINATION='platform=iOS Simulator,OS=latest,name=iPhone 11 Pro Max'
 
     # install the SDK
     if [ "$GITHUB_ACTIONS" = "true" ]; then
