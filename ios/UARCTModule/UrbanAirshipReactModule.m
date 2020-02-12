@@ -130,7 +130,7 @@ RCT_REMAP_METHOD(isAnalyticsEnabled,
 }
 
 RCT_EXPORT_METHOD(trackScreen:(NSString *)screen) {
-    [[UAirship shared].analytics trackScreen:screen]
+    [[UAirship shared].analytics trackScreen:screen];
 }
 
 RCT_REMAP_METHOD(getChannelId,
