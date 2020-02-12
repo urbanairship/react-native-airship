@@ -64,6 +64,14 @@ RCT_EXPORT_METHOD(enableChannelCreation) {
     [[UAirship channel] enableChannelCreation];
 }
 
+RCT_EXPORT_METHOD(setDataCollectionEnabled:(BOOL)enabled) {
+    [[UAirship shared] setDataCollectionEnabled:enabled];
+}
+
+RCT_EXPORT_METHOD(setPushTokenRegistrationEnabled:(BOOL)enabled) {
+    [[UAirship push] setPushTokenRegistrationEnabled:enabled];
+}
+
 RCT_REMAP_METHOD(isUserNotificationsEnabled,
                  isUserNotificationsEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
@@ -85,6 +93,20 @@ RCT_REMAP_METHOD(enableUserPushNotifications,
     [[UAirship push] enableUserPushNotifications:^(BOOL success) {
         resolve(@(success));
     }];
+}
+
+RCT_REMAP_METHOD(isDataCollectionEnabled,
+                 isDataCollectionEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    resolve(@([UAirship shared].isDataCollectionEnabled));
+}
+
+RCT_REMAP_METHOD(isPushTokenRegistrationEnabled,
+                 isPushTokenRegistrationEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    resolve(@([UAirship push].pushTokenRegistrationEnabled));
 }
 
 RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {

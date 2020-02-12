@@ -213,6 +213,46 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Enables/disables data collection.
+     *
+     * @param enabled {@code true} to allow data collection., {@code false} to disallow.
+     */
+    @ReactMethod
+    public void setDataCollectionEnabled(boolean enabled) {
+        UAirship.shared().setDataCollectionEnabled(enabled);
+    }
+
+    /**
+     * Checks if data collection is enabled.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void isDataCollectionEnabled(Promise promise) {
+        promise.resolve(UAirship.shared().isDataCollectionEnabled());
+    }
+
+    /**
+     * Enables/disables push token registration.
+     *
+     * @param enabled {@code true} to allow push token registration., {@code false} to disallow.
+     */
+    @ReactMethod
+    public void setPushTokenRegistrationEnabled(boolean enabled) {
+        UAirship.shared().getPushManager().setPushTokenRegistrationEnabled(enabled);
+    }
+
+    /**
+     * Checks if push token registration is enabled.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void isPushTokenRegistrationEnabled(Promise promise) {
+        promise.resolve(UAirship.shared().getPushManager().isPushTokenRegistrationEnabled());
+    }
+
+    /**
      * Checks if the app's notifications are enabled.
      *
      * @param promise The JS promise.
