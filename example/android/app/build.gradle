@@ -160,7 +160,7 @@ dependencies {
     } else {
         implementation 'org.webkit:android-jsc:+'
     }
-    
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
 }
@@ -175,4 +175,8 @@ task copyDownloadableDepsToLibs(type: Copy) {
 apply from: file("../../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
 // set custom root because we're in a monorepo
 applyNativeModulesAppBuildGradle(project, "../..")
-apply plugin: 'com.google.gms.google-services'
+
+def googleServicesFile = rootProject.file('app/google-services.json')
+if (googleServicesFile.exists()) {
+    apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
+}

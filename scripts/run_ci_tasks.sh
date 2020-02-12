@@ -46,20 +46,6 @@ npm run test
 if $ANDROID ; then
     cd example/android
 
-    # Make sure google-services.json exists
-    GOOGLE_SERVICES_FILE_PATH="android/app/google-services.json"
-    if [[ ! -f ${GOOGLE_SERVICES_FILE_PATH} ]]; then
-        echo "ERROR: You must provide ${GOOGLE_SERVICES_FILE_PATH}."
-        exit 1
-    fi
-
-    # Make sure airshipconfig.properties exists
-    AIRSHIP_CONFIG_FILE_PATH="app/src/main/assets/airshipconfig.properties"
-    SAMPLE_AIRSHIP_CONFIG_FILE_PATH="app/src/main/assets/airshipconfig.properties.sample"
-    if [[ ! -f ${AIRSHIP_CONFIG_FILE_PATH} ]]; then
-      cp -np $SAMPLE_AIRSHIP_CONFIG_FILE_PATH $AIRSHIP_CONFIG_FILE_PATH || true
-    fi
-
     # Build
     ./gradlew app:assembleDebug
 
