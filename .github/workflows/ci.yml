@@ -1,11 +1,6 @@
 name: CI
 
-#on: [pull_request]
-
-on:
-  push:
-    branches:
-      - MOBILE-1285
+on: [pull_request]
 
 jobs:
   android:
