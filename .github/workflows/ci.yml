@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+      - run: npm install
       - name: Run CI
         run: bash ./scripts/run_ci_tasks.sh -a
   ios:
