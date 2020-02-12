@@ -848,21 +848,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
             String action = operation.getString(ATTRIBUTE_OPERATION_TYPE);
             String key = operation.getString(ATTRIBUTE_OPERATION_KEY);
-            ReadableType type = null;
 
             if (action == null || key == null) {
                 continue;
             }
 
             if (ATTRIBUTE_OPERATION_SET.equals(action)) {
-                type = operation.getType(ATTRIBUTE_OPERATION_VALUE);
-                if (type == ReadableType.String) {
+                ReadableType type = operation.getType(ATTRIBUTE_OPERATION_VALUE);
+                if (ReadableType.String == type) {
                     String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
                     if (value == null) {
                         continue;
                     }
                     editor.setAttribute(key, value);
-                } else if (type == ReadableType.Number) {
+                } else if (ReadableType.Number == type) {
                     double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
                     editor.setAttribute(key, String.valueOf(value));
                 }
