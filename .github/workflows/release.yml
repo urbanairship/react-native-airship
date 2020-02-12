@@ -61,8 +61,6 @@ jobs:
           token: ${{ secrets.GitHub_PAT }}
       - name: Add documentation and commit
         run: |
-         ls -a
-         cd mobile-docs
          bash add.sh react-native ../out $LIB_VERSION
         #git add .
         #git commit -a -m "Added docs for react-native v${LIB_VERSION}"
