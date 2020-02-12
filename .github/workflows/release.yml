@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    #tags:
+      #- "[0-9]+.[0-9]+.[0-9]+*"
+    branches:
+       - MOBILE-1287
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@master
+      - name: Run Android CI
+        run: bash ./scripts/run_ci_tasks.sh -a
+        
+  ios:
+    runs-on: macos-latest
+    steps:
+      - name: Run iOS CI
+        run: bash ./scripts/run_ci_tasks.sh -i
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [analyze, android, ios]
+    steps:
+      #- run: npm publish --access public
+      - uses: codfish/semantic-release-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        
+  finished:
+    runs-on: ubuntu-latest
+    needs: [checkout, android, ios, publish]
+    steps:
+      - name: Slack Notification
+        uses: homoluctus/slatify@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: ":raised_hands: Airship React native Plugin Released! :raised_hands:"
+          url: ${{ secrets.MOBILE_SLACK_WEBHOOK }}
