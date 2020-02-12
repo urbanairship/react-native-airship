@@ -33,6 +33,11 @@ while true; do
   shift
 done
 
+# install tools not present on raw machine
+if [ "$GITHUB_ACTIONS" = "true" ]; then
+    npm install react-native-cli
+fi
+
 # verify react-native CLI is installed
 react-native -v
 
