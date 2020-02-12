@@ -98,7 +98,6 @@ RCT_REMAP_METHOD(getNamedUser,
     resolve([UAirship namedUser].identifier);
 }
 
-
 RCT_EXPORT_METHOD(addTag:(NSString *)tag) {
     if (tag) {
         [[UAirship channel] addTag:tag];
@@ -267,13 +266,15 @@ RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
 
     for (NSDictionary *operation in operations) {
         NSString *action = operation[@"action"];
-
-        // Only strings are currently supported
         NSString *name = operation[@"key"];
-        NSString *value = operation[@"value"];
+        id value = operation[@"value"];
 
         if ([action isEqualToString:@"set"]) {
-            [mutations setString:value forAttribute:name];
+            if ([value isKindOfClass:[NSString class]]) {
+                [mutations setString:value forAttribute:name];
+            } else if ([value isKindOfClass:[NSNumber class]]) {
+                [mutations setNumber:value forAttribute:name];
+            }
         } else if ([action isEqualToString:@"remove"]) {
             [mutations removeAttribute:name];
         }

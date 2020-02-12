@@ -1,17 +1,17 @@
 PODS:
-  - Airship (13.0.4):
-    - Airship/Automation (= 13.0.4)
-    - Airship/Core (= 13.0.4)
-    - Airship/ExtendedActions (= 13.0.4)
-    - Airship/MessageCenter (= 13.0.4)
-  - Airship/Automation (13.0.4):
+  - Airship (13.1.0):
+    - Airship/Automation (= 13.1.0)
+    - Airship/Core (= 13.1.0)
+    - Airship/ExtendedActions (= 13.1.0)
+    - Airship/MessageCenter (= 13.1.0)
+  - Airship/Automation (13.1.0):
     - Airship/Core
-  - Airship/Core (13.0.4)
-  - Airship/ExtendedActions (13.0.4):
+  - Airship/Core (13.1.0)
+  - Airship/ExtendedActions (13.1.0):
     - Airship/Core
-  - Airship/MessageCenter (13.0.4):
+  - Airship/MessageCenter (13.1.0):
     - Airship/Core
-  - AirshipExtensions/NotificationService (13.0.4)
+  - AirshipExtensions/NotificationService (13.1.0)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.1)
@@ -237,7 +237,7 @@ PODS:
   - RNScreens (2.0.0-alpha.22):
     - React
   - UrbanAirship-React-Native-Module (6.0.1):
-    - Airship (= 13.0.4)
+    - Airship (= 13.1.0)
     - React
   - Yoga (1.14.0)
 
@@ -272,7 +272,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../node_modules/react-native-screens`)
-  - UrbanAirship-React-Native-Module (from `../../.`)
+  - UrbanAirship-React-Native-Module (from `../../`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -337,13 +337,13 @@ EXTERNAL SOURCES:
   RNScreens:
     :path: "../../node_modules/react-native-screens"
   UrbanAirship-React-Native-Module:
-    :path: "../../."
+    :path: "../../"
   Yoga:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 81fd9eb432ff6db75140d5412915803806423cfb
-  AirshipExtensions: a42fc1cf899f6bb79b087d5e70f3fd488a61a88c
+  Airship: d134f9b40aa0f82a676ade69c0293d508034d3ce
+  AirshipExtensions: d7c19cb940daf475aa55af0778d8adab13369b03
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: 0846affdb2924b01093eb696766ecb0104e409e0
@@ -372,9 +372,9 @@ SPEC CHECKSUMS:
   RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNScreens: 6adf01eb4080f44af6cca551207c6b0505066857
-  UrbanAirship-React-Native-Module: 65addbd5d332cc6e506703f3d341c8ae7e12e910
+  UrbanAirship-React-Native-Module: 9f77cdde75bb46957b4398dc86a7c9a5ca9cc3a0
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: de1a3c7fbab8ecc2c3b4ec98dfb4723c3ebfdfd9
+PODFILE CHECKSUM: b5e5abc1e0c2305331ac61b6ea3a6b8509c1450b
 
 COCOAPODS: 1.8.4
