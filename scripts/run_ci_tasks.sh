@@ -35,7 +35,8 @@ done
 
 # install tools not present on raw machine
 if [ "$GITHUB_ACTIONS" = "true" ]; then
-    sudo npm install -g react-native-cli
+    chmod +w /usr/local/lib/node_modules/
+    npm install -g react-native-cli
 fi
 
 # verify react-native CLI is installed
