@@ -61,6 +61,8 @@ jobs:
           token: ${{ secrets.GitHub_PAT }}
       - name: Add documentation and commit
         run: |
+         pwd
+         ls
          cd mobile-docs
          bash add.sh react-native ../out $LIB_VERSION
         #git add .
@@ -69,7 +71,8 @@ jobs:
         
   publish:
     runs-on: ubuntu-latest
-    needs: [android, ios, publish_docs]
+    #needs: [android, ios, publish_docs]
+    needs: [publish_docs]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
