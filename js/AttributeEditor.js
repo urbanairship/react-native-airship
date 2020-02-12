@@ -28,6 +28,22 @@ class AttributeEditor {
   }
 
   /**
+   * Adds number attribute.
+   * @instance
+   * @memberof AttributeEditor
+   * @function setDouble
+   *
+   * @param {number} value The attribute value.
+   * @param {string} name The attribute name.
+   * @return {AttributeEditor} The attribute editor instance.
+   */
+  setAttribute(value: ?number, name: string): AttributeEditor {
+    var operation = { "action": "set", "value": value, "key": name }
+    this.operations.push(operation)
+    return this;
+  }
+
+  /**
    * Removes the attribute.
    * @instance
    * @memberof AttributeEditor

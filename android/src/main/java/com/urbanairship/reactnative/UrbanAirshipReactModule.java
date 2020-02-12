@@ -28,6 +28,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -847,14 +848,24 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
             String action = operation.getString(ATTRIBUTE_OPERATION_TYPE);
             String key = operation.getString(ATTRIBUTE_OPERATION_KEY);
-            String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
+            ReadableType type = null;
 
-            if (action == null || key == null || value == null) {
+            if (action == null || key == null) {
                 continue;
             }
 
             if (ATTRIBUTE_OPERATION_SET.equals(action)) {
-                editor.setAttribute(key, value);
+                type = operation.getType(ATTRIBUTE_OPERATION_VALUE);
+                if (type == ReadableType.String) {
+                    String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
+                    if (value == null) {
+                        continue;
+                    }
+                    editor.setAttribute(key, value);
+                } else if (type == ReadableType.Number) {
+                    double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
+                    editor.setAttribute(key, String.valueOf(value));
+                }
             } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
                 editor.removeAttribute(key);
             }
