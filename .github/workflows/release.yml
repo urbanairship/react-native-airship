@@ -61,7 +61,7 @@ jobs:
           token: ${{ secrets.GitHub_PAT }}
       - name: Add documentation and commit
         run: |
-         bash add.sh react-native ../out $LIB_VERSION
+         bash add.sh react-native ../out ${{ steps.lib_version.outputs.lib_version }}
         #git add .
         #git commit -a -m "Added docs for react-native v${LIB_VERSION}"
         #git push origin master
