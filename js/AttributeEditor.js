@@ -21,23 +21,7 @@ class AttributeEditor {
    * @param {string} name The attribute name.
    * @return {AttributeEditor} The attribute editor instance.
    */
-  setAttribute(value: string, name: string): AttributeEditor {
-    var operation = { "action": "set", "value": value, "key": name }
-    this.operations.push(operation)
-    return this;
-  }
-
-  /**
-   * Adds number attribute.
-   * @instance
-   * @memberof AttributeEditor
-   * @function setDouble
-   *
-   * @param {number} value The attribute value.
-   * @param {string} name The attribute name.
-   * @return {AttributeEditor} The attribute editor instance.
-   */
-  setAttribute(value: ?number, name: string): AttributeEditor {
+  setAttribute(name: string, value: string|number): AttributeEditor {
     var operation = { "action": "set", "value": value, "key": name }
     this.operations.push(operation)
     return this;

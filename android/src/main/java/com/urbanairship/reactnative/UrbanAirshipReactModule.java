@@ -863,7 +863,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                     editor.setAttribute(key, value);
                 } else if (ReadableType.Number == type) {
                     double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
-                    editor.setAttribute(key, String.valueOf(value));
+                    editor.setAttribute(key, value);
                 }
             } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
                 editor.removeAttribute(key);
