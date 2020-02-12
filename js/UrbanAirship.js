@@ -172,6 +172,50 @@ class UrbanAirship {
   }
 
   /**
+   * Global data collection flag. Enabled by default, unless `dataCollectionOptInEnabled`
+   * is set to `YES` in AirshipConfig.
+   * When disabled, the device will stop collecting and sending data for named user, events,
+   * tags, attributes, associated identifiers, and location from the device.
+   *
+   * Push notifications will continue to work only if `UrbanAirshipModule.setPushTokenRegistrationEnabled`
+   * has been explicitly set to `YES`, otherwise it will default to the current state  of `isDataCollectionEnabled`.
+   *
+   * @note To disable by default, set the `dataCollectionOptInEnabled` flag to `YES`in AirshipConfig.
+   * @param {boolean} enabled true to enable data collection, false to disable.
+   */
+  static setDataCollectionEnabled(enabled: boolean) {
+    UrbanAirshipModule.setDataCollectionEnabled(enabled);
+  }
+
+  /**
+   * Checks if data collection is enabled or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
+  static isDataCollectionEnabled(): Promise<boolean> {
+    return UrbanAirshipModule.isDataCollectionEnabled();
+  }
+
+  /**
+   * Enables/disables sending the device token during channel registration.
+   * Defaults to `UrbanAirshipModule.isDataCollectionEnabled`. If set to `NO`, the app will not be able to receive push
+   * notifications.
+   * @param {boolean} enabled true to enable push token registration, false to disable.
+   */
+  static setPushTokenRegistrationEnabled(enabled: boolean) {
+    UrbanAirshipModule.setPushTokenRegistrationEnabled(enabled);
+  }
+
+  /**
+   * Checks if push token registration is enabled or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
+  static isPushTokenRegistrationEnabled(): Promise<boolean> {
+    return UrbanAirshipModule.isPushTokenRegistrationEnabled();
+  }
+
+  /**
    * Enables user notifications.
    *
    * @return {Promise.<boolean>} A promise that returns true if enablement was authorized
