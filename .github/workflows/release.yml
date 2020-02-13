@@ -36,8 +36,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          path: main
       - uses: actions/setup-node@v1
         with:
           node-version: 12
@@ -46,8 +44,6 @@ jobs:
         run: |
           npm install .
           npm run-script generate-docs
-          ls -a
-          pwd
       - name: Generate library version
         id: lib_version
         run: |
