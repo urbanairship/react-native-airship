@@ -44,6 +44,8 @@ jobs:
         run: |
           npm install .
           npm run-script generate-docs
+          ls -a
+          pwd
       - name: Generate library version
         id: lib_version
         run: |
@@ -61,6 +63,8 @@ jobs:
           token: ${{ secrets.GitHub_PAT }}
       - name: Add documentation and commit
         run: |
+         ls -a
+         pwd
          bash add.sh react-native ../out ${{ steps.lib_version.outputs.lib_version }}
         #git add .
         #git commit -a -m "Added docs for react-native v${LIB_VERSION}"
