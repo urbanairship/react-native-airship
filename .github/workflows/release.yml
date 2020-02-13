@@ -54,17 +54,15 @@ jobs:
          | sed 's/[",]//g' \
          | tr -d '[[:space:]]')
          echo ::set-output name=lib_version::${LIB_VERSION}
-      - name: Clone mobile doc repo
-        uses: actions/checkout@v2
-        with:
-          repository: urbanairship/mobile-docs
-          token: ${{ secrets.GitHub_PAT }}
-          path: react-native-module
-      - name: Add documentation and commit
+      - name: Clone mobile doc repo and add documentation
         run: |
+         git clone "https://${{ secrets.GitHub_PAT }}@github.com/urbanairship/mobile-docs.git"
          ls -a
          pwd
+         cd mobile-docs
          bash add.sh react-native ../out ${{ steps.lib_version.outputs.lib_version }}
+      - name: Commit documentation
+        run: |
         #git add .
         #git commit -a -m "Added docs for react-native v${LIB_VERSION}"
         #git push origin master
