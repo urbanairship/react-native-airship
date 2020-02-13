@@ -36,6 +36,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          path: main
       - uses: actions/setup-node@v1
         with:
           node-version: 12
@@ -61,6 +63,7 @@ jobs:
         with:
           repository: urbanairship/mobile-docs
           token: ${{ secrets.GitHub_PAT }}
+          path: react-native-module
       - name: Add documentation and commit
         run: |
          ls -a
