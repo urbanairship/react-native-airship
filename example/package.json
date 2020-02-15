@@ -1,0 +1,20 @@
+{  
+    "private" : true,
+    "name": "example",
+    "version": "1.0.0",
+    "dependencies": {
+      "react": "16.10.1",
+      "react-native": "0.61.1",
+      "react-native-gesture-handler": "^1.4.1",
+      "react-native-reanimated": "^1.3.0",
+      "react-native-screens": "^2.0.0-alpha.3",
+      "react-navigation": "^4.0.10",
+      "react-navigation-tabs": "^2.5.5",
+      "urbanairship-react-native": "./src"
+    },
+    "scripts": {
+      "start": "node ../node_modules/react-native/local-cli/cli.js start",
+      "run:android": "node ../node_modules/react-native/local-cli/cli.js run-android",
+      "run:ios": "node ../node_modules/react-native/local-cli/cli.js run-ios"
+    }
+ }

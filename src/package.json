@@ -1,0 +1,43 @@
+{
+  "name": "urbanairship-react-native",
+  "version": "6.1.0",
+  "description": "Airship plugin for React Native apps.",
+  "main": "./js/index.js",
+  "author": "Airship",
+  "homepage": "https://github.com/urbanairship/react-native-module",
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "ios",
+    "android",
+    "urbanairship"
+  ],
+  "devDependencies": {
+    "@babel/core": "7.5.4",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+    "@babel/runtime": "7.5.4",
+    "@react-native-community/eslint-config": "0.0.5",
+    "@typescript-eslint/parser": "^1.13.0",
+    "acorn": "^7.0.0",
+    "acorn-jsx": "^5.0.2",
+    "documentation": "12.1.1",
+    "eslint": "^5.16.0",
+    "jest": "^24.9.0",
+    "jetifier": "^1.6.4",
+    "metro-react-native-babel-preset": "0.55.0",
+    "react": "16.10.1",
+    "react-native": "0.61.1",
+    "typescript": "^3.6.3"
+  },
+  "peerDependencies" : {
+    "react": "^16.8",
+    "react-native": ">=0.60"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urbanairship/react-native-module.git"
+  },
+  "license": "Apache-2.0",
+  "typings": "./js/index.d.ts"
+}
