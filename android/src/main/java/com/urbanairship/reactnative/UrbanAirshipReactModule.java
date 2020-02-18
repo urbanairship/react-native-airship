@@ -28,6 +28,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -210,6 +211,46 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void isUserNotificationsEnabled(Promise promise) {
         promise.resolve(UAirship.shared().getPushManager().getUserNotificationsEnabled());
+    }
+
+    /**
+     * Enables/disables data collection.
+     *
+     * @param enabled {@code true} to allow data collection., {@code false} to disallow.
+     */
+    @ReactMethod
+    public void setDataCollectionEnabled(boolean enabled) {
+        UAirship.shared().setDataCollectionEnabled(enabled);
+    }
+
+    /**
+     * Checks if data collection is enabled.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void isDataCollectionEnabled(Promise promise) {
+        promise.resolve(UAirship.shared().isDataCollectionEnabled());
+    }
+
+    /**
+     * Enables/disables push token registration.
+     *
+     * @param enabled {@code true} to allow push token registration., {@code false} to disallow.
+     */
+    @ReactMethod
+    public void setPushTokenRegistrationEnabled(boolean enabled) {
+        UAirship.shared().getPushManager().setPushTokenRegistrationEnabled(enabled);
+    }
+
+    /**
+     * Checks if push token registration is enabled.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void isPushTokenRegistrationEnabled(Promise promise) {
+        promise.resolve(UAirship.shared().getPushManager().isPushTokenRegistrationEnabled());
     }
 
     /**
@@ -857,14 +898,23 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
             String action = operation.getString(ATTRIBUTE_OPERATION_TYPE);
             String key = operation.getString(ATTRIBUTE_OPERATION_KEY);
-            String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
 
-            if (action == null || key == null || value == null) {
+            if (action == null || key == null) {
                 continue;
             }
 
             if (ATTRIBUTE_OPERATION_SET.equals(action)) {
-                editor.setAttribute(key, value);
+                ReadableType type = operation.getType(ATTRIBUTE_OPERATION_VALUE);
+                if (ReadableType.String == type) {
+                    String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
+                    if (value == null) {
+                        continue;
+                    }
+                    editor.setAttribute(key, value);
+                } else if (ReadableType.Number == type) {
+                    double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
+                    editor.setAttribute(key, value);
+                }
             } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
                 editor.removeAttribute(key);
             }

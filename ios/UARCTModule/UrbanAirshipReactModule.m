@@ -64,6 +64,14 @@ RCT_EXPORT_METHOD(enableChannelCreation) {
     [[UAirship channel] enableChannelCreation];
 }
 
+RCT_EXPORT_METHOD(setDataCollectionEnabled:(BOOL)enabled) {
+    [[UAirship shared] setDataCollectionEnabled:enabled];
+}
+
+RCT_EXPORT_METHOD(setPushTokenRegistrationEnabled:(BOOL)enabled) {
+    [[UAirship push] setPushTokenRegistrationEnabled:enabled];
+}
+
 RCT_REMAP_METHOD(isUserNotificationsEnabled,
                  isUserNotificationsEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
@@ -87,6 +95,20 @@ RCT_REMAP_METHOD(enableUserPushNotifications,
     }];
 }
 
+RCT_REMAP_METHOD(isDataCollectionEnabled,
+                 isDataCollectionEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    resolve(@([UAirship shared].isDataCollectionEnabled));
+}
+
+RCT_REMAP_METHOD(isPushTokenRegistrationEnabled,
+                 isPushTokenRegistrationEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    resolve(@([UAirship push].pushTokenRegistrationEnabled));
+}
+
 RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {
     namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     [UAirship namedUser].identifier = namedUser.length ? namedUser : nil;
@@ -97,7 +119,6 @@ RCT_REMAP_METHOD(getNamedUser,
                  rejecter:(RCTPromiseRejectBlock)reject) {
     resolve([UAirship namedUser].identifier);
 }
-
 
 RCT_EXPORT_METHOD(addTag:(NSString *)tag) {
     if (tag) {
@@ -130,7 +151,7 @@ RCT_REMAP_METHOD(isAnalyticsEnabled,
 }
 
 RCT_EXPORT_METHOD(trackScreen:(NSString *)screen) {
-    [[UAirship shared].analytics trackScreen:screen]
+    [[UAirship shared].analytics trackScreen:screen];
 }
 
 RCT_REMAP_METHOD(getChannelId,
@@ -271,13 +292,15 @@ RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
 
     for (NSDictionary *operation in operations) {
         NSString *action = operation[@"action"];
-
-        // Only strings are currently supported
         NSString *name = operation[@"key"];
-        NSString *value = operation[@"value"];
+        id value = operation[@"value"];
 
         if ([action isEqualToString:@"set"]) {
-            [mutations setString:value forAttribute:name];
+            if ([value isKindOfClass:[NSString class]]) {
+                [mutations setString:value forAttribute:name];
+            } else if ([value isKindOfClass:[NSNumber class]]) {
+                [mutations setNumber:value forAttribute:name];
+            }
         } else if ([action isEqualToString:@"remove"]) {
             [mutations removeAttribute:name];
         }
