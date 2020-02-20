@@ -8,7 +8,7 @@
     "preset": "react-native"
   },
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start": "react-native start",
     "run:android": "react-native run-android --root example/",
     "run:ios": "react-native run-ios --root example/",
     "generate-docs": "node_modules/.bin/documentation --config documentation.yml build js/** -f html -o out",

@@ -272,7 +272,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../node_modules/react-native-screens`)
-  - urbanairship-react-native (from `../node_modules/urbanairship-react-native`)
+  - urbanairship-react-native (from `../../src/`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -337,7 +337,7 @@ EXTERNAL SOURCES:
   RNScreens:
     :path: "../../node_modules/react-native-screens"
   urbanairship-react-native:
-    :path: "../node_modules/urbanairship-react-native"
+    :path: "../../src/"
   Yoga:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
@@ -375,6 +375,6 @@ SPEC CHECKSUMS:
   urbanairship-react-native: 760ff5145ebf740cb45d09d58f1a72ef78b5e8ef
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
+PODFILE CHECKSUM: 416395ff0c05632a8aa3ef756def107e5d18a3a0
 
 COCOAPODS: 1.8.4

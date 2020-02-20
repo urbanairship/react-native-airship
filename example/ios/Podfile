@@ -1,6 +1,7 @@
 use_frameworks!
 platform :ios, '11.0'
 $node_modules_path = '../../node_modules'
+$source_path = '../../src/'
 
 require_relative "#{$node_modules_path}/@react-native-community/cli-platform-ios/native_modules"
 
@@ -34,6 +35,7 @@ target 'AirshipSample' do
   pod 'RCTRequired', :path => "#{$node_modules_path}/react-native/Libraries/RCTRequired"
   pod 'RCTTypeSafety', :path => "#{$node_modules_path}/react-native/Libraries/TypeSafety"
 
+  pod 'urbanairship-react-native', :path => "#{$source_path}"
   use_native_modules!
 end
 

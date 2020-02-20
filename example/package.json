@@ -13,8 +13,9 @@
       "urbanairship-react-native": "./src"
     },
     "scripts": {
-      "start": "node ../node_modules/react-native/local-cli/cli.js start",
-      "run:android": "node ../node_modules/react-native/local-cli/cli.js run-android",
-      "run:ios": "node ../node_modules/react-native/local-cli/cli.js run-ios"
+      "start": "react-native start",
+      "run:android": "react-native run-android",
+      "run:ios": "react-native run-ios",
+      "cli-version" : "react-native --version"
     }
  }
