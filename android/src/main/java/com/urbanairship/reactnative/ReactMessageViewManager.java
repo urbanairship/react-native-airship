@@ -47,13 +47,13 @@ public class ReactMessageViewManager extends SimpleViewManager<ReactMessageView>
     }
 
     @NonNull
-    public Map getExportedCustomBubblingEventTypeConstants() {
+    public Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
         List<String> events = Arrays.asList(ReactMessageView.EVENT_CLOSE,
                 ReactMessageView.EVENT_LOAD_ERROR,
                 ReactMessageView.EVENT_LOAD_FINISHED,
                 ReactMessageView.EVENT_LOAD_STARTED);
 
-        MapBuilder.Builder builder = MapBuilder.builder();
+        MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
 
         for (String event : events) {
             builder.put(event,
