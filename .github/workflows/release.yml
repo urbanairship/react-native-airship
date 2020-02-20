@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@master
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@master
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
@@ -69,7 +69,7 @@ jobs:
     needs: [android, ios, publish_docs]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@master
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
