@@ -13,7 +13,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.urbanairship.Logger;
 import com.urbanairship.json.JsonMap;
 import com.urbanairship.json.JsonValue;
 import com.urbanairship.util.UAStringUtil;
@@ -130,7 +129,7 @@ class Utils {
 
         if (value.isJsonList()) {
             WritableArray array = Arguments.createArray();
-            for (JsonValue arrayValue : value.getList()) {
+            for (JsonValue arrayValue : value.optList()) {
                 if (arrayValue.isNull()) {
                     array.pushNull();
                     continue;
@@ -171,7 +170,7 @@ class Utils {
 
         if (value.isJsonMap()) {
             WritableMap map = Arguments.createMap();
-            for (Map.Entry<String, JsonValue> entry : value.getMap().entrySet()) {
+            for (Map.Entry<String, JsonValue> entry : value.optMap().entrySet()) {
 
                 String key = entry.getKey();
                 JsonValue mapValue = entry.getValue();

@@ -33,7 +33,7 @@ import com.urbanairship.richpush.RichPushInbox;
 public class ReactAutopilot extends Autopilot {
 
     @Override
-    public void onAirshipReady(UAirship airship) {
+    public void onAirshipReady(@NonNull UAirship airship) {
         super.onAirshipReady(airship);
 
         PluginLogger.setLogLevel(airship.getAirshipConfigOptions().logLevel);

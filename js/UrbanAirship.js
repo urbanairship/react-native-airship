@@ -524,6 +524,7 @@ class UrbanAirship {
      * @param {number} quiteTime.startMinute Start minute.
      * @param {number} quiteTime.endHour End hour.
      * @param {number} quiteTime.endMinute End minute.
+     * @deprecated Will be removed in 7.0.0
      */
   static setQuietTime(quietTime: {startHour?: number, startMinute?: number, endHour?: number, endMinute?: number }) {
     return UrbanAirshipModule.setQuietTime(quietTime);
@@ -537,6 +538,7 @@ class UrbanAirship {
    * "endMinute": Number
    *
    * @return {Promise.Object} A promise with the result.
+   * @deprecated Will be removed in 7.0.0
    */
   static getQuietTime(): Promise<Object> {
     return UrbanAirshipModule.getQuietTime();
@@ -546,6 +548,7 @@ class UrbanAirship {
    * Enables or disables quiet time.
    *
    * @param {boolean} enabled true to enable quiet time, false to disable.
+   * @deprecated Will be removed in 7.0.0
    */
   static setQuietTimeEnabled(enabled: boolean) {
     UrbanAirshipModule.setQuietTimeEnabled(enabled);
@@ -555,6 +558,7 @@ class UrbanAirship {
    * Checks if quietTime is enabled or not.
    *
    * @return {Promise.<boolean>} A promise with the result.
+   * @deprecated Will be removed in 7.0.0
    */
   static isQuietTimeEnabled(): Promise<boolean> {
     return UrbanAirshipModule.isQuietTimeEnabled();

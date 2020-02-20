@@ -21,6 +21,7 @@ public class ReactNotificationProvider extends AirshipNotificationProvider {
     }
 
     @Override
+    @NonNull
     public String getDefaultNotificationChannelId() {
         String defaultChannelId = ReactAirshipPreferences.shared().getDefaultNotificationChannelId(context);
         if (defaultChannelId != null) {

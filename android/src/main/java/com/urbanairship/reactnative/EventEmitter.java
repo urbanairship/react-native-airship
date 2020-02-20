@@ -4,7 +4,6 @@ package com.urbanairship.reactnative;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.MainThread;
 
