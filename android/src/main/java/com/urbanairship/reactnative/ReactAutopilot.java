@@ -27,9 +27,6 @@ import com.urbanairship.reactnative.events.RegistrationEvent;
 import com.urbanairship.reactnative.events.ShowInboxEvent;
 import com.urbanairship.richpush.RichPushInbox;
 
-import static com.urbanairship.reactnative.BuildConfig;
-import static com.urbanairship.reactnative.UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER;
-
 /**
  * Module's autopilot to customize Urban Airship.
  */
@@ -126,7 +123,7 @@ public class ReactAutopilot extends Autopilot {
         airship.getMessageCenter().setOnShowMessageCenterListener(new MessageCenter.OnShowMessageCenterListener() {
             @Override
             public boolean onShowMessageCenter(@Nullable String messageId) {
-                if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
+                if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER, true)) {
                     return false;
                 } else {
                     sendShowInboxEvent(messageId);
