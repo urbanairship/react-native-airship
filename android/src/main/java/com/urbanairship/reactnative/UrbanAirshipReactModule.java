@@ -13,11 +13,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-
-import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
@@ -32,18 +32,16 @@ import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
-import com.urbanairship.analytics.Analytics;
 import com.urbanairship.analytics.AssociatedIdentifiers;
+import com.urbanairship.channel.AttributeEditor;
+import com.urbanairship.channel.TagGroupsEditor;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.PushMessage;
-import com.urbanairship.channel.TagGroupsEditor;
-import com.urbanairship.channel.AttributeEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.richpush.RichPushInbox;
@@ -140,7 +138,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void addAndroidListener(String eventName) {
-        Logger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
+        PluginLogger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
         EventEmitter.shared().addAndroidListener(eventName);
     }
 
@@ -151,7 +149,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void removeAndroidListeners(int count) {
-        Logger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
+        PluginLogger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
         EventEmitter.shared().removeAndroidListeners(count);
     }
 
@@ -199,8 +197,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void enableUserPushNotifications(Promise promise) {
-      UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
-      promise.resolve(true);
+        UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
+        promise.resolve(true);
     }
 
     /**
@@ -396,9 +394,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Associated an identifier to the channel.
      *
-     * @param key   The identifier's key.
+     * @param key The identifier's key.
      * @param value The identifier's value. If the value is null it will be removed from the current
-     *              set of associated identifiers.
+     * set of associated identifiers.
      */
     @ReactMethod
     public void associateIdentifier(String key, String value) {
@@ -498,8 +496,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Runs an action.
      *
-     * @param name    The action's name.
-     * @param value   The action's value.
+     * @param name The action's name.
+     * @param value The action's value.
      * @param promise A JS promise to deliver the action result.
      */
     @ReactMethod
@@ -773,7 +771,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
 
-
     /**
      * Retrieves the current inbox messages.
      *
@@ -793,8 +790,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
                 PushMessage pushMessage;
                 Bundle extras = statusBarNotification.getNotification().extras;
-                if (extras != null && extras.containsKey("push_message")) {
-                    pushMessage = new PushMessage(extras.getBundle("push_message"));
+                Bundle bundle = extras == null ? null : extras.getBundle("push_message");
+
+                if (bundle != null) {
+                    pushMessage = new PushMessage(bundle);
                 } else {
                     pushMessage = new PushMessage(new Bundle());
                 }
@@ -809,21 +808,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
 
-
     /**
      * Forces the inbox to refresh. This is normally not needed as the inbox will automatically refresh on foreground or when a push arrives thats associated with a message.
      *
      * @param promise The JS promise.
      */
     @ReactMethod
-    public  void refreshInbox(final Promise promise)  {
+    public void refreshInbox(final Promise promise) {
         UAirship.shared().getInbox().fetchMessages(new RichPushInbox.FetchMessagesCallback() {
             @Override
             public void onFinished(boolean success) {
                 if (success) {
                     promise.resolve(true);
                 } else {
-                    promise.reject("STATUS_DID_NOT_REFRESH","Inbox failed to refresh");
+                    promise.reject("STATUS_DID_NOT_REFRESH", "Inbox failed to refresh");
                 }
             }
         });
@@ -835,7 +833,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * @param enabled {@code true} to automatically launch the default message center, {@code false} to disable.
      */
     @ReactMethod
-    public void setAutoLaunchDefaultMessageCenter(boolean enabled)  {
+    public void setAutoLaunchDefaultMessageCenter(boolean enabled) {
         PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext())
                 .edit()
                 .putBoolean(AUTO_LAUNCH_MESSAGE_CENTER, enabled)
@@ -845,7 +843,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Helper method to apply tag group changes.
      *
-     * @param editor     The tag group editor.
+     * @param editor The tag group editor.
      * @param operations A list of tag group operations.
      */
     private static void applyTagGroupOperations(@NonNull TagGroupsEditor editor, @NonNull ReadableArray operations) {
@@ -886,7 +884,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Helper method to apply attribute changes.
      *
-     * @param editor     The attribute editor.
+     * @param editor The attribute editor.
      * @param operations A list of attribute operations.
      */
     private static void applyAttributeOperations(@NonNull AttributeEditor editor, @NonNull ReadableArray operations) {
@@ -942,7 +940,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      *
      * @param context The application context.
      */
-    static protected void checkOptIn(Context context) {
+    static void checkOptIn(Context context) {
         boolean optIn = UAirship.shared().getPushManager().isOptIn();
 
         if (ReactAirshipPreferences.shared().getOptInStatus(context) != optIn) {

@@ -140,7 +140,7 @@ class EventEmitter {
         try {
             reactContext.getJSModule(RCTNativeAppEventEmitter.class).emit(event.getName(), event.getBody());
         } catch (Exception e) {
-            Log.d("UrbanAirshipReactModule", "Failed to emit event", e);
+            PluginLogger.error("UrbanAirshipReactModule - Failed to emit event", e);
             return false;
         }
 

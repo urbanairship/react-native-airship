@@ -91,7 +91,7 @@ class Utils {
             if (id != 0) {
                 return id;
             } else {
-                Logger.error("Unable to find resource with name: %s", resourceName);
+                PluginLogger.error("Unable to find resource with name: %s", resourceName);
             }
         }
         return 0;
@@ -110,7 +110,7 @@ class Utils {
             try {
                 return Color.parseColor(hexColor);
             } catch (IllegalArgumentException e) {
-                Logger.error(e, "Unable to parse color: %s", hexColor);
+                PluginLogger.error(e, "Unable to parse color: %s", hexColor);
             }
         }
         return defaultColor;
@@ -163,7 +163,6 @@ class Utils {
 
                 if (arrayValue.isJsonMap()) {
                     array.pushMap((WritableMap) convertJsonValue(arrayValue));
-                    continue;
                 }
             }
 
@@ -209,7 +208,6 @@ class Utils {
 
                 if (mapValue.isJsonMap()) {
                     map.putMap(key, (WritableMap) convertJsonValue(mapValue));
-                    continue;
                 }
             }
 

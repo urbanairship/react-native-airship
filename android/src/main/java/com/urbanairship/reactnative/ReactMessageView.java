@@ -3,8 +3,6 @@
 package com.urbanairship.reactnative;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;

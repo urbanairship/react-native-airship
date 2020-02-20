@@ -11,12 +11,11 @@ import androidx.annotation.NonNull;
 import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.push.notifications.AirshipNotificationProvider;
 
-
 public class ReactNotificationProvider extends AirshipNotificationProvider {
 
     private Context context;
 
-    public ReactNotificationProvider(@NonNull Context context, @NonNull AirshipConfigOptions configOptions) {
+    ReactNotificationProvider(@NonNull Context context, @NonNull AirshipConfigOptions configOptions) {
         super(context, configOptions);
         this.context = context;
     }

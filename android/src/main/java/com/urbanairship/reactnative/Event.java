@@ -13,6 +13,7 @@ public interface Event {
 
     /**
      * The event name.
+     *
      * @return The event name.
      */
     @NonNull
@@ -20,6 +21,7 @@ public interface Event {
 
     /**
      * The event body.
+     *
      * @return The event body.
      */
     @NonNull
