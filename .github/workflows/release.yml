@@ -16,8 +16,6 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-      - name: Set up Node.js
-        uses: actions/setup-node@master
       - name: Run Android CI
         run: bash ./scripts/run_ci_tasks.sh -a
         
