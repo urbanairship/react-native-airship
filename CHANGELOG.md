@@ -1,3 +1,14 @@
+Version 6.1.0 - February 12, 2020
+=================================
+- Updated iOS SDK to 13.1.0
+- Updated Android SDK to 12.2.0
+- Added number attributes support for iOS and Android
+- Added data collection controls for iOS and Android
+- Added screen tracking for iOS and Android
+
+Changes
+-------
+- Fixed npm configuration to include a required script.
 
 Version 6.0.1 - January 3, 2020
 =================================
