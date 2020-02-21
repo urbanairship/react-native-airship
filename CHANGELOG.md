@@ -1,4 +1,4 @@
-Version 6.1.0 - February 12, 2020
+Version 6.1.0 - February 21, 2020
 =================================
 - Updated iOS SDK to 13.1.0
 - Updated Android SDK to 12.2.0
