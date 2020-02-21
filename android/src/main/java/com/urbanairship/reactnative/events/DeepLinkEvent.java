@@ -37,7 +37,6 @@ public class DeepLinkEvent implements Event {
     public WritableMap getBody() {
         WritableMap map = Arguments.createMap();
         map.putString(DEEP_LINK, deepLink);
-
         return map;
     }
 }

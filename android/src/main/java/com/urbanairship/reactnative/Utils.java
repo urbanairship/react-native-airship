@@ -13,7 +13,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.urbanairship.Logger;
 import com.urbanairship.json.JsonMap;
 import com.urbanairship.json.JsonValue;
 import com.urbanairship.util.UAStringUtil;
@@ -91,7 +90,7 @@ class Utils {
             if (id != 0) {
                 return id;
             } else {
-                Logger.error("Unable to find resource with name: %s", resourceName);
+                PluginLogger.error("Unable to find resource with name: %s", resourceName);
             }
         }
         return 0;
@@ -110,7 +109,7 @@ class Utils {
             try {
                 return Color.parseColor(hexColor);
             } catch (IllegalArgumentException e) {
-                Logger.error(e, "Unable to parse color: %s", hexColor);
+                PluginLogger.error(e, "Unable to parse color: %s", hexColor);
             }
         }
         return defaultColor;
@@ -130,7 +129,7 @@ class Utils {
 
         if (value.isJsonList()) {
             WritableArray array = Arguments.createArray();
-            for (JsonValue arrayValue : value.getList()) {
+            for (JsonValue arrayValue : value.optList()) {
                 if (arrayValue.isNull()) {
                     array.pushNull();
                     continue;
@@ -163,7 +162,6 @@ class Utils {
 
                 if (arrayValue.isJsonMap()) {
                     array.pushMap((WritableMap) convertJsonValue(arrayValue));
-                    continue;
                 }
             }
 
@@ -172,7 +170,7 @@ class Utils {
 
         if (value.isJsonMap()) {
             WritableMap map = Arguments.createMap();
-            for (Map.Entry<String, JsonValue> entry : value.getMap().entrySet()) {
+            for (Map.Entry<String, JsonValue> entry : value.optMap().entrySet()) {
 
                 String key = entry.getKey();
                 JsonValue mapValue = entry.getValue();
@@ -209,7 +207,6 @@ class Utils {
 
                 if (mapValue.isJsonMap()) {
                     map.putMap(key, (WritableMap) convertJsonValue(mapValue));
-                    continue;
                 }
             }
 

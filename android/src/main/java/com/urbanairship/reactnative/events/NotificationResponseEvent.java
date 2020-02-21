@@ -11,12 +11,10 @@ import com.urbanairship.push.NotificationActionButtonInfo;
 import com.urbanairship.push.NotificationInfo;
 import com.urbanairship.reactnative.Event;
 
-
 /**
  * Notification response event.
  */
 public class NotificationResponseEvent implements Event {
-
 
     private static final String NOTIFICATION_RESPONSE_EVENT = "com.urbanairship.notification_response";
     private static final String RESPONSE_ACTION_ID = "actionId";
@@ -64,7 +62,6 @@ public class NotificationResponseEvent implements Event {
         } else {
             map.putBoolean(RESPONSE_FOREGROUND, true);
         }
-
 
         return map;
     }

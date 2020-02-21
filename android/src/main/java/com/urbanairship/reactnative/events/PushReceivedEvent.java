@@ -12,8 +12,6 @@ import com.urbanairship.push.PushMessage;
 import com.urbanairship.reactnative.Event;
 import com.urbanairship.util.UAStringUtil;
 
-
-
 /**
  * Push received event.
  */
@@ -60,8 +58,6 @@ public class PushReceivedEvent implements Event {
         this.notificationTag = notificationTag;
     }
 
-
-
     @NonNull
     @Override
     public String getName() {
@@ -82,7 +78,7 @@ public class PushReceivedEvent implements Event {
         }
 
         if (notificationId != null) {
-            map.putString(NOTIFICATION_ID, getNotificationdId(notificationId, notificationTag));
+            map.putString(NOTIFICATION_ID, getNotificationId(notificationId, notificationTag));
         }
 
         Bundle bundle = new Bundle(message.getPushBundle());
@@ -92,7 +88,7 @@ public class PushReceivedEvent implements Event {
         return map;
     }
 
-    static String getNotificationdId(int notificationId, String notificationTag) {
+    private static String getNotificationId(int notificationId, String notificationTag) {
         String id = String.valueOf(notificationId);
         if (!UAStringUtil.isEmpty(notificationTag)) {
             id += ":" + notificationTag;

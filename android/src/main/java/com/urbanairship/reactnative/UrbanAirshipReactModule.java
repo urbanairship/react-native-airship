@@ -3,6 +3,7 @@
 package com.urbanairship.reactnative;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,11 +14,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-
-import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
@@ -32,18 +33,16 @@ import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
-import com.urbanairship.analytics.Analytics;
 import com.urbanairship.analytics.AssociatedIdentifiers;
+import com.urbanairship.channel.AttributeEditor;
+import com.urbanairship.channel.TagGroupsEditor;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.PushMessage;
-import com.urbanairship.channel.TagGroupsEditor;
-import com.urbanairship.channel.AttributeEditor;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.richpush.RichPushInbox;
@@ -128,6 +127,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         EventEmitter.shared().attachReactContext(getReactApplicationContext());
     }
 
+    @NonNull
     @Override
     public String getName() {
         return "UrbanAirshipReactModule";
@@ -140,7 +140,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void addAndroidListener(String eventName) {
-        Logger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
+        PluginLogger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
         EventEmitter.shared().addAndroidListener(eventName);
     }
 
@@ -151,7 +151,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void removeAndroidListeners(int count) {
-        Logger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
+        PluginLogger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
         EventEmitter.shared().removeAndroidListeners(count);
     }
 
@@ -189,7 +189,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void enableChannelCreation() {
-        UAirship.shared().getPushManager().enableChannelCreation();
+        UAirship.shared().getChannel().enableChannelCreation();
     }
 
     /**
@@ -199,8 +199,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void enableUserPushNotifications(Promise promise) {
-      UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
-      promise.resolve(true);
+        UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
+        promise.resolve(true);
     }
 
     /**
@@ -270,7 +270,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getChannelId(Promise promise) {
-        promise.resolve(UAirship.shared().getPushManager().getChannelId());
+        promise.resolve(UAirship.shared().getChannel().getId());
     }
 
     /**
@@ -280,7 +280,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getRegistrationToken(Promise promise) {
-        promise.resolve(UAirship.shared().getPushManager().getRegistrationToken());
+        promise.resolve(UAirship.shared().getPushManager().getPushToken());
     }
 
 
@@ -320,7 +320,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addTag(String tag) {
         if (tag != null) {
-            UAirship.shared().getPushManager().editTags().addTag(tag).apply();
+            UAirship.shared().getChannel().editTags().addTag(tag).apply();
         }
     }
 
@@ -332,7 +332,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeTag(String tag) {
         if (tag != null) {
-            UAirship.shared().getPushManager().editTags().removeTag(tag).apply();
+            UAirship.shared().getChannel().editTags().removeTag(tag).apply();
         }
     }
 
@@ -344,7 +344,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getTags(Promise promise) {
         WritableArray array = Arguments.createArray();
-        for (String tag : UAirship.shared().getPushManager().getTags()) {
+        for (String tag : UAirship.shared().getChannel().getTags()) {
             array.pushString(tag);
         }
 
@@ -362,7 +362,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editChannelTagGroups(ReadableArray operations) {
-        applyTagGroupOperations(UAirship.shared().getPushManager().editTagGroups(), operations);
+        applyTagGroupOperations(UAirship.shared().getChannel().editTagGroups(), operations);
     }
 
     /**
@@ -396,9 +396,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Associated an identifier to the channel.
      *
-     * @param key   The identifier's key.
+     * @param key The identifier's key.
      * @param value The identifier's value. If the value is null it will be removed from the current
-     *              set of associated identifiers.
+     * set of associated identifiers.
      */
     @ReactMethod
     public void associateIdentifier(String key, String value) {
@@ -498,8 +498,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Runs an action.
      *
-     * @param name    The action's name.
-     * @param value   The action's value.
+     * @param name The action's name.
+     * @param value The action's value.
      * @param promise A JS promise to deliver the action result.
      */
     @ReactMethod
@@ -556,6 +556,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         start.set(Calendar.MINUTE, startMinute);
         end.set(Calendar.HOUR_OF_DAY, endHour);
         end.set(Calendar.MINUTE, endMinute);
+        //noinspection deprecation
         UAirship.shared().getPushManager().setQuietTimeInterval(start.getTime(), end.getTime());
     }
 
@@ -566,6 +567,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getQuietTime(Promise promise) {
+        //noinspection deprecation
         Date[] quietTime = UAirship.shared().getPushManager().getQuietTimeInterval();
 
         int startHour = 0;
@@ -601,6 +603,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setQuietTimeEnabled(Boolean enabled) {
+        //noinspection deprecation
         UAirship.shared().getPushManager().setQuietTimeEnabled(enabled);
     }
 
@@ -611,6 +614,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isQuietTimeEnabled(Promise promise) {
+        //noinspection deprecation
         promise.resolve(UAirship.shared().getPushManager().isQuietTimeEnabled());
     }
 
@@ -629,7 +633,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void displayMessageCenter() {
-        UAirship.shared().getInbox().startInboxActivity();
+        UAirship.shared().getMessageCenter().showMessageCenter();
     }
 
     /**
@@ -637,9 +641,12 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void dismissMessageCenter() {
-        Intent intent = new Intent(this.getCurrentActivity(), CustomMessageCenterActivity.class)
-                .setAction(CLOSE_MESSAGE_CENTER);
-        this.getCurrentActivity().startActivity(intent);
+        Activity activity = getCurrentActivity();
+        if (activity != null) {
+            Intent intent = new Intent(activity, CustomMessageCenterActivity.class)
+                    .setAction(CLOSE_MESSAGE_CENTER);
+            activity.startActivity(intent);
+        }
     }
 
     /**
@@ -650,13 +657,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void displayMessage(String messageId, Promise promise) {
-        Intent intent = new Intent(this.getReactApplicationContext().getCurrentActivity(), CustomMessageActivity.class)
-                .setAction(MessageCenter.VIEW_MESSAGE_INTENT_ACTION)
-                .setPackage(this.getReactApplicationContext().getCurrentActivity().getPackageName())
-                .setData(Uri.fromParts(MessageCenter.MESSAGE_DATA_SCHEME, messageId, null))
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        this.getReactApplicationContext().startActivity(intent);
+        UAirship.shared().getMessageCenter().showMessageCenter(messageId);
+        promise.resolve(true);
     }
 
     /**
@@ -664,10 +666,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void dismissMessage() {
-        Intent intent = new Intent(this.getCurrentActivity(), CustomMessageActivity.class)
-                .setAction(CLOSE_MESSAGE_CENTER)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        this.getCurrentActivity().startActivity(intent);
+        Activity activity = getCurrentActivity();
+        if (activity != null) {
+            Intent intent = new Intent(activity, CustomMessageActivity.class)
+                    .setAction(CLOSE_MESSAGE_CENTER)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            activity.startActivity(intent);
+        }
     }
 
     /**
@@ -691,7 +696,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             WritableMap extrasMap = new WritableNativeMap();
             Bundle extras = message.getExtras();
             for (String key : extras.keySet()) {
-                String value = extras.get(key).toString();
+                String value = String.valueOf(extras.get(key));
                 extrasMap.putString(key, value);
             }
 
@@ -773,7 +778,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
 
-
     /**
      * Retrieves the current inbox messages.
      *
@@ -793,8 +797,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
                 PushMessage pushMessage;
                 Bundle extras = statusBarNotification.getNotification().extras;
-                if (extras != null && extras.containsKey("push_message")) {
-                    pushMessage = new PushMessage(extras.getBundle("push_message"));
+                Bundle bundle = extras == null ? null : extras.getBundle("push_message");
+
+                if (bundle != null) {
+                    pushMessage = new PushMessage(bundle);
                 } else {
                     pushMessage = new PushMessage(new Bundle());
                 }
@@ -809,21 +815,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
 
-
     /**
      * Forces the inbox to refresh. This is normally not needed as the inbox will automatically refresh on foreground or when a push arrives thats associated with a message.
      *
      * @param promise The JS promise.
      */
     @ReactMethod
-    public  void refreshInbox(final Promise promise)  {
+    public void refreshInbox(final Promise promise) {
         UAirship.shared().getInbox().fetchMessages(new RichPushInbox.FetchMessagesCallback() {
             @Override
             public void onFinished(boolean success) {
                 if (success) {
                     promise.resolve(true);
                 } else {
-                    promise.reject("STATUS_DID_NOT_REFRESH","Inbox failed to refresh");
+                    promise.reject("STATUS_DID_NOT_REFRESH", "Inbox failed to refresh");
                 }
             }
         });
@@ -835,7 +840,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * @param enabled {@code true} to automatically launch the default message center, {@code false} to disable.
      */
     @ReactMethod
-    public void setAutoLaunchDefaultMessageCenter(boolean enabled)  {
+    public void setAutoLaunchDefaultMessageCenter(boolean enabled) {
         PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext())
                 .edit()
                 .putBoolean(AUTO_LAUNCH_MESSAGE_CENTER, enabled)
@@ -845,7 +850,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Helper method to apply tag group changes.
      *
-     * @param editor     The tag group editor.
+     * @param editor The tag group editor.
      * @param operations A list of tag group operations.
      */
     private static void applyTagGroupOperations(@NonNull TagGroupsEditor editor, @NonNull ReadableArray operations) {
@@ -886,7 +891,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Helper method to apply attribute changes.
      *
-     * @param editor     The attribute editor.
+     * @param editor The attribute editor.
      * @param operations A list of attribute operations.
      */
     private static void applyAttributeOperations(@NonNull AttributeEditor editor, @NonNull ReadableArray operations) {
@@ -942,7 +947,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      *
      * @param context The application context.
      */
-    static protected void checkOptIn(Context context) {
+    static void checkOptIn(Context context) {
         boolean optIn = UAirship.shared().getPushManager().isOptIn();
 
         if (ReactAirshipPreferences.shared().getOptInStatus(context) != optIn) {

@@ -9,17 +9,16 @@ import androidx.annotation.Nullable;
 import androidx.annotation.XmlRes;
 
 import com.urbanairship.Autopilot;
-import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.DeepLinkListener;
 import com.urbanairship.analytics.Analytics;
+import com.urbanairship.channel.AirshipChannelListener;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.NotificationActionButtonInfo;
 import com.urbanairship.push.NotificationInfo;
 import com.urbanairship.push.NotificationListener;
 import com.urbanairship.push.PushListener;
 import com.urbanairship.push.PushMessage;
-import com.urbanairship.push.RegistrationListener;
 import com.urbanairship.reactnative.events.DeepLinkEvent;
 import com.urbanairship.reactnative.events.InboxUpdatedEvent;
 import com.urbanairship.reactnative.events.NotificationResponseEvent;
@@ -28,17 +27,16 @@ import com.urbanairship.reactnative.events.RegistrationEvent;
 import com.urbanairship.reactnative.events.ShowInboxEvent;
 import com.urbanairship.richpush.RichPushInbox;
 
-import static com.urbanairship.reactnative.BuildConfig.MODULE_VERSION;
-import static com.urbanairship.reactnative.UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER;
-
 /**
  * Module's autopilot to customize Urban Airship.
  */
 public class ReactAutopilot extends Autopilot {
 
     @Override
-    public void onAirshipReady(UAirship airship) {
+    public void onAirshipReady(@NonNull UAirship airship) {
         super.onAirshipReady(airship);
+
+        PluginLogger.setLogLevel(airship.getAirshipConfigOptions().logLevel);
 
         final Context context = UAirship.getApplicationContext();
 
@@ -61,10 +59,10 @@ public class ReactAutopilot extends Autopilot {
             }
         });
 
-        airship.getPushManager().addRegistrationListener(new RegistrationListener() {
+        airship.getChannel().addChannelListener(new AirshipChannelListener() {
             @Override
             public void onChannelCreated(@NonNull String channelId) {
-                Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
+                Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getPushToken());
                 EventEmitter.shared().sendEvent(event);
 
                 // If the opt-in status changes send an event
@@ -73,16 +71,14 @@ public class ReactAutopilot extends Autopilot {
 
             @Override
             public void onChannelUpdated(@NonNull String channelId) {
-                Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getRegistrationToken());
+                Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getPushToken());
                 EventEmitter.shared().sendEvent(event);
 
                 // If the opt-in status changes send an event
                 UrbanAirshipReactModule.checkOptIn(context);
             }
-
-            @Override
-            public void onPushTokenUpdated(@NonNull String s) {}
         });
+
 
         airship.getPushManager().setNotificationListener(new NotificationListener() {
             @Override
@@ -127,7 +123,7 @@ public class ReactAutopilot extends Autopilot {
         airship.getMessageCenter().setOnShowMessageCenterListener(new MessageCenter.OnShowMessageCenterListener() {
             @Override
             public boolean onShowMessageCenter(@Nullable String messageId) {
-                if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true)) {
+                if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER, true)) {
                     return false;
                 } else {
                     sendShowInboxEvent(messageId);
@@ -140,28 +136,28 @@ public class ReactAutopilot extends Autopilot {
         ReactNotificationProvider notificationProvider = new ReactNotificationProvider(context, airship.getAirshipConfigOptions());
         airship.getPushManager().setNotificationProvider(notificationProvider);
 
-        airship.shared().getAnalytics().registerSDKExtension(Analytics.EXTENSION_REACT_NATIVE, MODULE_VERSION);
+        airship.getAnalytics().registerSDKExtension(Analytics.EXTENSION_REACT_NATIVE, BuildConfig.MODULE_VERSION);
 
         loadCustomNotificationChannels(context, airship);
         loadCustomNotificationButtonGroups(context, airship);
     }
 
     private void loadCustomNotificationChannels(Context context, UAirship airship) {
-        String packageName = UAirship.shared().getPackageName();
+        String packageName = UAirship.getPackageName();
         @XmlRes int resId = context.getResources().getIdentifier("ua_custom_notification_channels", "xml", packageName);
 
         if (resId != 0) {
-            Logger.debug("Loading custom notification channels");
+            PluginLogger.debug("Loading custom notification channels");
             airship.getPushManager().getNotificationChannelRegistry().createNotificationChannels(resId);
         }
     }
 
     private void loadCustomNotificationButtonGroups(Context context, UAirship airship) {
-        String packageName = UAirship.shared().getPackageName();
+        String packageName = UAirship.getPackageName();
         @XmlRes int resId = context.getResources().getIdentifier("ua_custom_notification_buttons", "xml", packageName);
 
         if (resId != 0) {
-            Logger.debug("Loading custom notification button groups");
+            PluginLogger.debug("Loading custom notification button groups");
             airship.getPushManager().addNotificationActionButtonGroups(context, resId);
         }
     }

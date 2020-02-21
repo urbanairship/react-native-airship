@@ -21,7 +21,6 @@ public class RegistrationEvent implements Event {
     private final String channelId;
     private final String registrationToken;
 
-
     /**
      * Default constructor.
      *

@@ -4,7 +4,6 @@ package com.urbanairship.reactnative;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.MainThread;
 
@@ -140,7 +139,7 @@ class EventEmitter {
         try {
             reactContext.getJSModule(RCTNativeAppEventEmitter.class).emit(event.getName(), event.getBody());
         } catch (Exception e) {
-            Log.d("UrbanAirshipReactModule", "Failed to emit event", e);
+            PluginLogger.error("UrbanAirshipReactModule - Failed to emit event", e);
             return false;
         }
 

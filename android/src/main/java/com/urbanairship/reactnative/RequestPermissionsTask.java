@@ -2,6 +2,7 @@
 
 package com.urbanairship.reactnative;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import com.urbanairship.util.HelperActivity;
  */
 class RequestPermissionsTask extends AsyncTask<String, Void, Boolean> {
 
+    @SuppressLint("StaticFieldLeak")
     private final Context context;
     private Callback callback;
 
