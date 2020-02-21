@@ -20,6 +20,18 @@ Execute the following command in the root directory
 yarn install
 ```
 
+3) Link urbanairship-react-native
+
+Execute the following command in src/
+
+yarn link
+
+Next, execute the following command in example/
+
+yarn link urbanairship-react-native
+
+4) Perform platform-specific setup
+
 ## iOS
 
 1) Run `pod install` in `example/ios`
