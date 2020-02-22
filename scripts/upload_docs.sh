@@ -2,13 +2,13 @@
 set -e
 set -x
 
-if [ -z "$1" ]
-  then
+if [ -z "$1" ];
+then
     echo "No version supplied"
     exit 1
 fi
 
-if [ ! -d "$2" ]; then
+if [ ! -d "$2" ];
 then
     echo "Missing docs $2"
     exit 1
