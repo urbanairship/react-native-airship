@@ -234,10 +234,10 @@ PODS:
     - React
   - RNReanimated (1.7.0):
     - React
-  - RNScreens (2.0.0-beta.8):
+  - RNScreens (2.0.0-beta.12):
     - React
-  - urbanairship-react-native (6.0.1):
-    - Airship (= 13.0.4)
+  - urbanairship-react-native (6.1.0):
+    - Airship (= 13.1.0)
     - React
   - Yoga (1.14.0)
 
@@ -272,7 +272,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../node_modules/react-native-screens`)
-  - urbanairship-react-native (from `../../src`)
+  - urbanairship-react-native (from `../node_modules/urbanairship-react-native`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -337,12 +337,12 @@ EXTERNAL SOURCES:
   RNScreens:
     :path: "../../node_modules/react-native-screens"
   urbanairship-react-native:
-    :path: "../../src"
+    :path: "../node_modules/urbanairship-react-native"
   Yoga:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 81fd9eb432ff6db75140d5412915803806423cfb
+  Airship: d134f9b40aa0f82a676ade69c0293d508034d3ce
   AirshipExtensions: d7c19cb940daf475aa55af0778d8adab13369b03
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
@@ -371,10 +371,10 @@ SPEC CHECKSUMS:
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: d56b2da8367a56bbc9840e16d968339eb0ec7e7f
-  urbanairship-react-native: 760ff5145ebf740cb45d09d58f1a72ef78b5e8ef
+  RNScreens: 5462aa9a2b2cdf23d81d3f4ac2cf9bb54f27f594
+  urbanairship-react-native: e87a5bbb77a95f9dd11e9f7ed598b08c563dedb9
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: 4e1bc94212b9a73575276fbd79c1ca4df24aa8d7
+PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
 
 COCOAPODS: 1.8.4
