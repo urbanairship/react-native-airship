@@ -24,11 +24,15 @@ yarn install
 
 Execute the following command in src/
 
+```
 yarn link
+```
 
 Next, execute the following command in example/
 
+```
 yarn link urbanairship-react-native
+```
 
 4) Perform platform-specific setup
 
@@ -40,7 +44,9 @@ yarn link urbanairship-react-native
 
 3) Create the `AirshipConfig.plist` file
 
-4) Build and run the sample: `yarn run:ios`
+4) Start the webserver in the example directory by running `yarn react-native start`
+
+5) Build and run the sample: `yarn run:ios`
 
 You should now be able to modify the iOS plugin source
 directly in the sample's workspace.
@@ -53,7 +59,9 @@ directly in the sample's workspace.
 
 3) If using FCM, add your `google-services.json` file in `example/android/app`
 
-4) Build and run the sample: `yarn run:android`
+4) Start the webserver in the example directory by running `yarn react-native start`
+
+5) Build and run the sample: `yarn run:android`
 
 You should now be able to modify the Android plugin source directly in the Android Studio.
 

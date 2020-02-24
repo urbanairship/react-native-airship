@@ -77,8 +77,6 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "example/index.js",
-    // TODO: remove once @esemesek's patch is merged
-    cliPath: "../node_modules/react-native/cli.js"
 ]
 
 apply from: "../../../node_modules/react-native/react.gradle"
