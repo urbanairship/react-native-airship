@@ -76,7 +76,8 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "example/index.js",
+    entryFile: "index.js",
+    cliPath: "../node_modules/react-native/cli.js"
 ]
 
 apply from: "../../../node_modules/react-native/react.gradle"
@@ -152,7 +153,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation project(':urbanairship-react-native')
 
     // JSC from node_modules
     if (useIntlJsc) {
