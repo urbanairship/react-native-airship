@@ -30,7 +30,7 @@ yarn install
 
 3) Create the `AirshipConfig.plist` file
 
-4) Start the webserver in the `example` directory by running `yarn react-native start`
+4) Start the webserver in the top-level directory by running `yarn start`
 
 5) Build and run the sample in the `example` directory: `yarn run:ios`
 
@@ -45,7 +45,7 @@ directly in the sample's workspace.
 
 3) If using FCM, add your `google-services.json` file in `example/android/app`
 
-4) Start the webserver in the `example` directory by running `yarn react-native start`
+4) Start the webserver in the top-level directory by running `yarn start`
 
 5) Build and run the sample in the `example` directory: `yarn run:android`
 

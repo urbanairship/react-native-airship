@@ -8,6 +8,7 @@
     "preset": "react-native"
   },
   "scripts": {
+    "start": "react-native start",
     "generate-docs": "node_modules/.bin/documentation --config documentation.yml build src/js/** -f html -o out",
     "test": "jest --verbose",
     "clean": "rm -rf node_modules src/node_modules example/node_modules yarn.lock"

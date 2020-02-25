@@ -1,3 +1,18 @@
+
+Version 6.1.1 - February 25, 2020
+=================================
+Patch release enabling monorepo project structure. 
+Example app dependencies have been moved from the module's 
+package.json to the example app. These include:
+
+- react-native-gesture-handler
+- react-native-reanimated
+- react-native-screens
+- react-navigation
+- react-navigation-tabs
+
+iOS and Android SDKs remain at 13.1.0 and 12.2.0, respectively.
+
 Version 6.1.0 - February 21, 2020
 =================================
 - Updated iOS SDK to 13.1.0
