@@ -1,4 +1,4 @@
-{  
+{
     "private" : true,
     "name": "example",
     "version": "1.0.0",
@@ -10,7 +10,7 @@
       "react-native-screens": "^2.0.0-alpha.3",
       "react-navigation": "^4.0.10",
       "react-navigation-tabs": "^2.5.5",
-      "urbanairship-react-native": "./src"
+      "urbanairship-react-native": "*"
     },
     "scripts": {
       "start": "react-native start",
