@@ -42,8 +42,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Generate documentation
         run: |
-          npm install .
-          npm run-script generate-docs
+          yarn install .
+          yarn generate-docs
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: "270.0.0"
@@ -52,7 +52,10 @@ jobs:
       - name: Upload docs
         run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//} out
       - name: Publish library
-        run: npm publish
+        run: |
+          cd src/
+          yarn publish
+          cd -
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Slack Notification
