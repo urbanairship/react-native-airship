@@ -4,7 +4,7 @@ require "json"
  sync_version = `#{__dir__}/scripts/sync_version.sh #{package["version"]}`
 
  Pod::Spec.new do |s|
-  s.name         = "UrbanAirship-React-Native-Module"
+  s.name         = "urbanairship-react-native"
   s.version      = package["version"]
   s.summary      = package['description']
   s.author       = package['author']

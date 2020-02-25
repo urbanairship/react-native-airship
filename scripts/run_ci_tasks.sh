@@ -37,10 +37,10 @@ done
 
 cd $REPO_PATH
 
-npm install
+yarn install
 
 # Tests
-npm run test
+yarn test
 
 # Android
 if $ANDROID ; then

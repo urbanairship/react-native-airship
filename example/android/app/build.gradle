@@ -76,7 +76,8 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+    entryFile: "index.js",
+    cliPath: "../node_modules/react-native/cli.js"
 ]
 
 apply from: "../../../node_modules/react-native/react.gradle"
@@ -152,7 +153,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation project(':urbanairship-react-native')
 
     // JSC from node_modules
     if (useIntlJsc) {
@@ -173,8 +173,9 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
+
 // set custom root because we're in a monorepo
-applyNativeModulesAppBuildGradle(project, "../..")
+applyNativeModulesAppBuildGradle(project)
 
 def googleServicesFile = rootProject.file('app/google-services.json')
 if (googleServicesFile.exists()) {

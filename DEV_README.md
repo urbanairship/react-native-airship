@@ -1,11 +1,11 @@
 # Airship React Native development
 
-The example is set up to pull the Airship module from the root directory.
+The example is set up to reference the module using a yarn workspace.
 
-1) Install the react command line tools and watchman, if necessary:
+1) Install yarn and watchman, if necessary
 
 ```
-npm install -g react-native-cli
+brew install yarn
 ```
 
 ```
@@ -14,9 +14,13 @@ brew install watchman
 
 2) Install modules
 
+Execute the following command in the root directory
+
 ```
-npm install
+yarn install
 ```
+
+3) Perform platform-specific setup
 
 ## iOS
 
@@ -26,9 +30,9 @@ npm install
 
 3) Create the `AirshipConfig.plist` file
 
-4) Start the webserver in the root by running `react-native start`
+4) Start the webserver in the `example` directory by running `yarn react-native start`
 
-5) Build and run the sample
+5) Build and run the sample in the `example` directory: `yarn run:ios`
 
 You should now be able to modify the iOS plugin source
 directly in the sample's workspace.
@@ -41,10 +45,10 @@ directly in the sample's workspace.
 
 3) If using FCM, add your `google-services.json` file in `example/android/app`
 
-4) Start the webserver in the root by running `react-native start`
+4) Start the webserver in the `example` directory by running `yarn react-native start`
 
-5) Build and run the sample
+5) Build and run the sample in the `example` directory: `yarn run:android`
 
-You should now be able to modify the Android plugin source directly in the Android Studio.
+You should now be able to modify the Android plugin source directly in Android Studio.
 
 

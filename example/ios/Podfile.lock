@@ -230,13 +230,13 @@ PODS:
     - React-cxxreact (= 0.61.1)
     - React-jsi (= 0.61.1)
     - ReactCommon/jscallinvoker (= 0.61.1)
-  - RNGestureHandler (1.5.3):
+  - RNGestureHandler (1.6.0):
     - React
-  - RNReanimated (1.4.0):
+  - RNReanimated (1.7.0):
     - React
-  - RNScreens (2.0.0-alpha.22):
+  - RNScreens (2.0.0-beta.12):
     - React
-  - UrbanAirship-React-Native-Module (6.0.1):
+  - urbanairship-react-native (6.1.0):
     - Airship (= 13.1.0)
     - React
   - Yoga (1.14.0)
@@ -272,7 +272,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../node_modules/react-native-screens`)
-  - UrbanAirship-React-Native-Module (from `../../`)
+  - urbanairship-react-native (from `../../src`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -336,8 +336,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../../node_modules/react-native-screens"
-  UrbanAirship-React-Native-Module:
-    :path: "../../"
+  urbanairship-react-native:
+    :path: "../../src"
   Yoga:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
@@ -369,12 +369,12 @@ SPEC CHECKSUMS:
   React-RCTText: 81b62b4e7f11531a5154e4daa5617670d5a2d5de
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
-  RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
-  RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
-  RNScreens: 6adf01eb4080f44af6cca551207c6b0505066857
-  UrbanAirship-React-Native-Module: 9f77cdde75bb46957b4398dc86a7c9a5ca9cc3a0
+  RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
+  RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
+  RNScreens: 5462aa9a2b2cdf23d81d3f4ac2cf9bb54f27f594
+  urbanairship-react-native: e87a5bbb77a95f9dd11e9f7ed598b08c563dedb9
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: b5e5abc1e0c2305331ac61b6ea3a6b8509c1450b
+PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
 
 COCOAPODS: 1.8.4
