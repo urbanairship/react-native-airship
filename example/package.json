@@ -13,9 +13,7 @@
       "urbanairship-react-native": "*"
     },
     "scripts": {
-      "start": "react-native start",
       "run:android": "react-native run-android",
-      "run:ios": "react-native run-ios",
-      "cli-version" : "react-native --version"
+      "run:ios": "react-native run-ios"
     }
  }
