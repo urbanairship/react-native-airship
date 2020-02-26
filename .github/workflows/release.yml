@@ -42,7 +42,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Generate documentation
         run: |
-          yarn install .
+          yarn install
           yarn generate-docs
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
