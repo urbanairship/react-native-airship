@@ -75,6 +75,85 @@ declare class TagGroupEditor {
   apply(): void;
 }
 
+/**
+ * Event type indicating that a message load has started.
+ */
+declare interface MessageLoadStartedEvent {
+  /**
+   * The message ID.
+   */
+  messageId: string;
+}
+
+/**
+ * Event type indicating that a message load finished.
+ */
+declare interface MessageLoadFinishedEvent {
+  /**
+   * The message ID.
+   */
+  messageId: string;
+}
+
+/**
+ * Event type indicating that a message load failed.
+ */
+declare interface MessageLoadErrorEvent {
+  /**
+   * The message ID.
+   */
+  messageId: string;
+  /**
+   * The error message.
+   */
+  error: string;
+  /**
+   * Whether the error is retriable.
+   */
+  retryable: boolean;
+}
+
+/**
+ * Event type indicating that message was closed.
+ */
+declare interface MessageCloseEvent {
+  /**
+   * The message ID.
+   */
+  messageId:string;
+}
+
+/**
+ * Properties for UAMessageView.
+ */
+declare interface MessageViewProps {
+  /**
+   * The message ID to load.
+   */
+  messageId: string;
+  /**
+   * Callback invoked when loading starts.
+   */
+  onLoadStarted?: (event: MessageLoadStartedEvent) => void;
+  /**
+   * Callback invoked when loading finishes.
+   */
+  onLoadFinished?: (event: MessageLoadFinishedEvent) => void;
+  /**
+   * Callback invoked when loading fails.
+   */
+  onLoadError?: (event: MessageLoadErrorEvent) => void;
+  /**
+   * Callback invoked when the message is closed.
+   */
+  onClose?: (event: MessageCloseEvent) => void;
+}
+
+/**
+ * Component class for loading and displaying Message Center messages.
+ */
+declare class UAMessageView extends React.Component<MessageViewProps, any> {}
+
 declare interface Message {
   /** The messages ID.Needed to display, mark as read, or delete the message. **/
   id: string;
