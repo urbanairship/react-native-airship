@@ -8,7 +8,8 @@ Patch release to fix IAA Youtube video display on Android.
 
 ## Version 6.1.1 - February 25, 2020
 Patch release enabling monorepo project structure.
-Example app dependencies have been moved from the module's package.json to the example app. These include:
+Example app dependencies have been moved from the module's
+package.json to the example app. These include:
 
 - react-native-gesture-handler
 - react-native-reanimated
