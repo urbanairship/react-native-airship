@@ -19,7 +19,7 @@
     "@babel/runtime": "7.5.4",
     "@react-native-community/eslint-config": "0.0.5",
     "@typescript-eslint/parser": "^1.13.0",
-    "acorn": "^7.0.0",
+    "acorn": "^7.1.1",
     "acorn-jsx": "^5.0.2",
     "documentation": "12.1.1",
     "eslint": "^5.16.0",
