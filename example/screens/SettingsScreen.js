@@ -54,7 +54,6 @@ export default class SettingsScreen extends Component {
     this.handleNamedUserSet = this.handleNamedUserSet.bind(this);
     this.handleUpdateNamedUserText = this.handleUpdateNamedUserText.bind(this);
     this.handleRenderNamedUser = this.handleRenderNamedUser.bind(this);
-    this.handleMessageCenterDisplay = this.handleMessageCenterDisplay.bind(this);
 
     this.handleUpdateTagsList();
     this.handleUpdateNamedUser();
@@ -121,10 +120,6 @@ export default class SettingsScreen extends Component {
 
   handleUpdateTagText(text) {
     this.setState({tagText:text})
-  }
-
-  handleMessageCenterDisplay() {
-    UrbanAirship.displayMessageCenter()
   }
 
   componentDidMount() {
@@ -195,11 +190,6 @@ export default class SettingsScreen extends Component {
           <EnableLocationCell
             locationEnabled={this.state.locationEnabled}
             handleLocationEnabled={this.handleLocationEnabled}
-          />
-          <Button
-             color='#0d6a83'
-             onPress={() => this.handleMessageCenterDisplay()}
-             title="Message Center"
           />
         </ScrollView>
     </View>
