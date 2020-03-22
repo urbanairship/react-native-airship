@@ -1,8 +1,8 @@
 # React Native Module Changelog
 
 ## Version 6.1.3 - March 23, 2020
-Patch addressing a regression in ios sdk 13.1.0 causing channel tag loss
-when upgrading from ios-sdk versions prior to 13.0.2. Apps upgrading from react-native module
+Patch addressing a regression in iOS SDK 13.1.0 causing channel tag loss
+when upgrading from iOS SDK versions prior to 13.0.1. Apps upgrading from react-native module
 version 5.0.1 or below should avoid plugin versions 6.1.0 through 6.1.2 in favor of version 6.1.3.
 
 - Updated iOS SDK to 13.1.1
