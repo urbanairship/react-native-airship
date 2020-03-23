@@ -1,17 +1,17 @@
 PODS:
-  - Airship (13.1.0):
-    - Airship/Automation (= 13.1.0)
-    - Airship/Core (= 13.1.0)
-    - Airship/ExtendedActions (= 13.1.0)
-    - Airship/MessageCenter (= 13.1.0)
-  - Airship/Automation (13.1.0):
+  - Airship (13.1.1):
+    - Airship/Automation (= 13.1.1)
+    - Airship/Core (= 13.1.1)
+    - Airship/ExtendedActions (= 13.1.1)
+    - Airship/MessageCenter (= 13.1.1)
+  - Airship/Automation (13.1.1):
     - Airship/Core
-  - Airship/Core (13.1.0)
-  - Airship/ExtendedActions (13.1.0):
+  - Airship/Core (13.1.1)
+  - Airship/ExtendedActions (13.1.1):
     - Airship/Core
-  - Airship/MessageCenter (13.1.0):
+  - Airship/MessageCenter (13.1.1):
     - Airship/Core
-  - AirshipExtensions/NotificationService (13.1.0)
+  - AirshipExtensions/NotificationService (13.1.1)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.1)
@@ -236,8 +236,8 @@ PODS:
     - React
   - RNScreens (2.0.0-beta.12):
     - React
-  - urbanairship-react-native (6.1.1):
-    - Airship (= 13.1.0)
+  - urbanairship-react-native (6.1.3):
+    - Airship (= 13.1.1)
     - React
   - Yoga (1.14.0)
 
@@ -342,8 +342,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: d134f9b40aa0f82a676ade69c0293d508034d3ce
-  AirshipExtensions: d7c19cb940daf475aa55af0778d8adab13369b03
+  Airship: ad7caf4cd8a419977f3975502308dae5561f7a03
+  AirshipExtensions: dd031cf81363ff5316eea79bf3ebfc1a016dd4f0
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: 0846affdb2924b01093eb696766ecb0104e409e0
@@ -372,9 +372,9 @@ SPEC CHECKSUMS:
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: 5462aa9a2b2cdf23d81d3f4ac2cf9bb54f27f594
-  urbanairship-react-native: 7e800d6a410791ed2a2cb5c58a3fe5d0ce79aa2e
+  urbanairship-react-native: d1f47a85422cc0850ede50cbe1deef6a9d686598
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
 PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.0.beta.2
