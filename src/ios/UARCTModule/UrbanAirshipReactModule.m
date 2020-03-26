@@ -536,7 +536,6 @@ RCT_REMAP_METHOD(refreshInbox,
 
 RCT_EXPORT_METHOD(setAutoLaunchDefaultMessageCenter:(BOOL)enabled) {
     [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:UARCTAutoLaunchMessageCenterKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 RCT_EXPORT_METHOD(clearNotifications) {
