@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  *
- * HomeScreen: Contains only the channelId for the moment.
+ * MessageCenterScreen: Contains the list of messages.
  */
 'use strict';
 
@@ -19,43 +19,57 @@ import {
   Image,
   ScrollView,
   Button,
+  FlatList,
+  TouchableHighlight,
 } from 'react-native';
 
-import styles from './../Styles'
+import Moment from 'moment';
+
+import styles from './../Styles';
+import MessageScreen from "./MessageScreen"
+
+function Item({ message, navigation }) {
+  return (
+  <TouchableHighlight
+    activeOpacity={0.6}
+    underlayColor="#DDDDDD"
+    onPress={() => navigation.navigate("MessageDetails", { messageId: message.id })}>
+    <View style={styles.item}>
+      <Text style={styles.itemTitle}>{message.title}</Text>
+      <Text style={styles.itemSubtitle}>{Moment(message.sentDate).format('MM/DD/YYYY')}</Text>
+      <View style={styles.itemSeparator}></View>
+    </View>
+  </TouchableHighlight>
+  );
+}
 
 export default class MessageCenterScreen extends React.Component {
 
   constructor(props) {
     super (props);
+    this.state = {
+      messages: [],
+    }
 
-    this.handleMessageCenterDisplay = this.handleMessageCenterDisplay.bind(this);
+    this.handleUpdateMessageList();
   }
 
-  componentDidMount() {
-    this.handleMessageCenterDisplay()
+  handleUpdateMessageList() {
+    UrbanAirship.getInboxMessages().then((data) => {
+        this.setState({
+            messages: data,
+        });
+    });
   }
-
-  handleMessageCenterDisplay() {
-    UrbanAirship.displayMessageCenter()
-  }
-
 
   render() {
     return (
        <View style={styles.backgroundContainer}>
-         <ScrollView contentContainerStyle={styles.contentContainer}>
-           <Image
-             style={{width: 300, height: 38, marginTop:50, alignItems:'center'}}
-             source={require('./../img/urban-airship-sidebyside.png')}
-           />
-           <View style={{height:75}}>
-           </View>
-           <Button
-             color='#0d6a83'
-             onPress={() => this.handleMessageCenterDisplay()}
-             title="Message center"
-           />
-         </ScrollView>
+        <FlatList
+            data={this.state.messages}
+            renderItem={({ item }) => <Item message={item} navigation={this.props.navigation} />}
+            keyExtractor={item => item.id}
+        />
        </View>
     );
   }

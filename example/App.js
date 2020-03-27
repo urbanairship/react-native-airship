@@ -6,10 +6,27 @@
 
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
-import MessageCenterScreen from "./screens/MessageCenterScreen";
+import MessageListScreen from "./screens/MessageCenterScreen";
+import MessageDetailsScreen from "./screens/MessageScreen";
+
+const MessageCenterStack = createStackNavigator({
+ MessageList: {
+  screen: MessageListScreen,
+  navigationOptions: {
+    headerTitle: 'Messages list',
+  }
+ },
+ MessageDetails: {
+  screen: MessageDetailsScreen,
+  navigationOptions: {
+    headerTitle: 'Message details',
+  }
+ }
+});
 
 const TabNavigator = createBottomTabNavigator({
     Home: {
@@ -19,7 +36,7 @@ const TabNavigator = createBottomTabNavigator({
         }
     },
     MessageCenter: {
-        screen: MessageCenterScreen,
+        screen: MessageCenterStack,
         navigationOptions: {
             tabBarLabel: "Message center"
         }

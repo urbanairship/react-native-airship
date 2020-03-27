@@ -93,5 +93,25 @@ export default StyleSheet.create({
    position: 'absolute',
    left: 5,
    top: 8.5,
- },
+  },
+  container: {
+   flex: 1,
+   marginTop: 20,
+  },
+  item: {
+   opacity: 1,
+   padding: 10,
+  },
+  itemTitle: {
+   fontSize: 20,
+   fontWeight: 'bold',
+  },
+  itemSubtitle: {
+   fontSize: 15,
+  },
+  itemSeparator: {
+   height: 1,
+   backgroundColor: "#CEDCCE",
+   marginTop: 15,
+  }
 });
