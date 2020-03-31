@@ -25,6 +25,13 @@ export default class MessageScreen extends React.Component {
     super (props);
   }
 
+  static navigationOptions = ({ navigation }) => {
+      const { params } = navigation.state;
+      return {
+        title: params ? params.title: "",
+      }
+  };
+
   render() {
     const { params } = this.props.navigation.state;
     const messageId = params ? params.messageId : "";

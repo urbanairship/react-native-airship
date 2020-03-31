@@ -26,14 +26,13 @@ import {
 import Moment from 'moment';
 
 import styles from './../Styles';
-import MessageScreen from "./MessageScreen"
 
 function Item({ message, navigation }) {
   return (
   <TouchableHighlight
     activeOpacity={0.6}
     underlayColor="#DDDDDD"
-    onPress={() => navigation.navigate("MessageDetails", { messageId: message.id })}>
+    onPress={() => navigation.navigate("MessageDetails", { messageId: message.id, title: message.title })}>
     <View style={styles.item}>
       <Text style={styles.itemTitle}>{message.title}</Text>
       <Text style={styles.itemSubtitle}>{Moment(message.sentDate).format('MM/DD/YYYY')}</Text>

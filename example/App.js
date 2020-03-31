@@ -15,16 +15,13 @@ import MessageScreen from "./screens/MessageScreen";
 
 const MessageCenterStack = createStackNavigator({
  MessageList: {
-  screen: MessageListScreen,
+  screen: MessageCenterScreen,
   navigationOptions: {
     headerTitle: 'Messages Center',
   }
  },
  MessageDetails: {
-  screen: MessageDetailsScreen,
-  navigationOptions: {
-    headerTitle: 'Message details',
-  }
+  screen: MessageScreen
  }
 });
 
