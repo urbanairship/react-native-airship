@@ -17,7 +17,7 @@ const MessageCenterStack = createStackNavigator({
  MessageList: {
   screen: MessageListScreen,
   navigationOptions: {
-    headerTitle: 'Messages list',
+    headerTitle: 'Messages Center',
   }
  },
  MessageDetails: {
