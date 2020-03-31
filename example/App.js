@@ -38,7 +38,7 @@ const TabNavigator = createBottomTabNavigator({
     MessageCenter: {
         screen: MessageCenterStack,
         navigationOptions: {
-            tabBarLabel: "Message center"
+            tabBarLabel: "Message Center"
         }
     },
     Settings: {
