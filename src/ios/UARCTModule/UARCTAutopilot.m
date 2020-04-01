@@ -54,7 +54,6 @@ static BOOL disabled = NO;
 
     if ([[NSUserDefaults standardUserDefaults] objectForKey:UARCTAutoLaunchMessageCenterKey] == nil) {
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:UARCTAutoLaunchMessageCenterKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
     if (([UARCTAirshipRecommendedVersion compare:[UAirshipVersion get] options:NSNumericSearch] == NSOrderedDescending)) {
