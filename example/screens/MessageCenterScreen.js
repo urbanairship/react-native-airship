@@ -21,6 +21,7 @@ import {
   Button,
   FlatList,
   TouchableHighlight,
+  RefreshControl
 } from 'react-native';
 
 import Moment from 'moment';
@@ -48,7 +49,10 @@ export default class MessageCenterScreen extends React.Component {
     super (props);
     this.state = {
       messages: [],
+      refreshing: true,
     }
+
+    this.refreshMessageCenter = this.refreshMessageCenter.bind(this);
 
     this.handleUpdateMessageList();
   }
@@ -57,18 +61,28 @@ export default class MessageCenterScreen extends React.Component {
     UrbanAirship.getInboxMessages().then((data) => {
         this.setState({
             messages: data,
+            refreshing: false,
         });
     });
   }
 
+  refreshMessageCenter() {
+    this.handleUpdateMessageList();
+  }
   render() {
     return (
        <View style={styles.backgroundContainer}>
+       <ScrollView
+               refreshControl={
+                 <RefreshControl refreshing={this.state.refreshing} onRefresh={this.refreshMessageCenter} />
+               }
+       >
         <FlatList
             data={this.state.messages}
             renderItem={({ item }) => <Item message={item} navigation={this.props.navigation} />}
             keyExtractor={item => item.id}
         />
+       </ScrollView>
        </View>
     );
   }
