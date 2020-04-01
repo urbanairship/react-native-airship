@@ -55,13 +55,20 @@ export default class MessageCenterScreen extends React.Component {
     this.refreshMessageCenter = this.refreshMessageCenter.bind(this);
 
     this.handleUpdateMessageList();
+
+    UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
+
+    UrbanAirship.addListener("showInbox", (event) => {
+        console.log('showInbox:', event.messageId);
+        this.props.navigation.navigate("MessageDetails", { messageId:event.messageId, title: "" })
+    });
   }
 
   handleUpdateMessageList() {
     UrbanAirship.getInboxMessages().then((data) => {
         this.setState({
             messages: data,
-            refreshing: false,
+            refreshing: false
         });
     });
   }
@@ -69,20 +76,20 @@ export default class MessageCenterScreen extends React.Component {
   refreshMessageCenter() {
     this.handleUpdateMessageList();
   }
+
   render() {
     return (
        <View style={styles.backgroundContainer}>
-       <ScrollView
-               refreshControl={
-                 <RefreshControl refreshing={this.state.refreshing} onRefresh={this.refreshMessageCenter} />
-               }
-       >
         <FlatList
             data={this.state.messages}
             renderItem={({ item }) => <Item message={item} navigation={this.props.navigation} />}
             keyExtractor={item => item.id}
+            refreshControl={
+                <RefreshControl refreshing={this.state.refreshing}
+                                onRefresh={this.refreshMessageCenter}
+                />
+            }
         />
-       </ScrollView>
        </View>
     );
   }

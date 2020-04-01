@@ -43,6 +43,8 @@ export default class SettingsScreen extends Component {
       tagText:"",
       namedUserText:"",
     }
+    
+    UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
 
     this.handleNotificationsEnabled = this.handleNotificationsEnabled.bind(this);
     this.handleLocationEnabled = this.handleLocationEnabled.bind(this);
