@@ -113,5 +113,16 @@ export default StyleSheet.create({
    height: 1,
    backgroundColor: "#CEDCCE",
    marginTop: 15,
+  },
+  loadingIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.5,
+    color: 'white',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
