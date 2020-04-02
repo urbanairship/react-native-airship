@@ -60,7 +60,11 @@ export default class MessageCenterScreen extends React.Component {
 
     UrbanAirship.addListener("showInbox", (event) => {
         console.log('showInbox:', event);
-        this.props.navigation.navigate("MessageDetails", { messageId:event.messageId, title: "" })
+        if (event.messageId != null) {
+            this.props.navigation.navigate("MessageDetails", { messageId:event.event, title: "" })
+        } else {
+            this.props.navigation.navigate("MessageCenter")
+        }
     });
   }
 
