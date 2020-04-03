@@ -7,7 +7,7 @@
 #import "UARCTModuleVersion.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
-NSString *const UARCTAirshipRecommendedVersion = @"13.1.0";
+NSString *const UARCTAirshipRecommendedVersion = @"13.1.1";
 
 @implementation UARCTAutopilot
 
@@ -54,7 +54,6 @@ static BOOL disabled = NO;
 
     if ([[NSUserDefaults standardUserDefaults] objectForKey:UARCTAutoLaunchMessageCenterKey] == nil) {
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:UARCTAutoLaunchMessageCenterKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
     if (([UARCTAirshipRecommendedVersion compare:[UAirshipVersion get] options:NSNumericSearch] == NSOrderedDescending)) {
