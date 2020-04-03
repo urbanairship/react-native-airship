@@ -43,6 +43,8 @@ export default class SettingsScreen extends Component {
       tagText:"",
       namedUserText:"",
     }
+    
+    UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
 
     this.handleNotificationsEnabled = this.handleNotificationsEnabled.bind(this);
     this.handleLocationEnabled = this.handleLocationEnabled.bind(this);
@@ -197,9 +199,9 @@ export default class SettingsScreen extends Component {
             handleLocationEnabled={this.handleLocationEnabled}
           />
           <Button
-             color='#0d6a83'
-             onPress={() => this.handleMessageCenterDisplay()}
-             title="Message Center"
+            color='#0d6a83'
+            onPress={() => this.handleMessageCenterDisplay()}
+            title="Message Center"
           />
         </ScrollView>
     </View>
