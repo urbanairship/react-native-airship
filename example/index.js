@@ -1,3 +1,4 @@
+/* Copyright Airship and Contributors */
 /**
  * @format
  */

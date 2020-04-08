@@ -1,3 +1,5 @@
+/* Copyright Airship and Contributors */
+
 import {
   StyleSheet,
 } from 'react-native';
