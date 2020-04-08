@@ -1,3 +1,5 @@
+/* Copyright Airship and Contributors */
+
 // @flow
 'use strict';
 
