@@ -1,15 +1,15 @@
 PODS:
-  - Airship (13.2.1):
-    - Airship/Automation (= 13.2.1)
-    - Airship/Core (= 13.2.1)
-    - Airship/ExtendedActions (= 13.2.1)
-    - Airship/MessageCenter (= 13.2.1)
-  - Airship/Automation (13.2.1):
+  - Airship (13.3.0):
+    - Airship/Automation (= 13.3.0)
+    - Airship/Core (= 13.3.0)
+    - Airship/ExtendedActions (= 13.3.0)
+    - Airship/MessageCenter (= 13.3.0)
+  - Airship/Automation (13.3.0):
     - Airship/Core
-  - Airship/Core (13.2.1)
-  - Airship/ExtendedActions (13.2.1):
+  - Airship/Core (13.3.0)
+  - Airship/ExtendedActions (13.3.0):
     - Airship/Core
-  - Airship/MessageCenter (13.2.1):
+  - Airship/MessageCenter (13.3.0):
     - Airship/Core
   - AirshipExtensions/NotificationService (13.3.0)
   - boost-for-react-native (1.63.0)
@@ -241,7 +241,7 @@ PODS:
   - RNScreens (2.7.0):
     - React
   - urbanairship-react-native (6.1.3):
-    - Airship (= 13.2.1)
+    - Airship (= 13.3.0)
     - React
   - Yoga (1.14.0)
 
@@ -352,7 +352,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 2831f96f97e3a902831bcbc8595ffc1b85773fbb
+  Airship: 6f80d0a043e757d2b53c447d1d786d18a3fa68c1
   AirshipExtensions: f71fac856a0f01787e760ac85471a4b1aeafe67f
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
@@ -384,7 +384,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
   RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
-  urbanairship-react-native: 0bc25cf68fff01b93fc824cd949a9748d9e915fc
+  urbanairship-react-native: e46e9674b05d13842fd6849c3d7f8b142f197ce0
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
 PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
