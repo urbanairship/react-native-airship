@@ -37,7 +37,7 @@ static BOOL disabled = NO;
 
     // Register custom deep link action
     UARCTDeepLinkAction *dle = [[UARCTDeepLinkAction alloc] init];
-    [[UAirship shared].actionRegistry updateAction:dle forEntryWithName:kUADeepLinkActionDefaultRegistryName];
+    [[UAirship shared].actionRegistry updateAction:dle forEntryWithName:UADeepLinkActionDefaultRegistryName];
     dle.deepLinkDelegate = [UARCTEventEmitter shared];
 
     // Add observer for inbox updated event
