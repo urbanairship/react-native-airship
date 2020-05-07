@@ -1,17 +1,17 @@
 PODS:
-  - Airship (13.1.1):
-    - Airship/Automation (= 13.1.1)
-    - Airship/Core (= 13.1.1)
-    - Airship/ExtendedActions (= 13.1.1)
-    - Airship/MessageCenter (= 13.1.1)
-  - Airship/Automation (13.1.1):
+  - Airship (13.2.1):
+    - Airship/Automation (= 13.2.1)
+    - Airship/Core (= 13.2.1)
+    - Airship/ExtendedActions (= 13.2.1)
+    - Airship/MessageCenter (= 13.2.1)
+  - Airship/Automation (13.2.1):
     - Airship/Core
-  - Airship/Core (13.1.1)
-  - Airship/ExtendedActions (13.1.1):
+  - Airship/Core (13.2.1)
+  - Airship/ExtendedActions (13.2.1):
     - Airship/Core
-  - Airship/MessageCenter (13.1.1):
+  - Airship/MessageCenter (13.2.1):
     - Airship/Core
-  - AirshipExtensions/NotificationService (13.1.1)
+  - AirshipExtensions/NotificationService (13.3.0)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.1)
@@ -232,16 +232,16 @@ PODS:
     - React-cxxreact (= 0.61.1)
     - React-jsi (= 0.61.1)
     - ReactCommon/jscallinvoker (= 0.61.1)
-  - RNCMaskedView (0.1.7):
+  - RNCMaskedView (0.1.10):
     - React
   - RNGestureHandler (1.6.1):
     - React
-  - RNReanimated (1.7.1):
+  - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.4.0):
+  - RNScreens (2.7.0):
     - React
   - urbanairship-react-native (6.1.3):
-    - Airship (= 13.1.1)
+    - Airship (= 13.2.1)
     - React
   - Yoga (1.14.0)
 
@@ -352,8 +352,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: ad7caf4cd8a419977f3975502308dae5561f7a03
-  AirshipExtensions: dd031cf81363ff5316eea79bf3ebfc1a016dd4f0
+  Airship: 2831f96f97e3a902831bcbc8595ffc1b85773fbb
+  AirshipExtensions: f71fac856a0f01787e760ac85471a4b1aeafe67f
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: 0846affdb2924b01093eb696766ecb0104e409e0
@@ -380,11 +380,11 @@ SPEC CHECKSUMS:
   React-RCTText: 81b62b4e7f11531a5154e4daa5617670d5a2d5de
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
-  RNCMaskedView: 76c40a1d41c3e2535df09246a2b5487f04de0814
+  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNReanimated: 4e102df74a9674fa943e05f97f3362b6e44d0b48
-  RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
-  urbanairship-react-native: d1f47a85422cc0850ede50cbe1deef6a9d686598
+  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
+  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
+  urbanairship-react-native: 0bc25cf68fff01b93fc824cd949a9748d9e915fc
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
 PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
