@@ -13,11 +13,6 @@
                              action:@selector(dismissMessageViewController:)];
     
     self.navigationItem.rightBarButtonItem = done;
-    
-    __weak UARCTMessageViewController *weakSelf = self;
-    self.closeBlock = ^(BOOL animated) {
-        [weakSelf dismissViewControllerAnimated:animated completion:nil];
-    };
 }
 
 - (void) dismissMessageViewController:(id)sender {

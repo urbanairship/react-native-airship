@@ -16,7 +16,7 @@
 #endif
 
 @interface UrbanAirshipReactModule()
-@property (nonatomic, weak) UARCTMessageViewController *messageViewController;
+@property (nonatomic, weak) UADefaultMessageCenterMessageViewController *messageViewController;
 @property (nonatomic, weak) UAInAppMessageHTMLAdapter *htmlAdapter;
 @property (nonatomic, assign) BOOL factoryBlockAssigned;
 @end
@@ -433,8 +433,8 @@ RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAMessageCenterResources bundle]];
-    [mvc loadMessageForID:messageId onlyIfChanged:YES onError:nil];
+    UADefaultMessageCenterMessageViewController *mvc = [[UADefaultMessageCenterMessageViewController alloc] initWithNibName:@"UADefaultMessageCenterMessageViewController" bundle:[UAMessageCenterResources bundle]];
+    [mvc loadMessageForID:messageId];
 
     UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
     self.messageViewController = mvc;
