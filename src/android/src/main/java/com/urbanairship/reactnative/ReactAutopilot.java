@@ -4,6 +4,7 @@ package com.urbanairship.reactnative;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.XmlRes;
@@ -13,6 +14,7 @@ import com.urbanairship.UAirship;
 import com.urbanairship.actions.DeepLinkListener;
 import com.urbanairship.analytics.Analytics;
 import com.urbanairship.channel.AirshipChannelListener;
+import com.urbanairship.messagecenter.InboxListener;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.NotificationActionButtonInfo;
 import com.urbanairship.push.NotificationInfo;
@@ -25,7 +27,6 @@ import com.urbanairship.reactnative.events.NotificationResponseEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.reactnative.events.RegistrationEvent;
 import com.urbanairship.reactnative.events.ShowInboxEvent;
-import com.urbanairship.richpush.RichPushInbox;
 
 /**
  * Module's autopilot to customize Urban Airship.
@@ -112,15 +113,15 @@ public class ReactAutopilot extends Autopilot {
         });
 
         // Register a listener for inbox update event
-        airship.getInbox().addListener(new RichPushInbox.Listener() {
+        MessageCenter.shared().getInbox().addListener(new InboxListener() {
             @Override
             public void onInboxUpdated() {
-                Event event = new InboxUpdatedEvent(UAirship.shared().getInbox().getUnreadCount(), UAirship.shared().getInbox().getCount());
+                Event event = new InboxUpdatedEvent(MessageCenter.shared().getInbox().getUnreadCount(), MessageCenter.shared().getInbox().getCount());
                 EventEmitter.shared().sendEvent(event);
             }
         });
 
-        airship.getMessageCenter().setOnShowMessageCenterListener(new MessageCenter.OnShowMessageCenterListener() {
+        MessageCenter.shared().setOnShowMessageCenterListener(new MessageCenter.OnShowMessageCenterListener() {
             @Override
             public boolean onShowMessageCenter(@Nullable String messageId) {
                 if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER, true)) {

@@ -29,7 +29,7 @@ dependencies {
 
     implementation 'com.facebook.react:react-native:+'
     
-    implementation ('com.urbanairship.android:urbanairship-fcm:$airshipVersion') {
+    implementation ("com.urbanairship.android:urbanairship-fcm:$airshipVersion") {
       exclude group: 'com.google.firebase', module: 'firebase-messaging'
     }
 
