@@ -325,6 +325,29 @@ class UrbanAirship {
   }
 
   /**
+   * Creates an editor to modify the named user attributes.
+   *
+   * @return {Promise.<AttributeEditor, Error>}  A promise that returns an attribute editor instance if resolved, or an Error if the
+   * named user doesn't exist.
+   */
+  static editNamedUserAttributes(): Promise {
+    return new Promise((resolve, reject) => {
+            UrbanAirshipModule.getNamedUser()
+                              .then((namedUser) => {
+                                if (namedUser != null) {
+                                  var editor = new AttributeEditor((operations) => {
+                                    UrbanAirshipModule.editNamedUserAttributes(operations);
+                                  });
+                                  resolve(editor);
+                                } else {
+                                  var error = new Error("Can't edit attributes without first setting a named user identifier.");
+                                  reject(error);
+                                }
+                               });
+        });
+  }
+
+  /**
    * Enables or disables analytics.
    *
    * Disabling analytics will delete any locally stored events

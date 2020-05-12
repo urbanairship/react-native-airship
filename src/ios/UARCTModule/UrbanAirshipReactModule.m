@@ -309,6 +309,27 @@ RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
     [[UAirship channel] applyAttributeMutations:mutations];
 }
 
+RCT_EXPORT_METHOD(editNamedUserAttributes:(NSArray *)operations) {
+    UAAttributeMutations *mutations = [UAAttributeMutations mutations];
+
+    for (NSDictionary *operation in operations) {
+        NSString *action = operation[@"action"];
+        NSString *name = operation[@"key"];
+        id value = operation[@"value"];
+
+        if ([action isEqualToString:@"set"]) {
+            if ([value isKindOfClass:[NSString class]]) {
+                [mutations setString:value forAttribute:name];
+            } else if ([value isKindOfClass:[NSNumber class]]) {
+                [mutations setNumber:value forAttribute:name];
+            }
+        } else if ([action isEqualToString:@"remove"]) {
+            [mutations removeAttribute:name];
+        }
+    }
+    [[UAirship namedUser] applyAttributeMutations:mutations];
+}
+
 RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {
     UNNotificationPresentationOptions presentationOptions = UNNotificationPresentationOptionNone;
 
