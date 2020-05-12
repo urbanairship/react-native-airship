@@ -288,45 +288,12 @@ RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
 }
 
 RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
-    UAAttributeMutations *mutations = [UAAttributeMutations mutations];
-
-    for (NSDictionary *operation in operations) {
-        NSString *action = operation[@"action"];
-        NSString *name = operation[@"key"];
-        id value = operation[@"value"];
-
-        if ([action isEqualToString:@"set"]) {
-            if ([value isKindOfClass:[NSString class]]) {
-                [mutations setString:value forAttribute:name];
-            } else if ([value isKindOfClass:[NSNumber class]]) {
-                [mutations setNumber:value forAttribute:name];
-            }
-        } else if ([action isEqualToString:@"remove"]) {
-            [mutations removeAttribute:name];
-        }
-    }
-
+    UAAttributeMutations *mutations = [self mutationsWithOperations:operations];
     [[UAirship channel] applyAttributeMutations:mutations];
 }
 
 RCT_EXPORT_METHOD(editNamedUserAttributes:(NSArray *)operations) {
-    UAAttributeMutations *mutations = [UAAttributeMutations mutations];
-
-    for (NSDictionary *operation in operations) {
-        NSString *action = operation[@"action"];
-        NSString *name = operation[@"key"];
-        id value = operation[@"value"];
-
-        if ([action isEqualToString:@"set"]) {
-            if ([value isKindOfClass:[NSString class]]) {
-                [mutations setString:value forAttribute:name];
-            } else if ([value isKindOfClass:[NSNumber class]]) {
-                [mutations setNumber:value forAttribute:name];
-            }
-        } else if ([action isEqualToString:@"remove"]) {
-            [mutations removeAttribute:name];
-        }
-    }
+    UAAttributeMutations *mutations = [self mutationsWithOperations:operations];
     [[UAirship namedUser] applyAttributeMutations:mutations];
 }
 
@@ -581,6 +548,30 @@ RCT_REMAP_METHOD(getActiveNotifications,
 
         resolve(result);
     }];
+}
+
+#pragma mark -
+#pragma mark Helper methods
+
+- (UAAttributeMutations *)mutationsWithOperations:(NSArray *)operations {
+    UAAttributeMutations *mutations = [UAAttributeMutations mutations];
+
+    for (NSDictionary *operation in operations) {
+        NSString *action = operation[@"action"];
+        NSString *name = operation[@"key"];
+        id value = operation[@"value"];
+
+        if ([action isEqualToString:@"set"]) {
+            if ([value isKindOfClass:[NSString class]]) {
+                [mutations setString:value forAttribute:name];
+            } else if ([value isKindOfClass:[NSNumber class]]) {
+                [mutations setNumber:value forAttribute:name];
+            }
+        } else if ([action isEqualToString:@"remove"]) {
+            [mutations removeAttribute:name];
+        }
+    }
+    return mutations;
 }
 
 @end

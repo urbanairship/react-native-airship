@@ -340,7 +340,7 @@ class UrbanAirship {
                                   });
                                   resolve(editor);
                                 } else {
-                                  var error = new Error("Can't edit attributes without first setting a named user identifier.");
+                                  var error = new Error("Can't edit named user attributes without first setting a named user identifier.");
                                   reject(error);
                                 }
                                });
