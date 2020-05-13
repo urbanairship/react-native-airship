@@ -14,10 +14,10 @@ class AttributeEditor {
   }
 
   /**
-   * Adds string attribute.
+   * Adds an attribute.
    * @instance
    * @memberof AttributeEditor
-   * @function setString
+   * @function setAttribute
    *
    * @param {string} value The attribute value.
    * @param {string|number|Date} name The attribute name.
@@ -45,7 +45,7 @@ class AttributeEditor {
   }
 
   /**
-   * Removes the attribute.
+   * Removes an attribute.
    * @instance
    * @memberof AttributeEditor
    * @function removeAttribute
