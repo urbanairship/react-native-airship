@@ -297,7 +297,12 @@ RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
 
         if ([action isEqualToString:@"set"]) {
             if ([value isKindOfClass:[NSString class]]) {
-                [mutations setString:value forAttribute:name];
+                NSDate *date = [self dateFromString:value];
+                if (date) {
+                    [mutations setDate:date forAttribute:name];
+                } else {
+                    [mutations setString:value forAttribute:name];
+                }
             } else if ([value isKindOfClass:[NSNumber class]]) {
                 [mutations setNumber:value forAttribute:name];
             }
@@ -560,6 +565,16 @@ RCT_REMAP_METHOD(getActiveNotifications,
 
         resolve(result);
     }];
+}
+
+#pragma mark -
+#pragma mark Utils
+- (NSDate *) dateFromString:(NSString *)value {
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ";
+    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    return [formatter dateFromString:value];
 }
 
 @end

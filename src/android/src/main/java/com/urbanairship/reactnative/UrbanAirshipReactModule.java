@@ -49,6 +49,8 @@ import com.urbanairship.richpush.RichPushInbox;
 import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.util.UAStringUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -915,7 +917,14 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                     if (value == null) {
                         continue;
                     }
-                    editor.setAttribute(key, value);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    Date date = null;
+                    try {
+                        date = format.parse(value);
+                        editor.setAttribute(key, date);
+                    } catch (ParseException e) {
+                        editor.setAttribute(key, value);
+                    }
                 } else if (ReadableType.Number == type) {
                     double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
                     editor.setAttribute(key, value);

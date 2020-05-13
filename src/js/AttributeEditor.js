@@ -23,8 +23,12 @@ class AttributeEditor {
    * @param {string} name The attribute name.
    * @return {AttributeEditor} The attribute editor instance.
    */
-  setAttribute(name: string, value: string|number): AttributeEditor {
-    var operation = { "action": "set", "value": value, "key": name }
+  setAttribute(name: string, value: string|number|date): AttributeEditor {
+    let newValue = value;
+    if (newValue instanceof Date) {
+        newValue = value.toISOString();
+    }
+    var operation = { "action": "set", "value": newValue, "key": name }
     this.operations.push(operation)
     return this;
   }
