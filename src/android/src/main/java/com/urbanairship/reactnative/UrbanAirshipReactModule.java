@@ -55,6 +55,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -918,6 +920,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                         continue;
                     }
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    format.setTimeZone(TimeZone.getTimeZone("UTC"));
                     Date date = null;
                     try {
                         date = format.parse(value);
