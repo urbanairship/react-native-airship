@@ -16,11 +16,11 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.urbanairship.Cancelable;
-import com.urbanairship.UAirship;
-import com.urbanairship.richpush.RichPushInbox;
-import com.urbanairship.richpush.RichPushMessage;
-import com.urbanairship.widget.UAWebView;
-import com.urbanairship.widget.UAWebViewClient;
+import com.urbanairship.messagecenter.Inbox;
+import com.urbanairship.messagecenter.Message;
+import com.urbanairship.messagecenter.MessageCenter;
+import com.urbanairship.messagecenter.webkit.MessageWebView;
+import com.urbanairship.messagecenter.webkit.MessageWebViewClient;
 
 public class ReactMessageView extends FrameLayout implements LifecycleEventListener {
 
@@ -37,11 +37,11 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
     private static final String ERROR_FAILED_TO_FETCH_MESSAGE = "FAILED_TO_FETCH_MESSAGE";
     private static final String ERROR_MESSAGE_LOAD_FAILED = "MESSAGE_LOAD_FAILED";
 
-    private RichPushMessage message;
+    private Message message;
     private Cancelable fetchMessageRequest;
-    private UAWebView webView;
+    private MessageWebView webView;
 
-    private WebViewClient webViewClient = new UAWebViewClient() {
+    private WebViewClient webViewClient = new MessageWebViewClient() {
         private Integer error = null;
 
         @Override
@@ -84,7 +84,7 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
 
     public void loadMessage(final String messageId) {
         if (webView == null) {
-            webView = new UAWebView(getContext());
+            webView = new MessageWebView(getContext());
             webView.setWebViewClient(webViewClient);
             addView(webView);
         }
@@ -99,12 +99,12 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
     void startLoading(final String messageId) {
         notifyLoadStarted(messageId);
 
-        this.message = UAirship.shared().getInbox().getMessage(messageId);
+        this.message = MessageCenter.shared().getInbox().getMessage(messageId);
         if (this.message == null) {
-            fetchMessageRequest = UAirship.shared().getInbox().fetchMessages(new RichPushInbox.FetchMessagesCallback() {
+            fetchMessageRequest = MessageCenter.shared().getInbox().fetchMessages(new Inbox.FetchMessagesCallback() {
                 @Override
                 public void onFinished(boolean success) {
-                    message = UAirship.shared().getInbox().getMessage(messageId);
+                    message = MessageCenter.shared().getInbox().getMessage(messageId);
                     if (!success) {
                         notifyLoadError(messageId, ERROR_FAILED_TO_FETCH_MESSAGE, true);
                         return;
@@ -112,7 +112,8 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
                         notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
                         return;
                     }
-                    webView.loadRichPushMessage(message);
+
+                    webView.loadMessage(message);
                 }
             });
         } else {
@@ -120,7 +121,7 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
                 notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
                 return;
             }
-            webView.loadRichPushMessage(this.message);
+            webView.loadMessage(this.message);
         }
     }
 

@@ -3,11 +3,11 @@ apply plugin: 'com.android.library'
 import groovy.json.JsonSlurper
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
     }
@@ -25,10 +25,18 @@ def safeExtGet (prop, fallback) {
 }
 
 dependencies {
+    def airshipVersion = "13.1.0"
+
     implementation 'com.facebook.react:react-native:+'
-    implementation ('com.urbanairship.android:urbanairship-fcm:12.2.2') {
+    
+    implementation ("com.urbanairship.android:urbanairship-fcm:$airshipVersion") {
       exclude group: 'com.google.firebase', module: 'firebase-messaging'
     }
-    implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '20.1.0')}"
-    implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '17.2.2')}"
+
+    implementation "com.urbanairship.android:urbanairship-message-center:$airshipVersion"
+    implementation "com.urbanairship.android:urbanairship-automation:$airshipVersion"
+    implementation "com.urbanairship.android:urbanairship-location:$airshipVersion"
+
+    implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '20.1.5')}"
+    implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '17.4.1')}"
 }

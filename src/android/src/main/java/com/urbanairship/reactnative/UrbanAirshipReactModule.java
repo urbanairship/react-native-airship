@@ -8,7 +8,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,12 +40,13 @@ import com.urbanairship.actions.ActionRunRequest;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.channel.AttributeEditor;
 import com.urbanairship.channel.TagGroupsEditor;
+import com.urbanairship.location.AirshipLocationManager;
+import com.urbanairship.messagecenter.Inbox;
+import com.urbanairship.messagecenter.Message;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
-import com.urbanairship.richpush.RichPushInbox;
-import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.util.UAStringUtil;
 
 import java.text.ParseException;
@@ -457,13 +457,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 @Override
                 public void onResult(boolean enabled) {
                     if (enabled) {
-                        UAirship.shared().getLocationManager().setLocationUpdatesEnabled(true);
+                        AirshipLocationManager.shared().setLocationUpdatesEnabled(true);
                     }
                 }
             });
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
-            UAirship.shared().getLocationManager().setLocationUpdatesEnabled(enabled);
+            AirshipLocationManager.shared().setLocationUpdatesEnabled(enabled);
         }
     }
 
@@ -474,7 +474,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isLocationEnabled(Promise promise) {
-        promise.resolve(UAirship.shared().getLocationManager().isLocationUpdatesEnabled());
+        promise.resolve(AirshipLocationManager.shared().isLocationUpdatesEnabled());
     }
 
     /**
@@ -484,7 +484,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setBackgroundLocationAllowed(boolean enabled) {
-        UAirship.shared().getLocationManager().setBackgroundLocationAllowed(enabled);
+        AirshipLocationManager.shared().setBackgroundLocationAllowed(enabled);
     }
 
     /**
@@ -494,7 +494,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isBackgroundLocationAllowed(Promise promise) {
-        promise.resolve(UAirship.shared().getLocationManager().isBackgroundLocationAllowed());
+        promise.resolve(AirshipLocationManager.shared().isBackgroundLocationAllowed());
     }
 
     /**
@@ -635,7 +635,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void displayMessageCenter() {
-        UAirship.shared().getMessageCenter().showMessageCenter();
+        MessageCenter.shared().showMessageCenter();
     }
 
     /**
@@ -659,7 +659,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void displayMessage(String messageId, Promise promise) {
-        UAirship.shared().getMessageCenter().showMessageCenter(messageId);
+        MessageCenter.shared().showMessageCenter(messageId);
         promise.resolve(true);
     }
 
@@ -686,7 +686,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void getInboxMessages(Promise promise) {
         WritableArray messagesArray = Arguments.createArray();
 
-        for (RichPushMessage message : UAirship.shared().getInbox().getMessages()) {
+        for (Message message : MessageCenter.shared().getInbox().getMessages()) {
             WritableMap messageMap = new WritableNativeMap();
             messageMap.putString("title", message.getTitle());
             messageMap.putString("id", message.getMessageId());
@@ -717,7 +717,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void deleteInboxMessage(String messageId, Promise promise) {
-        RichPushMessage message = UAirship.shared().getInbox().getMessage(messageId);
+        Message message = MessageCenter.shared().getInbox().getMessage(messageId);
 
         if (message == null) {
             promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found");
@@ -735,7 +735,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void markInboxMessageRead(String messageId, Promise promise) {
-        RichPushMessage message = UAirship.shared().getInbox().getMessage(messageId);
+        Message message = MessageCenter.shared().getInbox().getMessage(messageId);
 
         if (message == null) {
             promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
@@ -824,7 +824,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void refreshInbox(final Promise promise) {
-        UAirship.shared().getInbox().fetchMessages(new RichPushInbox.FetchMessagesCallback() {
+        MessageCenter.shared().getInbox().fetchMessages(new Inbox.FetchMessagesCallback() {
             @Override
             public void onFinished(boolean success) {
                 if (success) {
