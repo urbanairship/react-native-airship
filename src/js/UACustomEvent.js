@@ -39,9 +39,9 @@ class UACustomEvent {
      * Adds a property to the custom event.
      *
      * @param {string} name The property name.
-     * @param {string|number|boolean|string[]} value The property value.
+     * @param {string|number|boolean|string[]|Object} value The property value.
      */
-    addProperty(name: string, value: string | number | boolean | Array<string>) {
+    addProperty(name: string, value: string | number | boolean | Array<string> | Object) {
       this._properties[name] = value;
     }
 }

@@ -52,3 +52,10 @@ directly in the sample's workspace.
 You should now be able to modify the Android plugin source directly in Android Studio.
 
 
+4) JS unit tests
+
+We have unit tests for the Javascript part of the module. To run the tests, execute the following command in the root directory:
+
+```
+yarn test
+```
