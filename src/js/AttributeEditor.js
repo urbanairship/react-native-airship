@@ -24,11 +24,20 @@ class AttributeEditor {
    * @return {AttributeEditor} The attribute editor instance.
    */
   setAttribute(name: string, value: string|number|date): AttributeEditor {
-    let newValue = value;
-    if (newValue instanceof Date) {
-        newValue = value.toISOString();
+    var operation = { "action": "set", "value": value, "key": name }
+    if (typeof value === "string") {
+        operation["type"] = "string"
+    } else if (typeof value === "number") {
+        operation["type"] = "number"
+    } else if (typeof value === "boolean") {
+         // No boolean attribute type. Convert value to string.
+        operation["type"] = "string"
+        operation["value"] = value.toString();
+    } else if (value instanceof Date) {
+        // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
+        operation["type"] = "date"
+        operation["value"] = value.getTime()
     }
-    var operation = { "action": "set", "value": newValue, "key": name }
     this.operations.push(operation)
     return this;
   }

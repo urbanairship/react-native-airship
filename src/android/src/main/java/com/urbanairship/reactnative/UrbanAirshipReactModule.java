@@ -49,14 +49,10 @@ import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.util.UAStringUtil;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -82,6 +78,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String ATTRIBUTE_OPERATION_TYPE = "action";
     private static final String ATTRIBUTE_OPERATION_SET = "set";
     private static final String ATTRIBUTE_OPERATION_REMOVE = "remove";
+    private static final String ATTRIBUTE_OPERATION_VALUETYPE = "type";
 
     private static final String QUIET_TIME_START_HOUR = "startHour";
     private static final String QUIET_TIME_START_MINUTE = "startMinute";
@@ -914,23 +911,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
             if (ATTRIBUTE_OPERATION_SET.equals(action)) {
                 ReadableType type = operation.getType(ATTRIBUTE_OPERATION_VALUE);
-                if (ReadableType.String == type) {
+                String valueType = (String) operation.getString(ATTRIBUTE_OPERATION_VALUETYPE);
+                if ("string".equals(valueType)) {
                     String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
                     if (value == null) {
                         continue;
                     }
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                    format.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    Date date = null;
-                    try {
-                        date = format.parse(value);
-                        editor.setAttribute(key, date);
-                    } catch (ParseException e) {
-                        editor.setAttribute(key, value);
-                    }
-                } else if (ReadableType.Number == type) {
+                    editor.setAttribute(key, value);
+                } else if ("number".equals(valueType)) {
                     double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
                     editor.setAttribute(key, value);
+                } else if ("date".equals(valueType)) {
+                    double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
+                    // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
+                    editor.setAttribute(key, new Date(((Number) value).longValue()));
                 }
             } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
                 editor.removeAttribute(key);
