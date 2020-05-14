@@ -325,6 +325,17 @@ class UrbanAirship {
   }
 
   /**
+   * Creates an editor to modify the named user attributes.
+   *
+   * @return {AttributeEditor} A attribute editor instance.
+   */
+   static editNamedUserAttributes(): AttributeEditor {
+     return new AttributeEditor((operations) => {
+       UrbanAirshipModule.editNamedUserAttributes(operations);
+     });
+   }
+
+  /**
    * Enables or disables analytics.
    *
    * Disabling analytics will delete any locally stored events
