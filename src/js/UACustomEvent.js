@@ -41,7 +41,7 @@ class UACustomEvent {
      * @param {string} name The property name.
      * @param {string|number|boolean|string[]|Object} value The property value.
      */
-    addProperty(name: string, value: string | number | boolean | Array<string> | Object) {
+    addProperty(name: string, value: string | number | boolean | Array<string> | Record<string, any>) {
       this._properties[name] = value;
     }
 }

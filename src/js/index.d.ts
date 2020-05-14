@@ -23,7 +23,7 @@ declare class UACustomEvent {
    */
   addProperty(
     name: string,
-    value: string | number | boolean | Array<string> | Object
+    value: string | number | boolean | Array<string> | Record<string, any>
   ): void;
 }
 
