@@ -3,6 +3,10 @@
 // @flow
 'use strict';
 
+type JsonValue = string | number | boolean | null | JsonMap | JsonArray;
+interface JsonMap {  [key: string]: JsonValue; }
+interface JsonArray extends Array<JsonValue> {}
+
 /**
  * Urban Airship Custom events
  **/
@@ -39,9 +43,9 @@ class UACustomEvent {
      * Adds a property to the custom event.
      *
      * @param {string} name The property name.
-     * @param {string|number|boolean|string[]|Record<string, any>} value The property value.
+     * @param {string|number|boolean|string[]|JsonValue} value The property value.
      */
-    addProperty(name: string, value: string | number | boolean | Array<string> | Record<string, any>) {
+    addProperty(name: string, value: string | number | boolean | Array<string> | JsonValue) {
       this._properties[name] = value;
     }
 }
