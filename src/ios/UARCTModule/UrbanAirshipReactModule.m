@@ -433,8 +433,8 @@ RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UAMessageCenterMessageViewController" bundle:[UAMessageCenterResources bundle]];
-    [mvc loadMessageForID:messageId onlyIfChanged:YES onError:nil];
+    UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UADefaultMessageCenterMessageViewController" bundle:[UAMessageCenterResources bundle]];
+    [mvc loadMessageForID:messageId];
 
     UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
     self.messageViewController = mvc;
