@@ -19,7 +19,7 @@ declare class UACustomEvent {
    * Adds a property to the custom event.
    *
    * @param {string} name The property name.
-   * @param {string|number|boolean|string[]|Object} value The property value.
+   * @param {string|number|boolean|string[]|Record<string, any>} value The property value.
    */
   addProperty(
     name: string,
