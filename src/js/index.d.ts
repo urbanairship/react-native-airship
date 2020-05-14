@@ -23,11 +23,11 @@ declare class UACustomEvent {
    * Adds a property to the custom event.
    *
    * @param {string} name The property name.
-   * @param {string|number|boolean|string[]|JsonValue} value The property value.
+   * @param {string|number|boolean|JsonValue} value The property value.
    */
   addProperty(
     name: string,
-    value: string | number | boolean | Array<string> | JsonValue
+    value: string | number | boolean | JsonValue
   ): void;
 }
 
