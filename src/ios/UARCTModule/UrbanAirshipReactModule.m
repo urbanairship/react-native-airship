@@ -555,6 +555,7 @@ RCT_REMAP_METHOD(getActiveNotifications,
 
 - (UAAttributeMutations *)mutationsWithOperations:(NSArray *)operations {
     UAAttributeMutations *mutations = [UAAttributeMutations mutations];
+
     for (NSDictionary *operation in operations) {
         NSString *action = operation[@"action"];
         NSString *name = operation[@"key"];
