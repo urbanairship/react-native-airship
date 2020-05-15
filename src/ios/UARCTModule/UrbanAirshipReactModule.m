@@ -578,7 +578,6 @@ RCT_REMAP_METHOD(getActiveNotifications,
                 [mutations removeAttribute:name];
         }
     }
-
     return mutations;
 }
 
