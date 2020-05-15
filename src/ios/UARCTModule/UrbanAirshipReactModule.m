@@ -288,31 +288,7 @@ RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
 }
 
 RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
-    UAAttributeMutations *mutations = [UAAttributeMutations mutations];
-
-    for (NSDictionary *operation in operations) {
-        NSString *action = operation[@"action"];
-        NSString *name = operation[@"key"];
-        id value = operation[@"value"];
-
-        if ([action isEqualToString:@"set"]) {
-            NSString *valueType = operation[@"type"];
-            if ([valueType isEqualToString:@"string"]) {
-                [mutations setString:value forAttribute:name];
-            } else if ([valueType isEqualToString:@"number"]) {
-                [mutations setNumber:value forAttribute:name];
-            } else if ([valueType isEqualToString:@"date"]) {
-                // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
-                NSDate *date = [NSDate dateWithTimeIntervalSince1970:[(NSNumber *)value doubleValue] / 1000.0];
-                [mutations setDate:date forAttribute:name];
-            } else {
-                UA_LWARN("Unknown channel attribute type: %@", valueType);
-            }
-        } else if ([action isEqualToString:@"remove"]) {
-            [mutations removeAttribute:name];
-        }
-    }
-
+    UAAttributeMutations *mutations = [self mutationsWithOperations:operations];
     [[UAirship channel] applyAttributeMutations:mutations];
 }
 
@@ -579,22 +555,29 @@ RCT_REMAP_METHOD(getActiveNotifications,
 
 - (UAAttributeMutations *)mutationsWithOperations:(NSArray *)operations {
     UAAttributeMutations *mutations = [UAAttributeMutations mutations];
-
     for (NSDictionary *operation in operations) {
         NSString *action = operation[@"action"];
         NSString *name = operation[@"key"];
         id value = operation[@"value"];
 
         if ([action isEqualToString:@"set"]) {
-            if ([value isKindOfClass:[NSString class]]) {
-                [mutations setString:value forAttribute:name];
-            } else if ([value isKindOfClass:[NSNumber class]]) {
-                [mutations setNumber:value forAttribute:name];
-            }
+            NSString *valueType = operation[@"type"];
+                if ([valueType isEqualToString:@"string"]) {
+                    [mutations setString:value forAttribute:name];
+                } else if ([valueType isEqualToString:@"number"]) {
+                    [mutations setNumber:value forAttribute:name];
+                } else if ([valueType isEqualToString:@"date"]) {
+                    // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
+                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[(NSNumber *)value doubleValue] / 1000.0];
+                    [mutations setDate:date forAttribute:name];
+                } else {
+                    UA_LWARN("Unknown channel attribute type: %@", valueType);
+                }
         } else if ([action isEqualToString:@"remove"]) {
-            [mutations removeAttribute:name];
+                [mutations removeAttribute:name];
         }
     }
+
     return mutations;
 }
 
