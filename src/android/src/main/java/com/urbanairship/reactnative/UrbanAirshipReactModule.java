@@ -910,7 +910,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             }
 
             if (ATTRIBUTE_OPERATION_SET.equals(action)) {
-                ReadableType type = operation.getType(ATTRIBUTE_OPERATION_VALUE);
                 String valueType = (String) operation.getString(ATTRIBUTE_OPERATION_VALUETYPE);
                 if ("string".equals(valueType)) {
                     String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
