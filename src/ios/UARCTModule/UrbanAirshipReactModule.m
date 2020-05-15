@@ -574,15 +574,6 @@ RCT_REMAP_METHOD(getActiveNotifications,
     }];
 }
 
-#pragma mark -
-#pragma mark Utils
-- (NSDate *) dateFromString:(NSString *)value {
-    NSDateFormatter *formatter = [NSDateFormatter new];
-    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ";
-    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-    formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-    return [formatter dateFromString:value];
-
 #pragma mark Helper methods
 
 - (UAAttributeMutations *)mutationsWithOperations:(NSArray *)operations {
