@@ -20,7 +20,7 @@ class AttributeEditor {
    * @function setString
    *
    * @param {string} value The attribute value.
-   * @param {string} name The attribute name.
+   * @param {string|number|Date} name The attribute name.
    * @return {AttributeEditor} The attribute editor instance.
    */
   setAttribute(name: string, value: string|number|date): AttributeEditor {
