@@ -937,7 +937,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 } else if ("date".equals(valueType)) {
                     double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
                     // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
-                    editor.setAttribute(key, new Date(((Number) value).longValue()));
+                    editor.setAttribute(key, new Date((long)value));
                 }
             } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
                 editor.removeAttribute(key);
