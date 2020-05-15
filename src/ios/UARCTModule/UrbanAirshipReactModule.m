@@ -575,7 +575,7 @@ RCT_REMAP_METHOD(getActiveNotifications,
                     UA_LWARN("Unknown channel attribute type: %@", valueType);
                 }
         } else if ([action isEqualToString:@"remove"]) {
-                [mutations removeAttribute:name];
+            [mutations removeAttribute:name];
         }
     }
     return mutations;
