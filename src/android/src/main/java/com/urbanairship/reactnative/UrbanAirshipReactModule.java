@@ -395,6 +395,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Edits the named user attributes.
+     * Operations should each be a map with the following:
+     * - action: Either set or remove
+     * - value: The group to modify
+     * - key: The tags to add or remove.
+     *
+     * @param operations An array of operations.
+     */
+    @ReactMethod
+    public void editNamedUserAttributes(ReadableArray operations) {
+        applyAttributeOperations(UAirship.shared().getNamedUser().editAttributes(), operations);
+    }
+
+    /**
      * Associated an identifier to the channel.
      *
      * @param key The identifier's key.
