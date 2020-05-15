@@ -37,6 +37,8 @@ class AttributeEditor {
         // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
         operation["type"] = "date"
         operation["value"] = value.getTime()
+    } else {
+        throw("Unsupported attribute type: " + typeof value)
     }
     this.operations.push(operation)
     return this;
