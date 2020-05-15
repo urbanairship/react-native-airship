@@ -23,7 +23,7 @@ class AttributeEditor {
    * @param {string|number|Date} name The attribute name.
    * @return {AttributeEditor} The attribute editor instance.
    */
-  setAttribute(name: string, value: string|number|date): AttributeEditor {
+  setAttribute(name: string, value: string|number|Date): AttributeEditor {
     var operation = { "action": "set", "value": value, "key": name }
     if (typeof value === "string") {
         operation["type"] = "string"
