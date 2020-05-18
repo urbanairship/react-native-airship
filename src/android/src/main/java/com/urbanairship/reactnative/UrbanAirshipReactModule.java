@@ -78,6 +78,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String ATTRIBUTE_OPERATION_TYPE = "action";
     private static final String ATTRIBUTE_OPERATION_SET = "set";
     private static final String ATTRIBUTE_OPERATION_REMOVE = "remove";
+    private static final String ATTRIBUTE_OPERATION_VALUETYPE = "type";
 
     private static final String QUIET_TIME_START_HOUR = "startHour";
     private static final String QUIET_TIME_START_MINUTE = "startMinute";
@@ -923,16 +924,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             }
 
             if (ATTRIBUTE_OPERATION_SET.equals(action)) {
-                ReadableType type = operation.getType(ATTRIBUTE_OPERATION_VALUE);
-                if (ReadableType.String == type) {
+                String valueType = (String) operation.getString(ATTRIBUTE_OPERATION_VALUETYPE);
+                if ("string".equals(valueType)) {
                     String value = operation.getString(ATTRIBUTE_OPERATION_VALUE);
                     if (value == null) {
                         continue;
                     }
                     editor.setAttribute(key, value);
-                } else if (ReadableType.Number == type) {
+                } else if ("number".equals(valueType)) {
                     double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
                     editor.setAttribute(key, value);
+                } else if ("date".equals(valueType)) {
+                    double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
+                    // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
+                    editor.setAttribute(key, new Date((long)value));
                 }
             } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
                 editor.removeAttribute(key);

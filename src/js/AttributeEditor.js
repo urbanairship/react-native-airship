@@ -20,11 +20,26 @@ class AttributeEditor {
    * @function setString
    *
    * @param {string} value The attribute value.
-   * @param {string} name The attribute name.
+   * @param {string|number|Date} name The attribute name.
    * @return {AttributeEditor} The attribute editor instance.
    */
-  setAttribute(name: string, value: string|number): AttributeEditor {
+  setAttribute(name: string, value: string|number|Date): AttributeEditor {
     var operation = { "action": "set", "value": value, "key": name }
+    if (typeof value === "string") {
+        operation["type"] = "string"
+    } else if (typeof value === "number") {
+        operation["type"] = "number"
+    } else if (typeof value === "boolean") {
+         // No boolean attribute type. Convert value to string.
+        operation["type"] = "string"
+        operation["value"] = value.toString();
+    } else if (value instanceof Date) {
+        // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
+        operation["type"] = "date"
+        operation["value"] = value.getTime()
+    } else {
+        throw("Unsupported attribute type: " + typeof value)
+    }
     this.operations.push(operation)
     return this;
   }
