@@ -175,14 +175,14 @@ class UrbanAirship {
 
   /**
    * Global data collection flag. Enabled by default, unless `dataCollectionOptInEnabled`
-   * is set to `YES` in AirshipConfig.
+   * is set to `YES` in AirshipConfig.plist on iOS, and `true` in airshipconfig.properties on Android.
    * When disabled, the device will stop collecting and sending data for named user, events,
    * tags, attributes, associated identifiers, and location from the device.
    *
-   * Push notifications will continue to work only if `UrbanAirshipModule.setPushTokenRegistrationEnabled`
-   * has been explicitly set to `YES`, otherwise it will default to the current state  of `isDataCollectionEnabled`.
+   * Push notifications will continue to work only if `UrbanAirship.setPushTokenRegistrationEnabled`
+   * has been explicitly set to `true`, otherwise it will default to the current state of `isDataCollectionEnabled`.
    *
-   * @note To disable by default, set the `dataCollectionOptInEnabled` flag to `YES`in AirshipConfig.
+   * @note To disable by default, set the `dataCollectionOptInEnabled` flag to `YES` in AirshipConfig.plist on iOS, and `true` in airshipconfig.properties on Android.
    * @param {boolean} enabled true to enable data collection, false to disable.
    */
   static setDataCollectionEnabled(enabled: boolean) {
@@ -200,7 +200,7 @@ class UrbanAirship {
 
   /**
    * Enables/disables sending the device token during channel registration.
-   * Defaults to `UrbanAirshipModule.isDataCollectionEnabled`. If set to `NO`, the app will not be able to receive push
+   * Defaults to `UrbanAirship.isDataCollectionEnabled`. If set to `false`, the app will not be able to receive push
    * notifications.
    * @param {boolean} enabled true to enable push token registration, false to disable.
    */

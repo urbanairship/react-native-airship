@@ -27,15 +27,21 @@ declare class UACustomEvent {
   ): void;
 }
 
-declare interface Operation {
+declare interface TagGroupOperation {
   operationType: string;
   group: string;
   tags: Array<string>;
 }
 
+declare interface AttributeOperation {
+  action: string;
+  key?: string;
+  value: string | number;
+}
+
 /** Editor for tag groups. **/
 declare class TagGroupEditor {
-  constructor(onApply: (operations: Array<Operation>) => any);
+  constructor(onApply: (operations: Array<TagGroupOperation>) => any);
   /**
    * Adds tags to a tag group.
    *
@@ -70,6 +76,42 @@ declare class TagGroupEditor {
    * Applies the tag changes.
    * @instance
    * @memberof TagGroupEditor
+   * @function apply
+   */
+  apply(): void;
+}
+
+/** Editor for attributes. **/
+declare class AttributeEditor {
+  constructor(onApply: (operations: Array<AttributeOperation>) => any);
+
+  /**
+   * Adds an attribute.
+   * @instance
+   * @memberof AttributeEditor
+   * @function setAttribute
+   *
+   * @param {string} name The attribute name.
+   * @param {string | number} value The attribute value.
+   * @return {AttributeEditor} The attribute editor instance.
+   */
+  setAttribute(name: string, value: string | number): AttributeEditor;
+
+  /**
+   * Removes an attribute.
+   * @instance
+   * @memberof AttributeEditor
+   * @function removeAttribute
+   *
+   * @param {string} name The attribute name.
+   * @return {AttributeEditor} The attribute editor instance.
+   */
+  removeAttribute(name: string): AttributeEditor;
+
+  /**
+   * Applies the attribute changes.
+   * @instance
+   * @memberof AttributeEditor
    * @function apply
    */
   apply(): void;
@@ -205,6 +247,42 @@ export class UrbanAirship {
   static isUserNotificationsEnabled(): Promise<boolean>;
 
   /**
+   * Global data collection flag. Enabled by default, unless `dataCollectionOptInEnabled`
+   * is set to `YES` in AirshipConfig.plist on iOS, and `true` in airshipconfig.properties on Android.
+   * When disabled, the device will stop collecting and sending data for named user, events,
+   * tags, attributes, associated identifiers, and location from the device.
+   *
+   * Push notifications will continue to work only if `UrbanAirship.setPushTokenRegistrationEnabled`
+   * has been explicitly set to `true`, otherwise it will default to the current state of `isDataCollectionEnabled`.
+   *
+   * @note To disable by default, set the `dataCollectionOptInEnabled` flag to `YES` in AirshipConfig.plist on iOS, and `true` in airshipconfig.properties on Android.
+   * @param {boolean} enabled true to enable data collection, false to disable.
+   */
+  static setDataCollectionEnabled(enabled: boolean) : void;
+
+   /**
+   * Checks if data collection is enabled or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
+  static isDataCollectionEnabled(): Promise<boolean>;
+
+  /**
+   * Enables/disables sending the device token during channel registration.
+   * Defaults to `UrbanAirship.isDataCollectionEnabled`. If set to `false`, the app will not be able to receive push
+   * notifications.
+   * @param {boolean} enabled true to enable push token registration, false to disable.
+   */
+  static setPushTokenRegistrationEnabled(enabled: boolean) : void;
+
+    /**
+   * Checks if push token registration is enabled or not.
+   *
+   * @return {Promise.<boolean>} A promise with the result.
+   */
+  static isPushTokenRegistrationEnabled(): Promise<boolean>
+
+  /**
    * Enables user push notifications.
    *
    * @return {Promise.<boolean>} A promise that returns true if enablement was authorized
@@ -276,6 +354,13 @@ export class UrbanAirship {
   static editChannelTagGroups(): TagGroupEditor;
 
   /**
+   * Creates an editor to modify the channel attributes.
+   *
+   * @return {AttributeEditor} An attribute editor instance.
+   */
+  static editChannelAttributes() : AttributeEditor;
+
+  /**
    * Enables or disables analytics.
    *
    * Disabling analytics will delete any locally stored events
@@ -293,6 +378,13 @@ export class UrbanAirship {
    * @return {Promise.<boolean>} A promise with the result.
    */
   static isAnalyticsEnabled(): Promise<boolean>;
+
+  /**
+    * Initiates screen tracking for a specific app screen, must be called once per tracked screen.
+    *
+    * @param {string} screen The screen's string identifier.
+    */
+  static trackScreen(screen: string): void;
 
   /**
    * Gets the channel ID.
@@ -445,6 +537,20 @@ export class UrbanAirship {
    * @return {Promise.<boolean>} A promise with the result.
    */
   static isQuietTimeEnabled(): Promise<boolean>;
+
+   /**
+   * Enables or disables autobadging on iOS. Badging is not supported for Android.
+   *
+   * @param {boolean} enabled Whether or not to enable autobadging.
+   */
+  static setAutobadgeEnabled(enabled: boolean) : void;
+
+  /**
+   * Checks to see if autobadging on iOS is enabled. Badging is not supported for Android.
+   *
+   * @return {Promise.<boolean>} A promise with the result, either true or false.
+   */
+  static isAutobadgeEnabled(): Promise<boolean>;
 
   /**
    * Sets the badge number for iOS. Badging is not supported for Android.
