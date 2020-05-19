@@ -3,14 +3,18 @@
 // @flow
 'use strict';
 
+type JsonValue = string | number | boolean | null | JsonMap | JsonArray;
+type JsonMap = { [key: string]: JsonValue };
+type JsonArray = JsonValue[];
+
 /**
  * Urban Airship Custom events
  **/
 class UACustomEvent {
     _name: string;
-    _value: number;
-    _properties: object;
-    _transactionId: transactionId;
+    _value: ?number;
+    _properties: Object;
+    _transactionId: ?string;
 
     /**
      * Custom event constructor.
@@ -39,9 +43,9 @@ class UACustomEvent {
      * Adds a property to the custom event.
      *
      * @param {string} name The property name.
-     * @param {string|number|boolean|string[]} value The property value.
+     * @param {JsonValue} value The property value.
      */
-    addProperty(name: string, value: string | number | boolean | Array<string>) {
+    addProperty(name: string, value: JsonValue) {
       this._properties[name] = value;
     }
 }

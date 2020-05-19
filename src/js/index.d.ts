@@ -1,5 +1,9 @@
 import { EmitterSubscription } from "react-native";
 
+declare type JsonValue = string | number | boolean | null | JsonMap | JsonArray;
+declare interface JsonMap {  [key: string]: JsonValue; }
+declare interface JsonArray extends Array<JsonValue> {}
+
 /**
  * Urban Airship Custom events
  **/
@@ -19,11 +23,11 @@ declare class UACustomEvent {
    * Adds a property to the custom event.
    *
    * @param {string} name The property name.
-   * @param {string|number|boolean|string[]} value The property value.
+   * @param {JsonValue} value The property value.
    */
   addProperty(
     name: string,
-    value: string | number | boolean | Array<string>
+    value: JsonValue
   ): void;
 }
 

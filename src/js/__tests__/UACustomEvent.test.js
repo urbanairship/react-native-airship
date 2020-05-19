@@ -19,11 +19,13 @@ describe("UACustomEvent Tests", () => {
         event.addProperty("oh", "hi");
         event.addProperty("foo", 123);
         event.addProperty("bar", true);
+        event.addProperty("json", { "test": 1 });
 
         expect(event._properties).toEqual({
             "oh" : "hi",
             "foo" : 123,
-            "bar" : true
+            "bar" : true,
+            "json" : { "test": 1 }
         });
     });
 
