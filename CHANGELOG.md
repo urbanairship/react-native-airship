@@ -1,5 +1,16 @@
 # React Native Module Changelog
 
+## Version 7.0.0 - May 26, 2020
+Major release to provide new features and include the latest iOS and Android SDKs.
+
+- Added support for JSON properties on custom events.
+- Added support for date attributes.
+- Added support for named user attributes.
+- Added a sample message center screen to the example app.
+- Added missing Typescript definitions for new APIs.
+- Updated iOS SDK to 13.3.2
+- Updated Android SDK to 13.1.2
+
 ## Version 6.1.3 - March 23, 2020
 Patch addressing a regression in iOS SDK 13.1.0 causing channel tag loss
 when upgrading from iOS SDK versions prior to 13.0.1. Apps upgrading from react-native module
