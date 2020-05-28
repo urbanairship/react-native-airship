@@ -1,17 +1,17 @@
 PODS:
-  - Airship (13.3.0):
-    - Airship/Automation (= 13.3.0)
-    - Airship/Core (= 13.3.0)
-    - Airship/ExtendedActions (= 13.3.0)
-    - Airship/MessageCenter (= 13.3.0)
-  - Airship/Automation (13.3.0):
+  - Airship (13.3.2):
+    - Airship/Automation (= 13.3.2)
+    - Airship/Core (= 13.3.2)
+    - Airship/ExtendedActions (= 13.3.2)
+    - Airship/MessageCenter (= 13.3.2)
+  - Airship/Automation (13.3.2):
     - Airship/Core
-  - Airship/Core (13.3.0)
-  - Airship/ExtendedActions (13.3.0):
+  - Airship/Core (13.3.2)
+  - Airship/ExtendedActions (13.3.2):
     - Airship/Core
-  - Airship/MessageCenter (13.3.0):
+  - Airship/MessageCenter (13.3.2):
     - Airship/Core
-  - AirshipExtensions/NotificationService (13.3.0)
+  - AirshipExtensions/NotificationService (13.3.2)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.1)
@@ -236,12 +236,12 @@ PODS:
     - React
   - RNGestureHandler (1.6.1):
     - React
-  - RNReanimated (1.8.0):
+  - RNReanimated (1.9.0):
     - React
-  - RNScreens (2.7.0):
+  - RNScreens (2.8.0):
     - React
   - urbanairship-react-native (6.1.3):
-    - Airship (= 13.3.0)
+    - Airship (= 13.3.2)
     - React
   - Yoga (1.14.0)
 
@@ -352,8 +352,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 6f80d0a043e757d2b53c447d1d786d18a3fa68c1
-  AirshipExtensions: f71fac856a0f01787e760ac85471a4b1aeafe67f
+  Airship: ce026f4cc30869566ce17da980907fa149d64855
+  AirshipExtensions: fec29602d11565dbca59e3e16a8f1a6256314e24
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: 0846affdb2924b01093eb696766ecb0104e409e0
@@ -382,9 +382,9 @@ SPEC CHECKSUMS:
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
-  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
-  urbanairship-react-native: e46e9674b05d13842fd6849c3d7f8b142f197ce0
+  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
+  RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
+  urbanairship-react-native: 8cbc9f1a7ac66097f2e0f5a23e859ac18f3be158
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
 PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
