@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 7.0.0 - May 26, 2020
+## Version 7.0.0 - May 27, 2020
 Major release to provide new features and include the latest iOS and Android SDKs.
 
 - Added support for JSON properties on custom events.
