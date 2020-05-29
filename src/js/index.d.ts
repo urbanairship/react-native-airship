@@ -1,3 +1,4 @@
+import React from "react";
 import { EmitterSubscription } from "react-native";
 
 declare type JsonValue = string | number | boolean | null | JsonMap | JsonArray;
