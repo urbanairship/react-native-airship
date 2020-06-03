@@ -22,10 +22,10 @@ Please visit https://support.airship.com/ for any issues integrating or using th
 
 ```
 # using yarn
-yarn add react-native-airship-accengage
+yarn add urbanairship-accengage-react-native
 
 # using npm
-`$ npm install react-native-airship-accengage --save`
+`$ npm install urbanairship-accengage-react-native --save`
 ```
 
 ## iOS Setup
@@ -40,7 +40,7 @@ cd ios && pod install
 
 ## Usage
 ```javascript
-import AirshipAccengage from 'react-native-airship-accengage';
+import AirshipAccengage from 'urbanairship-accengage-react-native';
 
 // TODO: What to do with the module?
 AirshipAccengage;
