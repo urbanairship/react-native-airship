@@ -7,6 +7,7 @@
     "moment": "^2.24.0",
     "react": "16.10.1",
     "react-native": "0.61.1",
+    "react-native-airship-accengage": "link:../react-native-airship-accengage",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-reanimated": "^1.7.1",
     "react-native-safe-area-context": "^0.7.3",
