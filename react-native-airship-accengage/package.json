@@ -1,0 +1,31 @@
+{
+  "name": "react-native-airship-accengage",
+  "version": "7.0.0",
+  "description": "Airship accengage module for React Native apps.",
+  "main": "./js/index.js",
+  "author": "Airship",
+  "homepage": "https://github.com/urbanairship/react-native-module",
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "ios",
+    "android",
+    "urbanairship",
+    "accengage"
+  ],
+  "devDependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
+  },
+  "peerDependencies": {
+    "react": "^16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urbanairship/react-native-module.git"
+  },
+  "license": "Apache-2.0",
+  "readmeFilename": "README.md"
+}
