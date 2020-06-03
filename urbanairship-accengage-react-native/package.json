@@ -1,5 +1,5 @@
 {
-  "name": "react-native-airship-accengage",
+  "name": "urbanairship-accengage-react-native",
   "version": "7.0.0",
   "description": "Airship accengage module for React Native apps.",
   "main": "./js/index.js",

@@ -1,10 +1,10 @@
 require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
- sync_version = `#{__dir__}/scripts/sync_version.sh #{package["version"]}`
+sync_version = `#{__dir__}/scripts/sync_version.sh #{package["version"]}`
 
 Pod::Spec.new do |s|
-  s.name         = "react-native-airship-accengage"
+  s.name         = "urbanairship-accengage-react-native"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.author       = package['author']
@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React"
+  s.dependency "Airship/Accengage"
 
 end
 
