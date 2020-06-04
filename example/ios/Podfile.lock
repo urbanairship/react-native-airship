@@ -243,7 +243,7 @@ PODS:
   - RNScreens (2.8.0):
     - React
   - urbanairship-accengage-react-native (7.0.0):
-    - Airship/Accengage
+    - Airship/Accengage (= 13.3.2)
     - React
   - urbanairship-react-native (7.0.0):
     - Airship (= 13.3.2)
@@ -392,7 +392,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
-  urbanairship-accengage-react-native: b2295e4a687f24c586fcf90d08186f89e64e3d18
+  urbanairship-accengage-react-native: 74da4bc03d87522184276f35c3cec9664fad0f26
   urbanairship-react-native: d3488ddba975f9e822dd1c891fc4f41bd1646424
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
