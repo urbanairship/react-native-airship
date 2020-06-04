@@ -35,14 +35,10 @@ yarn add urbanairship-accengage-react-native
 cd ios && pod install
 ```
 
-## Android Setup
-
 
 ## Usage
 ```javascript
 import AirshipAccengage from 'urbanairship-accengage-react-native';
 
-// TODO: What to do with the module?
-AirshipAccengage;
 ```
 
