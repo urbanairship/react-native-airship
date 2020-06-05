@@ -1,6 +1,10 @@
 buildscript {
 
     ext {
+
+        // Airship Version - major.minor.patch
+        airshipVersion = '13.1.2'
+
         // Android SDK Versions
         compileSdkVersion = 29
         targetSdkVersion = 29
