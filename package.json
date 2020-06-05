@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "react-native start",
-    "generate-docs": "node_modules/.bin/documentation --config documentation.yml build urbanairship-react-native/js/** -f html -o out",
+    "generate-docs": "node_modules/.bin/documentation --config documentation.yml build urbanairship-react-native/js/** urbanairship-accengage-react-native/js/** -f html -o out",
     "test": "jest --verbose",
     "clean": "rm -rf node_modules urbanairship-react-native/node_modules example/node_modules yarn.lock"
   }
