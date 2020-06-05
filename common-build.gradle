@@ -1,0 +1,22 @@
+import groovy.json.JsonSlurper
+
+android {
+
+    // Android SDK Versions
+    compileSdkVersion rootProject.compileSdkVersion
+
+    defaultConfig {
+        targetSdkVersion rootProject.targetSdkVersion
+        minSdkVersion rootProject.minSdkVersion
+
+        buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
+    }
+
+}
+
+def getModuleVersion() {
+    def jsonFile = file('../package.json')
+    def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+
+    return parsedJson["version"]
+}
