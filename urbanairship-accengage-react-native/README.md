@@ -25,7 +25,7 @@ Please visit https://support.airship.com/ for any issues integrating or using th
 yarn add urbanairship-accengage-react-native
 
 # using npm
-`$ npm install urbanairship-accengage-react-native --save`
+npm install urbanairship-accengage-react-native --save
 ```
 
 ## iOS Setup
@@ -41,4 +41,3 @@ cd ios && pod install
 import AirshipAccengage from 'urbanairship-accengage-react-native';
 
 ```
-
