@@ -16,7 +16,8 @@
   ],
   "devDependencies": {
     "react": "^16.9.0",
-    "react-native": "^0.61.5"
+    "react-native": "^0.61.5",
+    "urbanairship-react-native": "^7.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.1",
