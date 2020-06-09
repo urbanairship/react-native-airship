@@ -1,4 +1,4 @@
-package com.urbanairship.reactnative;
+package com.urbanairship.reactnative.accengage;
 
 import java.util.Arrays;
 import java.util.Collections;

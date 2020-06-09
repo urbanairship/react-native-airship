@@ -1,4 +1,4 @@
-package com.urbanairship.reactnative;
+package com.urbanairship.reactnative.accengage;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
