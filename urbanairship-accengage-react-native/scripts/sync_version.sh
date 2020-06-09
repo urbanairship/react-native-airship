@@ -10,5 +10,5 @@ if [ -z "$1" ]
     exit
 fi
 
-# Update UARCTModuleVersion.m for current install
-sed -i '' "s/\(moduleVersionString *= *@\)\".*\"/\1\"$VERSION\"/g" ios/UARCTModule/UARCTModuleVersion.m
+# Update AirshipAccengageReactModuleVersion.m for current install
+sed -i '' "s/\(moduleVersionString *= *@\)\".*\"/\1\"$VERSION\"/g" ios/AirshipAccengageReactModuleVersion.m
