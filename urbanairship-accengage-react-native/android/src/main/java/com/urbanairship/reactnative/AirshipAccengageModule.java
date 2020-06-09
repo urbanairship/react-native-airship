@@ -1,4 +1,4 @@
-package com.reactlibrary;
+package com.urbanairship.reactnative;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
