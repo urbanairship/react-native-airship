@@ -20,11 +20,13 @@ Please visit https://support.airship.com/ for any issues integrating or using th
 
 ## Install
 
+### using yarn
 ```
-# using yarn
 yarn add urbanairship-accengage-react-native
+```
 
-# using npm
+### using npm
+```
 npm install urbanairship-accengage-react-native --save
 ```
 
