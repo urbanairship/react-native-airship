@@ -3,11 +3,11 @@ import groovy.json.JsonSlurper
 android {
 
     // Android SDK Versions
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdkVersion 29
 
     defaultConfig {
-        targetSdkVersion rootProject.targetSdkVersion
-        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion 29
+        minSdkVersion 16
 
         buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
     }
