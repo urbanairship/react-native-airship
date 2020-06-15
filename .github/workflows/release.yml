@@ -65,7 +65,7 @@ jobs:
         run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//} out
       - name: Publish library
         run: |
-          cd src/
+          cd urbanairship-react-native/
           yarn publish
           cd -
         env:
