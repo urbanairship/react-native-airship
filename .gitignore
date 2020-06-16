@@ -33,25 +33,28 @@ Carthage/
 node_modules/
 npm-debug.log
 
-
-
-*.DS_Store
-*.orig
-*.swo
-*.swp
-*.iml
-
 # Android
 local.properties
 build.properties
 airshipconfig.properties
 .gradle
 .idea
+google-services.json
 
 # iOS
 AirshipConfig.plist
 
-#jsdoc
-out/
+# Docs 
+docs/
 
-google-services.json
+# Typescript
+lib/
+
+# Yarn
+yarn-error.log
+
+# Etc
+*.orig
+*.swo
+*.swp
+*.iml
