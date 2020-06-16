@@ -31,7 +31,7 @@ module.exports = {
   },
   resolver: {
     extraNodeModules,
-    sourceExts: ['js', 'jsx'],
+    sourceExts: ['js', 'jsx', 'ts', 'tsx'],
   },
   watchFolders,
 };
