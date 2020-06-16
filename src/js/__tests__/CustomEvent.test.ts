@@ -1,11 +1,11 @@
 /* Copyright Airship and Contributors */
 
-const UACustomEvent =  require('../UACustomEvent')
+import CustomEvent from '../CustomEvent';
 
-describe("UACustomEvent Tests", () => {
+describe("CustomEvent Tests", () => {
 
-    test('UACustomEvent', () => {
-        var event = new UACustomEvent("customevent", 123);
+    test('CustomEvent', () => {
+        const event = new CustomEvent("customevent", 123);
 
         expect(event._name).toEqual("customevent");
         expect(event._value).toEqual(123);
@@ -14,7 +14,7 @@ describe("UACustomEvent Tests", () => {
     });
 
     test('addProperty', () => {
-        var event = new UACustomEvent("customevent", 123);
+        const event = new CustomEvent("customevent", 123);
 
         event.addProperty("oh", "hi");
         event.addProperty("foo", 123);
@@ -30,7 +30,7 @@ describe("UACustomEvent Tests", () => {
     });
 
     test('transactionId', () => {
-        var event = new UACustomEvent("customevent", 123);
+        const event = new CustomEvent("customevent", 123);
         event.transactionId = "transactionId";
         expect(event.transactionId).toEqual("transactionId");
     });

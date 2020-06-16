@@ -1,60 +1,72 @@
 /* Copyright Airship and Contributors */
 
+import {EmitterSubscription} from 'react-native';
+import UAEventEmitter from '../UAEventEmitter';
+
 class MockEventEmitter  {
     constructor() {}
-    listeners(eventType) { return [] }
-    addListener(eventType, listener, context) {}
-    removeAllListeners(eventType) {}
-    removeSubscription(subscription) {}
+    listeners(eventType:string) { return [] }
+    addListener(eventType:string, listener:(...args: any[]) => any, context?: Object | null | undefined) {}
+    removeAllListeners(eventType?:string) {}
+    removeSubscription(subscription:EmitterSubscription) {}
 }
 
 class MockNativeEventEmitter extends MockEventEmitter {}
 
-describe("UAEventEmitter Tests", () => {
-    beforeEach(() => {
-        jest.resetModules();
+interface MockNativeModule {
+    addAndroidListener: jest.Mock<any, any>,
+    removeAndroidListeners: jest.Mock<any, any>,
+    removeAllAndroidListeners : jest.Mock<any, any>
+}
 
+describe("UAEventEmitter Tests", () => {
+    var emitter:UAEventEmitter;
+    var MockUrbanairshipModule: MockNativeModule
+    var MockPlatform: {OS: string};
+
+    beforeEach(() => {
         // Stub out the relevant native modules
         MockUrbanairshipModule = {
             addAndroidListener : jest.fn(),
-            removeAndroidListeners : jest.fn()
+            removeAndroidListeners : jest.fn(),
+            removeAllAndroidListeners : jest.fn()
         }
 
-        MockNativeModules = {
-            UrbanAirshipReactModule : MockUrbanairshipModule
+        MockPlatform = {
+            OS : "test"
         };
 
-        MockPlatform = {};
+        jest.resetModules();
 
         // Mock the react-native imports used by UAEventEmitter
         jest.mock('react-native', () => ({
             Platform : MockPlatform,
             NativeEventEmitter: MockNativeEventEmitter,
-            NativeModules : MockNativeModules
+            NativeModules : {
+                UrbanAirshipReactModule : MockUrbanairshipModule
+            }
         }));
 
         // Spy on super calls for later verification
-
         jest.spyOn(MockNativeEventEmitter.prototype, 'addListener');
         jest.spyOn(MockNativeEventEmitter.prototype, 'removeAllListeners');
         jest.spyOn(MockNativeEventEmitter.prototype, 'removeSubscription');
 
-        // Load and instantiate the class
-        UAEventEmitter = require("../UAEventEmitter");
-        emitter = new UAEventEmitter();
+        const UAEventEmitter = require("../UAEventEmitter");
+        emitter = new UAEventEmitter.default();
     });
 
     afterEach(() => {
         // Reset global event state
         emitter.removeAllListeners();
-    })
+    });
 
     test('addListenerAndroid', () => {
         MockPlatform.OS = 'android';
 
         var listener = () => {};
         var context = {"cool" : "rad"};
-;
+
         emitter.addListener("foo", listener, context);
 
         expect(MockUrbanairshipModule.addAndroidListener).toHaveBeenCalledWith("foo");
@@ -94,26 +106,23 @@ describe("UAEventEmitter Tests", () => {
         expect(MockUrbanairshipModule.removeAndroidListeners).not.toHaveBeenCalled();
         expect(MockNativeEventEmitter.prototype.removeAllListeners).toHaveBeenCalledWith("foo");
     });
-
     test('removeSubscriptionAndroid', () => {
         MockPlatform.OS = 'android';
 
-        var subcription = {"fake" : "subscription"};
-
-        emitter.removeSubscription(subcription);
+        const subscription = emitter.addListener("foo", () => {})
+        emitter.removeSubscription(subscription);
 
         expect(MockUrbanairshipModule.removeAndroidListeners).toHaveBeenCalledWith(1);
-        expect(MockNativeEventEmitter.prototype.removeSubscription).toHaveBeenCalledWith(subcription);
+        expect(MockNativeEventEmitter.prototype.removeSubscription).toHaveBeenCalledWith(subscription);
     });
 
     test('removeSubscriptioniOS', () => {
         MockPlatform.OS = 'ios';
 
-        var subcription = {"another fake" : "subscription"};
-
-        emitter.removeSubscription(subcription);
+        const subscription = emitter.addListener("foo", () => {}    )
+        emitter.removeSubscription(subscription);
 
         expect(MockUrbanairshipModule.removeAndroidListeners).not.toHaveBeenCalled();
-        expect(MockNativeEventEmitter.prototype.removeSubscription).toHaveBeenCalledWith(subcription);
+        expect(MockNativeEventEmitter.prototype.removeSubscription).toHaveBeenCalledWith(subscription);
     });
 });

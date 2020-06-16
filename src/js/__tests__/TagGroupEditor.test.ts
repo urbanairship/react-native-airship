@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-const TagGroupEditor = require("../TagGroupEditor");
+import TagGroupEditor from "../TagGroupEditor";
 
 describe("TagGroupEditor Tests", () => {
 

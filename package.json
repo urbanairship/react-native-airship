@@ -5,7 +5,7 @@
     "example"
   ],
   "jest": {
-    "preset": "react-native"
+    "preset": "ts-jest"
   },
   "scripts": {
     "start": "react-native start",

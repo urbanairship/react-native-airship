@@ -2,7 +2,6 @@
   "name": "urbanairship-react-native",
   "version": "7.0.0",
   "description": "Airship plugin for React Native apps.",
-  "main": "./js/index.js",
   "author": "Airship",
   "homepage": "https://github.com/urbanairship/react-native-module",
   "keywords": [
@@ -14,23 +13,26 @@
     "urbanairship"
   ],
   "devDependencies": {
-    "@babel/core": "7.5.4",
-    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
-    "@babel/runtime": "7.5.4",
+    "@react-native-community/bob": "^0.14.5",
     "@react-native-community/eslint-config": "0.0.5",
-    "@typescript-eslint/parser": "^1.13.0",
+    "@types/jest": "^24.0.15",
+    "@types/prop-types": "^15.7.3",
+    "@types/react": "^16.8.23",
+    "@types/react-native": "^0.60.1",
+    "@types/react-test-renderer": "^16.8.2",
     "acorn": "^7.1.1",
     "acorn-jsx": "^5.0.2",
     "documentation": "12.1.1",
     "eslint": "^5.16.0",
     "jest": "^24.9.0",
     "jetifier": "^1.6.4",
-    "metro-react-native-babel-preset": "0.55.0",
     "react": "16.10.1",
     "react-native": "0.61.1",
-    "typescript": "^3.6.3"
+    "ts-jest": "^24.0.2",
+    "typedoc": "^0.17.7",
+    "typescript": "^3.9.5"
   },
-  "peerDependencies" : {
+  "peerDependencies": {
     "react": "^16.8",
     "react-native": ">=0.60"
   },
@@ -39,5 +41,28 @@
     "url": "git+https://github.com/urbanairship/react-native-module.git"
   },
   "license": "Apache-2.0",
-  "typings": "./js/index.d.ts"
+  "typings": "./js/index.d.ts",
+  "@react-native-community/bob": {
+    "source": "js",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "typescript"
+    ]
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "modulePathIgnorePatterns": ["lib/"]
+  },
+  "scripts": {
+    "prepare": "bob build",
+    "generate-docs": "typedoc --out docs --exclude js/__tests__ js/"
+  },
+  "types": "lib/typescript/index.d.ts",
+  "main": "lib/commonjs/index.js",
+  "react-native": "js/index.ts",
+  "files": [
+    "lib/",
+    "js/"
+  ]
 }
