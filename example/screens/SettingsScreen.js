@@ -6,11 +6,6 @@
  */
 'use strict';
 
-import {
- UrbanAirship,
- UACustomEvent,
-} from 'urbanairship-react-native'
-
 import React, {
   Component,
 } from 'react';
@@ -24,9 +19,10 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
-  Alert,
   ScrollView,
 } from 'react-native';
+
+import {UrbanAirship} from 'urbanairship-react-native'
 
 import styles from './../Styles';
 
@@ -41,10 +37,10 @@ export default class SettingsScreen extends Component {
       notificationsEnabled: false,
       locationEnabled: false,
       tags: [],
-      tagText:"",
-      namedUserText:"",
+      tagText: "",
+      namedUserText: "",
     }
-    
+
     UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
 
     this.handleNotificationsEnabled = this.handleNotificationsEnabled.bind(this);
@@ -52,7 +48,7 @@ export default class SettingsScreen extends Component {
 
     this.handleTagAdd = this.handleTagAdd.bind(this);
     this.handleTagRemove = this.handleTagRemove.bind(this);
-    this.handleUpdateTagText= this.handleUpdateTagText.bind(this);
+    this.handleUpdateTagText = this.handleUpdateTagText.bind(this);
 
     this.handleNamedUserSet = this.handleNamedUserSet.bind(this);
     this.handleUpdateNamedUserText = this.handleUpdateNamedUserText.bind(this);
@@ -65,45 +61,45 @@ export default class SettingsScreen extends Component {
 
   handleNotificationsEnabled(enabled) {
     UrbanAirship.setUserNotificationsEnabled(enabled)
-    this.setState({notificationsEnabled:enabled});
+    this.setState({ notificationsEnabled: enabled });
   }
 
   handleLocationEnabled(enabled) {
     UrbanAirship.setLocationEnabled(enabled)
-    this.setState({locationEnabled:enabled});
+    this.setState({ locationEnabled: enabled });
   }
 
-  handleUpdateNamedUser () {
+  handleUpdateNamedUser() {
     UrbanAirship.getNamedUser().then((data) => {
-         this.setState({
-           namedUser: data,
-         });
+      this.setState({
+        namedUser: data,
+      });
     });
   }
 
   handleNamedUserSet(text) {
     UrbanAirship.setNamedUser(text)
     this.handleUpdateNamedUser();
-    this.setState({namedUserText:""})
+    this.setState({ namedUserText: "" })
   }
 
   handleRenderNamedUser(text) {
     if (text != null) {
       return (
-          <Text>
-            Named User: {this.state.namedUser}
-          </Text>
-        );
+        <Text>
+          Named User: {this.state.namedUser}
+        </Text>
+      );
     } else {
       return null;
     }
   }
 
   handleUpdateNamedUserText(text) {
-    this.setState({namedUserText:text})
+    this.setState({ namedUserText: text })
   }
 
-  handleUpdateTagsList () {
+  handleUpdateTagsList() {
     UrbanAirship.getTags().then((data) => {
       this.setState({
         tags: data,
@@ -114,7 +110,7 @@ export default class SettingsScreen extends Component {
   handleTagAdd(text) {
     UrbanAirship.addTag(text)
     this.handleUpdateTagsList();
-    this.setState({tagText:""})
+    this.setState({ tagText: "" })
   }
 
   handleTagRemove(text) {
@@ -123,7 +119,7 @@ export default class SettingsScreen extends Component {
   }
 
   handleUpdateTagText(text) {
-    this.setState({tagText:text})
+    this.setState({ tagText: text })
   }
 
   handleMessageCenterDisplay() {
@@ -131,12 +127,12 @@ export default class SettingsScreen extends Component {
   }
 
   componentDidMount() {
-    UrbanAirship.isUserNotificationsEnabled().then ((enabled) => {
-      this.setState({notificationsEnabled:enabled})
+    UrbanAirship.isUserNotificationsEnabled().then((enabled) => {
+      this.setState({ notificationsEnabled: enabled })
     })
 
-    UrbanAirship.isLocationEnabled().then ((enabled) => {
-      this.setState({locationEnabled:enabled})
+    UrbanAirship.isLocationEnabled().then((enabled) => {
+      this.setState({ locationEnabled: enabled })
     })
 
     UrbanAirship.addListener("notificationResponse", (response) => {
@@ -171,16 +167,16 @@ export default class SettingsScreen extends Component {
       <View style={styles.backgroundContainer}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <Image
-            style={{width: 300, height: 38, marginTop:50, alignItems:'center'}}
+            style={{ width: 300, height: 38, marginTop: 50, alignItems: 'center' }}
             source={require('./../img/urban-airship-sidebyside.png')}
           />
-          <View style={{height:75}}>
-            </View>
-              <EnablePushCell
-                notificationsEnabled={this.state.notificationsEnabled}
-                handleNotificationsEnabled={this.handleNotificationsEnabled}
-              />
-            <View>
+          <View style={{ height: 75 }}>
+          </View>
+          <EnablePushCell
+            notificationsEnabled={this.state.notificationsEnabled}
+            handleNotificationsEnabled={this.handleNotificationsEnabled}
+          />
+          <View>
           </View>
           <NamedUserManagerCell
             namedUserText={this.state.namedUserText}
@@ -205,7 +201,7 @@ export default class SettingsScreen extends Component {
             title="Message Center"
           />
         </ScrollView>
-    </View>
+      </View>
 
     );
   }
@@ -219,7 +215,7 @@ class EnablePushCell extends Component {
           Enable Push
         </Text>
         <Switch
-          trackColor={{true: "#0d6a83", false: null}}
+          trackColor={{ true: "#0d6a83", false: null }}
           onValueChange={(value) => this.props.handleNotificationsEnabled(value)}
           value={this.props.notificationsEnabled}
         />
@@ -236,7 +232,7 @@ class EnableLocationCell extends Component {
           Enable Location
         </Text>
         <Switch
-          trackColor={{true: "#0d6a83", false: null}}
+          trackColor={{ true: "#0d6a83", false: null }}
           onValueChange={(value) => this.props.handleLocationEnabled(value)}
           value={this.props.locationEnabled}
         />
@@ -257,7 +253,7 @@ class NamedUserManagerCell extends Component {
             handleRenderNamedUser={this.props.handleRenderNamedUser}
             placeholder={'named user'}
           />
-          <Text style={{marginLeft:10, color:'#0d6a83'}}>
+          <Text style={{ marginLeft: 10, color: '#0d6a83' }}>
             {this.props.handleRenderNamedUser(this.props.namedUserText)}
           </Text>
         </View>
@@ -267,27 +263,27 @@ class NamedUserManagerCell extends Component {
 }
 
 class NamedUserInputCell extends Component {
-  render () {
-        return (
-          <View style={styles.miniCellContainer}>
-            <TextInput
-              style={styles.textInput}
-              autoCorrect={false}
-              autoCapitalize={'none'}
-              onSubmitEditing={(event) => this.props.handleNamedUserSet(this.props.namedUserText)}
-              onChangeText={(text) => this.props.handleUpdateNamedUserText(text)}
-              value={this.props.namedUserText}
-            />
-            <View style={styles.inputButton}>
-               <Button
-                 color='#0d6a83'
-                 onPress={() => this.props.handleNamedUserSet(this.props.namedUserText)}
-                 title="Set Named User"
-               />
-            </View>
-          </View>
-       );
-    }
+  render() {
+    return (
+      <View style={styles.miniCellContainer}>
+        <TextInput
+          style={styles.textInput}
+          autoCorrect={false}
+          autoCapitalize={'none'}
+          onSubmitEditing={(event) => this.props.handleNamedUserSet(this.props.namedUserText)}
+          onChangeText={(text) => this.props.handleUpdateNamedUserText(text)}
+          value={this.props.namedUserText}
+        />
+        <View style={styles.inputButton}>
+          <Button
+            color='#0d6a83'
+            onPress={() => this.props.handleNamedUserSet(this.props.namedUserText)}
+            title="Set Named User"
+          />
+        </View>
+      </View>
+    );
+  }
 }
 
 class TagsManagerCell extends Component {
@@ -295,32 +291,32 @@ class TagsManagerCell extends Component {
     return (
       <View style={styles.managerCell}>
         <View style={styles.stackRight}>
-        <TagInputCell
-          tagText={this.props.tagText}
-          handleTagAdd={this.props.handleTagAdd}
-          handleUpdateTagText={this.props.handleUpdateTagText}
-          placeholder={'tag'}
-        />
-        <FlatList
-          horizontal={true}
-          data={this.props.tags}
-          keyExtractor={(item, index) => item}
-          renderItem={({item}) =>
-            <View style={styles.cellContainer}>
-              <Text style={{color:'#0d6a83'}}>
-              {item}
-              </Text>
-              <View style={styles.circle}>
-                <TouchableOpacity
-                style={styles.circle}
-                onPress={() => this.props.handleTagRemove(item)}
-                title="-"
-                />
-                <View style = {styles.dash}/>
+          <TagInputCell
+            tagText={this.props.tagText}
+            handleTagAdd={this.props.handleTagAdd}
+            handleUpdateTagText={this.props.handleUpdateTagText}
+            placeholder={'tag'}
+          />
+          <FlatList
+            horizontal={true}
+            data={this.props.tags}
+            keyExtractor={(item, index) => item}
+            renderItem={({ item }) =>
+              <View style={styles.cellContainer}>
+                <Text style={{ color: '#0d6a83' }}>
+                  {item}
+                </Text>
+                <View style={styles.circle}>
+                  <TouchableOpacity
+                    style={styles.circle}
+                    onPress={() => this.props.handleTagRemove(item)}
+                    title="-"
+                  />
+                  <View style={styles.dash} />
                 </View>
               </View>
-          }
-        />
+            }
+          />
         </View>
       </View>
     );
@@ -328,7 +324,7 @@ class TagsManagerCell extends Component {
 }
 
 class TagInputCell extends Component {
-  render () {
+  render() {
     return (
       <View style={styles.miniCellContainer}>
         <TextInput
@@ -341,11 +337,11 @@ class TagInputCell extends Component {
         />
         <View style={styles.inputButton}>
           <Button
-             color='#0d6a83'
-             onPress={() => this.props.handleTagAdd(this.props.tagText || '')}
-             title="Add Tag"
+            color='#0d6a83'
+            onPress={() => this.props.handleTagAdd(this.props.tagText || '')}
+            title="Add Tag"
           />
-       </View>
+        </View>
       </View>
     );
   }

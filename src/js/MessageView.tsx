@@ -60,7 +60,7 @@ export interface MessageLoadErrorEvent {
   /**
    * The error
    */
-  error : MessageLoadError
+  error: MessageLoadError
 }
 
 /**
@@ -82,54 +82,54 @@ export interface MessageViewProps {
    * @memberof UAMessageView
    * @instance
    */
-  onLoadStarted: (event:MessageLoadStartedEvent) => void;
+  onLoadStarted: (event: MessageLoadStartedEvent) => void;
   /**
    * A callback when the view finishes loading a message.
    * @memberof UAMessageView
    * @instance
    */
-  onLoadFinished: (event:MessageLoadFinishedEvent) => void;
+  onLoadFinished: (event: MessageLoadFinishedEvent) => void;
   /**
    * A callback when the view fails to load a message with an error.
    * @memberof UAMessageView
    * @instance
    */
-  onLoadError: (event:MessageLoadErrorEvent) => void;
+  onLoadError: (event: MessageLoadErrorEvent) => void;
   /**
    * A callback when the message is closed.
    * @memberof UAMessageView
    * @instance
    */
-  onClose: (event:MessageClosedEvent) => void;
+  onClose: (event: MessageClosedEvent) => void;
 }
 
 /**
  * Inbox message view component.
  */
-export default class MessageView extends React.Component<MessageViewProps> {
+export class MessageView extends React.Component<MessageViewProps> {
 
-  _onLoadStarted = (event:NativeSyntheticEvent<MessageLoadStartedEvent>) => {
+  _onLoadStarted = (event: NativeSyntheticEvent<MessageLoadStartedEvent>) => {
     if (!this.props.onLoadStarted) {
       return;
     }
     this.props.onLoadStarted(event.nativeEvent);
   };
 
-  _onLoadFinished = (event:NativeSyntheticEvent<MessageLoadFinishedEvent>) => {
+  _onLoadFinished = (event: NativeSyntheticEvent<MessageLoadFinishedEvent>) => {
     if (!this.props.onLoadFinished) {
       return;
     }
     this.props.onLoadFinished(event.nativeEvent);
   };
 
-  _onLoadError = (event:NativeSyntheticEvent<MessageLoadErrorEvent>) => {
+  _onLoadError = (event: NativeSyntheticEvent<MessageLoadErrorEvent>) => {
     if (!this.props.onLoadError) {
       return;
     }
     this.props.onLoadError(event.nativeEvent);
   };
 
-  _onClose = (event:NativeSyntheticEvent<MessageClosedEvent>) => {
+  _onClose = (event: NativeSyntheticEvent<MessageClosedEvent>) => {
     if (!this.props.onClose) {
       return;
     }

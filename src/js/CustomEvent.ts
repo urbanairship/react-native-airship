@@ -7,7 +7,7 @@ import {JsonObject, JsonValue} from './Json'
 /**
  * Custom event
  */
-export default class CustomEvent {
+export class CustomEvent {
 
   _name: string;
   _value?: number;

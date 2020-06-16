@@ -14,7 +14,7 @@ const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
  *
  * @hidden
  */
-export default class UAEventEmitter extends NativeEventEmitter {
+export class UAEventEmitter extends NativeEventEmitter {
   constructor() {
     super(UrbanAirshipModule);
   }

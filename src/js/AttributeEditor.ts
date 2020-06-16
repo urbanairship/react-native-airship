@@ -28,7 +28,7 @@ export interface AttributeOperation {
 /**
  * Editor for attributes.
  */
-export default class AttributeEditor {
+export class AttributeEditor {
   onApply: (operations: AttributeOperation[]) => void;
   operations: AttributeOperation[];
 

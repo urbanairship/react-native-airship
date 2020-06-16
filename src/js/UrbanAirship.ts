@@ -4,10 +4,10 @@
 
 import { NativeModules, Platform, EmitterSubscription } from "react-native";
 
-import CustomEvent from "./CustomEvent";
-import TagGroupEditor, { TagGroupOperation } from "./TagGroupEditor";
-import AttributeEditor, { AttributeOperation } from "./AttributeEditor";
-import UAEventEmitter from "./UAEventEmitter";
+import { CustomEvent } from "./CustomEvent";
+import { TagGroupEditor, TagGroupOperation } from "./TagGroupEditor";
+import { AttributeEditor, AttributeOperation } from "./AttributeEditor";
+import { UAEventEmitter } from "./UAEventEmitter";
 import { JsonObject, JsonValue } from "./Json";
 
 /**
@@ -169,12 +169,12 @@ export enum NotificationOptionsIOS {
 /**
  * A map of notification options. iOS only.
  */
-export type NotificationOptionsMapIOS = {[option in NotificationOptionsIOS] : boolean}
+export type NotificationOptionsMapIOS = { [option in NotificationOptionsIOS]: boolean }
 
 /**
  * A map of foreground notification options. iOS only.
  */
-export type ForegroundNotificationOptionsIOS = {[option in NotificationOptionsIOS] : boolean | null | undefined}
+export type ForegroundNotificationOptionsIOS = { [option in NotificationOptionsIOS]: boolean | null | undefined }
 
 /**
  * Enum of authorized notification settings. iOS only.
@@ -209,7 +209,7 @@ export enum AuthorizedNotificationSettingsIOS {
 /**
  * A map of authorized notification settings.
  */
-export type iOSAuthorizedNotificationSettingsMap = {[setting in AuthorizedNotificationSettingsIOS] : boolean}
+export type iOSAuthorizedNotificationSettingsMap = { [setting in AuthorizedNotificationSettingsIOS]: boolean }
 
 /**
  * Event fired when the notification opt-in status changes.
@@ -322,10 +322,10 @@ export interface NotificationConfigAndroid {
   defaultChannelId?: string;
 }
 
- /**
- * The main Airship API.
- */
-export default class UrbanAirship {
+/**
+* The main Airship API.
+*/
+export class UrbanAirship {
   /**
    * Sets the Android notification config. Values not set will fallback to any values set in the airship config options.
    *

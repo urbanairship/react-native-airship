@@ -24,7 +24,7 @@ export interface TagGroupOperation {
 /**
  * Editor for tag groups.
  */
-export default class TagGroupEditor {
+export class TagGroupEditor {
   onApply: (operations: TagGroupOperation[]) => void;
   operations: TagGroupOperation[];
 

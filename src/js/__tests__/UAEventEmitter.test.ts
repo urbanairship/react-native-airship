@@ -1,49 +1,49 @@
 /* Copyright Airship and Contributors */
 
-import {EmitterSubscription} from 'react-native';
-import UAEventEmitter from '../UAEventEmitter';
+import { EmitterSubscription } from 'react-native';
+import { UAEventEmitter } from '../UAEventEmitter';
 
-class MockEventEmitter  {
-    constructor() {}
-    listeners(eventType:string) { return [] }
-    addListener(eventType:string, listener:(...args: any[]) => any, context?: Object | null | undefined) {}
-    removeAllListeners(eventType?:string) {}
-    removeSubscription(subscription:EmitterSubscription) {}
+class MockEventEmitter {
+    constructor() { }
+    listeners(eventType: string) { return [] }
+    addListener(eventType: string, listener: (...args: any[]) => any, context?: Object | null | undefined) { }
+    removeAllListeners(eventType?: string) { }
+    removeSubscription(subscription: EmitterSubscription) { }
 }
 
-class MockNativeEventEmitter extends MockEventEmitter {}
+class MockNativeEventEmitter extends MockEventEmitter { }
 
 interface MockNativeModule {
     addAndroidListener: jest.Mock<any, any>,
     removeAndroidListeners: jest.Mock<any, any>,
-    removeAllAndroidListeners : jest.Mock<any, any>
+    removeAllAndroidListeners: jest.Mock<any, any>
 }
 
 describe("UAEventEmitter Tests", () => {
-    var emitter:UAEventEmitter;
+    var emitter: UAEventEmitter;
     var MockUrbanairshipModule: MockNativeModule
-    var MockPlatform: {OS: string};
+    var MockPlatform: { OS: string };
 
     beforeEach(() => {
         // Stub out the relevant native modules
         MockUrbanairshipModule = {
-            addAndroidListener : jest.fn(),
-            removeAndroidListeners : jest.fn(),
-            removeAllAndroidListeners : jest.fn()
+            addAndroidListener: jest.fn(),
+            removeAndroidListeners: jest.fn(),
+            removeAllAndroidListeners: jest.fn()
         }
 
         MockPlatform = {
-            OS : "test"
+            OS: "test"
         };
 
         jest.resetModules();
 
         // Mock the react-native imports used by UAEventEmitter
         jest.mock('react-native', () => ({
-            Platform : MockPlatform,
+            Platform: MockPlatform,
             NativeEventEmitter: MockNativeEventEmitter,
-            NativeModules : {
-                UrbanAirshipReactModule : MockUrbanairshipModule
+            NativeModules: {
+                UrbanAirshipReactModule: MockUrbanairshipModule
             }
         }));
 
@@ -53,7 +53,7 @@ describe("UAEventEmitter Tests", () => {
         jest.spyOn(MockNativeEventEmitter.prototype, 'removeSubscription');
 
         const UAEventEmitter = require("../UAEventEmitter");
-        emitter = new UAEventEmitter.default();
+        emitter = new UAEventEmitter.UAEventEmitter();
     });
 
     afterEach(() => {
@@ -64,8 +64,8 @@ describe("UAEventEmitter Tests", () => {
     test('addListenerAndroid', () => {
         MockPlatform.OS = 'android';
 
-        var listener = () => {};
-        var context = {"cool" : "rad"};
+        var listener = () => { };
+        var context = { "cool": "rad" };
 
         emitter.addListener("foo", listener, context);
 
@@ -76,9 +76,9 @@ describe("UAEventEmitter Tests", () => {
     test('addListeneriOS', () => {
         MockPlatform.OS = 'ios';
 
-        var listener = () => {};
-        var context = {"cool" : "rad"};
-;
+        var listener = () => { };
+        var context = { "cool": "rad" };
+        ;
         emitter.addListener("foo", listener, context);
 
         expect(MockUrbanairshipModule.addAndroidListener).not.toHaveBeenCalled();
@@ -89,7 +89,7 @@ describe("UAEventEmitter Tests", () => {
         MockPlatform.OS = 'android';
 
         MockNativeEventEmitter.prototype.listeners = jest.fn().mockImplementation((eventType) => {
-            return [() => {}, () => {}];
+            return [() => { }, () => { }];
         });
 
         emitter.removeAllListeners("foo");
@@ -109,7 +109,7 @@ describe("UAEventEmitter Tests", () => {
     test('removeSubscriptionAndroid', () => {
         MockPlatform.OS = 'android';
 
-        const subscription = emitter.addListener("foo", () => {})
+        const subscription = emitter.addListener("foo", () => { })
         emitter.removeSubscription(subscription);
 
         expect(MockUrbanairshipModule.removeAndroidListeners).toHaveBeenCalledWith(1);
@@ -119,7 +119,7 @@ describe("UAEventEmitter Tests", () => {
     test('removeSubscriptioniOS', () => {
         MockPlatform.OS = 'ios';
 
-        const subscription = emitter.addListener("foo", () => {}    )
+        const subscription = emitter.addListener("foo", () => { })
         emitter.removeSubscription(subscription);
 
         expect(MockUrbanairshipModule.removeAndroidListeners).not.toHaveBeenCalled();

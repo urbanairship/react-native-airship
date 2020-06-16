@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-import CustomEvent from '../CustomEvent';
+import { CustomEvent } from '../CustomEvent';
 
 describe("CustomEvent Tests", () => {
 
