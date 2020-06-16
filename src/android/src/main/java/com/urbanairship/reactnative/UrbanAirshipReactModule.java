@@ -156,6 +156,15 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         EventEmitter.shared().removeAndroidListeners(count);
     }
 
+    /**
+     * Called when all listeners are removed.
+     */
+    @ReactMethod
+    public void removeAllAndroidListeners() {
+        PluginLogger.info("UrbanAirshipReactModule - Remove all listeners");
+        EventEmitter.shared().removeAllAndroidListeners();
+    }
+
     @ReactMethod
     public void setAndroidNotificationConfig(ReadableMap map) {
         Context context = getReactApplicationContext();
@@ -544,93 +553,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                         }
                     }
                 });
-    }
-
-    /**
-     * Sets the quiet time.
-     * Map should be in the form of:
-     * - startHour
-     * - startMinute
-     * - endHour
-     * - endMinute
-     *
-     * @param map The quiet time map.
-     */
-    @ReactMethod
-    public void setQuietTime(ReadableMap map) {
-        Calendar start = new GregorianCalendar();
-        Calendar end = new GregorianCalendar();
-
-        int startHour = map.hasKey(QUIET_TIME_START_HOUR) ? map.getInt(QUIET_TIME_START_HOUR) : 0;
-        int startMinute = map.hasKey(QUIET_TIME_START_MINUTE) ? map.getInt(QUIET_TIME_START_MINUTE) : 0;
-
-        int endHour = map.hasKey(QUIET_TIME_END_HOUR) ? map.getInt(QUIET_TIME_END_HOUR) : 0;
-        int endMinute = map.hasKey(QUIET_TIME_END_MINUTE) ? map.getInt(QUIET_TIME_END_MINUTE) : 0;
-
-        start.set(Calendar.HOUR_OF_DAY, startHour);
-        start.set(Calendar.MINUTE, startMinute);
-        end.set(Calendar.HOUR_OF_DAY, endHour);
-        end.set(Calendar.MINUTE, endMinute);
-        //noinspection deprecation
-        UAirship.shared().getPushManager().setQuietTimeInterval(start.getTime(), end.getTime());
-    }
-
-    /**
-     * Gets the current quiet time.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    public void getQuietTime(Promise promise) {
-        //noinspection deprecation
-        Date[] quietTime = UAirship.shared().getPushManager().getQuietTimeInterval();
-
-        int startHour = 0;
-        int startMinute = 0;
-        int endHour = 0;
-        int endMinute = 0;
-
-        if (quietTime != null) {
-            Calendar start = new GregorianCalendar();
-            Calendar end = new GregorianCalendar();
-            start.setTime(quietTime[0]);
-            end.setTime(quietTime[1]);
-
-            startHour = start.get(Calendar.HOUR_OF_DAY);
-            startMinute = start.get(Calendar.MINUTE);
-            endHour = end.get(Calendar.HOUR_OF_DAY);
-            endMinute = end.get(Calendar.MINUTE);
-        }
-
-        WritableMap map = Arguments.createMap();
-        map.putInt(QUIET_TIME_START_HOUR, startHour);
-        map.putInt(QUIET_TIME_START_MINUTE, startMinute);
-        map.putInt(QUIET_TIME_END_HOUR, endHour);
-        map.putInt(QUIET_TIME_END_MINUTE, endMinute);
-
-        promise.resolve(map);
-    }
-
-    /**
-     * Enables/Disables quiet time
-     *
-     * @param enabled {@code true} to enable quiet time, {@code false} to disable.
-     */
-    @ReactMethod
-    public void setQuietTimeEnabled(Boolean enabled) {
-        //noinspection deprecation
-        UAirship.shared().getPushManager().setQuietTimeEnabled(enabled);
-    }
-
-    /**
-     * Checks if quiet time is enabled.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    public void isQuietTimeEnabled(Promise promise) {
-        //noinspection deprecation
-        promise.resolve(UAirship.shared().getPushManager().isQuietTimeEnabled());
     }
 
     /**
