@@ -14,9 +14,5 @@
     "generate-docs": "node_modules/.bin/documentation --config documentation.yml build urbanairship-react-native/js/** urbanairship-accengage-react-native/js/** urbanairship-location-react-native/js/** -f html -o out",
     "test": "jest --verbose",
     "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules urbanairship-location-react-native/node_modules example/node_modules yarn.lock"
-  },
-  "dependencies": {
-    "react": "^16.9.0",
-    "react-native": "^0.61.5"
   }
 }
