@@ -78,7 +78,7 @@ describe("UAEventEmitter Tests", () => {
 
         var listener = () => { };
         var context = { "cool": "rad" };
-        ;
+
         emitter.addListener("foo", listener, context);
 
         expect(MockUrbanairshipModule.addAndroidListener).not.toHaveBeenCalled();

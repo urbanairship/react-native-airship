@@ -13,6 +13,7 @@
     "urbanairship"
   ],
   "devDependencies": {
+    "@babel/core": "7.5.4",
     "@react-native-community/bob": "^0.14.5",
     "@react-native-community/eslint-config": "0.0.5",
     "@types/jest": "^24.0.15",
@@ -33,8 +34,8 @@
     "typescript": "^3.9.5"
   },
   "peerDependencies": {
-    "react": "^16.8",
-    "react-native": ">=0.60"
+    "react": "^16.10",
+    "react-native": ">=0.61.1"
   },
   "repository": {
     "type": "git",

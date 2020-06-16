@@ -55,7 +55,9 @@ jobs:
       - name: Generate documentation
         run: |
           yarn install
+          cd urbanairship-react-native/
           yarn generate-docs
+          cd -
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: "270.0.0"
@@ -65,7 +67,8 @@ jobs:
         run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//} out
       - name: Publish library
         run: |
-          cd src/
+          cd urbanairship-react-native/
+          yarn prepare
           yarn publish
           cd -
         env:

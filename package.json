@@ -1,7 +1,8 @@
 {
   "private": true,
   "workspaces": [
-    "src",
+    "urbanairship-react-native",
+    "urbanairship-accengage-react-native",
     "example"
   ],
   "jest": {
@@ -9,6 +10,7 @@
   },
   "scripts": {
     "start": "react-native start",
-    "clean": "rm -rf node_modules src/node_modules example/node_modules yarn.lock"
+    "test": "jest --verbose",
+    "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules example/node_modules yarn.lock"
   }
 }

@@ -22,7 +22,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import {UrbanAirship} from 'urbanairship-react-native'
+import { UrbanAirship } from 'urbanairship-react-native'
 
 import styles from './../Styles';
 

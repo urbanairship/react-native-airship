@@ -140,3 +140,4 @@ export class MessageView extends React.Component<MessageViewProps> {
     return <UARCTMessageView {...this.props} onLoadError={this._onLoadError} onLoadStarted={this._onLoadStarted} onLoadFinished={this._onLoadFinished} onClose={this._onClose} />;
   }
 }
+
