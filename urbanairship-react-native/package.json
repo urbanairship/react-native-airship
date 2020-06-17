@@ -42,7 +42,6 @@
     "url": "git+https://github.com/urbanairship/react-native-module.git"
   },
   "license": "Apache-2.0",
-  "typings": "./js/index.d.ts",
   "@react-native-community/bob": {
     "source": "js",
     "output": "lib",
