@@ -68,7 +68,6 @@ jobs:
       - name: Publish library
         run: |
           cd urbanairship-react-native/
-          yarn prepare
           yarn publish
           cd -
         env:
