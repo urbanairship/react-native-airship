@@ -193,11 +193,6 @@ static UARCTEventEmitter *sharedEventEmitter_;
     optedIn = authorizedSettings != UAAuthorizedNotificationSettingsNone;
 
     NSDictionary *body = @{  @"optIn": @(optedIn),
-                             @"notificationOptions" : @{
-                                     UARCTAuthorizedNotificationSettingsAlertKey : @(alertBool),
-                                     UARCTAuthorizedNotificationSettingsBadgeKey : @(badgeBool),
-                                     UARCTAuthorizedNotificationSettingsSoundKey : @(soundBool)
-                             },
                              @"authorizedNotificationSettings" : @{
                                      UARCTAuthorizedNotificationSettingsAlertKey : @(alertBool),
                                      UARCTAuthorizedNotificationSettingsBadgeKey : @(badgeBool),

@@ -219,14 +219,11 @@ export interface NotificationOptInStatusEvent {
    * Whether the user is opted in to notifications.
    */
   optIn: boolean;
+
   /**
-   * The currently available notification options.
+   * The authorized notification settings. iOS only.
    */
-  notificationOptions: NotificationOptionsMapIOS;
-  /**
-   * The authorized notification settings.
-   */
-  authorizedNotificationSettings: AuthorizedNotificationSettingsIOS;
+  authorizedNotificationSettings?: AuthorizedNotificationSettingsIOS;
 }
 
 /**
