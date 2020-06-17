@@ -14,7 +14,7 @@
   ],
   "devDependencies": {
     "@babel/core": "7.5.4",
-    "@react-native-community/bob": "^0.14.5",
+    "@react-native-community/bob": "^0.15.1",
     "@react-native-community/eslint-config": "0.0.5",
     "@types/jest": "^24.0.15",
     "@types/prop-types": "^15.7.3",
