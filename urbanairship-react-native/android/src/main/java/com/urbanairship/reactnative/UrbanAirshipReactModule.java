@@ -40,7 +40,6 @@ import com.urbanairship.actions.ActionRunRequest;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.channel.AttributeEditor;
 import com.urbanairship.channel.TagGroupsEditor;
-import com.urbanairship.location.AirshipLocationManager;
 import com.urbanairship.messagecenter.Inbox;
 import com.urbanairship.messagecenter.Message;
 import com.urbanairship.messagecenter.MessageCenter;
@@ -456,58 +455,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void trackScreen(String screen) {
         UAirship.shared().getAnalytics().trackScreen(screen);
-    }
-
-    /**
-     * Enables/Disables location updates.
-     *
-     * @param enabled {@code true} to enable location updates, {@code false} to disable.
-     */
-    @ReactMethod
-    public void setLocationEnabled(boolean enabled) {
-        if (enabled && shouldRequestLocationPermissions()) {
-            RequestPermissionsTask task = new RequestPermissionsTask(getReactApplicationContext(), new RequestPermissionsTask.Callback() {
-                @Override
-                public void onResult(boolean enabled) {
-                    if (enabled) {
-                        AirshipLocationManager.shared().setLocationUpdatesEnabled(true);
-                    }
-                }
-            });
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
-        } else {
-            AirshipLocationManager.shared().setLocationUpdatesEnabled(enabled);
-        }
-    }
-
-    /**
-     * Checks if location updates are enabled.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    public void isLocationEnabled(Promise promise) {
-        promise.resolve(AirshipLocationManager.shared().isLocationUpdatesEnabled());
-    }
-
-    /**
-     * Allows/Disallows background location.
-     *
-     * @param enabled {@code true} to allow background location., {@code false} to disallow.
-     */
-    @ReactMethod
-    public void setBackgroundLocationAllowed(boolean enabled) {
-        AirshipLocationManager.shared().setBackgroundLocationAllowed(enabled);
-    }
-
-    /**
-     * Checks if background location updates are allowed.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    public void isBackgroundLocationAllowed(Promise promise) {
-        promise.resolve(AirshipLocationManager.shared().isBackgroundLocationAllowed());
     }
 
     /**
