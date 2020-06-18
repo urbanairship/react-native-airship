@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1B0269042498C8A600B91120 /* AirshipLocationReactModuleVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0269022498C8A600B91120 /* AirshipLocationReactModuleVersion.m */; };
 		1B0269072498C8B600B91120 /* AirshipLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0269052498C8B600B91120 /* AirshipLocation.m */; };
+		1B02690D249B8E2700B91120 /* AirshipLocationReactModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B02690C249B8E2700B91120 /* AirshipLocationReactModule.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +30,8 @@
 		1B0269032498C8A600B91120 /* AirshipLocationReactModuleVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirshipLocationReactModuleVersion.h; sourceTree = "<group>"; };
 		1B0269052498C8B600B91120 /* AirshipLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirshipLocation.m; sourceTree = "<group>"; };
 		1B0269062498C8B600B91120 /* AirshipLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirshipLocation.h; sourceTree = "<group>"; };
+		1B02690B249B8E2700B91120 /* AirshipLocationReactModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirshipLocationReactModule.h; sourceTree = "<group>"; };
+		1B02690C249B8E2700B91120 /* AirshipLocationReactModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirshipLocationReactModule.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +48,8 @@
 		1B0268ED2498C72A00B91120 = {
 			isa = PBXGroup;
 			children = (
+				1B02690B249B8E2700B91120 /* AirshipLocationReactModule.h */,
+				1B02690C249B8E2700B91120 /* AirshipLocationReactModule.m */,
 				1B0269062498C8B600B91120 /* AirshipLocation.h */,
 				1B0269052498C8B600B91120 /* AirshipLocation.m */,
 				1B0269032498C8A600B91120 /* AirshipLocationReactModuleVersion.h */,
@@ -145,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B0269042498C8A600B91120 /* AirshipLocationReactModuleVersion.m in Sources */,
+				1B02690D249B8E2700B91120 /* AirshipLocationReactModule.m in Sources */,
 				1B0269072498C8B600B91120 /* AirshipLocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

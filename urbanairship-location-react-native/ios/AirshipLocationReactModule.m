@@ -4,7 +4,6 @@
 
 @implementation AirshipLocationReactModule
 
-
 #pragma mark -
 #pragma mark Module methods
 

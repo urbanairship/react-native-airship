@@ -895,20 +895,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Helper to determine if location permissions should be requested or not.
-     *
-     * @return {@code true} if permissions should be requested, otherwise {@code false}.
-     */
-    private boolean shouldRequestLocationPermissions() {
-        if (Build.VERSION.SDK_INT < 23) {
-            return false;
-        }
-
-        return ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED &&
-                ContextCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED;
-    }
-
-    /**
      * Helper to determine user notifications authorization status
      *
      * @param context The application context.
