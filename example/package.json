@@ -1,25 +1,25 @@
 {
-  "private":true,
-  "name":"example",
-  "version":"1.0.0",
-  "dependencies":{
-    "@react-native-community/masked-view":"^0.1.7",
-    "moment":"^2.24.0",
-    "react":"16.10.1",
-    "react-native":"0.61.1",
-    "react-native-gesture-handler":"^1.6.1",
-    "react-native-reanimated":"^1.7.1",
-    "react-native-safe-area-context":"^0.7.3",
-    "react-native-screens":"^2.4.0",
-    "react-navigation":"^4.0.10",
-    "react-navigation-stack":"^2.3.7",
-    "react-navigation-tabs":"^2.5.5",
-    "urbanairship-accengage-react-native":"*",
-    "urbanairship-react-native":"*",
-    "urbanairship-location-react-native":"*"
+  "private": true,
+  "name": "example",
+  "version": "1.0.0",
+  "dependencies": {
+    "@react-native-community/masked-view": "^0.1.7",
+    "moment": "^2.24.0",
+    "react": "16.10.1",
+    "react-native": "0.61.1",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-reanimated": "^1.7.1",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.4.0",
+    "react-navigation": "^4.0.10",
+    "react-navigation-stack": "^2.3.7",
+    "react-navigation-tabs": "^2.5.5",
+    "urbanairship-accengage-react-native": "*",
+    "urbanairship-react-native": "*",
+    "urbanairship-location-react-native": "*"
   },
-  "scripts":{
-    "run:android":"react-native run-android",
-    "run:ios":"react-native run-ios"
+  "scripts": {
+    "run:android": "react-native run-android",
+    "run:ios": "react-native run-ios"
   }
 }
