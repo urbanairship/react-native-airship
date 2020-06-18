@@ -6,7 +6,7 @@ def safeExtGet (prop, fallback) {
 }
 
 dependencies {
-    def airshipVersion = "13.1.2"
+    def airshipVersion = "13.2.0"
 
     implementation 'com.facebook.react:react-native:+'
 

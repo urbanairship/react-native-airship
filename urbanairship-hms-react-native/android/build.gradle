@@ -2,8 +2,6 @@ apply plugin: 'com.android.library'
 apply from: "../../common-build.gradle"
 
 dependencies {
-    def airshipVersion = "13.1.2"
-
     implementation 'com.facebook.react:react-native:+'
     implementation "com.urbanairship.android:urbanairship-hms:$airshipVersion"
 }

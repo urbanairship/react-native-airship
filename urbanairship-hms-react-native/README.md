@@ -1,20 +1,12 @@
 # Airship HMS React Native
 
-A React Native module for Airship's Android SDK.
+Installs the HMS push provider for Airship SDK.
 
 ### Resources
 
 * [Getting started guide](http://docs.airship.com/platform/react-native/)
 * [API docs](http://docs.airship.com/reference/libraries/react-native/latest/index.html)
 
-### Issues
-
-Please visit https://support.airship.com/ for any issues integrating or using this module.
-
-### Requirements:
- - Android: minSdkVersion 16+, compileSdkVersion 28+
- - React Native >= 0.60.0
- - React Native cli >= 2.0.1
 
 ## Install
 
@@ -28,9 +20,9 @@ yarn add urbanairship-hms-react-native
 npm install urbanairship-hms-react-native --save
 ```
 
+### Add Huawei dependencies
 
-## Usage
-```javascript
-import AirshipHMS from 'urbanairship-hms-react-native';
+This plugin does not include the HMS dependency directly, instead you need to follow [HMS setup guide](https://developer.huawei.com/consumer/en/doc/development/HMS-Guides/Preparations#h1-1575707420071) to add it the to app directly.
 
-```
+
+

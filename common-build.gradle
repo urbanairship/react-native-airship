@@ -1,5 +1,9 @@
 import groovy.json.JsonSlurper
 
+ext {
+    airshipVersion = "13.2.0"
+}
+
 android {
 
     // Android SDK Versions
