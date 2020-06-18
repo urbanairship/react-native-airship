@@ -1,7 +1,6 @@
 require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
-sync_version = `#{__dir__}/scripts/sync_version.sh #{package["version"]}`
 
 Pod::Spec.new do |s|
   s.name         = "urbanairship-location-react-native"
