@@ -1,0 +1,32 @@
+{
+  "name": "urbanairship-location-react-native",
+  "version": "7.0.0",
+  "description": "Airship location module for React Native apps.",
+  "main": "./js/index.js",
+  "author": "Airship",
+  "homepage": "https://github.com/urbanairship/react-native-module",
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "ios",
+    "android",
+    "urbanairship",
+    "location"
+  ],
+  "devDependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.61.5",
+    "urbanairship-react-native": "^7.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urbanairship/react-native-module.git"
+  },
+  "license": "Apache-2.0",
+  "readmeFilename": "README.md"
+}

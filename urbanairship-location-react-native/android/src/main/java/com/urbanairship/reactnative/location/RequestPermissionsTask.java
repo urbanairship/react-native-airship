@@ -1,6 +1,6 @@
 /* Copyright Urban Airship and Contributors */
 
-package com.urbanairship.reactnative;
+package com.urbanairship.reactnative.location;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

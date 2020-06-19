@@ -363,6 +363,7 @@
 				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
 				"${BUILT_PRODUCTS_DIR}/react-native-safe-area-context/react_native_safe_area_context.framework",
 				"${BUILT_PRODUCTS_DIR}/urbanairship-accengage-react-native/urbanairship_accengage_react_native.framework",
+				"${BUILT_PRODUCTS_DIR}/urbanairship-location-react-native/urbanairship_location_react_native.framework",
 				"${BUILT_PRODUCTS_DIR}/urbanairship-react-native/urbanairship_react_native.framework",
 				"${BUILT_PRODUCTS_DIR}/AirshipExtensions/AirshipExtensions.framework",
 			);
@@ -397,6 +398,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/react_native_safe_area_context.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/urbanairship_accengage_react_native.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/urbanairship_location_react_native.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/urbanairship_react_native.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AirshipExtensions.framework",
 			);
