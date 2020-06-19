@@ -54,7 +54,14 @@ export class AttributeEditor {
     var attributeValue: string | number | Date;
     var attributeType: "string" | "number" | "date";
 
-    if (typeof value != "boolean") {
+    if (typeof value == "boolean") {
+
+      // No boolean attribute type. Convert value to string.
+      attributeValue = value.toString();
+      attributeType = "string";
+
+    } else {
+
       attributeValue = value;
       if (typeof value === "string") {
         attributeType = "string";
@@ -68,10 +75,6 @@ export class AttributeEditor {
       } else {
         throw "Unsupported attribute type: " + typeof attributeValue;
       }
-    } else {
-      // No boolean attribute type. Convert value to string.
-      attributeValue = value.toString();
-      attributeType = "string";
     }
 
     const operation = { "action": "set", "value": attributeValue, "key": name, type: attributeType};

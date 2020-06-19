@@ -74,31 +74,31 @@ export interface MessageClosedEvent {
 }
 
 /**
- * UAMessageView props
+ * MessageView props
  */
 export interface MessageViewProps {
   /**
    * A callback when the view starts loading a message.
-   * @memberof UAMessageView
-   * @instance
+   *
+   * @param event: The message load started event.
    */
   onLoadStarted: (event: MessageLoadStartedEvent) => void;
   /**
    * A callback when the view finishes loading a message.
-   * @memberof UAMessageView
-   * @instance
+   *
+   * @param event: The message load finished event.
    */
   onLoadFinished: (event: MessageLoadFinishedEvent) => void;
   /**
    * A callback when the view fails to load a message with an error.
-   * @memberof UAMessageView
-   * @instance
+   *
+   * @param event: The message load error event.
    */
   onLoadError: (event: MessageLoadErrorEvent) => void;
   /**
    * A callback when the message is closed.
-   * @memberof UAMessageView
-   * @instance
+   *
+   * @param event: The message closed event.
    */
   onClose: (event: MessageClosedEvent) => void;
 }
