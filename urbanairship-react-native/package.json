@@ -26,13 +26,13 @@
     "jest": "^24.9.0",
     "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "0.55.0",
-    "react": "16.10.1",
-    "react-native": "0.61.1",
+    "react": "^16.9.0",
+    "react-native": "^0.61.5",
     "typescript": "^3.6.3"
   },
   "peerDependencies" : {
-    "react": "^16.8",
-    "react-native": ">=0.60"
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
   },
   "repository": {
     "type": "git",
