@@ -3,5 +3,5 @@ apply from: "../../common-build.gradle"
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation "com.urbanairship.android:urbanairship-accengage:$airshipVersion"
+    implementation "com.urbanairship.android:urbanairship-hms:$airshipVersion"
 }
