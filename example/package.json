@@ -15,7 +15,8 @@
     "react-navigation-stack": "^2.3.7",
     "react-navigation-tabs": "^2.5.5",
     "urbanairship-accengage-react-native": "*",
-    "urbanairship-react-native": "*"
+    "urbanairship-react-native": "*",
+    "urbanairship-location-react-native": "*"
   },
   "scripts": {
     "run:android": "react-native run-android",

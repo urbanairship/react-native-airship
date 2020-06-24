@@ -3,6 +3,8 @@
   "workspaces": [
     "urbanairship-react-native",
     "urbanairship-accengage-react-native",
+    "urbanairship-location-react-native",
+    "urbanairship-hms-react-native",
     "example"
   ],
   "jest": {
@@ -10,7 +12,8 @@
   },
   "scripts": {
     "start": "react-native start",
+    "generate-docs": "node_modules/.bin/documentation --config documentation.yml build urbanairship-accengage-react-native/js/** urbanairship-location-react-native/js/** urbanairship-hms-react-native/js/** -f html -o out",
     "test": "jest --verbose",
-    "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules example/node_modules yarn.lock"
+    "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules urbanairship-location-react-native/node_modules urbanairship-hms-react-native/node_modules example/node_modules yarn.lock"
   }
 }

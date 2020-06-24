@@ -600,58 +600,6 @@ export class UrbanAirship {
   }
 
   /**
-   * Enables or disables Urban Airship location services.
-   *
-   * Note: On iOS, location services require an additional dependency
-   * on AirshipLocationKit. For more information see
-   * https://docs.airship.com/platform/react-native/location/
-   *
-   * @param enabled true to enable location, false to disable.
-   */
-  static setLocationEnabled(enabled: boolean) {
-    UrbanAirshipModule.setLocationEnabled(enabled);
-  }
-
-  /**
-   * Allows or disallows location services to continue in the background.
-   *
-   * Note: On iOS, location services require an additional dependency
-   * on AirshipLocationKit. For more information see
-   * https://docs.airship.com/platform/react-native/location/
-   *
-   * @param allowed true to allow background location, false to disallow.
-   */
-  static setBackgroundLocationAllowed(allowed: boolean) {
-    UrbanAirshipModule.setBackgroundLocationAllowed(allowed);
-  }
-
-  /**
-   * Checks if location is enabled or not.
-   *
-   * Note: On iOS, location services require an additional dependency
-   * on AirshipLocationKit. For more information see
-   * https://docs.airship.com/platform/react-native/location/
-   *
-   * @return A promise with the result.
-   */
-  static isLocationEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isLocationEnabled();
-  }
-
-  /**
-   * Checks if background location is allowed or not.
-   *
-   * Note: On iOS, location services require an additional dependency
-   * on AirshipLocationKit. For more information see
-   * https://docs.airship.com/platform/react-native/location/
-   *
-   * @return A promise with the result.
-   */
-  static isBackgroundLocationAllowed(): Promise<boolean> {
-    return UrbanAirshipModule.isBackgroundLocationAllowed();
-  }
-
-  /**
    * Runs an Urban Airship action.
    *
    * @param name The name of the action.
