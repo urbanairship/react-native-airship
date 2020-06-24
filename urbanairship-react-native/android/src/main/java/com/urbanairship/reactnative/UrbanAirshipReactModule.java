@@ -155,15 +155,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         EventEmitter.shared().removeAndroidListeners(count);
     }
 
-    /**
-     * Called when all listeners are removed.
-     */
-    @ReactMethod
-    public void removeAllAndroidListeners() {
-        PluginLogger.info("UrbanAirshipReactModule - Remove all listeners");
-        EventEmitter.shared().removeAllAndroidListeners();
-    }
-
     @ReactMethod
     public void setAndroidNotificationConfig(ReadableMap map) {
         Context context = getReactApplicationContext();
