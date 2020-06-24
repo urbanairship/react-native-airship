@@ -56,11 +56,6 @@ describe("UAEventEmitter Tests", () => {
         emitter = new UAEventEmitter.UAEventEmitter();
     });
 
-    afterEach(() => {
-        // Reset global event state
-        emitter.removeAllListeners();
-    });
-
     test('addListenerAndroid', () => {
         MockPlatform.OS = 'android';
 

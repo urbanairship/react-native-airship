@@ -26,13 +26,9 @@ export class UAEventEmitter extends NativeEventEmitter {
     return super.addListener(eventType, listener, context);
   }
 
-  removeAllListeners(eventType?: string) {
+  removeAllListeners(eventType: string) {
     if (Platform.OS === 'android') {
-      if (eventType) {
         UrbanAirshipModule.removeAndroidListeners(this.listeners(eventType).length);
-      } else {
-        UrbanAirshipModule.removeAllAndroidListeners();
-      }
     }
 
     super.removeAllListeners(eventType);

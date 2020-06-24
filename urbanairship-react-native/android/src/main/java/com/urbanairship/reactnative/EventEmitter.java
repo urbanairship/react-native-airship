@@ -107,16 +107,6 @@ class EventEmitter {
     }
 
     /**
-     * Called when all listeners are removed.
-     */
-    void removeAllAndroidListeners() {
-        synchronized (knownListeners) {
-            listenerCount = 0;
-            knownListeners.clear();
-        }
-    }
-
-    /**
      * Attempts to send pending events.
      */
     @MainThread
