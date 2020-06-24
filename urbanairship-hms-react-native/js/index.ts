@@ -1,6 +1,5 @@
 /* Copyright Airship and Contributors */
 
-// @flow
 'use strict';
 
 /**
@@ -10,6 +9,6 @@
 
 import { NativeModules } from 'react-native';
 
-const { AirshipAccengage } = NativeModules;
+const { AirshipHMS } = NativeModules;
 
-export default AirshipAccengage;
+export default AirshipHMS;

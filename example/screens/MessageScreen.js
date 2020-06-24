@@ -7,13 +7,10 @@
 'use strict';
 
 import {
- UAMessageView,
- UrbanAirship
+  MessageView
 } from 'urbanairship-react-native'
 
-import React, {
-  Component,
-} from 'react';
+import React from 'react';
 
 import {
   View,
@@ -26,9 +23,9 @@ import styles from './../Styles'
 export default class MessageScreen extends React.Component {
 
   constructor(props) {
-    super (props);
+    super(props);
     this.state = {
-        animating: true
+      animating: true
     }
 
     this.startLoading = this.startLoading.bind(this);
@@ -37,25 +34,25 @@ export default class MessageScreen extends React.Component {
   }
 
   static navigationOptions = ({ navigation }) => {
-      const { params } = navigation.state;
-      return {
-        title: params ? params.title: "",
-      }
+    const { params } = navigation.state;
+    return {
+      title: params ? params.title : "",
+    }
   }
 
   startActivityIndicator() {
     setTimeout(() => {
-        this.setState({
-            animating: false
-        });
+      this.setState({
+        animating: false
+      });
     }, 500);
   }
 
   stopActivityIndicator() {
     setTimeout(() => {
-        this.setState({
-            animating: false
-        });
+      this.setState({
+        animating: false
+      });
     }, 500);
   }
 
@@ -63,35 +60,35 @@ export default class MessageScreen extends React.Component {
     this.startActivityIndicator();
   }
 
-   finishLoading() {
+  finishLoading() {
     this.stopActivityIndicator();
-   }
+  }
 
-   failedLoading() {
+  failedLoading() {
     this.stopActivityIndicator();
     Alert.alert('Error', 'Unable to load message. Please try again later',
-              [{text: 'OK', onPress: () => this.props.navigation.goBack()},]
+      [{ text: 'OK', onPress: () => this.props.navigation.goBack() },]
     )
-   }
+  }
 
   render() {
     const { params } = this.props.navigation.state;
     const messageId = params ? params.messageId : "";
 
     return (
-       <View style={styles.backgroundContainer}>
-            <UAMessageView messageId={messageId}
-                           onLoadStarted={this.startLoading}
-                           onLoadFinished={this.finishLoading}
-                           onLoadError={this.failedLoading}
-                           style={{ flex: 1 }}
-            />
-            <View style={styles.loadingIndicator}>
-                <ActivityIndicator size="large"
-                                   animating={this.state.animating}
-                />
-            </View>
-       </View>
+      <View style={styles.backgroundContainer}>
+        <MessageView messageId={messageId}
+          onLoadStarted={this.startLoading}
+          onLoadFinished={this.finishLoading}
+          onLoadError={this.failedLoading}
+          style={{ flex: 1 }}
+        />
+        <View style={styles.loadingIndicator}>
+          <ActivityIndicator size="large"
+            animating={this.state.animating}
+          />
+        </View>
+      </View>
     );
   }
 }

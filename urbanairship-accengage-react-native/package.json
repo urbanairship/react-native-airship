@@ -2,7 +2,6 @@
   "name": "urbanairship-accengage-react-native",
   "version": "7.0.0",
   "description": "Airship accengage module for React Native apps.",
-  "main": "./js/index.js",
   "author": "Airship",
   "homepage": "https://github.com/urbanairship/react-native-module",
   "keywords": [
@@ -15,18 +14,41 @@
     "accengage"
   ],
   "devDependencies": {
-    "react": "^16.9.0",
+    "react": "^16.10.1",
     "react-native": "^0.61.5",
+    "@react-native-community/bob": "^0.15.1",
+    "typedoc": "^0.17.7",
+    "typescript": "^3.9.5",
     "urbanairship-react-native": "^7.0.0"
   },
   "peerDependencies": {
-    "react": "^16.8.1",
-    "react-native": ">=0.60.0-rc.0 <1.0.x"
+    "react": "^16.10.1",
+    "react-native": ">=0.61.5"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/urbanairship/react-native-module.git"
   },
+  "@react-native-community/bob": {
+    "source": "js",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "typescript"
+    ]
+  },
+  "scripts": {
+    "prepare": "bob build",
+    "test": "jest --verbose",
+    "generate-docs": "typedoc --out docs --exclude js/__tests__ js/"
+  },
+  "types": "lib/typescript/index.d.ts",
+  "main": "lib/commonjs/index.js",
+  "react-native": "lib/commonjs/index.js",
+  "files": [
+    "lib/",
+    "js/"
+  ],
   "license": "Apache-2.0",
   "readmeFilename": "README.md"
 }

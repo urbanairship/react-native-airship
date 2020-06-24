@@ -1,23 +1,25 @@
 /* Copyright Airship and Contributors */
 
-// @flow
 'use strict';
 
-import {
-  NativeModules,
-  NativeEventEmitter,
-  Platform
-} from 'react-native';
+import { NativeModules, NativeEventEmitter, EmitterSubscription, Platform } from "react-native";
 
+/**
+ * @hidden
+ */
 const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
 
-class UAEventEmitter extends NativeEventEmitter {
-
+/**
+ * Custom native event emitter with additional Android behavior
+ *
+ * @hidden
+ */
+export class UAEventEmitter extends NativeEventEmitter {
   constructor() {
     super(UrbanAirshipModule);
   }
 
-  addListener(eventType: string, listener: Function, context: ?Object): EmitterSubscription {
+  addListener(eventType: string, listener: (...args: any[]) => any, context?: object | null | undefined): EmitterSubscription {
     if (Platform.OS === 'android') {
       UrbanAirshipModule.addAndroidListener(eventType);
     }
@@ -26,8 +28,7 @@ class UAEventEmitter extends NativeEventEmitter {
 
   removeAllListeners(eventType: string) {
     if (Platform.OS === 'android') {
-      const count = this.listeners(eventType).length;
-      UrbanAirshipModule.removeAndroidListeners(count);
+        UrbanAirshipModule.removeAndroidListeners(this.listeners(eventType).length);
     }
 
     super.removeAllListeners(eventType);
@@ -40,5 +41,3 @@ class UAEventEmitter extends NativeEventEmitter {
     super.removeSubscription(subscription);
   }
 }
-
-module.exports = UAEventEmitter;

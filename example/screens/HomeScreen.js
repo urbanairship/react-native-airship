@@ -7,7 +7,7 @@
 'use strict';
 
 import {
- UrbanAirship,
+  UrbanAirship,
 } from 'urbanairship-react-native'
 
 import React, {
@@ -37,7 +37,7 @@ class ChannelCell extends Component {
 export default class HomeScreen extends React.Component {
 
   constructor(props) {
-    super (props);
+    super(props);
     this.state = {
       channelId: ""
     }
@@ -45,34 +45,34 @@ export default class HomeScreen extends React.Component {
 
   componentDidMount() {
     UrbanAirship.getChannelId().then((channelId) => {
-      this.setState({channelId:channelId})
+      this.setState({ channelId: channelId })
     });
   }
 
   render() {
     let channelcell = null
     if (this.state.channelId) {
-      channelcell = <ChannelCell channelId={this.state.channelId}/>;
+      channelcell = <ChannelCell channelId={this.state.channelId} />;
     }
 
     return (
-        <View style={styles.backgroundContainer}>
-          <ScrollView contentContainerStyle={styles.contentContainer}>
-            <Image
-              style={{width: 300, height: 38, marginTop:50, alignItems:'center'}}
-              source={require('./../img/urban-airship-sidebyside.png')}
-            />
-            <View style={{height:75}}>
-            </View>
-            {channelcell}
-          </ScrollView>
-          <View style={styles.bottom}>
-            <Text style={styles.instructions}>
-              Press Cmd+R to reload,{'\n'}
+      <View style={styles.backgroundContainer}>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          <Image
+            style={{ width: 300, height: 38, marginTop: 50, alignItems: 'center' }}
+            source={require('./../img/urban-airship-sidebyside.png')}
+          />
+          <View style={{ height: 75 }}>
+          </View>
+          {channelcell}
+        </ScrollView>
+        <View style={styles.bottom}>
+          <Text style={styles.instructions}>
+            Press Cmd+R to reload,{'\n'}
               Cmd+D or shake for dev menu
             </Text>
-          </View>
         </View>
+      </View>
     );
   }
 }

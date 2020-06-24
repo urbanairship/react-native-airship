@@ -2,7 +2,7 @@ const path = require('path');
 
 const extraNodeModules = new Proxy(
   {
-    'urbanairship-react-native': path.resolve(__dirname, '../src'),
+    'urbanairship-react-native': path.resolve(__dirname, '../urbanairship-react-native'),
   },
   {
     get: (target, name) => {
@@ -15,7 +15,7 @@ const extraNodeModules = new Proxy(
 );
 
 const watchFolders = [
-  path.resolve(__dirname, '../src'),
+  path.resolve(__dirname, '../urbanairship-react-native'),
   path.resolve(__dirname, '../node_modules'),
 ];
 
@@ -31,7 +31,7 @@ module.exports = {
   },
   resolver: {
     extraNodeModules,
-    sourceExts: ['js', 'jsx'],
+    sourceExts: ['js', 'jsx', 'ts', 'tsx'],
   },
   watchFolders,
 };

@@ -15,15 +15,15 @@ import MessageCenterScreen from "./screens/MessageCenterScreen";
 import MessageScreen from "./screens/MessageScreen";
 
 const MessageCenterStack = createStackNavigator({
- MessageList: {
-  screen: MessageCenterScreen,
-  navigationOptions: {
-    headerTitle: 'Messages Center',
-  }
- },
- MessageDetails: {
-  screen: MessageScreen
- }
+    MessageList: {
+        screen: MessageCenterScreen,
+        navigationOptions: {
+            headerTitle: 'Messages Center',
+        }
+    },
+    MessageDetails: {
+        screen: MessageScreen
+    }
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -44,9 +44,9 @@ const TabNavigator = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: "Settings"
         }
-     },
+    },
 },
-  { initialRouteName: 'Home' },
+    { initialRouteName: 'Home' },
 );
 
 export default createAppContainer(TabNavigator);

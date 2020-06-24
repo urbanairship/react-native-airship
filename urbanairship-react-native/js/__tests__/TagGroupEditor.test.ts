@@ -1,15 +1,15 @@
 /* Copyright Airship and Contributors */
 
-const TagGroupEditor = require("../TagGroupEditor");
+import { TagGroupEditor } from "../TagGroupEditor";
 
 describe("TagGroupEditor Tests", () => {
 
     test('addTags', () => {
         new TagGroupEditor((operations) => {
             expect(operations).toEqual([{
-                "group" : "testGroup",
-                "operationType" : "add",
-                "tags" : ["oh", "hi"]
+                "group": "testGroup",
+                "operationType": "add",
+                "tags": ["oh", "hi"]
             }]);
         }).addTags("testGroup", ["oh", "hi"]).apply();
     });
@@ -17,9 +17,9 @@ describe("TagGroupEditor Tests", () => {
     test('removeTags', () => {
         new TagGroupEditor((operations) => {
             expect(operations).toEqual([{
-                "group" : "testGroup",
-                "operationType" : "remove",
-                "tags" : ["foo", "bar"]
+                "group": "testGroup",
+                "operationType": "remove",
+                "tags": ["foo", "bar"]
             }]);
         }).removeTags("testGroup", ["foo", "bar"]).apply();
     });
@@ -27,9 +27,9 @@ describe("TagGroupEditor Tests", () => {
     test('setTags', () => {
         new TagGroupEditor((operations) => {
             expect(operations).toEqual([{
-                "group" : "testGroup",
-                "operationType" : "set",
-                "tags" : ["baz", "boz"]
+                "group": "testGroup",
+                "operationType": "set",
+                "tags": ["baz", "boz"]
             }]);
         }).setTags("testGroup", ["baz", "boz"]).apply();
     });
@@ -37,7 +37,7 @@ describe("TagGroupEditor Tests", () => {
     test('apply', () => {
         var applied = false;
         new TagGroupEditor(() => {
-          applied = true;
+            applied = true;
         }).apply();
 
         expect(applied).toEqual(true);

@@ -7,19 +7,15 @@
 'use strict';
 
 import {
- UrbanAirship,
+  UrbanAirship,
+  EventType
 } from 'urbanairship-react-native'
 
-import React, {
-  Component,
-} from 'react';
+import React from 'react';
 
 import {
   Text,
   View,
-  Image,
-  ScrollView,
-  Button,
   FlatList,
   TouchableHighlight,
   RefreshControl
@@ -31,23 +27,23 @@ import styles from './../Styles';
 
 function Item({ message, navigation }) {
   return (
-  <TouchableHighlight
-    activeOpacity={0.6}
-    underlayColor="#DDDDDD"
-    onPress={() => navigation.navigate("MessageDetails", { messageId: message.id, title: message.title })}>
-    <View style={styles.item}>
-      <Text style={styles.itemTitle}>{message.title}</Text>
-      <Text style={styles.itemSubtitle}>{Moment(message.sentDate).format('MM/DD/YYYY')}</Text>
-      <View style={styles.itemSeparator}></View>
-    </View>
-  </TouchableHighlight>
+    <TouchableHighlight
+      activeOpacity={0.6}
+      underlayColor="#DDDDDD"
+      onPress={() => navigation.navigate("MessageDetails", { messageId: message.id, title: message.title })}>
+      <View style={styles.item}>
+        <Text style={styles.itemTitle}>{message.title}</Text>
+        <Text style={styles.itemSubtitle}>{Moment(message.sentDate).format('MM/DD/YYYY')}</Text>
+        <View style={styles.itemSeparator}></View>
+      </View>
+    </TouchableHighlight>
   );
 }
 
 export default class MessageCenterScreen extends React.Component {
 
   constructor(props) {
-    super (props);
+    super(props);
     this.state = {
       messages: [],
       refreshing: true,
@@ -59,22 +55,22 @@ export default class MessageCenterScreen extends React.Component {
 
     UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
 
-    UrbanAirship.addListener("showInbox", (event) => {
-        console.log('showInbox:', event);
-        if (event.messageId != null) {
-            this.props.navigation.navigate("MessageDetails", { messageId:event.event, title: "" })
-        } else {
-            this.props.navigation.navigate("MessageCenter")
-        }
+    UrbanAirship.addListener(EventType.ShowInbox, (event) => {
+      console.log(EventType.ShowInbox + ':', event);
+      if (event.messageId != null) {
+        this.props.navigation.navigate("MessageDetails", { messageId: event.event, title: "" })
+      } else {
+        this.props.navigation.navigate("MessageCenter")
+      }
     });
   }
 
   handleUpdateMessageList() {
     UrbanAirship.getInboxMessages().then((data) => {
-        this.setState({
-            messages: data,
-            refreshing: false
-        });
+      this.setState({
+        messages: data,
+        refreshing: false
+      });
     });
   }
 
@@ -84,18 +80,18 @@ export default class MessageCenterScreen extends React.Component {
 
   render() {
     return (
-       <View style={styles.backgroundContainer}>
+      <View style={styles.backgroundContainer}>
         <FlatList
-            data={this.state.messages}
-            renderItem={({ item }) => <Item message={item} navigation={this.props.navigation} />}
-            keyExtractor={item => item.id}
-            refreshControl={
-                <RefreshControl refreshing={this.state.refreshing}
-                                onRefresh={this.refreshMessageCenter}
-                />
-            }
+          data={this.state.messages}
+          renderItem={({ item }) => <Item message={item} navigation={this.props.navigation} />}
+          keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl refreshing={this.state.refreshing}
+              onRefresh={this.refreshMessageCenter}
+            />
+          }
         />
-       </View>
+      </View>
     );
   }
 }
