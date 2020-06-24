@@ -12,8 +12,8 @@
   },
   "scripts": {
     "start": "react-native start",
-    "generate-docs": "node_modules/.bin/documentation --config documentation.yml build urbanairship-accengage-react-native/js/** urbanairship-location-react-native/js/** urbanairship-hms-react-native/js/** -f html -o out",
     "test": "jest --verbose",
+    "prepare" : "yarn workspace urbanairship-react-native run prepare; yarn workspace urbanairship-accengage-react-native run prepare; yarn workspace urbanairship-hms-react-native run prepare; yarn workspace urbanairship-location-react-native run prepare;",
     "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules urbanairship-location-react-native/node_modules urbanairship-hms-react-native/node_modules example/node_modules yarn.lock"
   }
 }

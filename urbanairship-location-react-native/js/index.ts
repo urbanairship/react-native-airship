@@ -8,8 +8,5 @@
  * @module react-native-airship-location
  */
 
-import { NativeModules } from 'react-native';
+export * from './AirshipLocation';
 
-const { AirshipLocation } = NativeModules;
-
-export default AirshipLocation;

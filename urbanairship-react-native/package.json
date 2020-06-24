@@ -23,7 +23,6 @@
     "@types/react-test-renderer": "^16.8.2",
     "acorn": "^7.1.1",
     "acorn-jsx": "^5.0.2",
-    "documentation": "12.1.1",
     "eslint": "^5.16.0",
     "jest": "^24.9.0",
     "jetifier": "^1.6.4",
@@ -34,7 +33,7 @@
     "typescript": "^3.9.5"
   },
   "peerDependencies": {
-    "react": "^16.10",
+    "react": "^16.10.1",
     "react-native": ">=0.61.5"
   },
   "repository": {
@@ -52,7 +51,9 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "modulePathIgnorePatterns": ["lib/"]
+    "modulePathIgnorePatterns": [
+      "lib/"
+    ]
   },
   "scripts": {
     "prepare": "bob build",
