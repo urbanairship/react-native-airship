@@ -5,6 +5,11 @@
 @implementation AirshipLocationReactModule
 
 #pragma mark -
+#pragma mark Module setup
+
+RCT_EXPORT_MODULE();
+
+#pragma mark -
 #pragma mark Module methods
 
 RCT_EXPORT_METHOD(setLocationEnabled:(BOOL)enabled) {
