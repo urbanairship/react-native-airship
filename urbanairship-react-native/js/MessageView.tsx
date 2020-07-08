@@ -54,9 +54,9 @@ export interface MessageLoadErrorEvent {
    */
   messageId: string
   /**
-   * Whether the failure is retriable.
+   * Whether the failure is retryable.
    */
-  retriable: boolean
+  retryable: boolean
   /**
    * The error
    */
