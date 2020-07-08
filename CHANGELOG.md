@@ -9,6 +9,8 @@ HMS and Accengage features
 - Added urbanairship-accengage-react-native module
 - Added full TypeScript coverage
 - Removed Flow
+- Updated iOS SDK to 13.5.0
+- Updated Android SDK to 13.2.1
 
 ## Version 7.0.0 - May 27, 2020
 Major release to provide new features and include the latest iOS and Android SDKs.
