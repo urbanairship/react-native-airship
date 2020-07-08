@@ -1,5 +1,15 @@
 # React Native Module Changelog
 
+## Version 8.0.0 - July 8, 2020
+Major release rewritten in TypeScript and adding separate modules for location,
+HMS and Accengage features
+
+- Added urbanairship-location-react-native module
+- Added urbanairship-hms-react-native module
+- Added urbanairship-accengage-react-native module
+- Added full TypeScript coverage
+- Removed Flow
+
 ## Version 7.0.0 - May 27, 2020
 Major release to provide new features and include the latest iOS and Android SDKs.
 

@@ -4,7 +4,7 @@
 
 @implementation UARCTModuleVersion
 
-NSString *const moduleVersionString = @"7.0.0";
+NSString *const moduleVersionString = @"8.0.0";
 
 + (nonnull NSString *)get {
     return moduleVersionString;
