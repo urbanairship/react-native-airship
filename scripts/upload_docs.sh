@@ -21,4 +21,4 @@ cd $2
 tar -czf $TAR_NAME *
 cd -
 
-gsutil cp $ROOT_PATH/out/$TAR_NAME gs://ua-web-ci-prod-docs-transfer/libraries/react-native/$TAR_NAME
+gsutil cp $2/$TAR_NAME gs://ua-web-ci-prod-docs-transfer/libraries/react-native/$TAR_NAME
