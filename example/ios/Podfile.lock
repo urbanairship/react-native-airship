@@ -1,21 +1,21 @@
 PODS:
-  - Airship (13.3.2):
-    - Airship/Automation (= 13.3.2)
-    - Airship/Core (= 13.3.2)
-    - Airship/ExtendedActions (= 13.3.2)
-    - Airship/MessageCenter (= 13.3.2)
-  - Airship/Accengage (13.3.2):
+  - Airship (13.5.0):
+    - Airship/Automation (= 13.5.0)
+    - Airship/Core (= 13.5.0)
+    - Airship/ExtendedActions (= 13.5.0)
+    - Airship/MessageCenter (= 13.5.0)
+  - Airship/Accengage (13.5.0):
     - Airship/Core
-  - Airship/Automation (13.3.2):
+  - Airship/Automation (13.5.0):
     - Airship/Core
-  - Airship/Core (13.3.2)
-  - Airship/ExtendedActions (13.3.2):
+  - Airship/Core (13.5.0)
+  - Airship/ExtendedActions (13.5.0):
     - Airship/Core
-  - Airship/Location (13.3.2):
+  - Airship/Location (13.5.0):
     - Airship/Core
-  - Airship/MessageCenter (13.3.2):
+  - Airship/MessageCenter (13.5.0):
     - Airship/Core
-  - AirshipExtensions/NotificationService (13.3.2)
+  - AirshipExtensions/NotificationService (13.5.0)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
@@ -242,16 +242,16 @@ PODS:
     - React
   - RNReanimated (1.9.0):
     - React
-  - RNScreens (2.8.0):
+  - RNScreens (2.9.0):
     - React
-  - urbanairship-accengage-react-native (7.0.0):
-    - Airship/Accengage (= 13.3.2)
+  - urbanairship-accengage-react-native (8.0.0):
+    - Airship/Accengage (= 13.5.0)
     - React
-  - urbanairship-location-react-native (7.0.0):
-    - Airship/Location (= 13.3.2)
+  - urbanairship-location-react-native (8.0.0):
+    - Airship/Location (= 13.5.0)
     - React
-  - urbanairship-react-native (7.0.0):
-    - Airship (= 13.3.2)
+  - urbanairship-react-native (8.0.0):
+    - Airship (= 13.5.0)
     - React
   - Yoga (1.14.0)
 
@@ -273,7 +273,7 @@ DEPENDENCIES:
   - React-jsi (from `../../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
   - React-RCTActionSheet (from `../../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../../node_modules/react-native/Libraries/Blob`)
@@ -284,10 +284,10 @@ DEPENDENCIES:
   - React-RCTText (from `../../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../../node_modules/react-native/ReactCommon`)
-  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - "RNCMaskedView (from `../../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
-  - RNReanimated (from `../node_modules/react-native-reanimated`)
-  - RNScreens (from `../node_modules/react-native-screens`)
+  - RNReanimated (from `../../node_modules/react-native-reanimated`)
+  - RNScreens (from `../../node_modules/react-native-screens`)
   - urbanairship-accengage-react-native (from `../../urbanairship-accengage-react-native`)
   - urbanairship-location-react-native (from `../../urbanairship-location-react-native`)
   - urbanairship-react-native (from `../../urbanairship-react-native`)
@@ -329,7 +329,7 @@ EXTERNAL SOURCES:
   React-jsinspector:
     :path: "../../node_modules/react-native/ReactCommon/jsinspector"
   react-native-safe-area-context:
-    :path: "../node_modules/react-native-safe-area-context"
+    :path: "../../node_modules/react-native-safe-area-context"
   React-RCTActionSheet:
     :path: "../../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -351,13 +351,13 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../../node_modules/react-native/ReactCommon"
   RNCMaskedView:
-    :path: "../node_modules/@react-native-community/masked-view"
+    :path: "../../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
     :path: "../../node_modules/react-native-gesture-handler"
   RNReanimated:
-    :path: "../node_modules/react-native-reanimated"
+    :path: "../../node_modules/react-native-reanimated"
   RNScreens:
-    :path: "../node_modules/react-native-screens"
+    :path: "../../node_modules/react-native-screens"
   urbanairship-accengage-react-native:
     :path: "../../urbanairship-accengage-react-native"
   urbanairship-location-react-native:
@@ -368,8 +368,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: ce026f4cc30869566ce17da980907fa149d64855
-  AirshipExtensions: fec29602d11565dbca59e3e16a8f1a6256314e24
+  Airship: 7463331b043f02b38c1da948e30d34212aa6bdbb
+  AirshipExtensions: 623fec49ce3d093d3b4395a43752b8845f53900f
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
@@ -399,10 +399,10 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
-  RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
-  urbanairship-accengage-react-native: 74da4bc03d87522184276f35c3cec9664fad0f26
-  urbanairship-location-react-native: 02eceb8c2b03d5ef6eff1a15b37a6f4efc77f5cc
-  urbanairship-react-native: d3488ddba975f9e822dd1c891fc4f41bd1646424
+  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
+  urbanairship-accengage-react-native: 52d3043d929b3e72b104a905716731d3d134e158
+  urbanairship-location-react-native: 01624acbdda98d168e232617d2048f7ef32ebc6c
+  urbanairship-react-native: 3d81b612bd5251931f57eb57ece32ffa0e1c58a3
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
