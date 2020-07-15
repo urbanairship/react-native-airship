@@ -65,9 +65,18 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - name: Upload docs
         run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//} urbanairship-react-native/docs
-      - name: Publish library
+      - name: Publish modules
         run: |
           cd urbanairship-react-native/
+          yarn publish
+          cd -
+          cd urbanairship-location-react-native/
+          yarn publish
+          cd -
+          cd urbanairship-accengage-react-native/
+          yarn publish
+          cd -
+          cd urbanairship-hms-react-native/
           yarn publish
           cd -
         env:
