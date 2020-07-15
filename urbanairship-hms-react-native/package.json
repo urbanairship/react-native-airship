@@ -46,10 +46,6 @@
   "types": "lib/typescript/index.d.ts",
   "main": "lib/commonjs/index.js",
   "react-native": "lib/commonjs/index.js",
-  "files": [
-    "lib/",
-    "js/"
-  ],
   "license": "Apache-2.0",
   "readmeFilename": "README.md"
 }
