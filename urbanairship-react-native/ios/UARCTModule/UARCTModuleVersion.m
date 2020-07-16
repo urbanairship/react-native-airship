@@ -4,10 +4,10 @@
 
 @implementation UARCTModuleVersion
 
-NSString *const moduleVersionString = @"8.0.0";
+NSString *const airshipModuleVersionString = @"8.0.1";
 
 + (nonnull NSString *)get {
-    return moduleVersionString;
+    return airshipModuleVersionString;
 }
 
 @end

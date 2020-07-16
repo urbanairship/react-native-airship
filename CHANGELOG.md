@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 8.0.1 - July 16, 2020
+Patch release to fix package generation, common gradle file references and the example app.
+
+- Fixed package generation
+- Fixed common gradle file references
+- Fixed example app
+
 ## Version 8.0.0 - July 8, 2020
 Major release rewritten in TypeScript and adding separate modules for location,
 HMS and Accengage features
