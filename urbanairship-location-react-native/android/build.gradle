@@ -1,5 +1,30 @@
 apply plugin: 'com.android.library'
-apply from: "../../common-build.gradle"
+
+import groovy.json.JsonSlurper
+
+ext {
+    airshipVersion = "13.2.1"
+}
+
+android {
+
+    // Android SDK Versions
+    compileSdkVersion 29
+
+    defaultConfig {
+        targetSdkVersion 29
+        minSdkVersion 16
+
+        buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
+    }
+}
+
+def getModuleVersion() {
+    def jsonFile = file('../package.json')
+    def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+
+    return parsedJson["version"]
+}
 
 dependencies {
     def airshipVersion = "13.1.2"
