@@ -62,9 +62,5 @@
   },
   "types": "lib/typescript/index.d.ts",
   "main": "lib/commonjs/index.js",
-  "react-native": "lib/commonjs/index.js",
-  "files": [
-    "lib/",
-    "js/"
-  ]
+  "react-native": "lib/commonjs/index.js"
 }

@@ -23,6 +23,7 @@ import {
 } from 'react-native';
 
 import { UrbanAirship } from 'urbanairship-react-native'
+import { AirshipLocation } from 'urbanairship-location-react-native'
 
 import styles from './../Styles';
 
@@ -65,7 +66,7 @@ export default class SettingsScreen extends Component {
   }
 
   handleLocationEnabled(enabled) {
-    UrbanAirship.setLocationEnabled(enabled)
+    AirshipLocation.setLocationEnabled(enabled)
     this.setState({ locationEnabled: enabled });
   }
 
@@ -131,7 +132,7 @@ export default class SettingsScreen extends Component {
       this.setState({ notificationsEnabled: enabled })
     })
 
-    UrbanAirship.isLocationEnabled().then((enabled) => {
+    AirshipLocation.isLocationEnabled().then((enabled) => {
       this.setState({ locationEnabled: enabled })
     })
 

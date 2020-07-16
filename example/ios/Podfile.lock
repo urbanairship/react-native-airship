@@ -15,7 +15,7 @@ PODS:
     - Airship/Core
   - Airship/MessageCenter (13.5.0):
     - Airship/Core
-  - AirshipExtensions/NotificationService (13.5.0)
+  - AirshipExtensions/NotificationService (13.5.1)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
@@ -369,7 +369,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Airship: 7463331b043f02b38c1da948e30d34212aa6bdbb
-  AirshipExtensions: 623fec49ce3d093d3b4395a43752b8845f53900f
+  AirshipExtensions: c55fa7b9d471a678d1704e6f9fe29f6e7d9fe1a7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
