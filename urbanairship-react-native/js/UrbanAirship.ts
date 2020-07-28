@@ -639,7 +639,7 @@ export class UrbanAirship {
   /**
    * Removes a listener for an Urban Airship event.
    *
-   * @param listener The event listner (also an emitter subscription).
+   * @param listener The event listener (an emitter subscription).
    */
   static removeListener(listener: EmitterSubscription) {
     EventEmitter.removeSubscription(listener);
