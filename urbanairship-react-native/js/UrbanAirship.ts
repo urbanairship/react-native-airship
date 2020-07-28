@@ -653,7 +653,7 @@ export class UrbanAirship {
    * EventType.InboxUpdated, or EventType.ShowInbox.
    */
   static removeAllListeners(eventType: EventType) {
-    EventEmitter.removeAllListeners(eventType);
+    EventEmitter.removeAllListeners(convertEventEnum(eventType));
   }
 
   /**
