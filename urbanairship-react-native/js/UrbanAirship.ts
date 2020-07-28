@@ -639,13 +639,21 @@ export class UrbanAirship {
   /**
    * Removes a listener for an Urban Airship event.
    *
+   * @param listener The event listner (also an emitter subscription).
+   */
+  static removeListener(listener: EmitterSubscription) {
+    EventEmitter.removeSubscription(listener);
+  }
+
+  /**
+   * Removes all listeners for Urban Airship events.
+   *
    * @param eventType The event type. Either EventType.NotificationResponse, EventType.pushReceived,
    * EventType.Register, EventType.Reistration, EventType.DeepLink, EventType.NotificationOptInStatus,
    * EventType.InboxUpdated, or EventType.ShowInbox.
-   * @param listener The event listner.
    */
-  static removeListener(eventType: EventType, listener: (...args: any[]) => any) {
-    EventEmitter.removeListener(convertEventEnum(eventType), listener);
+  static removeAllListeners(eventType: EventType) {
+    EventEmitter.removeAllListeners(eventType);
   }
 
   /**
