@@ -636,7 +636,7 @@ export class UrbanAirship {
     return EventEmitter.addListener(convertEventEnum(eventType), listener);
   }
 
-   /**
+  /**
    * Removes a listener for an Urban Airship event.
    *
    * @param eventType The event type. Either EventType.NotificationResponse, EventType.pushReceived,
