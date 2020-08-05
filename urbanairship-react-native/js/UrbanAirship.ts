@@ -649,15 +649,6 @@ export class UrbanAirship {
   }
 
   /**
-   * Removes a subscription for an Urban Airship event.
-   *
-   * @param subscription The emitter subscription, returned from addListener.
-   */
-  static removeSubscription(subscription: EmitterSubscription) {
-    EventEmitter.removeSubscription(subscription);
-  }
-
-  /**
    * Removes all listeners for Urban Airship events.
    *
    * @param eventType The event type. Either EventType.NotificationResponse, EventType.pushReceived,
