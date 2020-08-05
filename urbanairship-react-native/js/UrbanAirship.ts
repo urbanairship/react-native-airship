@@ -626,10 +626,10 @@ export class UrbanAirship {
   /**
    * Adds a listener for an Urban Airship event.
    *
-   * @param eventType The event type. Either EventType.NotificationResponse, EventType.pushReceived,
+   * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
    * EventType.Register, EventType.Reistration, EventType.DeepLink, EventType.NotificationOptInStatus,
    * EventType.InboxUpdated, or EventType.ShowInbox.
-   * @param listener The event listner.
+   * @param listener The event listener.
    * @return An emitter subscription.
    */
   static addListener(eventType: EventType, listener: (...args: any[]) => any): EmitterSubscription {
@@ -639,13 +639,24 @@ export class UrbanAirship {
   /**
    * Removes a listener for an Urban Airship event.
    *
-   * @param eventType The event type. Either EventType.NotificationResponse, EventType.pushReceived,
+   * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
    * EventType.Register, EventType.Reistration, EventType.DeepLink, EventType.NotificationOptInStatus,
    * EventType.InboxUpdated, or EventType.ShowInbox.
-   * @param listener The event listner.
+   * @param listener The event listener. Should be a reference to the function passed into addListener.
    */
   static removeListener(eventType: EventType, listener: (...args: any[]) => any) {
     EventEmitter.removeListener(convertEventEnum(eventType), listener);
+  }
+
+  /**
+   * Removes all listeners for Urban Airship events.
+   *
+   * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
+   * EventType.Register, EventType.Reistration, EventType.DeepLink, EventType.NotificationOptInStatus,
+   * EventType.InboxUpdated, or EventType.ShowInbox.
+   */
+  static removeAllListeners(eventType: EventType) {
+    EventEmitter.removeAllListeners(convertEventEnum(eventType));
   }
 
   /**
@@ -806,7 +817,7 @@ export class UrbanAirship {
    * Supported on Android and iOS 10+.
    *
    * @param identifier The notification identifier. The identifier will be
-   * available in the pushReceived event and in the active notification response
+   * available in the PushReceived event and in the active notification response
    * under the "notificationId" field.
    */
   static clearNotification(identifier: string) {
