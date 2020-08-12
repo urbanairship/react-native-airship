@@ -8,6 +8,6 @@
     "target": "es5",
     "noImplicitAny": true
   },
-  "include": ["js/**/*.ts"],
+  "include": ["js/**/*.ts", "js/**/*.tsx"],
   "exclude": ["node_modules", "js/__tests__"]
 }
