@@ -58,13 +58,22 @@ jobs:
           cd urbanairship-react-native/
           yarn generate-docs
           cd -
+          cd urbanairship-location-react-native/
+          yarn generate-docs
+          cd -
+          cd urbanairship-accengage-react-native/
+          yarn generate-docs
+          cd -
+          cd urbanairship-hms-react-native/
+          yarn generate-docs
+          cd -
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: "270.0.0"
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - name: Upload docs
-        run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//} urbanairship-react-native/docs
+        run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//}
       - name: Publish modules
         run: |
           cd urbanairship-react-native/

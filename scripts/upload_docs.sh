@@ -8,17 +8,22 @@ then
     exit 1
 fi
 
-if [ ! -d "$2" ];
-then
-    echo "Missing docs $2"
-    exit 1
-fi
+ROOT_PATH=$PWD/`dirname "${0}"`/..
+VERSION=$1
+TAR_NAME="$ROOT_PATH/build/Documentation.tar.gz"
+DEST_PATH="$ROOT_PATH/build/Documentation"
 
-ROOT_PATH=`dirname "${0}"`/..
-TAR_NAME="$1.tar.gz"
+mkdir -p $DEST_PATH
+cd $DEST_PATH
 
-cd $2
+cp -p $ROOT_PATH/documentation/index-for-docs.html index.html
+
+cp -rp $ROOT_PATH/urbanairship-accengage-react-native/docs urbanairship-accengage-react-native
+cp -rp $ROOT_PATH/urbanairship-hms-react-native/docs urbanairship-hms-react-native
+cp -rp $ROOT_PATH/urbanairship-location-react-native/docs urbanairship-location-react-native
+cp -rp $ROOT_PATH/urbanairship-react-native/docs urbanairship-react-native
+
 tar -czf $TAR_NAME *
 cd -
 
-gsutil cp $2/$TAR_NAME gs://ua-web-ci-prod-docs-transfer/libraries/react-native/$TAR_NAME
+gsutil cp $TAR_NAME gs://ua-web-ci-prod-docs-transfer/libraries/react-native/$VERSION.tar.gz
