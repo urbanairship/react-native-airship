@@ -244,13 +244,13 @@ PODS:
     - React
   - RNScreens (2.8.0):
     - React
-  - urbanairship-accengage-react-native (8.0.1):
+  - urbanairship-accengage-react-native (8.1.0):
     - Airship/Accengage (= 13.5.4)
     - React
-  - urbanairship-location-react-native (8.0.1):
+  - urbanairship-location-react-native (8.1.0):
     - Airship/Location (= 13.5.4)
     - React
-  - urbanairship-react-native (8.0.1):
+  - urbanairship-react-native (8.1.0):
     - Airship (= 13.5.4)
     - React
   - Yoga (1.14.0)
@@ -400,9 +400,9 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
-  urbanairship-accengage-react-native: b488b3860abddcf172257d162f966cf687632f7e
-  urbanairship-location-react-native: c62476885aeee78dc0f1749eb202753dbc8f5dfa
-  urbanairship-react-native: f1b53c9232c696d92299381b4864f976ca31deef
+  urbanairship-accengage-react-native: b1c8561d1dd089fa0437946f0c5ae939b591e57b
+  urbanairship-location-react-native: 46e27ae6355411267a3d7fd0cf3873ea1c037b70
+  urbanairship-react-native: 87a82abfbc182a854f66eb7fd25198ce62e95a54
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
