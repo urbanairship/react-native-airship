@@ -25,7 +25,7 @@ public class AirshipLocationReactModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "AirshipLocation";
+        return "AirshipLocationReactModule";
     }
 
     /**

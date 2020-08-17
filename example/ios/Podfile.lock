@@ -1,19 +1,19 @@
 PODS:
-  - Airship (13.5.1):
-    - Airship/Automation (= 13.5.1)
-    - Airship/Core (= 13.5.1)
-    - Airship/ExtendedActions (= 13.5.1)
-    - Airship/MessageCenter (= 13.5.1)
-  - Airship/Accengage (13.5.1):
+  - Airship (13.5.4):
+    - Airship/Automation (= 13.5.4)
+    - Airship/Core (= 13.5.4)
+    - Airship/ExtendedActions (= 13.5.4)
+    - Airship/MessageCenter (= 13.5.4)
+  - Airship/Accengage (13.5.4):
     - Airship/Core
-  - Airship/Automation (13.5.1):
+  - Airship/Automation (13.5.4):
     - Airship/Core
-  - Airship/Core (13.5.1)
-  - Airship/ExtendedActions (13.5.1):
+  - Airship/Core (13.5.4)
+  - Airship/ExtendedActions (13.5.4):
     - Airship/Core
-  - Airship/Location (13.5.1):
+  - Airship/Location (13.5.4):
     - Airship/Core
-  - Airship/MessageCenter (13.5.1):
+  - Airship/MessageCenter (13.5.4):
     - Airship/Core
   - AirshipExtensions/NotificationService (13.5.1)
   - boost-for-react-native (1.63.0)
@@ -244,14 +244,14 @@ PODS:
     - React
   - RNScreens (2.8.0):
     - React
-  - urbanairship-accengage-react-native (8.0.1):
-    - Airship/Accengage (= 13.5.1)
+  - urbanairship-accengage-react-native (8.1.0):
+    - Airship/Accengage (= 13.5.4)
     - React
-  - urbanairship-location-react-native (8.0.1):
-    - Airship/Location (= 13.5.1)
+  - urbanairship-location-react-native (8.1.0):
+    - Airship/Location (= 13.5.4)
     - React
-  - urbanairship-react-native (8.0.1):
-    - Airship (= 13.5.1)
+  - urbanairship-react-native (8.1.0):
+    - Airship (= 13.5.4)
     - React
   - Yoga (1.14.0)
 
@@ -368,7 +368,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 644bb975feaf98f439462350fcbc2c6b68a86bf0
+  Airship: cbbd372a4ffc8dcfeacec01fd623155ec41f33ed
   AirshipExtensions: c55fa7b9d471a678d1704e6f9fe29f6e7d9fe1a7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
@@ -400,9 +400,9 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
-  urbanairship-accengage-react-native: ad5fb9a8b6946673621c7e903782103717afed26
-  urbanairship-location-react-native: fe50c8a3fedd9d8c9b31e92b732b2554dd21602f
-  urbanairship-react-native: c34e32972016008653970b9fcca0de852cfb9bfa
+  urbanairship-accengage-react-native: b1c8561d1dd089fa0437946f0c5ae939b591e57b
+  urbanairship-location-react-native: 46e27ae6355411267a3d7fd0cf3873ea1c037b70
+  urbanairship-react-native: 87a82abfbc182a854f66eb7fd25198ce62e95a54
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 3b1e496b3d7771c6b9bf243d65fe1c555613c117
