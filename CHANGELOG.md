@@ -1,7 +1,7 @@
 # React Native Module Changelog
 
 ## Version 8.1.0 - August 17, 2020
-Minor release to add a `removeAllListeners(eventType: EventType)` method and to get the following SDK updates:
+Minor release to add a `removeAllListeners(eventType: EventType)` method, fix a problem with the Android React Native location module and to get the following SDK updates:
 
 ### iOS (Updated iOS SDK from 13.5.1 to 13.5.4)
 - Addresses [Dynamic Type](https://developer.apple.com/documentation/uikit/uifont/scaling_fonts_automatically) build warnings and Message Center Inbox UI issues.
