@@ -1,18 +1,18 @@
 # React Native Module Changelog
 
 ## Version 8.1.0 - August 17, 2020
-Minor release to add a `removeAllListeners(eventType: EventType)` method, fix a problem with the Android React Native location module and to get the following SDK updates:
+Minor release adding a `removeAllListeners` method, fixing a bug preventing the the location module from loading on android, and bundling the following SDK updates:
 
 ### iOS (Updated iOS SDK from 13.5.1 to 13.5.4)
 - Addresses [Dynamic Type](https://developer.apple.com/documentation/uikit/uifont/scaling_fonts_automatically) build warnings and Message Center Inbox UI issues.
 - Fixes a crash with Accengage data migration.
-- Improves iOS 14 support, adds a missing XCFramework, and fixes In-App Automation issues.
+- Improves iOS 14 support and fixes In-App Automation issues.
 For more details, see the [iOS CHANGELOG](https://github.com/urbanairship/ios-library/blob/13.5.4/CHANGELOG.md).
 
 ### Android (Updated Android SDK from 13.3.0 to 13.3.2)
 - Fixes In-App Automation version triggers to only fire on app updates instead of new installs.
 - Fixes ADM registration exceptions that occur on first run and text alignment issues with In-App Automation.
-For more details, see the [iOS CHANGELOG](https://github.com/urbanairship/android-library/blob/13.3.2/CHANGELOG.md).
+For more details, see the [Android CHANGELOG](https://github.com/urbanairship/android-library/blob/13.3.2/CHANGELOG.md).
 
 ## Version 8.0.1 - July 16, 2020
 Patch release to fix package generation, common gradle file references and the example app.
