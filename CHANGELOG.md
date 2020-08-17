@@ -25,7 +25,7 @@ Patch release to fix package generation, common gradle file references and the e
 Major release rewritten in TypeScript and adding separate modules for location,
 HMS and Accengage features
 
-- Added urbanairship-location-react-native module
+- Added urbanairship-location-react-native module (iOS integration no longer needs AirshipLocationKit for location services.)
 - Added urbanairship-hms-react-native module
 - Added urbanairship-accengage-react-native module
 - Added full TypeScript coverage
