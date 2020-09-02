@@ -5,8 +5,8 @@
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.7",
     "moment": "^2.24.0",
-    "react": "16.10.1",
-    "react-native": "0.61.5",
+    "react": "16.13.1",
+    "react-native": "0.63.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-reanimated": "^1.7.1",
     "react-native-safe-area-context": "^0.7.3",
