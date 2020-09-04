@@ -7,7 +7,7 @@ require_relative "#{$node_modules_path}/@react-native-community/cli-platform-ios
 
 target 'AirshipSample' do
   config = use_native_modules!
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(:path => config[:reactNativePath])
 end
 
 target 'ServiceExtension' do
