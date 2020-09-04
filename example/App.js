@@ -1,7 +1,7 @@
 /* Copyright Airship and Contributors */
 /**
  * Sample React Native App
- * @flow
+ * @flow strict-local
  */
 'use strict';
 
