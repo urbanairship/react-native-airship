@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 9.0.0 - September 16, 2020
+Major release that updates Airship Android and iOS SDK to 14.0. Starting with SDK 14, all landing page and external urls are tested against a URL allow list. The easiest way to go back to 13.x behavior is to add the wildcard symbol `*` to the array under the URLAllowListScopeOpenURL key in your AirshipConfig.plist for iOS, and `urlAllowListScopeOpenUrl = *` to the airshipconfig.properties on Android. Config for `whitelist` has been removed and replaced with:
+-  iOS: `URLAllowList`, Android: `urlAllowList`
+-  iOS: `URLAllowListScopeOpenURL`, Android: `urlAllowListScopeOpenUrl`
+-  iOS: `URLAllowListScopeJavaScriptInterface`, Android: `urlAllowListScopeJavaScriptInterface`
+
 ## Version 8.1.0 - August 17, 2020
 Minor release adding a `removeAllListeners` method, fixing a bug preventing the the location module from loading on android, and bundling the following SDK updates:
 
