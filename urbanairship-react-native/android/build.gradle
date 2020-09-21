@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 import groovy.json.JsonSlurper
 
 ext {
-    airshipVersion = "13.3.2"
+    airshipVersion = "14.0.0"
 }
 
 android {
@@ -41,6 +41,5 @@ dependencies {
     implementation "com.urbanairship.android:urbanairship-automation:$airshipVersion"
     implementation "com.urbanairship.android:urbanairship-location:$airshipVersion"
 
-    implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '20.1.5')}"
-    implementation "com.google.firebase:firebase-core:${safeExtGet('firebaseCoreVersion', '17.4.1')}"
+    implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '20.2.4')}"
 }
