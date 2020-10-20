@@ -46,9 +46,8 @@ static BOOL disabled = NO;
                                              name:UAInboxMessageListUpdatedNotification
                                            object:nil];
 
-    UNNotificationPresentationOptions presentationOptions = (UNNotificationPresentationOptions)[[NSUserDefaults standardUserDefaults] valueForKey:UARCTPresentationOptionsStorageKey];
-
-    if (presentationOptions) {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:UARCTPresentationOptionsStorageKey]) {
+        UNNotificationPresentationOptions presentationOptions = [[NSUserDefaults standardUserDefaults] integerForKey:UARCTPresentationOptionsStorageKey];
         [[UAirship push] setDefaultPresentationOptions:presentationOptions];
     }
 
