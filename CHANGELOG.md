@@ -2,7 +2,7 @@
 
 ## Version 9.0.1 - October 22, 2020
 Patch release that updates the iOS and Android SDKs to 14.0.1, and fixes
-a bug impacting foreground noitifcation options on iOS. 
+a bug impacting foreground noitification options on iOS. 
 
 - Updated Android SDK to 14.0.1
 - Updated iOS SDK to 14.0.1
