@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 9.0.1 - October 22, 2020
+Patch release that updates the iOS and Android SDKs to 14.0.1, and fixes
+a bug impacting foreground noitifcation options on iOS. 
+
+- Updated Android SDK to 14.0.1
+- Updated iOS SDK to 14.0.1
+- Fixed issue causing misinterpretation of iOS foreground notification options
+
 ## Version 9.0.0 - September 16, 2020
 Major release that updates Airship Android and iOS SDK to 14.0. Starting with SDK 14, all landing page and external urls are tested against a URL allow list. The easiest way to go back to 13.x behavior is to add the wildcard symbol `*` to the array under the URLAllowListScopeOpenURL key in your AirshipConfig.plist for iOS, and `urlAllowListScopeOpenUrl = *` to the airshipconfig.properties on Android. Config for `whitelist` has been removed and replaced with:
 -  iOS: `URLAllowList`, Android: `urlAllowList`
