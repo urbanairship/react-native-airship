@@ -5,7 +5,15 @@
 import React from "react";
 import { requireNativeComponent, NativeSyntheticEvent } from "react-native";
 
-const UARCTMessageView = requireNativeComponent('UARCTMessageView');
+
+const UARCTMessageView = requireNativeComponent<UARCTMessageViewProps>('UARCTMessageView');
+
+interface UARCTMessageViewProps {
+  onLoadStarted: (event: NativeSyntheticEvent<MessageLoadStartedEvent>) => void;
+  onLoadFinished: (event: NativeSyntheticEvent<MessageLoadFinishedEvent>) => void;
+  onLoadError: (event: NativeSyntheticEvent<MessageLoadErrorEvent>) => void;
+  onClose: (event: NativeSyntheticEvent<MessageClosedEvent>) => void;
+}
 
 /**
  * Enum of possible message load errors
@@ -76,7 +84,7 @@ export interface MessageClosedEvent {
 /**
  * MessageView props
  */
-export interface MessageViewProps {
+export interface MessageViewProps  {
   /**
    * A callback when the view starts loading a message.
    *

@@ -1,19 +1,24 @@
 {
   "private": true,
-  "workspaces": [
-    "urbanairship-react-native",
-    "urbanairship-accengage-react-native",
-    "urbanairship-location-react-native",
-    "urbanairship-hms-react-native",
-    "example"
-  ],
+  "workspaces": {
+    "packages": [
+      "urbanairship-react-native",
+      "urbanairship-accengage-react-native",
+      "urbanairship-location-react-native",
+      "urbanairship-hms-react-native",
+      "example"
+    ]
+  },
   "jest": {
     "preset": "ts-jest"
   },
   "scripts": {
     "start": "react-native start",
     "test": "jest --verbose",
-    "prepare" : "yarn workspace urbanairship-react-native run prepare; yarn workspace urbanairship-accengage-react-native run prepare; yarn workspace urbanairship-hms-react-native run prepare; yarn workspace urbanairship-location-react-native run prepare;",
+    "prepare": "yarn workspace urbanairship-react-native run prepare; yarn workspace urbanairship-accengage-react-native run prepare; yarn workspace urbanairship-hms-react-native run prepare; yarn workspace urbanairship-location-react-native run prepare;",
     "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules urbanairship-location-react-native/node_modules urbanairship-hms-react-native/node_modules example/node_modules yarn.lock"
+  },
+  "resolutions": {
+    "@types/react": "^16"
   }
 }
