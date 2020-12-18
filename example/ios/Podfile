@@ -14,5 +14,5 @@ end
 target 'ServiceExtension' do
   platform :ios, '11.0'
   # Pods for Service Extension
-  pod 'AirshipExtensions/NotificationService', '~> 14.1.3'
+  pod 'AirshipExtensions/NotificationService', '~> 14.2.0'
 end

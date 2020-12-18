@@ -12,9 +12,9 @@ A React Native module for Airship's iOS and Android SDK.
 Please visit https://support.airship.com/ for any issues integrating or using this module.
 
 ### Requirements:
- - Xcode 11+
+ - Xcode 12+
  - iOS: Deployment target 11.0+
- - Android: minSdkVersion 16+, compileSdkVersion 28+
+ - Android: minSdkVersion 16+, compileSdkVersion 29+
  - React Native >= 0.60.0
  - React Native cli >= 2.0.1
 
@@ -113,10 +113,7 @@ Firebase core and messaging dependencies versions can be overriden by setting th
 
 ```
 ext {
-    // Requires 17.0.0+
-    firebaseCoreVersion "VERSION"
-
-    // Requires 19.0.0+
+    // Requires 21.0.0+
     firebaseMessagingVersion "VERSION"
 }
 ```

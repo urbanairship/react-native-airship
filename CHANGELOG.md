@@ -1,8 +1,19 @@
 # React Native Module Changelog
 
+## Version 10.0.0 - December 18, 2020
+
+Major release that updates the iOS Airship SDK to 14.2.0 and the Android SDK to 14.1.0. Xcode 12 is required for this version.
+
+- Added better logging for default presentation options
+- Changed InboxMessage.extras type from Map<string, string> to Record<string, string>
+- Updated Android SDK to 14.1.0
+- Updated iOS SDK to 14.2.0
+- Fixed Xcode 12 compatibility
+- firebaseMessagingVersion requires version 21.0.0+
+
 ## Version 9.0.1 - October 22, 2020
 Patch release that updates the iOS and Android SDKs to 14.0.1, and fixes
-a bug impacting foreground noitification options on iOS. 
+a bug impacting foreground noitification options on iOS.
 
 - Updated Android SDK to 14.0.1
 - Updated iOS SDK to 14.0.1

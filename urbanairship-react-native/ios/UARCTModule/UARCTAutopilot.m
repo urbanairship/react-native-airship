@@ -7,7 +7,7 @@
 #import "UARCTModuleVersion.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
-NSString *const UARCTAirshipRecommendedVersion = @"13.5.4";
+NSString *const UARCTAirshipRecommendedVersion = @"14.2.0";
 
 @implementation UARCTAutopilot
 
@@ -29,6 +29,7 @@ static BOOL disabled = NO;
 
     [UAirship takeOff];
 
+    UA_LINFO(@"Airship ReactNative version: %@, SDK version: %@", [UARCTModuleVersion get], [UAirshipVersion get]);
     [[UAirship analytics] registerSDKExtension:UASDKExtensionReactNative version:[UARCTModuleVersion get]];
 
     [UAirship push].pushNotificationDelegate = [UARCTEventEmitter shared];
@@ -48,6 +49,7 @@ static BOOL disabled = NO;
 
     if ([[NSUserDefaults standardUserDefaults] objectForKey:UARCTPresentationOptionsStorageKey]) {
         UNNotificationPresentationOptions presentationOptions = [[NSUserDefaults standardUserDefaults] integerForKey:UARCTPresentationOptionsStorageKey];
+        UA_LDEBUG(@"Foreground presentation options set: %lu", (unsigned long)presentationOptions);
         [[UAirship push] setDefaultPresentationOptions:presentationOptions];
     }
 

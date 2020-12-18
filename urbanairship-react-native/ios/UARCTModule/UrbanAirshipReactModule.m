@@ -298,7 +298,7 @@ RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {
         }
     }
 
-    UA_LDEBUG(@"Foreground presentation options set: %lu", (unsigned long)options);
+    UA_LDEBUG(@"Foreground presentation options set: %lu from dictionary: %@", (unsigned long)presentationOptions, options);
 
     [UAirship push].defaultPresentationOptions = presentationOptions;
     [[NSUserDefaults standardUserDefaults] setInteger:presentationOptions
