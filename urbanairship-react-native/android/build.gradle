@@ -41,5 +41,5 @@ dependencies {
     implementation "com.urbanairship.android:urbanairship-automation:$airshipVersion"
     implementation "com.urbanairship.android:urbanairship-location:$airshipVersion"
 
-    implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '20.2.4')}"
+    implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '21.0.0')}"
 }
