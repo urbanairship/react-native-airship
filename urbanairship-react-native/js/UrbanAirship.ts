@@ -103,7 +103,7 @@ export interface InboxMessage {
   /**
    * String to String map of any message extras.
    */
-  extras: Map<string, string>;
+  extras: Record<string, string>;
 }
 
 /**
