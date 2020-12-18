@@ -10,20 +10,20 @@
     "react-component",
     "ios",
     "android",
-    "urbanairship",
+    "airship",
     "accengage"
   ],
   "devDependencies": {
-    "react": "^16.10.1",
-    "react-native": "^0.61.5",
-    "@react-native-community/bob": "^0.15.1",
+    "react": "16.13.1",
+    "react-native": "0.63.4",
+    "@react-native-community/bob": "^0.16.2",
     "typedoc": "^0.17.7",
     "typescript": "^3.9.5",
-    "urbanairship-react-native": "^7.0.0"
+    "urbanairship-react-native": "*"
   },
   "peerDependencies": {
-    "react": "^16.10.1",
-    "react-native": ">=0.61.5"
+    "react": "*",
+    "react-native": "*"
   },
   "repository": {
     "type": "git",

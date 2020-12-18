@@ -19,7 +19,7 @@ export class UAEventEmitter extends NativeEventEmitter {
     super(UrbanAirshipModule);
   }
 
-  addListener(eventType: string, listener: (...args: any[]) => any, context?: object | null | undefined): EmitterSubscription {
+  addListener(eventType: string, listener: (...args: any[]) => any, context?: Object): EmitterSubscription {
     if (Platform.OS === 'android') {
       UrbanAirshipModule.addAndroidListener(eventType);
     }
