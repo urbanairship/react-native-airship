@@ -39,6 +39,8 @@ public class ReactAutopilot extends Autopilot {
 
         PluginLogger.setLogLevel(airship.getAirshipConfigOptions().logLevel);
 
+        PluginLogger.debug("Airship React Native version: %s, SDK version: %s", BuildConfig.MODULE_VERSION, UAirship.getVersion());
+
         final Context context = UAirship.getApplicationContext();
 
         airship.setDeepLinkListener(new DeepLinkListener() {
