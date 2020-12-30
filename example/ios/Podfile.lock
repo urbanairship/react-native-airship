@@ -1,19 +1,19 @@
 PODS:
-  - Airship (14.2.0):
-    - Airship/Automation (= 14.2.0)
-    - Airship/Core (= 14.2.0)
-    - Airship/ExtendedActions (= 14.2.0)
-    - Airship/MessageCenter (= 14.2.0)
-  - Airship/Accengage (14.2.0):
+  - Airship (14.2.1):
+    - Airship/Automation (= 14.2.1)
+    - Airship/Core (= 14.2.1)
+    - Airship/ExtendedActions (= 14.2.1)
+    - Airship/MessageCenter (= 14.2.1)
+  - Airship/Accengage (14.2.1):
     - Airship/Core
-  - Airship/Automation (14.2.0):
+  - Airship/Automation (14.2.1):
     - Airship/Core
-  - Airship/Core (14.2.0)
-  - Airship/ExtendedActions (14.2.0):
+  - Airship/Core (14.2.1)
+  - Airship/ExtendedActions (14.2.1):
     - Airship/Core
-  - Airship/Location (14.2.0):
+  - Airship/Location (14.2.1):
     - Airship/Core
-  - Airship/MessageCenter (14.2.0):
+  - Airship/MessageCenter (14.2.1):
     - Airship/Core
   - AirshipExtensions/NotificationService (14.2.0)
   - boost-for-react-native (1.63.0)
@@ -273,13 +273,13 @@ PODS:
   - RNScreens (2.16.1):
     - React-Core
   - urbanairship-accengage-react-native (10.0.0):
-    - Airship/Accengage (= 14.2.0)
+    - Airship/Accengage (= 14.2.1)
     - React-Core
-  - urbanairship-location-react-native (10.0.0):
-    - Airship/Location (= 14.2.0)
+  - urbanairship-location-react-native (10.0.1):
+    - Airship/Location (= 14.2.1)
     - React-Core
-  - urbanairship-react-native (10.0.0):
-    - Airship (= 14.2.0)
+  - urbanairship-react-native (10.0.1):
+    - Airship (= 14.2.1)
     - React-Core
   - Yoga (1.14.0)
 
@@ -399,7 +399,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 02ad73780f9eed21870e36b0aaab327acda6a102
+  Airship: 9d2bfec2bd9586ddee5d1dbeb15cf4fdbababf85
   AirshipExtensions: dae6544dc8c6977ccf03ea32dfb062cf0ed2b021
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cde416483dac037923206447da6e1454df403714
@@ -432,9 +432,9 @@ SPEC CHECKSUMS:
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
-  urbanairship-accengage-react-native: d57723b2fe2045d4dd8cd5af19bdb4aa80b0f214
-  urbanairship-location-react-native: d7b289f1db1ebe14d240cfdc1c6d30de97793a4a
-  urbanairship-react-native: afab7684561909be2a6a2a52baa3435776d050de
+  urbanairship-accengage-react-native: d862d653561efda491b8a3bbd0c42267f814407c
+  urbanairship-location-react-native: 9d90bde68742d1f86bef4d930510eb0fa4f36be4
+  urbanairship-react-native: 55f29ff21b5732ee3cacbcaa42b76e489465abea
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
 PODFILE CHECKSUM: 5820be3e3b56e627a80c61535fd3647306f748e8

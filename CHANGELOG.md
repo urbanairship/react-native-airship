@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 10.0.1 - December 30, 2020
+Patch release to fix an issue where the Airship SDK is not initialized before calls are made to the module if calls are made before application:didFinishLaunching. Applications that use plugins such as `react-native-splash-screen` and make calls to Airship before the splash screen is dismissed should update.
+
+- Updated Android SDK to 14.1.1
+- Updated iOS SDK to 14.2.1
+- Ensure takeOff is called on iOS when the module is created
+
 ## Version 10.0.0 - December 18, 2020
 
 Major release that updates the iOS Airship SDK to 14.2.0 and the Android SDK to 14.1.0. Xcode 12 is required for this version.
