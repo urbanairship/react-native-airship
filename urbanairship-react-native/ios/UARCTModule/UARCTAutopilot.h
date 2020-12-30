@@ -22,4 +22,9 @@ extern NSString *const UARCTAirshipRecommendedVersion;
  */
 + (void)disable;
 
+/**
+ * Performs takeOff.
+ */
++ (void)takeOff;
+
 @end

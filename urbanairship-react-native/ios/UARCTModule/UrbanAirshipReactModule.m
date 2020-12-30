@@ -45,6 +45,18 @@ RCT_EXPORT_MODULE();
     return [UARCTEventEmitter shared].bridge;
 }
 
++ (BOOL)requiresMainQueueSetup {
+    return YES;
+}
+
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        [UARCTAutopilot takeOff];
+    }
+    return self;
+}
+
 #pragma mark -
 #pragma mark Module methods
 
