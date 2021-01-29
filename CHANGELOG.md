@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 10.0.2 - February 01, 2021
+Patch release to fix some issues with setting attributes on a named user if the named user ID contains invalid URL characters. Applications using attributes with named users that possibly contain invalid URL characters should update.
+
+- Updated iOS SDK to 14.2.2
+- Fixed attributes updates when the named user has invalid URL characters.
+
 ## Version 10.0.1 - December 30, 2020
 Patch release to fix an issue where the Airship SDK is not initialized before calls are made to the module if calls are made before application:didFinishLaunching. Applications that use plugins such as `react-native-splash-screen` and make calls to Airship before the splash screen is dismissed should update.
 
