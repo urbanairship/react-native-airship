@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 10.0.2 - February 01, 2021
+## Version 10.0.2 - February 02, 2021
 Patch release to fix some issues with setting attributes on a named user if the named user ID contains invalid URL characters. Applications using attributes with named users that possibly contain invalid URL characters should update.
 
 - Updated iOS SDK to 14.2.2
