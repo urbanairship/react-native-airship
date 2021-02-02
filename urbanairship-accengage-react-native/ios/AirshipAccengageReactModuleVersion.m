@@ -2,7 +2,7 @@
 
 #import "AirshipAccengageReactModuleVersion.h"
 
-NSString *const moduleVersionString = @"8.1.0";
+NSString *const moduleVersionString = @"10.0.2";
 
 @implementation AirshipAccengageReactModuleVersion
 
