@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.reactnative.Event;
 
@@ -36,9 +37,13 @@ public class ShowInboxEvent implements Event {
 
     @NonNull
     @Override
-    public WritableMap getBody() {
+    public ReadableMap getBody() {
         WritableMap map = Arguments.createMap();
         map.putString(MESSAGE_ID, messageId);
         return map;
+    }
+    @Override
+    public boolean isForeground() {
+        return true;
     }
 }

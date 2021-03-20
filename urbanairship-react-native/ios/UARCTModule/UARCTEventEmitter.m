@@ -4,10 +4,9 @@
 
 @interface UARCTEventEmitter()
 @property(nonatomic, strong) NSMutableArray *pendingEvents;
-@property(atomic, assign) NSInteger listenerCount;
-@property(nonatomic, strong) NSMutableSet *knownListeners;
-@property(readonly) BOOL isObserving;
 @end
+
+NSString *const UARCTPendingEventName = @"com.urbanairship.onPendingEvent";
 
 NSString *const UARCTRegistrationEventName = @"com.urbanairship.registration";
 NSString *const UARCTNotificationResponseEventName = @"com.urbanairship.notification_response";
@@ -47,8 +46,6 @@ static UARCTEventEmitter *sharedEventEmitter_;
     self = [super init];
     if (self) {
         self.pendingEvents = [NSMutableArray array];
-        self.knownListeners = [NSMutableSet set];
-
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(channelRegistrationSucceeded:)
                                                      name:UAChannelUpdatedEvent
@@ -59,48 +56,41 @@ static UARCTEventEmitter *sharedEventEmitter_;
 }
 
 - (void)sendEventWithName:(NSString *)eventName body:(id)body {
-    @synchronized(self.knownListeners) {
-        if (self.bridge && self.isObserving && [self.knownListeners containsObject:eventName]) {
-            [self.bridge enqueueJSCall:@"RCTDeviceEventEmitter"
-                                method:@"emit"
-                                  args:body ? @[eventName, body] : @[eventName]
-                            completion:NULL];
-
-        } else {
-            @synchronized(self.pendingEvents) {
-                [self.pendingEvents addObject:@{ UARCTEventNameKey: eventName, UARCTEventBodyKey: body}];
-            }
-        }
+    @synchronized(self.pendingEvents) {
+        [self.pendingEvents addObject:@{ UARCTEventNameKey: eventName, UARCTEventBodyKey: body}];
+        [self notifyPendingEvents];
     }
 }
 
-- (void)addListener:(NSString *)eventName {
-    @synchronized(self.knownListeners) {
-        self.listenerCount++;
-        [self.knownListeners addObject:eventName];
+- (void)notifyPendingEvents {
+    [self.bridge enqueueJSCall:@"RCTDeviceEventEmitter"
+                        method:@"emit"
+                          args:@[UARCTPendingEventName]
+                    completion:nil];
+}
 
+- (NSArray *)takePendingEventsWithType:(NSString *)type {
+    @synchronized (self.pendingEvents) {
+        NSMutableArray *events = [NSMutableArray array];
         for (id event in [self.pendingEvents copy]) {
-            if ([event[UARCTEventNameKey] isEqualToString:eventName]) {
-                [self sendEventWithName:event[UARCTEventNameKey] body:event[UARCTEventBodyKey]];
+            if ([event[UARCTEventNameKey] isEqualToString:type]) {
+                [events addObject:event[UARCTEventBodyKey]];
                 [self.pendingEvents removeObject:event];
             }
         }
+        return events;
     }
 }
 
-- (void)removeListeners:(NSInteger)count {
-    @synchronized(self.knownListeners) {
-        self.listenerCount = MAX(self.listenerCount - count, 0);
-        if (self.listenerCount == 0) {
-            @synchronized(self.knownListeners) {
-                [self.knownListeners removeAllObjects];
+- (void)onAirshipListenerAddedForType:(NSString *)type {
+    @synchronized (self.pendingEvents) {
+        for (id event in [self.pendingEvents copy]) {
+            if ([event[UARCTEventNameKey] isEqualToString:type]) {
+                [self notifyPendingEvents];
+                break;
             }
         }
     }
-}
-
-- (BOOL)isObserving {
-    return self.listenerCount > 0;
 }
 
 #pragma mark -
@@ -108,7 +98,6 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 -(void)deepLinkReceived:(NSString *)deepLink {
     id body = @{ @"deepLink" : deepLink };
-
     [self sendEventWithName:UARCTDeepLinkEventName body:body];
 }
 

@@ -61,12 +61,23 @@ RCT_EXPORT_MODULE();
 #pragma mark Module methods
 
 RCT_EXPORT_METHOD(addListener:(NSString *)eventName) {
-    [[UARCTEventEmitter shared] addListener:eventName];
 }
 
 RCT_EXPORT_METHOD(removeListeners:(NSInteger)count) {
-    [[UARCTEventEmitter shared] removeListeners:count];
 }
+
+RCT_EXPORT_METHOD(onAirshipListenerAdded:(NSString *)eventName) {
+    [[UARCTEventEmitter shared] onAirshipListenerAddedForType:eventName];
+}
+
+RCT_REMAP_METHOD(takePendingEvents,
+                 type:(NSString *)type
+                 takePendingEvents_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+
+    resolve([[UARCTEventEmitter shared] takePendingEventsWithType:type]);
+}
+
 
 RCT_EXPORT_METHOD(setUserNotificationsEnabled:(BOOL)enabled) {
     [UAirship push].userPushNotificationsEnabled = enabled;

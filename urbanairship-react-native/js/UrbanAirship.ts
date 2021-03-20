@@ -39,11 +39,14 @@ enum InternalEventType {
  */
 export enum EventType {
   /**
-   * Notification response event.
+   * Notification response event. On Android, this event will be dispatched
+   * in the background for background notifications actions.
    */
   NotificationResponse = "notificationResponse",
   /**
-   * Push received event.
+   * Push received event. On Android, this event will only be dispatched
+   * in the background if the app is able to start a service or by sending a
+   * high priority FCM message.
    */
   PushReceived = "pushReceived",
   /**
@@ -258,6 +261,22 @@ export interface DeepLinkEvent {
    * The deep link string.
    */
   deepLink: string;
+}
+
+/**
+ * A listener subscription.
+ */
+export class Subscription {
+  onRemove: () => void;
+  constructor(onRemove: () => void) {
+    this.onRemove = onRemove;
+  }
+  /**
+   * Removes the listener.
+   */
+  remove(): void {
+    this.onRemove();
+  }
 }
 
 /**
@@ -569,7 +588,7 @@ export class UrbanAirship {
    * Associates an identifier for the Connect data stream.
    *
    * @param key The identifier's key.
-   * @param id The identifier's id, or null/unefined to clear.
+   * @param id The identifier's id, or null/undefined to clear.
    */
   static associateIdentifier(key: string, id?: string) {
     UrbanAirshipModule.associateIdentifier(key, id);
@@ -627,20 +646,23 @@ export class UrbanAirship {
    * Adds a listener for an Urban Airship event.
    *
    * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
-   * EventType.Register, EventType.Reistration, EventType.DeepLink, EventType.NotificationOptInStatus,
+   * EventType.Register, EventType.Registration, EventType.DeepLink, EventType.NotificationOptInStatus,
    * EventType.InboxUpdated, or EventType.ShowInbox.
    * @param listener The event listener.
-   * @return An emitter subscription.
+   * @return A subscription.
    */
-  static addListener(eventType: EventType, listener: (...args: any[]) => any): EmitterSubscription {
-    return EventEmitter.addListener(convertEventEnum(eventType), listener);
+  static addListener(eventType: EventType, listener: (...args: any[]) => any): Subscription {
+    EventEmitter.addListener(convertEventEnum(eventType), listener);
+    return new Subscription(() => {
+      UrbanAirship.removeListener(eventType, listener);
+    });
   }
 
   /**
    * Removes a listener for an Urban Airship event.
    *
    * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
-   * EventType.Register, EventType.Reistration, EventType.DeepLink, EventType.NotificationOptInStatus,
+   * EventType.Register, EventType.Registration, EventType.DeepLink, EventType.NotificationOptInStatus,
    * EventType.InboxUpdated, or EventType.ShowInbox.
    * @param listener The event listener. Should be a reference to the function passed into addListener.
    */
@@ -652,7 +674,7 @@ export class UrbanAirship {
    * Removes all listeners for Urban Airship events.
    *
    * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
-   * EventType.Register, EventType.Reistration, EventType.DeepLink, EventType.NotificationOptInStatus,
+   * EventType.Register, EventType.Registration, EventType.DeepLink, EventType.NotificationOptInStatus,
    * EventType.InboxUpdated, or EventType.ShowInbox.
    */
   static removeAllListeners(eventType: EventType) {

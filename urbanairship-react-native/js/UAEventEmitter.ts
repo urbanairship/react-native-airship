@@ -2,7 +2,7 @@
 
 'use strict';
 
-import { NativeModules, NativeEventEmitter, EmitterSubscription, Platform } from "react-native";
+import { NativeModules, NativeEventEmitter, Platform, AppRegistry } from "react-native";
 
 /**
  * @hidden
@@ -10,34 +10,70 @@ import { NativeModules, NativeEventEmitter, EmitterSubscription, Platform } from
 const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
 
 /**
- * Custom native event emitter with additional Android behavior
+ * SDK event emitter.
  *
  * @hidden
  */
-export class UAEventEmitter extends NativeEventEmitter {
+export class UAEventEmitter  {
+  nativeEventEmitter: NativeEventEmitter;
+  listeners: Map<string, Array<(...args: any[]) => any>>
+
   constructor() {
-    super(UrbanAirshipModule);
+    this.nativeEventEmitter = new NativeEventEmitter(UrbanAirshipModule);
+    this.listeners = new Map();
+
+    if (Platform.OS === 'android') {
+      AppRegistry.registerHeadlessTask('AirshipAndroidBackgroundEventTask', () => {
+        return () => this.dispatchEvents(UrbanAirshipModule.takePendingBackgroundEvents);
+      });
+
+      this.nativeEventEmitter.addListener("com.urbanairship.onPendingForegroundEvent", async  () => {
+        return this.dispatchEvents(UrbanAirshipModule.takePendingForegroundEvents);
+      });
+    } else if (Platform.OS === 'ios') {
+      this.nativeEventEmitter.addListener("com.urbanairship.onPendingEvent", async  () => {
+        return this.dispatchEvents(UrbanAirshipModule.takePendingEvents);
+      });
+    }
   }
 
-  addListener(eventType: string, listener: (...args: any[]) => any, context?: Object): EmitterSubscription {
-    if (Platform.OS === 'android') {
-      UrbanAirshipModule.addAndroidListener(eventType);
+  removeListener(eventType: string, listener: (...args: any[]) => any): void {
+    var typedListeners = this.listeners.get(eventType);
+    if (typedListeners) {
+      typedListeners = typedListeners.filter(obj => obj !== listener);
+      this.listeners.set(eventType, typedListeners);
     }
-    return super.addListener(eventType, listener, context);
+  }
+
+  addListener(eventType: string, listener: (...args: any[]) => any): void {
+    if (!this.listeners.get(eventType)) {
+      this.listeners.set(eventType, new Array());
+    }
+
+    this.listeners.get(eventType)?.push(listener);
+    UrbanAirshipModule.onAirshipListenerAdded(eventType);
   }
 
   removeAllListeners(eventType: string) {
-    if (Platform.OS === 'android') {
-        UrbanAirshipModule.removeAndroidListeners(this.listeners(eventType).length);
-    }
-
-    super.removeAllListeners(eventType);
+    this.listeners.set(eventType, new Array());
   }
 
-  removeSubscription(subscription: EmitterSubscription) {
-    if (Platform.OS === 'android') {
-      UrbanAirshipModule.removeAndroidListeners(1);
-    }
-    super.removeSubscription(subscription);
+  private async dispatchEvents(source: (eventType: string) => Promise<any>): Promise<any> {
+    let actions = Array.from(this.listeners.keys())
+    .map(async (key: string) => {
+      let typedListeners = this.listeners.get(key);
+      if (typedListeners == null) {
+        return Promise.resolve();
+      }
+
+      let events = await source(key);
+
+      return Promise.all(typedListeners.map(async (listener: (...args: any[]) => any) => {
+        for (const event of events) {
+          await listener(event);
+        }
+      }))
+    });
+    return Promise.all(actions);
   }
 }

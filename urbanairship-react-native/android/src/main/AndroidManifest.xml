@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.urbanairship.reactnative">
+
     <application>
 
-      <meta-data android:name="com.urbanairship.autopilot"
-                android:value="com.urbanairship.reactnative.ReactAutopilot"/>
+        <meta-data
+            android:name="com.urbanairship.autopilot"
+            android:value="com.urbanairship.reactnative.ReactAutopilot" />
 
         <activity
             android:name="com.urbanairship.reactnative.CustomMessageCenterActivity"
@@ -18,10 +20,14 @@
         <activity android:name="com.urbanairship.reactnative.CustomMessageActivity">
             <intent-filter>
                 <action android:name="com.urbanairship.VIEW_RICH_PUSH_MESSAGE" />
-                <data android:scheme="message"/>
+                <data android:scheme="message" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.urbanairship.reactnative.AirshipHeadlessEventService"
+            android:exported="false" />
 
     </application>
 </manifest>
