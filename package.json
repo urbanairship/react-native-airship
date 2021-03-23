@@ -9,9 +9,6 @@
       "example"
     ]
   },
-  "jest": {
-    "preset": "ts-jest"
-  },
   "scripts": {
     "start": "react-native start",
     "test": "jest --verbose",

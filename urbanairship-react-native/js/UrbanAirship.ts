@@ -2,7 +2,7 @@
 
 'use strict';
 
-import { NativeModules, Platform, EmitterSubscription } from "react-native";
+import { NativeModules, Platform } from "react-native";
 
 import { CustomEvent } from "./CustomEvent";
 import { TagGroupEditor, TagGroupOperation } from "./TagGroupEditor";

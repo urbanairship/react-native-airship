@@ -45,7 +45,7 @@ gradle/
 # iOS
 AirshipConfig.plist
 
-# Docs 
+# Docs
 docs/
 
 # Typescript
@@ -59,3 +59,5 @@ yarn-error.log
 *.swo
 *.swp
 *.iml
+
+.jest/*
