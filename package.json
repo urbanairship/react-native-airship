@@ -16,6 +16,6 @@
     "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules urbanairship-location-react-native/node_modules urbanairship-hms-react-native/node_modules example/node_modules yarn.lock"
   },
   "resolutions": {
-    "@types/react": "^16"
+    "@types/react": "^17"
   }
 }
