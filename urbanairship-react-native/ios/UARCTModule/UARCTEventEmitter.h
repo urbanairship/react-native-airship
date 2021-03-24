@@ -32,18 +32,6 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 + (UARCTEventEmitter *)shared;
 
 /**
- * Adds an event listener.
- * @param eventName The event name.
- */
-- (void)addListener:(NSString *)eventName;
-
-/**
- * Removes event listeners.
- * @param count The count of event listeners being removed.
- */
-- (void)removeListeners:(NSInteger)count;
-
-/**
  * Sends an inbox updated event.
  */
 - (void)inboxUpdated;
@@ -66,5 +54,17 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
  */
 + (NSMutableDictionary *)eventBodyForNotificationContent:(UANotificationContent *)content;
 
+/**
+ * Gets and removes any pending events for the given type.
+ * @param type The event type.
+ * @return An array of event bodies.
+ */
+- (NSArray *)takePendingEventsWithType:(NSString *)type;
+
+/**
+ * Called when the app starts listening for airship events.
+ * @param type The event type.
+ */
+- (void)onAirshipListenerAddedForType:(NSString *)type;
 
 @end

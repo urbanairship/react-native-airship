@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.reactnative.Event;
 
@@ -40,7 +41,7 @@ public class RegistrationEvent implements Event {
 
     @NonNull
     @Override
-    public WritableMap getBody() {
+    public ReadableMap getBody() {
         WritableMap map = Arguments.createMap();
         map.putString(CHANNEL_ID, channelId);
 
@@ -49,5 +50,11 @@ public class RegistrationEvent implements Event {
         }
 
         return map;
+    }
+
+
+    @Override
+    public boolean isForeground() {
+        return true;
     }
 }

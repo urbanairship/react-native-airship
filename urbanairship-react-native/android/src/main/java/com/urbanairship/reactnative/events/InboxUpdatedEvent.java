@@ -5,6 +5,7 @@ package com.urbanairship.reactnative.events;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.reactnative.Event;
 
@@ -38,11 +39,17 @@ public class InboxUpdatedEvent implements Event {
 
     @NonNull
     @Override
-    public WritableMap getBody() {
+    public ReadableMap getBody() {
         WritableMap map = Arguments.createMap();
         map.putInt(MESSAGE_UNREAD_COUNT, unreadCount);
         map.putInt(MESSAGE_COUNT, count);
 
         return map;
+    }
+
+
+    @Override
+    public boolean isForeground() {
+        return true;
     }
 }

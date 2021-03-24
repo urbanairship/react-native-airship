@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.push.NotificationInfo;
 import com.urbanairship.push.PushMessage;
@@ -66,7 +67,7 @@ public class PushReceivedEvent implements Event {
 
     @NonNull
     @Override
-    public WritableMap getBody() {
+    public ReadableMap getBody() {
         WritableMap map = Arguments.createMap();
 
         if (message.getAlert() != null) {
@@ -95,5 +96,11 @@ public class PushReceivedEvent implements Event {
         }
 
         return id;
+    }
+
+
+    @Override
+    public boolean isForeground() {
+        return false;
     }
 }

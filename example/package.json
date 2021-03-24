@@ -10,7 +10,7 @@
     "react-native-gesture-handler": "^1.9.0",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.8",
-    "react-native-screens": "^2.16.1",
+    "react-native-screens": "^2.18.1",
     "react-navigation": "^4.4.3",
     "react-navigation-stack": "^2.10.2",
     "react-navigation-tabs": "^2.10.1",

@@ -2,13 +2,10 @@
 
 package com.urbanairship.reactnative;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,7 +14,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
@@ -28,7 +24,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -48,10 +43,9 @@ import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.util.UAStringUtil;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -110,6 +104,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             public void onHostResume() {
                 // If the opt-in status changes send an event
                 checkOptIn(getReactApplicationContext());
+                EventEmitter.shared().onHostResume();
             }
 
             @Override
@@ -131,28 +126,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "UrbanAirshipReactModule";
-    }
-
-    /**
-     * Called when a new listener is added for a specified event name.
-     *
-     * @param eventName The event name.
-     */
-    @ReactMethod
-    public void addAndroidListener(String eventName) {
-        PluginLogger.info("UrbanAirshipReactModule - Event listener added: " + eventName);
-        EventEmitter.shared().addAndroidListener(eventName);
-    }
-
-    /**
-     * Called when listeners are removed.
-     *
-     * @param count The count of listeners.
-     */
-    @ReactMethod
-    public void removeAndroidListeners(int count) {
-        PluginLogger.info("UrbanAirshipReactModule - Event listeners removed: " + count);
-        EventEmitter.shared().removeAndroidListeners(count);
     }
 
     @ReactMethod
@@ -455,6 +428,46 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void trackScreen(String screen) {
         UAirship.shared().getAnalytics().trackScreen(screen);
+    }
+
+    /**
+     * Called when the app is listening for an airship event.
+     *
+     * @param listener The listener type.
+     */
+    @ReactMethod
+    public void onAirshipListenerAdded(String listener) {
+        EventEmitter.shared().onAirshipListenerAdded(listener);
+    }
+
+    /**
+     * Removes and returns foreground events for the given type.
+     * @param type The type.
+     * @param promise  The promise.
+     */
+    @ReactMethod
+    public void takePendingForegroundEvents(String type, Promise promise) {
+        List<Event> events = EventEmitter.shared().takePendingForegroundEvents(type);
+        WritableArray array = Arguments.createArray();
+        for (Event event : events) {
+            array.pushMap(event.getBody());
+        }
+        promise.resolve(array);
+    }
+
+    /**
+     * Removes and returns background events for the given type.
+     * @param type The type.
+     * @param promise  The promise.
+     */
+    @ReactMethod
+    public void takePendingBackgroundEvents(String type, Promise promise) {
+        List<Event> events = EventEmitter.shared().takePendingBackgroundEvents(type);
+        WritableArray array = Arguments.createArray();
+        for (Event event : events) {
+            array.pushMap(event.getBody());
+        }
+        promise.resolve(array);
     }
 
     /**
@@ -797,7 +810,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 } else if ("date".equals(valueType)) {
                     double value = operation.getDouble(ATTRIBUTE_OPERATION_VALUE);
                     // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
-                    editor.setAttribute(key, new Date((long)value));
+                    editor.setAttribute(key, new Date((long) value));
                 }
             } else if (ATTRIBUTE_OPERATION_REMOVE.equals(action)) {
                 editor.removeAttribute(key);

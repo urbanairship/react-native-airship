@@ -4,7 +4,7 @@ package com.urbanairship.reactnative;
 
 import androidx.annotation.NonNull;
 
-import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableMap;
 
 /**
  * Event interface.
@@ -25,5 +25,12 @@ public interface Event {
      * @return The event body.
      */
     @NonNull
-    WritableMap getBody();
+    ReadableMap getBody();
+
+    /**
+     * Flags if the event should only be delivered in the foreground or not.
+     *
+     * @return {@code true} if the event should only be delivered in the foreground, otherwise {@code false}.
+     */
+    boolean isForeground();
 }

@@ -202,7 +202,7 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - React-jsinspector (0.63.4)
-  - react-native-safe-area-context (3.1.9):
+  - react-native-safe-area-context (3.2.0):
     - React-Core
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
@@ -266,11 +266,11 @@ PODS:
     - React-jsi (= 0.63.4)
   - RNCMaskedView (0.2.0):
     - React-Core
-  - RNGestureHandler (1.9.0):
+  - RNGestureHandler (1.10.3):
     - React-Core
   - RNReanimated (1.13.2):
     - React-Core
-  - RNScreens (2.16.1):
+  - RNScreens (2.18.1):
     - React-Core
   - urbanairship-accengage-react-native (10.0.2):
     - Airship/Accengage (= 14.2.2)
@@ -417,7 +417,7 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
-  react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
+  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
@@ -429,14 +429,14 @@ SPEC CHECKSUMS:
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNCMaskedView: 5c799d0290aa76c3ffa077b90207292a95b121b2
-  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
-  RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
+  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   urbanairship-accengage-react-native: 56ea33eefc8b4bcbd7ffa40bba38eb3d162e365f
   urbanairship-location-react-native: b13d2e2f2e77b98f94995b996b708476540e4808
   urbanairship-react-native: 75a82505b9fc7d2682b985d262f4460d1392787b
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
-PODFILE CHECKSUM: 5820be3e3b56e627a80c61535fd3647306f748e8
+PODFILE CHECKSUM: c46a27fe65dc42f14f010b92761ff90f54416504
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0

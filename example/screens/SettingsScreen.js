@@ -26,6 +26,7 @@ import { UrbanAirship } from 'urbanairship-react-native'
 import { AirshipLocation } from 'urbanairship-location-react-native'
 
 import styles from './../Styles';
+import { Subscription } from 'urbanairship-react-native';
 
 const notificationsEnabledKey = "com.urbanairship.notificationsEnabled"
 const locationEnabledKey = "com.urbanairship.locationEnabled"
@@ -41,6 +42,7 @@ export default class SettingsScreen extends Component {
       tagText: "",
       namedUserText: "",
     }
+
 
     UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
 
@@ -128,6 +130,8 @@ export default class SettingsScreen extends Component {
   }
 
   componentDidMount() {
+    this.subscriptions = [];
+
     UrbanAirship.isUserNotificationsEnabled().then((enabled) => {
       this.setState({ notificationsEnabled: enabled })
     })
@@ -136,30 +140,38 @@ export default class SettingsScreen extends Component {
       this.setState({ locationEnabled: enabled })
     })
 
-    UrbanAirship.addListener("notificationResponse", (response) => {
-      console.log('notificationResponse:', JSON.stringify(response));
-      alert("notificationResponse: " + response.notification.alert);
-    });
+    this.subscriptions = [
+      UrbanAirship.addListener("notificationResponse", (response) => {
+        console.log('notificationResponse:', JSON.stringify(response));
+        alert("notificationResponse: " + response.notification.alert);
+      }),
 
-    UrbanAirship.addListener("pushReceived", (notification) => {
-      console.log('pushReceived:', JSON.stringify(notification));
-      alert("pushReceived: " + notification.alert);
-    });
+      UrbanAirship.addListener("pushReceived", (notification) => {
+        console.log('pushReceived:', JSON.stringify(notification));
+        alert("pushReceived: " + notification.alert);
+      }),
 
-    UrbanAirship.addListener("deepLink", (event) => {
-      console.log('deepLink:', JSON.stringify(event));
-      alert("deepLink: " + event.deepLink);
-    });
+      UrbanAirship.addListener("deepLink", (event) => {
+        console.log('deepLink:', JSON.stringify(event));
+        alert("deepLink: " + event.deepLink);
+      }),
 
-    UrbanAirship.addListener("registration", (event) => {
-      console.log('registration:', JSON.stringify(event));
-      this.state.channelId = event.channelId;
-      this.setState(this.state);
-    });
+      UrbanAirship.addListener("registration", (event) => {
+        console.log('registration:', JSON.stringify(event));
+        this.state.channelId = event.channelId;
+        this.setState(this.state);
+      }),
 
-    UrbanAirship.addListener("notificationOptInStatus", (event) => {
-      console.log('notificationOptInStatus:', JSON.stringify(event));
-    });
+      UrbanAirship.addListener("notificationOptInStatus", (event) => {
+        console.log('notificationOptInStatus:', JSON.stringify(event));
+      })
+    ];
+  }
+
+  componentWillUnmount() {
+    this.subscriptions.forEach(sub => {
+      sub.remove();
+    })
   }
 
   render() {

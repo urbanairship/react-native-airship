@@ -5,6 +5,7 @@ package com.urbanairship.reactnative.events;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.reactnative.Event;
 
@@ -34,9 +35,14 @@ public class DeepLinkEvent implements Event {
 
     @NonNull
     @Override
-    public WritableMap getBody() {
+    public ReadableMap getBody() {
         WritableMap map = Arguments.createMap();
         map.putString(DEEP_LINK, deepLink);
         return map;
+    }
+
+    @Override
+    public boolean isForeground() {
+        return true;
     }
 }
