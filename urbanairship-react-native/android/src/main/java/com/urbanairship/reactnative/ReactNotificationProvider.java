@@ -13,9 +13,9 @@ import com.urbanairship.push.notifications.AirshipNotificationProvider;
 
 public class ReactNotificationProvider extends AirshipNotificationProvider {
 
-    private Context context;
+    protected final Context context;
 
-    ReactNotificationProvider(@NonNull Context context, @NonNull AirshipConfigOptions configOptions) {
+    public ReactNotificationProvider(@NonNull Context context, @NonNull AirshipConfigOptions configOptions) {
         super(context, configOptions);
         this.context = context;
     }

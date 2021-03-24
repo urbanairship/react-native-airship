@@ -16,6 +16,7 @@ android {
         minSdkVersion 16
 
         buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
+        consumerProguardFiles 'proguard-rules.pro'
     }
 }
 
@@ -33,13 +34,13 @@ def safeExtGet (prop, fallback) {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
 
-    implementation("com.urbanairship.android:urbanairship-fcm:$airshipVersion") {
+    api ("com.urbanairship.android:urbanairship-fcm:$airshipVersion") {
       exclude group: 'com.google.firebase', module: 'firebase-messaging'
     }
 
-    implementation "com.urbanairship.android:urbanairship-message-center:$airshipVersion"
-    implementation "com.urbanairship.android:urbanairship-automation:$airshipVersion"
-    implementation "com.urbanairship.android:urbanairship-location:$airshipVersion"
+    api "com.urbanairship.android:urbanairship-message-center:$airshipVersion"
+    api "com.urbanairship.android:urbanairship-automation:$airshipVersion"
+    api "com.urbanairship.android:urbanairship-location:$airshipVersion"
 
     implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '21.0.0')}"
 }
