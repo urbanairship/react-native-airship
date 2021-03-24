@@ -3,7 +3,10 @@
 package com.urbanairship.reactnative;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +35,7 @@ import com.urbanairship.reactnative.events.ShowInboxEvent;
  * Module's autopilot to customize Urban Airship.
  */
 public class ReactAutopilot extends Autopilot {
+    public static final String EXTENDER_MANIFEST_KEY = "com.urbanairship.reactnative.AIRSHIP_EXTENDER";
 
     @Override
     public void onAirshipReady(@NonNull UAirship airship) {
@@ -81,7 +85,6 @@ public class ReactAutopilot extends Autopilot {
                 UrbanAirshipReactModule.checkOptIn(context);
             }
         });
-
 
         airship.getPushManager().setNotificationListener(new NotificationListener() {
             @Override
@@ -143,6 +146,11 @@ public class ReactAutopilot extends Autopilot {
 
         loadCustomNotificationChannels(context, airship);
         loadCustomNotificationButtonGroups(context, airship);
+
+        AirshipExtender extender = createExtender(context);
+        if (extender != null) {
+            extender.onAirshipReady(context, airship);
+        }
     }
 
     private void loadCustomNotificationChannels(Context context, UAirship airship) {
@@ -168,5 +176,32 @@ public class ReactAutopilot extends Autopilot {
     private static void sendShowInboxEvent(@Nullable String messageId) {
         Event event = new ShowInboxEvent(messageId);
         EventEmitter.shared().sendEvent(event);
+    }
+
+    @Nullable
+    private static AirshipExtender createExtender(@NonNull Context context) {
+        ApplicationInfo ai;
+        try {
+            ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            if (ai == null || ai.metaData == null) {
+                return null;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+
+        String classname = ai.metaData.getString(EXTENDER_MANIFEST_KEY);
+
+        if (classname == null) {
+            return null;
+        }
+
+        try {
+            Class<?> extenderClass = Class.forName(classname);
+            return (AirshipExtender) extenderClass.newInstance();
+        } catch (Exception e) {
+            PluginLogger.error(e, "Unable to create extender: " + classname);
+        }
+        return null;
     }
 }
