@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 11.0.0 - March 25, 2021
+Major release updating the iOS and Android SDKs to 14.3.0. This release contains small breaking changes to the event handling API, and also adds an extender to Android making it easier to modify the Airship instance during takeOff.
+
+- Updated iOS SDK to 14.3.0
+- Updated Android SDK to 14.3.0
+- PushReceived and background NotificationResponse events are now triggered in the background on Android. To maintain UI thread safety, apps should now clean up any listeners that might modify the UI during `componentWillUnmount`.
+- UrbanAirship.addListener now returns `Subscription` instead of `EmitterSubscription`
+- Added AirshipExtender to Android to make it easier to modify the Airship instance during takeOff
+
 ## Version 10.0.2 - February 02, 2021
 Patch release to fix some issues with setting attributes on a named user if the named user ID contains invalid URL characters. Applications using attributes with named users that possibly contain invalid URL characters should update.
 
