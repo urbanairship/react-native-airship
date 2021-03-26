@@ -1,4 +1,3 @@
-use_frameworks!
 platform :ios, '11.0'
 
 require_relative "../../node_modules/react-native/scripts/react_native_pods"
@@ -14,7 +13,7 @@ end
 target 'ServiceExtension' do
   platform :ios, '11.0'
   # Pods for Service Extension
-  pod 'AirshipExtensions/NotificationService', '~> 14.2.0'
+  pod 'AirshipExtensions/NotificationService', '~> 14.3.0'
 end
 
 # https://github.com/software-mansion/react-native-screens/issues/842
