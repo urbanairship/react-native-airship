@@ -67,9 +67,8 @@ public class NotificationResponseEvent implements Event {
         return map;
     }
 
-
     @Override
     public boolean isForeground() {
-        return actionButtonInfo.isForeground();
+        return actionButtonInfo != null ? actionButtonInfo.isForeground() : true;
     }
 }
