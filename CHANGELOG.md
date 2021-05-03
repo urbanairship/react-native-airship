@@ -1,5 +1,10 @@
 # React Native Module Changelog
 
+## Version 11.0.1 - May 3, 2021
+Patch release to fix NPE on Android when opening notifications. Any app using 11.0.0 should update.
+
+- Fixed NPE on Android.
+
 ## Version 11.0.0 - March 25, 2021
 Major release updating the iOS and Android SDKs to 14.3.0. This release contains small breaking changes to the event handling API, and also adds an extender to Android making it easier to modify the Airship instance during takeOff.
 
