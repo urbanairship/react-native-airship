@@ -2,7 +2,7 @@
 
 #import "AirshipLocationReactModuleVersion.h"
 
-NSString *const airshipLocationModuleVersionString = @"11.0.1";
+NSString *const airshipLocationModuleVersionString = @"11.0.2";
 
 @implementation AirshipLocationReactModuleVersion
 

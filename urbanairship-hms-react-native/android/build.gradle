@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 import groovy.json.JsonSlurper
 
 ext {
-    airshipVersion = "14.3.0"
+    airshipVersion = "14.4.4"
 }
 
 android {
