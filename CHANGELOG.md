@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 11.0.2 - June 23, 2021
+Patch release updating the iOS and Android SDKs to 14.4.2 and 14.4.4 respectively.
+
+- Updated iOS SDK to 14.4.2
+- Updated Android SDK to 14.4.4
+
 ## Version 11.0.1 - May 3, 2021
 Patch release to fix NPE on Android when opening notifications. Any app using 11.0.0 should update.
 
