@@ -6,7 +6,7 @@
     "moment": "^2.24.0",
     "react": "17.0.1",
     "react-native": "0.64.0",
-    "@react-native-community/masked-view":  "git+https://github.com/react-native-masked-view/masked-view.git#611398ecf7b060e937fc073ffbc09cb990ec8ccf",
+    "@react-native-community/masked-view": "git+https://github.com/react-native-masked-view/masked-view.git#611398ecf7b060e937fc073ffbc09cb990ec8ccf",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.8",
@@ -16,7 +16,8 @@
     "react-navigation-tabs": "^2.10.1",
     "urbanairship-accengage-react-native": "*",
     "urbanairship-react-native": "*",
-    "urbanairship-location-react-native": "*"
+    "urbanairship-location-react-native": "*",
+    "urbanairship-chat-react-native": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

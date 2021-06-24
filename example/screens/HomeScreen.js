@@ -10,6 +10,10 @@ import {
   UrbanAirship,
 } from 'urbanairship-react-native'
 
+import {
+  AirshipChat,
+} from 'urbanairship-chat-react-native'
+
 import React, {
   Component,
 } from 'react';
@@ -47,6 +51,8 @@ export default class HomeScreen extends React.Component {
     UrbanAirship.getChannelId().then((channelId) => {
       this.setState({ channelId: channelId })
     });
+
+    AirshipChat.openChat();
   }
 
   render() {

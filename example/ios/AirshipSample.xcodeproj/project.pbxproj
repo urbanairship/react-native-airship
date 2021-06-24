@@ -11,7 +11,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		6E1F119722EA4E38003961F0 /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E1F119622EA4E38003961F0 /* AirshipConfig.plist */; };
+		A20F477E2679FA5200E529A9 /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = A20F477D2679FA5200E529A9 /* AirshipConfig.plist */; };
 		A9C13570551938B980BB2DE1 /* libPods-AirshipSample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FD338DD90FAFE0A166ED0C0 /* libPods-AirshipSample.a */; };
 		DF2D804A65D33CB942DBF847 /* libPods-ServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E992C77E3677D013BDACBD /* libPods-ServiceExtension.a */; };
 		DFB0AED82343BCC80093B5A1 /* ServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DFCB3AB82342C6470022A756 /* ServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -53,8 +53,8 @@
 		2D5A909683A08FD0623C7C26 /* Pods-ServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-ServiceExtension/Pods-ServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		43E992C77E3677D013BDACBD /* libPods-ServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD338DD90FAFE0A166ED0C0 /* libPods-AirshipSample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirshipSample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E1F119622EA4E38003961F0 /* AirshipConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		8D3C07FB200BCFA45B9BFA8C /* Pods-AirshipSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample.debug.xcconfig"; path = "Target Support Files/Pods-AirshipSample/Pods-AirshipSample.debug.xcconfig"; sourceTree = "<group>"; };
+		A20F477D2679FA5200E529A9 /* AirshipConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		CD995EA4D40FC2DC8368FD84 /* Pods-AirshipSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample.release.xcconfig"; path = "Target Support Files/Pods-AirshipSample/Pods-AirshipSample.release.xcconfig"; sourceTree = "<group>"; };
 		DFB0AEE62343CF1E0093B5A1 /* ServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ServiceExtension.entitlements; sourceTree = "<group>"; };
 		DFB0AEE72343D3620093B5A1 /* AirshipSample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AirshipSample.entitlements; path = AirshipSample/AirshipSample.entitlements; sourceTree = "<group>"; };
@@ -122,7 +122,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				6E1F119622EA4E38003961F0 /* AirshipConfig.plist */,
+				A20F477D2679FA5200E529A9 /* AirshipConfig.plist */,
 				13B07FAE1A68108700A75B9A /* AirshipSample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				DFCB3AB92342C6480022A756 /* ServiceExtension */,
@@ -253,7 +253,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E1F119722EA4E38003961F0 /* AirshipConfig.plist in Resources */,
+				A20F477E2679FA5200E529A9 /* AirshipConfig.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
