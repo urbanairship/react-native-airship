@@ -87,6 +87,40 @@ RCT_EXPORT_METHOD(enableChannelCreation) {
     [[UAirship channel] enableChannelCreation];
 }
 
+RCT_EXPORT_METHOD(setEnabledFeatures:(NSArray *) features) {
+    [UAirship shared].privacyManager.enabledFeatures = [self parseStringFeatures:features];
+    //[[UAirship shared].privacyManager setEnabledFeatures:[self parseStringFeatures:features]];
+}
+
+RCT_REMAP_METHOD(getEnabledFeatures,
+                 getEnabledFeatures_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve(@([UAirship shared].privacyManager.enabledFeatures));
+}
+
+RCT_EXPORT_METHOD(enableFeature:(NSArray *) features) {
+    [[UAirship shared].privacyManager enableFeatures:[self parseStringFeatures:features]];
+}
+
+RCT_EXPORT_METHOD(disableFeature:(NSArray *) features) {
+    [[UAirship shared].privacyManager disableFeatures:[self parseStringFeatures:features]];
+}
+
+RCT_REMAP_METHOD(isFeatureEnabled,
+                 features:(NSArray *)features
+                 isFeatureEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    [[UAirship shared].privacyManager isEnabled:[self parseStringFeatures:features]];
+}
+
+//TODO Not sure we have this one on iOS
+RCT_REMAP_METHOD(isFeatureAnyEnabled,
+                 features:(NSArray *)features
+                 isFeatureAnyEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    [[UAirship shared].privacyManager isEnabled:[self parseStringFeatures:features]];
+}
+
 RCT_EXPORT_METHOD(setDataCollectionEnabled:(BOOL)enabled) {
     [[UAirship shared] setDataCollectionEnabled:enabled];
 }
@@ -523,6 +557,35 @@ RCT_REMAP_METHOD(getActiveNotifications,
         }
     }
     return mutations;
+}
+
+-(UAFeatures)parseStringFeatures:(NSArray *)features {
+    UAFeatures convertedFeatures = UAFeaturesNone;
+
+    for (NSString *feature in features) {
+        if ([feature isEqualToString:@"FEATURE_NONE"]) {
+            convertedFeatures |= UAFeaturesNone;
+        } else if ([feature isEqualToString:@"FEATURE_IN_APP_AUTOMATION"]) {
+            convertedFeatures |= UAFeaturesInAppAutomation;
+        } else if ([feature isEqualToString:@"FEATURE_MESSAGE_CENTER"]) {
+            convertedFeatures |= UAFeaturesMessageCenter;
+        } else if ([feature isEqualToString:@"FEATURE_PUSH"]) {
+            convertedFeatures |= UAFeaturesPush;
+        } else if ([feature isEqualToString:@"FEATURE_CHAT"]) {
+            convertedFeatures |= UAFeaturesChat;
+        } else if ([feature isEqualToString:@"FEATURE_ANALYTICS"]) {
+            convertedFeatures |= UAFeaturesAnalytics;
+        } else if ([feature isEqualToString:@"FEATURE_TAGS_AND_ATTRIBUTES"]) {
+            convertedFeatures |= UAFeaturesTagsAndAttributes;
+        } else if ([feature isEqualToString:@"FEATURE_CONTACTS"]) {
+            convertedFeatures |= UAFeaturesContacts;
+        } else if ([feature isEqualToString:@"FEATURE_LOCATION"]) {
+            convertedFeatures |= UAFeaturesLocation;
+        } else {
+            convertedFeatures |= UAFeaturesAll;
+        }
+    }
+    return convertedFeatures;
 }
 
 @end

@@ -338,6 +338,19 @@ export interface NotificationConfigAndroid {
   defaultChannelId?: string;
 }
 
+export enum Feature {
+  FEATURE_NONE = "FEATURE_NONE",
+  FEATURE_IN_APP_AUTOMATION = "FEATURE_IN_APP_AUTOMATION",
+  FEATURE_MESSAGE_CENTER = "FEATURE_MESSAGE_CENTER",
+  FEATURE_PUSH = "FEATURE_PUSH",
+  FEATURE_CHAT = "FEATURE_CHAT",
+  FEATURE_ANALYTICS = "FEATURE_ANALYTICS",
+  FEATURE_TAGS_AND_ATTRIBUTES = "FEATURE_TAGS_AND_ATTRIBUTES",
+  FEATURE_CONTACTS = "FEATURE_CONTACTS",
+  FEATURE_LOCATION = "FEATURE_LOCATION",
+  FEATURE_ALL = "FEATURE_ALL"
+}
+
 /**
 * The main Airship API.
 */
@@ -368,6 +381,41 @@ export class UrbanAirship {
    */
   static isUserNotificationsEnabled(): Promise<boolean> {
     return UrbanAirshipModule.isUserNotificationsEnabled();
+  }
+
+  // TODO Comment all of these
+  static setEnabledFeatures(features: Feature[]) {
+    UrbanAirshipModule.setEnabledFeatures(features);
+  }
+
+  static getEnabledFeatures(): Promise<number> {
+    return UrbanAirshipModule.getEnabledFeatures();
+  }
+
+  static enableFeature(features: Feature[]) {
+    UrbanAirshipModule.enableFeature(features);
+  }
+
+  static disableFeature(features: Feature[]) {
+      UrbanAirshipModule.disableFeature(features);
+  }
+
+  /**
+   * Checks if a given feature is enabled or not.
+   *
+   * @return A promise with the result.
+   */
+  static isFeatureEnabled(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.isFeatureEnabled(features);
+  }
+
+  /**
+   * Checks if any of the given features is enabled or not.
+   *
+   * @return A promise with the result.
+   */
+  static isFeatureAnyEnabled(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.isFeatureAnyEnabled(features);
   }
 
   /**

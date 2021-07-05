@@ -27,6 +27,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.urbanairship.PrivacyManager;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
@@ -187,43 +188,68 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Enables/disables data collection.
+     * Sets the current enabled features.
      *
-     * @param enabled {@code true} to allow data collection., {@code false} to disallow.
+     * @param features The features to set as enabled.
      */
     @ReactMethod
-    public void setDataCollectionEnabled(boolean enabled) {
-        UAirship.shared().setDataCollectionEnabled(enabled);
+    public void setEnabledFeatures(ReadableArray features) {
+        UAirship.shared().getPrivacyManager().setEnabledFeatures(parseStringFeatures(features));
     }
 
     /**
-     * Checks if data collection is enabled.
+     * Gets the current enabled features.
      *
-     * @param promise The JS promise.
+     * @param promise  The promise.
+     * @return The enabled features.
      */
     @ReactMethod
-    public void isDataCollectionEnabled(Promise promise) {
-        promise.resolve(UAirship.shared().isDataCollectionEnabled());
+    public void getEnabledFeatures(Promise promise) {
+        promise.resolve(UAirship.shared().getPrivacyManager().getEnabledFeatures());
     }
 
     /**
-     * Enables/disables push token registration.
+     * Enables features.
      *
-     * @param enabled {@code true} to allow push token registration., {@code false} to disallow.
+     * @param features The features to enable.
      */
     @ReactMethod
-    public void setPushTokenRegistrationEnabled(boolean enabled) {
-        UAirship.shared().getPushManager().setPushTokenRegistrationEnabled(enabled);
+    public void enableFeature(ReadableArray features) {
+        UAirship.shared().getPrivacyManager().enable(parseStringFeatures(features));
     }
 
     /**
-     * Checks if push token registration is enabled.
+     * Disables features.
      *
-     * @param promise The JS promise.
+     * @param features The features to disable.
      */
     @ReactMethod
-    public void isPushTokenRegistrationEnabled(Promise promise) {
-        promise.resolve(UAirship.shared().getPushManager().isPushTokenRegistrationEnabled());
+    public void disableFeature(ReadableArray features) {
+        UAirship.shared().getPrivacyManager().disable(parseStringFeatures(features));
+    }
+
+    /**
+     * Checks if a given feature is enabled.
+     *
+     * @param features The features to check.
+     * @param promise  The promise.
+     * @return {@code true} if the provided features are enabled, otherwise {@code false}.
+     */
+    @ReactMethod
+    public void isFeatureEnabled(ReadableArray features, Promise promise) {
+        promise.resolve(UAirship.shared().getPrivacyManager().isEnabled(parseStringFeatures(features)));
+    }
+
+    /**
+     * Checks if any of the given features is enabled.
+     *
+     * @param features The features to check.
+     * @param promise  The promise.
+     * @return {@code true} if any of the provided features is enabled, otherwise {@code false}.
+     */
+    @ReactMethod
+    public void isFeatureAnyEnabled(ReadableArray features, Promise promise) {
+        promise.resolve(UAirship.shared().getPrivacyManager().isAnyEnabled(parseStringFeatures(features)));
     }
 
     /**
@@ -834,6 +860,53 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             Event optInEvent = new NotificationOptInEvent(optIn);
             EventEmitter.shared().sendEvent(optInEvent);
         }
+    }
+
+    /**
+     * Helper method to parse a String array into {@link PrivacyManager.Feature} array.
+     * @param features The String features to parse.
+     * @return The {@link PrivacyManager.Feature} array.
+     */
+    @PrivacyManager.Feature
+    private int[] parseStringFeatures(ReadableArray features) {
+        @PrivacyManager.Feature
+        int[] intFeatures = new int[features.size()];
+
+        for (int i = 0; i < features.size(); i++) {
+            switch (features.getString(i)) {
+                case "FEATURE_NONE":
+                    intFeatures[i] = PrivacyManager.FEATURE_NONE;
+                    break;
+                case "FEATURE_IN_APP_AUTOMATION":
+                    intFeatures[i] = PrivacyManager.FEATURE_IN_APP_AUTOMATION;
+                    break;
+                case "FEATURE_MESSAGE_CENTER":
+                    intFeatures[i] = PrivacyManager.FEATURE_MESSAGE_CENTER;
+                    break;
+                case "FEATURE_PUSH":
+                    intFeatures[i] = PrivacyManager.FEATURE_PUSH;
+                    break;
+                case "FEATURE_CHAT":
+                    intFeatures[i] = PrivacyManager.FEATURE_CHAT;
+                    break;
+                case "FEATURE_ANALYTICS":
+                    intFeatures[i] = PrivacyManager.FEATURE_ANALYTICS;
+                    break;
+                case "FEATURE_TAGS_AND_ATTRIBUTES":
+                    intFeatures[i] = PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES;
+                    break;
+                case "FEATURE_CONTACTS":
+                    intFeatures[i] = PrivacyManager.FEATURE_CONTACTS;
+                    break;
+                case "FEATURE_LOCATION":
+                    intFeatures[i] = PrivacyManager.FEATURE_LOCATION;
+                    break;
+                default:
+                    intFeatures[i] = PrivacyManager.FEATURE_ALL;
+                    break;
+            }
+        }
+        return intFeatures;
     }
 
 }
