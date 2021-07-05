@@ -241,18 +241,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Checks if any of the given features is enabled.
-     *
-     * @param features The features to check.
-     * @param promise  The promise.
-     * @return {@code true} if any of the provided features is enabled, otherwise {@code false}.
-     */
-    @ReactMethod
-    public void isFeatureAnyEnabled(ReadableArray features, Promise promise) {
-        promise.resolve(UAirship.shared().getPrivacyManager().isAnyEnabled(parseStringFeatures(features)));
-    }
-
-    /**
      * Checks if the app's notifications are enabled.
      *
      * @param promise The JS promise.

@@ -419,50 +419,6 @@ export class UrbanAirship {
   }
 
   /**
-   * Global data collection flag. Enabled by default, unless `dataCollectionOptInEnabled`
-   * is set to `YES` in AirshipConfig.plist on iOS, and `true` in airshipconfig.properties on Android.
-   * When disabled, the device will stop collecting and sending data for named user, events,
-   * tags, attributes, associated identifiers, and location from the device.
-   *
-   * Push notifications will continue to work only if `UrbanAirship.setPushTokenRegistrationEnabled`
-   * has been explicitly set to `true`, otherwise it will default to the current state of `isDataCollectionEnabled`.
-   *
-   * @note To disable by default, set the `dataCollectionOptInEnabled` flag to `YES` in AirshipConfig.plist on iOS, and `true` in airshipconfig.properties on Android.
-   * @param enabled true to enable data collection, false to disable.
-   */
-  static setDataCollectionEnabled(enabled: boolean) {
-    UrbanAirshipModule.setDataCollectionEnabled(enabled);
-  }
-
-  /**
-   * Checks if data collection is enabled or not.
-   *
-   * @return A promise with the result.
-   */
-  static isDataCollectionEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isDataCollectionEnabled();
-  }
-
-  /**
-   * Enables/disables sending the device token during channel registration.
-   * Defaults to `UrbanAirship.isDataCollectionEnabled`. If set to `false`, the app will not be able to receive push
-   * notifications.
-   * @param enabled true to enable push token registration, false to disable.
-   */
-  static setPushTokenRegistrationEnabled(enabled: boolean) {
-    UrbanAirshipModule.setPushTokenRegistrationEnabled(enabled);
-  }
-
-  /**
-   * Checks if push token registration is enabled or not.
-   *
-   * @return A promise with the result.
-   */
-  static isPushTokenRegistrationEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isPushTokenRegistrationEnabled();
-  }
-
-  /**
    * Enables user notifications.
    *
    * @return A promise that returns true if enablement was authorized
