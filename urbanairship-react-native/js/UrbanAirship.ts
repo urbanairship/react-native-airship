@@ -383,19 +383,41 @@ export class UrbanAirship {
     return UrbanAirshipModule.isUserNotificationsEnabled();
   }
 
-  // TODO Comment all of these
+  /**
+   * Sets the SDK features that will be enabled. The rest of the features will be disabled.
+   * 
+   * If all features are disabled the SDK will not make any network requests or collect data.
+   *
+   * @note All features are enabled by default.
+   * @param feature An array of `Features` to enable.
+   */
   static setEnabledFeatures(features: Feature[]) {
     UrbanAirshipModule.setEnabledFeatures(features);
   }
 
+  /**
+   * Gets a flag number representing the enabled features.
+   * 
+   * @return A promise that returns the enabled features as a flag `number`.
+   */
   static getEnabledFeatures(): Promise<number> {
     return UrbanAirshipModule.getEnabledFeatures();
   }
 
+  /**
+   * Enables one or many features.
+   *
+   * @param feature An array of `Feature` to enable.
+   */
   static enableFeature(features: Feature[]) {
     UrbanAirshipModule.enableFeature(features);
   }
 
+  /**
+   * Disables one or many features.
+   *
+   * @param feature An array of `Feature` to disable.
+   */
   static disableFeature(features: Feature[]) {
       UrbanAirshipModule.disableFeature(features);
   }
@@ -403,19 +425,10 @@ export class UrbanAirship {
   /**
    * Checks if a given feature is enabled or not.
    *
-   * @return A promise with the result.
+   * @return A promise that returns true if the features are enabled, false otherwise.
    */
   static isFeatureEnabled(features: Feature[]): Promise<boolean> {
     return UrbanAirshipModule.isFeatureEnabled(features);
-  }
-
-  /**
-   * Checks if any of the given features is enabled or not.
-   *
-   * @return A promise with the result.
-   */
-  static isFeatureAnyEnabled(features: Feature[]): Promise<boolean> {
-    return UrbanAirshipModule.isFeatureAnyEnabled(features);
   }
 
   /**
