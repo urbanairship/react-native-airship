@@ -83,11 +83,13 @@ export default class MessageScreen extends React.Component {
           onLoadError={this.failedLoading}
           style={{ flex: 1 }}
         />
+        {this.state.animating &&
         <View style={styles.loadingIndicator}>
           <ActivityIndicator size="large"
             animating={this.state.animating}
           />
         </View>
+        }
       </View>
     );
   }
