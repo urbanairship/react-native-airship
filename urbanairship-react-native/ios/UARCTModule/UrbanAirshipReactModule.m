@@ -89,7 +89,6 @@ RCT_EXPORT_METHOD(enableChannelCreation) {
 
 RCT_EXPORT_METHOD(setEnabledFeatures:(NSArray *) features) {
     [UAirship shared].privacyManager.enabledFeatures = [self parseStringFeatures:features];
-    //[[UAirship shared].privacyManager setEnabledFeatures:[self parseStringFeatures:features]];
 }
 
 RCT_REMAP_METHOD(getEnabledFeatures,
@@ -110,7 +109,7 @@ RCT_REMAP_METHOD(isFeatureEnabled,
                  features:(NSArray *)features
                  isFeatureEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    [[UAirship shared].privacyManager isEnabled:[self parseStringFeatures:features]];
+    resolve(@([[UAirship shared].privacyManager isEnabled:[self parseStringFeatures:features]]));
 }
 
 RCT_REMAP_METHOD(isUserNotificationsEnabled,
