@@ -32,6 +32,7 @@ enum InternalEventType {
   InboxUpdated = "com.urbanairship.inbox_updated",
   NotificationOptInStatus = "com.urbanairship.notification_opt_in_status",
   ShowInbox = "com.urbanairship.show_inbox",
+  ConversationUpdated = "com.urbanairship.conversation_updated"
 }
 
 /**
@@ -72,7 +73,11 @@ export enum EventType {
   /**
    * Show inbox event.
    */
-  ShowInbox = "showInbox"
+  ShowInbox = "showInbox",
+  /**
+   * Chat conversation updated.
+   */
+  ConversationUpdated = "conversationUpdated"
 }
 
 /**
@@ -315,6 +320,8 @@ function convertEventEnum(type: EventType): string {
     return InternalEventType.InboxUpdated;
   } else if (type == EventType.ShowInbox) {
     return InternalEventType.ShowInbox;
+  } else if (type == EventType.ConversationUpdated) {
+    return InternalEventType.ConversationUpdated;
   }
 
   throw new Error("Invalid event name: " + type);

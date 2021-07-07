@@ -24,6 +24,7 @@ import {
 
 import { UrbanAirship } from 'urbanairship-react-native'
 import { AirshipLocation } from 'urbanairship-location-react-native'
+import { AirshipChat } from 'urbanairship-chat-react-native'
 
 import styles from './../Styles';
 import { Subscription } from 'urbanairship-react-native';
@@ -126,7 +127,22 @@ export default class SettingsScreen extends Component {
   }
 
   handleMessageCenterDisplay() {
-    UrbanAirship.displayMessageCenter()
+    UrbanAirship.displayMessageCenter();
+  }
+
+  sendMessage() {
+    AirshipChat.sendMessage("Hello, it's Jimmy Badger");
+  }
+
+  addListener() {
+    console.log("Adding listener")
+    AirshipChat.addConversationListener( (body) => {
+      console.log("Conversation updated, messages count : " + body);
+    })
+  }
+
+  openChat() {
+    AirshipChat.openChat();
   }
 
   componentDidMount() {
@@ -212,6 +228,21 @@ export default class SettingsScreen extends Component {
             color='#0d6a83'
             onPress={() => this.handleMessageCenterDisplay()}
             title="Message Center"
+          />
+          <Button
+            color='#0d6a83'
+            onPress={() => this.openChat()}
+            title="Open chat"
+          />
+          <Button
+            color='#0d6a83'
+            onPress={() => this.sendMessage()}
+            title="Send Message Hello it's Jimmy"
+          />
+          <Button
+            color='#0d6a83'
+            onPress={() => this.addListener()}
+            title="Add Listener"
           />
         </ScrollView>
       </View>
