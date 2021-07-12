@@ -86,7 +86,7 @@ export class AirshipChat {
   static addConversationListener(listener: (...args: any[]) => any): Subscription {
     EventEmitter.addListener("com.urbanairship.conversation_updated", listener);
     return new Subscription(() => {
-      UrbanAirship.removeListener("com.urbanairship.conversation_updated", listener);
+      EventEmitter.removeListener("com.urbanairship.conversation_updated", listener);
     });
   }
 }
