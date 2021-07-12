@@ -103,7 +103,7 @@ public class AirshipChatModule extends ReactContextBaseJavaModule {
         Chat.shared().getConversation().addConversationListener(new ConversationListener() {
             @Override
             public void onConversationUpdated() {
-                Event event = new ConversationUpdatedEvent(Chat.shared().getConversation().getMessages().getResult().size());
+                Event event = new ConversationUpdatedEvent();
                 EventEmitter.shared().sendEvent(event);
             }
         });

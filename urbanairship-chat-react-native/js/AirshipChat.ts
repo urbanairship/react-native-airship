@@ -84,10 +84,9 @@ export class AirshipChat {
   }
 
   static addConversationListener(listener: (...args: any[]) => any): Subscription {
-    EventEmitter.addListener(UrbanAirshipModule.EventType.ConversationUpdated, listener);
-    console.log("UALibAPK React - addConversationListener");
+    EventEmitter.addListener("com.urbanairship.conversation_updated", listener);
     return new Subscription(() => {
-      UrbanAirship.removeListener(UrbanAirshipModule.EventType.ConversationUpdated, listener);
+      UrbanAirship.removeListener("com.urbanairship.conversation_updated", listener);
     });
   }
 }

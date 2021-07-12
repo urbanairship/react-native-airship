@@ -42,6 +42,11 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 - (void)showInbox;
 
 /**
+ * Sends a conversation updated event.
+ */
+- (void)conversationUpdated;
+
+/**
  * Sends an show inbox message event.
  * @param messageID The message ID.
  */

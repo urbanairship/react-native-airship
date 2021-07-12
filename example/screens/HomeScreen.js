@@ -51,8 +51,6 @@ export default class HomeScreen extends React.Component {
     UrbanAirship.getChannelId().then((channelId) => {
       this.setState({ channelId: channelId })
     });
-
-    AirshipChat.openChat();
   }
 
   render() {

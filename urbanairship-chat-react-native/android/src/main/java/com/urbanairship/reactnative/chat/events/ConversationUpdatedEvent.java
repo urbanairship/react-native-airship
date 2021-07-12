@@ -12,18 +12,8 @@ import com.urbanairship.reactnative.Event;
 public class ConversationUpdatedEvent implements Event {
 
     private static final String CONVERSATION_UPDATED_EVENT = "com.urbanairship.conversation_updated";
-    private static final String MESSAGE_COUNT = "messageCount";
 
-    private final int count;
-
-    /**
-     * Default constructor.
-     *
-     * @param count The number of messages in the conversation.
-     */
-    public ConversationUpdatedEvent(int count) {
-        this.count = count;
-    }
+    public ConversationUpdatedEvent() { }
 
     @NonNull
     @Override
@@ -35,8 +25,7 @@ public class ConversationUpdatedEvent implements Event {
     @Override
     public ReadableMap getBody() {
         WritableMap map = Arguments.createMap();
-        map.putInt(MESSAGE_COUNT, count);
-
+        map.putString("event","Conversation updated");
         return map;
     }
 
