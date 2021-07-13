@@ -1,12 +1,7 @@
 #import "AirshipChatModule.h"
 #import "ConversationUpdatedDelegate.h"
 @import Airship;
-//todo import UARCTEventEmitter
-
 @implementation AirshipChatModule
-
-
-
 
 RCT_EXPORT_MODULE()
 
