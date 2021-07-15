@@ -9,6 +9,7 @@ import { requireNativeComponent, NativeSyntheticEvent } from "react-native";
 const UARCTMessageView = requireNativeComponent<UARCTMessageViewProps>('UARCTMessageView');
 
 interface UARCTMessageViewProps {
+  messageId: string;
   onLoadStarted: (event: NativeSyntheticEvent<MessageLoadStartedEvent>) => void;
   onLoadFinished: (event: NativeSyntheticEvent<MessageLoadFinishedEvent>) => void;
   onLoadError: (event: NativeSyntheticEvent<MessageLoadErrorEvent>) => void;
