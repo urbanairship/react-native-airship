@@ -338,6 +338,9 @@ export interface NotificationConfigAndroid {
   defaultChannelId?: string;
 }
 
+/**
+ * Enum of authorized Features.
+ */
 export enum Feature {
   FEATURE_NONE = "FEATURE_NONE",
   FEATURE_IN_APP_AUTOMATION = "FEATURE_IN_APP_AUTOMATION",
@@ -390,17 +393,18 @@ export class UrbanAirship {
    *
    * @note All features are enabled by default.
    * @param feature An array of `Features` to enable.
+   * @return A promise that returns true if the enablement was authorized.
    */
-  static setEnabledFeatures(features: Feature[]) {
-    UrbanAirshipModule.setEnabledFeatures(features);
+  static setEnabledFeatures(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.setEnabledFeatures(features);
   }
 
   /**
-   * Gets a flag number representing the enabled features.
+   * Gets a String array with the enabled features.
    * 
-   * @return A promise that returns the enabled features as a flag `number`.
+   * @return A promise that returns the enabled features as a String array.
    */
-  static getEnabledFeatures(): Promise<number> {
+  static getEnabledFeatures(): Promise<String[]> {
     return UrbanAirshipModule.getEnabledFeatures();
   }
 
@@ -408,18 +412,20 @@ export class UrbanAirship {
    * Enables one or many features.
    *
    * @param feature An array of `Feature` to enable.
+   * @return A promise that returns true if the enablement was authorized.
    */
-  static enableFeature(features: Feature[]) {
-    UrbanAirshipModule.enableFeature(features);
+  static enableFeature(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.enableFeature(features);
   }
 
   /**
    * Disables one or many features.
    *
    * @param feature An array of `Feature` to disable.
+   * @return A promise that returns true if the disablement was authorized.
    */
-  static disableFeature(features: Feature[]) {
-      UrbanAirshipModule.disableFeature(features);
+  static disableFeature(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.disableFeature(features);
   }
 
   /**
