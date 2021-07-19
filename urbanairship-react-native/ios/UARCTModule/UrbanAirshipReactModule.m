@@ -150,9 +150,23 @@ RCT_EXPORT_METHOD(addTag:(NSString *)tag) {
     }
 }
 
+RCT_EXPORT_METHOD(addTags:(NSArray *)tags) {
+    if (tags) {
+        [[UAirship channel] addTags:tags];
+        [[UAirship channel] updateRegistration];
+    }
+}
+
 RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
     if (tag) {
         [[UAirship channel] removeTag:tag];
+        [[UAirship channel] updateRegistration];
+    }
+}
+
+RCT_EXPORT_METHOD(removeTags:(NSArray *)tags) {
+    if (tags) {
+        [[UAirship channel] removeTags:tags];
         [[UAirship channel] updateRegistration];
     }
 }

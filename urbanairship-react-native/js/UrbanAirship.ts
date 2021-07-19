@@ -470,12 +470,30 @@ export class UrbanAirship {
   }
 
   /**
+   * Adds multiple channel tags.
+   *
+   * @param tags An array of channel tags.
+   */
+  static addTags(tags: Array<string>) {
+    UrbanAirshipModule.addTags(tags);
+  }
+
+  /**
    * Removes a channel tag.
    *
    * @param tag A channel tag.
    */
   static removeTag(tag: string) {
     UrbanAirshipModule.removeTag(tag);
+  }
+
+  /**
+   * Removes multiple channel tags.
+   *
+   * @param tags An array of channel tags.
+   */
+  static removeTags(tags: Array<string>) {
+    UrbanAirshipModule.removeTags(tags);
   }
 
   /**

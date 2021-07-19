@@ -298,6 +298,18 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Adds multiple channel tags.
+     *
+     * @param tags An array of tags to add.
+     */
+    @ReactMethod
+    public void addTags(ReadableArray tags) {
+        if (tags.length > 0) {
+            UAirship.shared().getChannel().editTags().addTags(tags).apply();
+        }
+    }
+
+    /**
      * Removes a channel tag.
      *
      * @param tag The tag to remove.
@@ -306,6 +318,18 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void removeTag(String tag) {
         if (tag != null) {
             UAirship.shared().getChannel().editTags().removeTag(tag).apply();
+        }
+    }
+
+    /**
+     * Removes multiple channel tags.
+     *
+     * @param tags An array of tags to remove.
+     */
+    @ReactMethod
+    public void removeTags(ReadableArray tags) {
+        if (tags.length > 0) {
+            UAirship.shared().getChannel().editTags().removeTags(tags).apply();
         }
     }
 
