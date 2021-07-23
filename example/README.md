@@ -4,7 +4,7 @@ A basic sample application that integrates the Airship React Native module.
 
 ## Setup
 
-1) Install modules: Run `npm install` in repository root
+1) Install modules: Run `yarn` in repository root
 
 ### iOS
 
