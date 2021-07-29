@@ -28,6 +28,8 @@ NSString * const UARCTErrorDomain = @"com.urbanairship.react";
 NSString *const UARCTStatusUnavailable = @"UNAVAILABLE";
 NSString *const UARCTStatusInvalidFeature = @"INVALID_FEATURE";
 NSString *const UARCTErrorDescriptionInvalidFeature = @"Invalid feature, cancelling the action.";
+int const UARCTErrorCodeInvalidFeature = 2;
+
 
 
 #pragma mark -
@@ -101,7 +103,7 @@ RCT_REMAP_METHOD(setEnabledFeatures,
         NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
         NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
-                                              code:2
+                                              code:UARCTErrorCodeInvalidFeature
                                           userInfo:@{NSLocalizedDescriptionKey:errorMessage}];
         reject(code, errorMessage, error);
     }
@@ -125,7 +127,7 @@ RCT_REMAP_METHOD(enableFeature,
         NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
         NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
-                                              code:2
+                                              code:UARCTErrorCodeInvalidFeature
                                           userInfo:@{NSLocalizedDescriptionKey:errorMessage}];
         reject(code, errorMessage, error);
     }
@@ -143,7 +145,7 @@ RCT_REMAP_METHOD(disableFeature,
         NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
         NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
-                                              code:2
+                                              code:UARCTErrorCodeInvalidFeature
                                           userInfo:@{NSLocalizedDescriptionKey:errorMessage}];
         reject(code, errorMessage, error);
     }
@@ -160,7 +162,7 @@ RCT_REMAP_METHOD(isFeatureEnabled,
         NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
         NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
         NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
-                                              code:2
+                                              code:UARCTErrorCodeInvalidFeature
                                           userInfo:@{NSLocalizedDescriptionKey:errorMessage}];
         reject(code, errorMessage, error);
     }
