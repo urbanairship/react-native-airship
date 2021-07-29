@@ -320,6 +320,32 @@ function convertEventEnum(type: EventType): string {
   throw new Error("Invalid event name: " + type);
 }
 
+function convertFeatureEnum(feature: String): Feature {
+  if (feature == "FEATURE_NONE") {
+    return Feature.FEATURE_NONE
+  } else if (feature == "FEATURE_IN_APP_AUTOMATION") {
+    return Feature.FEATURE_IN_APP_AUTOMATION
+  } else if (feature == "FEATURE_MESSAGE_CENTER") {
+    return Feature.FEATURE_MESSAGE_CENTER
+  } else if (feature == "FEATURE_PUSH") {
+    return Feature.FEATURE_PUSH
+  } else if (feature == "FEATURE_CHAT") {
+    return Feature.FEATURE_CHAT
+  } else if (feature == "FEATURE_ANALYTICS") {
+    return Feature.FEATURE_ANALYTICS
+  } else if (feature == "FEATURE_TAGS_AND_ATTRIBUTES") {
+    return Feature.FEATURE_TAGS_AND_ATTRIBUTES
+  } else if (feature == "FEATURE_CONTACTS") {
+    return Feature.FEATURE_CONTACTS
+  } else if (feature == "FEATURE_LOCATION") {
+    return Feature.FEATURE_LOCATION
+  } else if (feature == "FEATURE_ALL") {
+    return Feature.FEATURE_ALL
+  }
+
+  throw new Error("Invalid feature name: " + feature);
+}
+
 /**
  * Android notification config.
  */
@@ -400,12 +426,22 @@ export class UrbanAirship {
   }
 
   /**
-   * Gets a String array with the enabled features.
+   * Gets a Feature array with the enabled features.
    * 
-   * @return A promise that returns the enabled features as a String array.
+   * @return A promise that returns the enabled features as a Feature array.
    */
-  static getEnabledFeatures(): Promise<String[]> {
-    return UrbanAirshipModule.getEnabledFeatures();
+  static getEnabledFeatures(): Promise<Feature[]> {
+    return new Promise((resolve, reject) => {
+      UrbanAirshipModule.getEnabledFeatures().then((features: String[]) => {
+        var convertedFeatures: Feature[] = new Array();        
+        for (const feature of features){
+          convertedFeatures.push(convertFeatureEnum(feature));
+        }
+        resolve(convertedFeatures);
+      }), (error: Error) => {
+        reject(error);
+      };
+    });
   }
 
   /**
