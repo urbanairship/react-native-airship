@@ -351,13 +351,13 @@ RCT_REMAP_METHOD(getBadgeNumber,
 
 RCT_EXPORT_METHOD(displayMessageCenter) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAMessageCenter shared] display];
+        [[UAMessageCenter shared].defaultUI displayMessageCenterAnimated:NO];
     });
 }
 
 RCT_EXPORT_METHOD(dismissMessageCenter) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAMessageCenter shared] dismiss];
+        [[UAMessageCenter shared].defaultUI dismissMessageCenterAnimated:NO];
     });
 }
 
