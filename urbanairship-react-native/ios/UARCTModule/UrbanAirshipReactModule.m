@@ -26,6 +26,10 @@
 NSString * const UARCTErrorDomain = @"com.urbanairship.react";
 
 NSString *const UARCTStatusUnavailable = @"UNAVAILABLE";
+NSString *const UARCTStatusInvalidFeature = @"INVALID_FEATURE";
+NSString *const UARCTErrorDescriptionInvalidFeature = @"Invalid feature, cancelling the action.";
+int const UARCTErrorCodeInvalidFeature = 2;
+
 
 
 #pragma mark -
@@ -87,12 +91,81 @@ RCT_EXPORT_METHOD(enableChannelCreation) {
     [[UAirship channel] enableChannelCreation];
 }
 
-RCT_EXPORT_METHOD(setDataCollectionEnabled:(BOOL)enabled) {
-    [[UAirship shared] setDataCollectionEnabled:enabled];
+RCT_REMAP_METHOD(setEnabledFeatures,
+                 features:(NSArray *) features
+                 setEnabledFeatures_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+   
+    if ([self isValidFeature:features]) {
+        [UAirship shared].privacyManager.enabledFeatures = [self stringToFeature:features];
+        resolve(@(YES));
+    } else {
+        NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
+        NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeInvalidFeature
+                                          userInfo:@{NSLocalizedDescriptionKey:errorMessage}];
+        reject(code, errorMessage, error);
+    }
 }
 
-RCT_EXPORT_METHOD(setPushTokenRegistrationEnabled:(BOOL)enabled) {
-    [[UAirship push] setPushTokenRegistrationEnabled:enabled];
+RCT_REMAP_METHOD(getEnabledFeatures,
+                 getEnabledFeatures_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve([self featureToString:[UAirship shared].privacyManager.enabledFeatures]);
+}
+
+RCT_REMAP_METHOD(enableFeature,
+                 features:(NSArray *) features
+                 enableFeature_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    if ([self isValidFeature:features]) {
+        [[UAirship shared].privacyManager enableFeatures:[self stringToFeature:features]];
+        resolve(@(YES));
+    } else {
+        NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
+        NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeInvalidFeature
+                                          userInfo:@{NSLocalizedDescriptionKey:errorMessage}];
+        reject(code, errorMessage, error);
+    }
+}
+
+RCT_REMAP_METHOD(disableFeature,
+                 features:(NSArray *) features
+                 disableFeature_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    if ([self isValidFeature:features]) {
+        [[UAirship shared].privacyManager disableFeatures:[self stringToFeature:features]];
+        resolve(@(YES));
+    } else {
+        NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
+        NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeInvalidFeature
+                                          userInfo:@{NSLocalizedDescriptionKey:errorMessage}];
+        reject(code, errorMessage, error);
+    }
+}
+
+RCT_REMAP_METHOD(isFeatureEnabled,
+                 features:(NSArray *)features
+                 isFeatureEnabled_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    if ([self isValidFeature:features]) {
+        resolve(@([[UAirship shared].privacyManager isEnabled:[self stringToFeature:features]]));
+    } else {
+        NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
+        NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeInvalidFeature
+                                          userInfo:@{NSLocalizedDescriptionKey:errorMessage}];
+        reject(code, errorMessage, error);
+    }
 }
 
 RCT_REMAP_METHOD(isUserNotificationsEnabled,
@@ -116,20 +189,6 @@ RCT_REMAP_METHOD(enableUserPushNotifications,
     [[UAirship push] enableUserPushNotifications:^(BOOL success) {
         resolve(@(success));
     }];
-}
-
-RCT_REMAP_METHOD(isDataCollectionEnabled,
-                 isDataCollectionEnabled_resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
-
-    resolve(@([UAirship shared].isDataCollectionEnabled));
-}
-
-RCT_REMAP_METHOD(isPushTokenRegistrationEnabled,
-                 isPushTokenRegistrationEnabled_resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
-
-    resolve(@([UAirship push].pushTokenRegistrationEnabled));
 }
 
 RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {
@@ -523,6 +582,72 @@ RCT_REMAP_METHOD(getActiveNotifications,
         }
     }
     return mutations;
+}
+
+- (BOOL)isValidFeature:(NSArray *)features {
+    if (!features || [features count] == 0) {
+        return NO;
+    }
+    NSDictionary *authorizedFeatures = [self authorizedFeatures];
+
+    for (NSString *feature in features) {
+        if (![authorizedFeatures objectForKey:feature]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (UAFeatures)stringToFeature:(NSArray *)features {
+    NSDictionary *authorizedFeatures = [self authorizedFeatures];
+    
+    NSNumber* objectFeature = authorizedFeatures[[features objectAtIndex:0]];
+    UAFeatures convertedFeatures = [objectFeature longValue];
+    
+    if ([features count] > 1) {
+        int i;
+        for (i = 1; i < [features count]; i++) {
+            NSNumber* objectFeature = authorizedFeatures[[features objectAtIndex:i]];
+            convertedFeatures |= [objectFeature longValue];
+        }
+    }
+    return convertedFeatures;
+}
+
+- (NSArray *)featureToString:(UAFeatures)features {
+    NSMutableArray *convertedFeatures = [[NSMutableArray alloc] init];
+
+    NSDictionary *authorizedFeatures = [self authorizedFeatures];
+    
+    if (features == UAFeaturesAll) {
+        [convertedFeatures addObject:@"FEATURE_ALL"];
+    } else if (features == UAFeaturesNone) {
+        [convertedFeatures addObject:@"FEATURE_NONE"];
+    } else {
+        for (NSString *feature in authorizedFeatures) {
+            NSNumber *objectFeature = authorizedFeatures[feature];
+            long longFeature = [objectFeature longValue];
+            if ((longFeature & features) && (longFeature != UAFeaturesAll)) {
+                [convertedFeatures addObject:feature];
+            }
+        }
+    }
+    return convertedFeatures;
+}
+
+- (NSDictionary *)authorizedFeatures {
+    NSMutableDictionary *authorizedFeatures = [[NSMutableDictionary alloc] init];
+    [authorizedFeatures setValue:@(UAFeaturesNone) forKey:@"FEATURE_NONE"];
+    [authorizedFeatures setValue:@(UAFeaturesInAppAutomation) forKey:@"FEATURE_IN_APP_AUTOMATION"];
+    [authorizedFeatures setValue:@(UAFeaturesMessageCenter) forKey:@"FEATURE_MESSAGE_CENTER"];
+    [authorizedFeatures setValue:@(UAFeaturesPush) forKey:@"FEATURE_PUSH"];
+    [authorizedFeatures setValue:@(UAFeaturesChat) forKey:@"FEATURE_CHAT"];
+    [authorizedFeatures setValue:@(UAFeaturesAnalytics) forKey:@"FEATURE_ANALYTICS"];
+    [authorizedFeatures setValue:@(UAFeaturesTagsAndAttributes) forKey:@"FEATURE_TAGS_AND_ATTRIBUTES"];
+    [authorizedFeatures setValue:@(UAFeaturesContacts) forKey:@"FEATURE_CONTACTS"];
+    [authorizedFeatures setValue:@(UAFeaturesLocation) forKey:@"FEATURE_LOCATION"];
+    [authorizedFeatures setValue:@(UAFeaturesAll) forKey:@"FEATURE_ALL"];
+    return authorizedFeatures;
 }
 
 @end
