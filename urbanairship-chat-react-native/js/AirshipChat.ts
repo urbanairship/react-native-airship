@@ -34,6 +34,21 @@ export class Subscription {
 }
 
 /**
+ * Enum of possible message directions
+ */
+export enum MessageDirection {
+  /**
+   * The message is outgoing.
+   */
+  DirectionOutgoing = 0,
+  /**
+   * The message is incoming.
+   */
+  DirectionIncoming = 1
+}
+
+
+/**
  * Chat message object
  */
  export interface ChatMessage {
@@ -44,7 +59,7 @@ export class Subscription {
   /**
    * The message text.
    */
-  text: string;
+  text?: string;
   /**
    * The message creation date in milliseconds.
    */
@@ -52,11 +67,11 @@ export class Subscription {
   /**
    * The direction of the message (incoming = 1 or outgoing = 0)
    */
-  direction: boolean;
+  direction: MessageDirection;
   /**
    * The attachment URL.
    */
-  attachmentUrl: string;
+  attachmentUrl?: string;
   /**
    * The pending status.
    */
@@ -68,6 +83,7 @@ export class Subscription {
  */
 export class AirshipChat {
   static openChat() {
+    console.log("coucou");
     AirshipChatModule.openChat();
   }
 

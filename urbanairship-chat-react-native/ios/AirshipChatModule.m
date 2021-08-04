@@ -30,7 +30,8 @@ RCT_REMAP_METHOD(getMessages,
             NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
             [messageInfo setValue:message.messageID forKey:@"messageId"];
             [messageInfo setValue:message.text forKey:@"text"];
-            [messageInfo setValue:message.timestamp forKey:@"createdOn"];
+            double timestamp = message.timestamp.timeIntervalSince1970 * 1000.0;
+            [messageInfo setValue:[NSNumber numberWithDouble:timestamp] forKey:@"createdOn"];
             if (message.direction == UAChatMessageDirectionOutgoing) {
                 [messageInfo setValue:[NSNumber numberWithInt:0] forKey:@"direction"];
             } else {

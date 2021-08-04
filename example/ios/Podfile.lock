@@ -1,23 +1,23 @@
 PODS:
-  - Airship (14.5.1):
-    - Airship/Automation (= 14.5.1)
-    - Airship/Core (= 14.5.1)
-    - Airship/ExtendedActions (= 14.5.1)
-    - Airship/MessageCenter (= 14.5.1)
-  - Airship/Accengage (14.5.1):
+  - Airship (14.5.2):
+    - Airship/Automation (= 14.5.2)
+    - Airship/Core (= 14.5.2)
+    - Airship/ExtendedActions (= 14.5.2)
+    - Airship/MessageCenter (= 14.5.2)
+  - Airship/Accengage (14.5.2):
     - Airship/Core
-  - Airship/Automation (14.5.1):
+  - Airship/Automation (14.5.2):
     - Airship/Core
-  - Airship/Chat (14.5.1):
+  - Airship/Chat (14.5.2):
     - Airship/Core
-  - Airship/Core (14.5.1)
-  - Airship/ExtendedActions (14.5.1):
+  - Airship/Core (14.5.2)
+  - Airship/ExtendedActions (14.5.2):
     - Airship/Core
-  - Airship/Location (14.5.1):
+  - Airship/Location (14.5.2):
     - Airship/Core
-  - Airship/MessageCenter (14.5.1):
+  - Airship/MessageCenter (14.5.2):
     - Airship/Core
-  - AirshipExtensions/NotificationService (14.5.1)
+  - AirshipExtensions/NotificationService (14.5.2)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.64.0)
@@ -297,22 +297,22 @@ PODS:
   - RNScreens (2.18.1):
     - React-Core
   - urbanairship-accengage-react-native (11.0.2):
-    - Airship/Accengage (= 14.5.1)
+    - Airship/Accengage (= 14.5.2)
     - React-Core
   - urbanairship-chat-react-native (11.0.2):
-    - Airship/Chat (= 14.5.1)
+    - Airship/Chat (= 14.5.2)
     - React-Core
     - urbanairship-react-native (= 11.0.2)
   - urbanairship-location-react-native (11.0.2):
-    - Airship/Location (= 14.5.1)
+    - Airship/Location (= 14.5.2)
     - React-Core
   - urbanairship-react-native (11.0.2):
-    - Airship (= 14.5.1)
+    - Airship (= 14.5.2)
     - React-Core
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - AirshipExtensions/NotificationService (~> 14.5.1)
+  - AirshipExtensions/NotificationService (~> 14.5.2)
   - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../../node_modules/react-native/React/FBReactNativeSpec`)
@@ -436,8 +436,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 8aafab3ca796aca500ec3199e7afb0d721da5231
-  AirshipExtensions: 3dbf2aeb9e3d36245e68321058b8097d2a0551a0
+  Airship: 1ff11c5cb093d66aef7fb0c8163ad364ee199f1c
+  AirshipExtensions: 0393b6bf0c2254cb4fbf316ac8ea43afb9589b4a
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
@@ -471,12 +471,12 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  urbanairship-accengage-react-native: cf92665491cda71e0568c6e7e0cb02a72bd6242b
-  urbanairship-chat-react-native: 24d0688f1b1e3f137ae8b387a4e5819bae284266
-  urbanairship-location-react-native: bf510559bef843ad9db6d0d697282368626148f6
-  urbanairship-react-native: 81703a402d79742a8595adce125c8160ca5eb4dd
+  urbanairship-accengage-react-native: a0ad52b3c2f23c8e534aa2b176e1157e4f3c2e44
+  urbanairship-chat-react-native: a31c726c210238ec6e545382d1d12e5f162eca5c
+  urbanairship-location-react-native: 869b824df5268c1141d3e0bb62efd697ec0405e8
+  urbanairship-react-native: fb41758c99d549d5e1227ce2d81001ec5a3f5a94
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
-PODFILE CHECKSUM: 42d6853d5b3b5d38353be9eb4519a6359f0c0ad6
+PODFILE CHECKSUM: 6b8d2868ffd14748e3ff7620bc05ca108801d3dc
 
 COCOAPODS: 1.10.1

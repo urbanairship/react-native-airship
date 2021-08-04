@@ -12,7 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		A22F0FD2269DF49E00420384 /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = A22F0FD1269DF49E00420384 /* AirshipConfig.plist */; };
-		A2D1BC112696ED2400892DA6 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D1BC102696ED2400892DA6 /* File.swift */; };
+		A26BED8026BAEBC300FF7913 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26BED7F26BAEBC300FF7913 /* File.swift */; };
 		A9C13570551938B980BB2DE1 /* libPods-AirshipSample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FD338DD90FAFE0A166ED0C0 /* libPods-AirshipSample.a */; };
 		DF2D804A65D33CB942DBF847 /* libPods-ServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E992C77E3677D013BDACBD /* libPods-ServiceExtension.a */; };
 		DFB0AED82343BCC80093B5A1 /* ServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DFCB3AB82342C6470022A756 /* ServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -56,7 +56,7 @@
 		5FD338DD90FAFE0A166ED0C0 /* libPods-AirshipSample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirshipSample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D3C07FB200BCFA45B9BFA8C /* Pods-AirshipSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample.debug.xcconfig"; path = "Target Support Files/Pods-AirshipSample/Pods-AirshipSample.debug.xcconfig"; sourceTree = "<group>"; };
 		A22F0FD1269DF49E00420384 /* AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
-		A2D1BC102696ED2400892DA6 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = File.swift; path = AirshipSample/File.swift; sourceTree = SOURCE_ROOT; };
+		A26BED7F26BAEBC300FF7913 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = File.swift; path = AirshipSample/File.swift; sourceTree = "<group>"; };
 		A2F856752695EC600091E9F3 /* AirshipSample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AirshipSample-Bridging-Header.h"; path = "AirshipSample/AirshipSample-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		CD995EA4D40FC2DC8368FD84 /* Pods-AirshipSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipSample.release.xcconfig"; path = "Target Support Files/Pods-AirshipSample/Pods-AirshipSample.release.xcconfig"; sourceTree = "<group>"; };
 		DFB0AEE62343CF1E0093B5A1 /* ServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ServiceExtension.entitlements; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				A2D1BC102696ED2400892DA6 /* File.swift */,
+				A26BED7F26BAEBC300FF7913 /* File.swift */,
 			);
 			name = AirshipSample;
 			sourceTree = "<group>";
@@ -390,7 +390,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				A2D1BC112696ED2400892DA6 /* File.swift in Sources */,
+				A26BED8026BAEBC300FF7913 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

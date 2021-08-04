@@ -59,6 +59,9 @@ export default class SettingsScreen extends Component {
     this.handleRenderNamedUser = this.handleRenderNamedUser.bind(this);
     this.handleMessageCenterDisplay = this.handleMessageCenterDisplay.bind(this);
 
+    this.handleMessageSet = this.handleMessageSet.bind(this);
+    this.handleUpdateMessage = this.handleUpdateMessage.bind(this);
+
     this.handleUpdateTagsList();
     this.handleUpdateNamedUser();
   }
@@ -103,6 +106,15 @@ export default class SettingsScreen extends Component {
     this.setState({ namedUserText: text })
   }
 
+  handleMessageSet(text) {
+    AirshipChat.sendMessage(text);
+    this.setState({ messageText: "" })
+  }
+
+  handleUpdateMessage(text) {
+    this.setState({ messageText: text })
+  }
+
   handleUpdateTagsList() {
     UrbanAirship.getTags().then((data) => {
       this.setState({
@@ -128,10 +140,6 @@ export default class SettingsScreen extends Component {
 
   handleMessageCenterDisplay() {
     UrbanAirship.displayMessageCenter();
-  }
-
-  sendMessage() {
-    AirshipChat.sendMessage("Hello, it's Jimmy Badger");
   }
 
   addListener() {
@@ -220,6 +228,11 @@ export default class SettingsScreen extends Component {
             handleTagRemove={this.handleTagRemove}
             handleUpdateTagText={this.handleUpdateTagText}
           />
+          <MessageInputCell
+            messageText={this.state.messageText}
+            handleMessageSet={this.handleMessageSet}
+            handleUpdateMessage={this.handleUpdateMessage}
+          />
           <EnableLocationCell
             locationEnabled={this.state.locationEnabled}
             handleLocationEnabled={this.handleLocationEnabled}
@@ -233,11 +246,6 @@ export default class SettingsScreen extends Component {
             color='#0d6a83'
             onPress={() => this.openChat()}
             title="Open chat"
-          />
-          <Button
-            color='#0d6a83'
-            onPress={() => this.sendMessage()}
-            title="Send Message Hello it's Jimmy"
           />
           <Button
             color='#0d6a83'
@@ -384,6 +392,30 @@ class TagInputCell extends Component {
             color='#0d6a83'
             onPress={() => this.props.handleTagAdd(this.props.tagText || '')}
             title="Add Tag"
+          />
+        </View>
+      </View>
+    );
+  }
+}
+
+class MessageInputCell extends Component {
+  render() {
+    return (
+      <View style={styles.miniCellContainer}>
+        <TextInput
+          style={styles.textInput}
+          autoCorrect={false}
+          autoCapitalize={'none'}
+          onSubmitEditing={(event) => this.props.handleMessageSet(this.props.messageText)}
+          onChangeText={(text) => this.props.handleUpdateMessage(text)}
+          value={this.props.messageText}
+        />
+        <View style={styles.inputButton}>
+          <Button
+            color='#0d6a83'
+            onPress={() => this.props.handleMessageSet(this.props.messageText)}
+            title="Send Chat Message"
           />
         </View>
       </View>
