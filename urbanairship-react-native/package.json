@@ -24,7 +24,7 @@
     "eslint": "^6.5.1",
     "jest": "^25.1.0",
     "react": "17.0.1",
-    "react-native": "0.64.0",
+    "react-native": "0.64.1",
     "ts-jest": "^26.0.1",
     "typedoc": "^0.17.7",
     "typescript": "^3.9.5"
