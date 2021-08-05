@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.dependency "React-Core"
   s.dependency "Airship/Chat", "14.5.2"
-  s.dependency "urbanairship-react-native", "11.0.2"
+  s.dependency "urbanairship-react-native", "12.0.0"
 
 end
 

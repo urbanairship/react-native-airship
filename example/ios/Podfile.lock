@@ -441,7 +441,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: e14effdeddf56213637f24d33948c06c86980186
+  FBReactNativeSpec: 7c6d712cdaaf4e87575f8c2700d676f0bcbda9bc
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
@@ -471,10 +471,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  urbanairship-accengage-react-native: a0ad52b3c2f23c8e534aa2b176e1157e4f3c2e44
-  urbanairship-chat-react-native: a31c726c210238ec6e545382d1d12e5f162eca5c
-  urbanairship-location-react-native: 869b824df5268c1141d3e0bb62efd697ec0405e8
-  urbanairship-react-native: fb41758c99d549d5e1227ce2d81001ec5a3f5a94
+  urbanairship-accengage-react-native: ce912fc10bf6eb4b43390b50c0825522aada4698
+  urbanairship-chat-react-native: 6a538257e362ddb441c0356672efd93e61bd4500
+  urbanairship-location-react-native: 0453828efd95071c1c90235ac9d639830214b804
+  urbanairship-react-native: 07bcb5d9ed100db56a95332236d1a3418d647c46
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
 PODFILE CHECKSUM: 6b8d2868ffd14748e3ff7620bc05ca108801d3dc
