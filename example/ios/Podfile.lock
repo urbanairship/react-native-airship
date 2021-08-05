@@ -296,17 +296,17 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - urbanairship-accengage-react-native (11.0.2):
+  - urbanairship-accengage-react-native (12.0.0):
     - Airship/Accengage (= 14.5.2)
     - React-Core
-  - urbanairship-chat-react-native (11.0.2):
+  - urbanairship-chat-react-native (12.0.0):
     - Airship/Chat (= 14.5.2)
     - React-Core
-    - urbanairship-react-native (= 11.0.2)
-  - urbanairship-location-react-native (11.0.2):
+    - urbanairship-react-native (= 12.0.0)
+  - urbanairship-location-react-native (12.0.0):
     - Airship/Location (= 14.5.2)
     - React-Core
-  - urbanairship-react-native (11.0.2):
+  - urbanairship-react-native (12.0.0):
     - Airship (= 14.5.2)
     - React-Core
   - Yoga (1.14.0)
@@ -441,7 +441,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: 7c6d712cdaaf4e87575f8c2700d676f0bcbda9bc
+  FBReactNativeSpec: e14effdeddf56213637f24d33948c06c86980186
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a

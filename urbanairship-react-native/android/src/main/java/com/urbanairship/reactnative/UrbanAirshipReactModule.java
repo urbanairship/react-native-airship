@@ -26,7 +26,9 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.urbanairship.PrivacyManager;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
 import com.urbanairship.actions.ActionCompletionCallback;
@@ -43,9 +45,12 @@ import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.util.UAStringUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
 import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
@@ -85,6 +90,23 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
     static final String CLOSE_MESSAGE_CENTER = "CLOSE";
+
+    private static final String INVALID_FEATURE_ERROR_CODE = "INVALID_FEATURE";
+    private static final String INVALID_FEATURE_ERROR_MESSAGE = "Invalid feature, cancelling the action.";
+
+    private static final Map<String, Integer> authorizedFeatures = new HashMap<>();
+    static {
+        authorizedFeatures.put("FEATURE_NONE", PrivacyManager.FEATURE_NONE);
+        authorizedFeatures.put("FEATURE_IN_APP_AUTOMATION", PrivacyManager.FEATURE_IN_APP_AUTOMATION);
+        authorizedFeatures.put("FEATURE_MESSAGE_CENTER", PrivacyManager.FEATURE_MESSAGE_CENTER);
+        authorizedFeatures.put("FEATURE_PUSH", PrivacyManager.FEATURE_PUSH);
+        authorizedFeatures.put("FEATURE_CHAT", PrivacyManager.FEATURE_CHAT);
+        authorizedFeatures.put("FEATURE_ANALYTICS", PrivacyManager.FEATURE_ANALYTICS);
+        authorizedFeatures.put("FEATURE_TAGS_AND_ATTRIBUTES", PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES);
+        authorizedFeatures.put("FEATURE_CONTACTS", PrivacyManager.FEATURE_CONTACTS);
+        authorizedFeatures.put("FEATURE_LOCATION", PrivacyManager.FEATURE_LOCATION);
+        authorizedFeatures.put("FEATURE_ALL", PrivacyManager.FEATURE_ALL);
+    }
 
     /**
      * Default constructor.
@@ -187,43 +209,78 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Enables/disables data collection.
+     * Sets the current enabled features.
      *
-     * @param enabled {@code true} to allow data collection., {@code false} to disallow.
+     * @param features The features to set as enabled.
+     * @param promise  The promise.
      */
     @ReactMethod
-    public void setDataCollectionEnabled(boolean enabled) {
-        UAirship.shared().setDataCollectionEnabled(enabled);
+    public void setEnabledFeatures(ReadableArray features, Promise promise) {
+        if (isValidFeature(features)) {
+            UAirship.shared().getPrivacyManager().setEnabledFeatures(stringToFeature(features));
+            promise.resolve(true);
+        } else {
+            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE);
+        }
     }
 
     /**
-     * Checks if data collection is enabled.
+     * Gets the current enabled features.
      *
-     * @param promise The JS promise.
+     * @param promise  The promise.
+     * @return The enabled features.
      */
     @ReactMethod
-    public void isDataCollectionEnabled(Promise promise) {
-        promise.resolve(UAirship.shared().isDataCollectionEnabled());
+    public void getEnabledFeatures(Promise promise) {
+        promise.resolve(featureToString(UAirship.shared().getPrivacyManager().getEnabledFeatures()));
     }
 
     /**
-     * Enables/disables push token registration.
+     * Enables features.
      *
-     * @param enabled {@code true} to allow push token registration., {@code false} to disallow.
+     * @param features The features to enable.
+     * @param promise  The promise.
      */
     @ReactMethod
-    public void setPushTokenRegistrationEnabled(boolean enabled) {
-        UAirship.shared().getPushManager().setPushTokenRegistrationEnabled(enabled);
+    public void enableFeature(ReadableArray features, Promise promise) {
+        if (isValidFeature(features)) {
+            UAirship.shared().getPrivacyManager().enable(stringToFeature(features));
+            promise.resolve(true);
+        } else {
+            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE);
+        }
     }
 
     /**
-     * Checks if push token registration is enabled.
+     * Disables features.
      *
-     * @param promise The JS promise.
+     * @param features The features to disable.
+     * @param promise  The promise.
      */
     @ReactMethod
-    public void isPushTokenRegistrationEnabled(Promise promise) {
-        promise.resolve(UAirship.shared().getPushManager().isPushTokenRegistrationEnabled());
+    public void disableFeature(ReadableArray features, Promise promise) {
+        if (isValidFeature(features)) {
+            UAirship.shared().getPrivacyManager().disable(stringToFeature(features));
+            promise.resolve(true);
+        } else {
+            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Checks if a given feature is enabled.
+     *
+     * @param features The features to check.
+     * @param promise  The promise.
+     * @return {@code true} if the provided features are enabled, otherwise {@code false}.
+     */
+    @ReactMethod
+    public void isFeatureEnabled(ReadableArray features, Promise promise) {
+        if (isValidFeature(features)) {
+            promise.resolve(UAirship.shared().getPrivacyManager().isEnabled(stringToFeature(features)));
+        } else {
+            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -834,6 +891,69 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             Event optInEvent = new NotificationOptInEvent(optIn);
             EventEmitter.shared().sendEvent(optInEvent);
         }
+    }
+
+    /**
+     * Helper method to verify if a Feature is authorized.
+     * @param features The String features to verify.
+     * @return {@code true} if the provided features are authorized, otherwise {@code false}.
+     */
+    private boolean isValidFeature(ReadableArray features) {
+        if (features == null || features.size() == 0) {
+            return false;
+        }
+
+        for (int i = 0; i < features.size(); i++) {
+            if (!authorizedFeatures.containsKey(features.getString(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Helper method to parse a String features array into {@link PrivacyManager.Feature} int array.
+     * @param features The String features to parse.
+     * @return The {@link PrivacyManager.Feature} int array.
+     */
+    @PrivacyManager.Feature
+    private @NonNull int[] stringToFeature(@NonNull ReadableArray features) {
+        @PrivacyManager.Feature
+        int[] intFeatures = new int[features.size()];
+
+        for (int i = 0; i < features.size(); i++) {
+            intFeatures[i] = (int) authorizedFeatures.get(features.getString(i));
+        }
+        return intFeatures;
+    }
+
+    /**
+     * Helper method to parse a {@link PrivacyManager.Feature} int array into a String features WritableNativeArray.
+     * @param features The {@link PrivacyManager.Feature} int array to parse.
+     * @return The String feature WritableNativeArray.
+     */
+    private @NonNull WritableNativeArray featureToString(@PrivacyManager.Feature int features) {
+        List<String> stringFeatures = new ArrayList<>();
+
+        if (features == PrivacyManager.FEATURE_ALL) {
+            stringFeatures.add("FEATURE_ALL");
+        } else if (features == PrivacyManager.FEATURE_NONE) {
+            stringFeatures.add("FEATURE_NONE");
+        } else {
+            for (String feature : authorizedFeatures.keySet()) {
+                @PrivacyManager.Feature
+                int intFeature = (int) authorizedFeatures.get(feature);
+                if (((intFeature & features) != 0) && (intFeature != PrivacyManager.FEATURE_ALL)) {
+                    stringFeatures.add(feature);
+                }
+            }
+        }
+
+        WritableNativeArray array = new WritableNativeArray();
+        for (String feature : stringFeatures) {
+            array.pushString(feature);
+        }
+        return array;
     }
 
 }

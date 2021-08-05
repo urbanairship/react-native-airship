@@ -327,6 +327,32 @@ function convertEventEnum(type: EventType): string {
   throw new Error("Invalid event name: " + type);
 }
 
+function convertFeatureEnum(feature: String): Feature {
+  if (feature == "FEATURE_NONE") {
+    return Feature.FEATURE_NONE
+  } else if (feature == "FEATURE_IN_APP_AUTOMATION") {
+    return Feature.FEATURE_IN_APP_AUTOMATION
+  } else if (feature == "FEATURE_MESSAGE_CENTER") {
+    return Feature.FEATURE_MESSAGE_CENTER
+  } else if (feature == "FEATURE_PUSH") {
+    return Feature.FEATURE_PUSH
+  } else if (feature == "FEATURE_CHAT") {
+    return Feature.FEATURE_CHAT
+  } else if (feature == "FEATURE_ANALYTICS") {
+    return Feature.FEATURE_ANALYTICS
+  } else if (feature == "FEATURE_TAGS_AND_ATTRIBUTES") {
+    return Feature.FEATURE_TAGS_AND_ATTRIBUTES
+  } else if (feature == "FEATURE_CONTACTS") {
+    return Feature.FEATURE_CONTACTS
+  } else if (feature == "FEATURE_LOCATION") {
+    return Feature.FEATURE_LOCATION
+  } else if (feature == "FEATURE_ALL") {
+    return Feature.FEATURE_ALL
+  }
+
+  throw new Error("Invalid feature name: " + feature);
+}
+
 /**
  * Android notification config.
  */
@@ -343,6 +369,22 @@ export interface NotificationConfigAndroid {
    * The default android notification channel ID.
    */
   defaultChannelId?: string;
+}
+
+/**
+ * Enum of authorized Features.
+ */
+export enum Feature {
+  FEATURE_NONE = "FEATURE_NONE",
+  FEATURE_IN_APP_AUTOMATION = "FEATURE_IN_APP_AUTOMATION",
+  FEATURE_MESSAGE_CENTER = "FEATURE_MESSAGE_CENTER",
+  FEATURE_PUSH = "FEATURE_PUSH",
+  FEATURE_CHAT = "FEATURE_CHAT",
+  FEATURE_ANALYTICS = "FEATURE_ANALYTICS",
+  FEATURE_TAGS_AND_ATTRIBUTES = "FEATURE_TAGS_AND_ATTRIBUTES",
+  FEATURE_CONTACTS = "FEATURE_CONTACTS",
+  FEATURE_LOCATION = "FEATURE_LOCATION",
+  FEATURE_ALL = "FEATURE_ALL"
 }
 
 /**
@@ -378,47 +420,64 @@ export class UrbanAirship {
   }
 
   /**
-   * Global data collection flag. Enabled by default, unless `dataCollectionOptInEnabled`
-   * is set to `YES` in AirshipConfig.plist on iOS, and `true` in airshipconfig.properties on Android.
-   * When disabled, the device will stop collecting and sending data for named user, events,
-   * tags, attributes, associated identifiers, and location from the device.
+   * Sets the SDK features that will be enabled. The rest of the features will be disabled.
+   * 
+   * If all features are disabled the SDK will not make any network requests or collect data.
    *
-   * Push notifications will continue to work only if `UrbanAirship.setPushTokenRegistrationEnabled`
-   * has been explicitly set to `true`, otherwise it will default to the current state of `isDataCollectionEnabled`.
-   *
-   * @note To disable by default, set the `dataCollectionOptInEnabled` flag to `YES` in AirshipConfig.plist on iOS, and `true` in airshipconfig.properties on Android.
-   * @param enabled true to enable data collection, false to disable.
+   * @note All features are enabled by default.
+   * @param feature An array of `Features` to enable.
+   * @return A promise that returns true if the enablement was authorized.
    */
-  static setDataCollectionEnabled(enabled: boolean) {
-    UrbanAirshipModule.setDataCollectionEnabled(enabled);
+  static setEnabledFeatures(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.setEnabledFeatures(features);
   }
 
   /**
-   * Checks if data collection is enabled or not.
-   *
-   * @return A promise with the result.
+   * Gets a Feature array with the enabled features.
+   * 
+   * @return A promise that returns the enabled features as a Feature array.
    */
-  static isDataCollectionEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isDataCollectionEnabled();
+  static getEnabledFeatures(): Promise<Feature[]> {
+    return new Promise((resolve, reject) => {
+      UrbanAirshipModule.getEnabledFeatures().then((features: String[]) => {
+        var convertedFeatures: Feature[] = new Array();        
+        for (const feature of features){
+          convertedFeatures.push(convertFeatureEnum(feature));
+        }
+        resolve(convertedFeatures);
+      }), (error: Error) => {
+        reject(error);
+      };
+    });
   }
 
   /**
-   * Enables/disables sending the device token during channel registration.
-   * Defaults to `UrbanAirship.isDataCollectionEnabled`. If set to `false`, the app will not be able to receive push
-   * notifications.
-   * @param enabled true to enable push token registration, false to disable.
+   * Enables one or many features.
+   *
+   * @param feature An array of `Feature` to enable.
+   * @return A promise that returns true if the enablement was authorized.
    */
-  static setPushTokenRegistrationEnabled(enabled: boolean) {
-    UrbanAirshipModule.setPushTokenRegistrationEnabled(enabled);
+  static enableFeature(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.enableFeature(features);
   }
 
   /**
-   * Checks if push token registration is enabled or not.
+   * Disables one or many features.
    *
-   * @return A promise with the result.
+   * @param feature An array of `Feature` to disable.
+   * @return A promise that returns true if the disablement was authorized.
    */
-  static isPushTokenRegistrationEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isPushTokenRegistrationEnabled();
+  static disableFeature(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.disableFeature(features);
+  }
+
+  /**
+   * Checks if a given feature is enabled or not.
+   *
+   * @return A promise that returns true if the features are enabled, false otherwise.
+   */
+  static isFeatureEnabled(features: Feature[]): Promise<boolean> {
+    return UrbanAirshipModule.isFeatureEnabled(features);
   }
 
   /**
