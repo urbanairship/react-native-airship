@@ -185,6 +185,10 @@ export default class SettingsScreen extends Component {
 
       AirshipChat.addConversationListener( (body) => {
         console.log("Conversation updated, messages count : " + body);
+      }),
+
+      AirshipChat.addChatOpenListener( (body) => {
+        console.log("Chat opened : " + body);
       })
     ];
   }
