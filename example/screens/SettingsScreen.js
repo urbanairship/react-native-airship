@@ -142,13 +142,6 @@ export default class SettingsScreen extends Component {
     UrbanAirship.displayMessageCenter();
   }
 
-  addListener() {
-    console.log("Adding listener")
-    AirshipChat.addConversationListener( (body) => {
-      console.log("Conversation updated, messages count : " + body);
-    })
-  }
-
   openChat() {
     AirshipChat.openChat();
   }
@@ -188,6 +181,10 @@ export default class SettingsScreen extends Component {
 
       UrbanAirship.addListener("notificationOptInStatus", (event) => {
         console.log('notificationOptInStatus:', JSON.stringify(event));
+      }),
+
+      AirshipChat.addConversationListener( (body) => {
+        console.log("Conversation updated, messages count : " + body);
       })
     ];
   }
@@ -246,11 +243,6 @@ export default class SettingsScreen extends Component {
             color='#0d6a83'
             onPress={() => this.openChat()}
             title="Open chat"
-          />
-          <Button
-            color='#0d6a83'
-            onPress={() => this.addListener()}
-            title="Add Listener"
           />
         </ScrollView>
       </View>
