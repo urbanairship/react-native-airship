@@ -1,7 +1,10 @@
 #import "AirshipChatModule.h"
 #import "ConversationUpdatedDelegate.h"
+#import "OpenChatDelegate.h"
 @import Airship;
 @implementation AirshipChatModule
+
+bool useCustomChatUI;
 
 RCT_EXPORT_MODULE()
 
@@ -46,6 +49,14 @@ RCT_REMAP_METHOD(getMessages,
 
 RCT_EXPORT_METHOD(addConversationListener) {
     [UAirshipChat shared].conversation.delegate = [ConversationUpdatedDelegate shared];
+}
+
+RCT_EXPORT_METHOD(addOpenChatListener) {
+    [UAirshipChat shared].openChatDelegate = [OpenChatDelegate shared];
+}
+
+RCT_EXPORT_METHOD(setUseCustomChatUI:(bool *)useCustomUI) {
+    useCustomChatUI = useCustomUI;
 }
 
 @end

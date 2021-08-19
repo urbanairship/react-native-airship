@@ -16,6 +16,7 @@ NSString *const UARCTOptInStatusChangedEventName = @"com.urbanairship.notificati
 NSString *const UARCTInboxUpdatedEventName = @"com.urbanairship.inbox_updated";
 NSString *const UARCTShowInboxEventName = @"com.urbanairship.show_inbox";
 NSString *const UARCTConversationUpdatedEventName = @"com.urbanairship.conversation_updated";
+NSString *const UARCTOpenChatEventName = @"com.urbanairship.open_chat";
 
 NSString *const UARCTNotificationPresentationAlertKey = @"alert";
 NSString *const UARCTNotificationPresentationBadgeKey = @"badge";
@@ -229,6 +230,13 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (void)conversationUpdated {
     [self sendEventWithName:UARCTConversationUpdatedEventName];
+}
+
+- (void)openChat:(NSString *)message {
+    NSMutableDictionary *body = [NSMutableDictionary dictionary];
+    [body setValue:message forKey:@"message"];
+    
+    [self sendEventWithName:UARCTOpenChatEventName body:body];
 }
 
 #pragma mark -

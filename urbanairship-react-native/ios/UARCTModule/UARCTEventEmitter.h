@@ -47,6 +47,12 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 - (void)conversationUpdated;
 
 /**
+ * Sends an open chat event
+ * @param message The message
+ */
+- (void)openChat:(NSString *)message;
+
+/**
  * Sends an show inbox message event.
  * @param messageID The message ID.
  */

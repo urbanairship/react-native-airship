@@ -29,6 +29,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.urbanairship.chat.ConversationListener;
 import com.urbanairship.reactnative.Event;
 import com.urbanairship.reactnative.chat.events.ConversationUpdatedEvent;
+import com.urbanairship.reactnative.chat.events.OpenChatEvent;
 import com.urbanairship.util.HelperActivity;
 import com.urbanairship.reactnative.EventEmitter;
 
@@ -40,6 +41,7 @@ public class AirshipChatModule extends ReactContextBaseJavaModule {
     private final ReactApplicationContext reactContext;
     List<ChatMessage> messagesList = new ArrayList<>();
     WritableArray messagesArray;
+    boolean useCustomChatUI;
 
     public AirshipChatModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -49,6 +51,23 @@ public class AirshipChatModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "AirshipChatModule";
+    }
+
+    @ReactMethod
+    public void addOpenChatListener() {
+        Chat.shared().setOpenChatListener(new Chat.OnShowChatListener() {
+            @Override
+            public boolean onOpenChat(String message) {
+                Event event = new OpenChatEvent(message);
+                EventEmitter.shared().sendEvent(event);
+                return !useCustomChatUI;
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setUseCustomChatUI(boolean useCustomUI) {
+        useCustomChatUI = useCustomUI;
     }
 
     @ReactMethod

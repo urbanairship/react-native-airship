@@ -82,8 +82,11 @@ export enum MessageDirection {
  * The Airship Chat API.
  */
 export class AirshipChat {
+  static connect() {
+    AirshipChatModule.connect();
+  }
+
   static openChat() {
-    console.log("coucou");
     AirshipChatModule.openChat();
   }
 
@@ -104,5 +107,16 @@ export class AirshipChat {
     return new Subscription(() => {
       EventEmitter.removeListener("com.urbanairship.conversation_updated", listener);
     });
+  }
+
+  static addChatOpenListener(listener: (...args: any[]) => any): Subscription {
+    EventEmitter.addListener("com.urbanairship.open_chat", listener);
+    return new Subscription(() => {
+      EventEmitter.removeListener("com.urbanairship.open_chat", listener);
+    });
+  }
+
+  static setUseCustomChatUI(useCustomUI: boolean) {
+    AirshipChatModule.setUseCustomChatUI(useCustomUI);
   }
 }
