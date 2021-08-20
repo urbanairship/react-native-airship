@@ -8,6 +8,14 @@ bool useCustomChatUI;
 
 RCT_EXPORT_MODULE()
 
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        [UAirshipChat shared].openChatDelegate = [OpenChatDelegate shared];
+    }
+    return self;
+}
+
 RCT_EXPORT_METHOD(openChat) {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [[UAirshipChat shared] openChat];
@@ -49,10 +57,6 @@ RCT_REMAP_METHOD(getMessages,
 
 RCT_EXPORT_METHOD(addConversationListener) {
     [UAirshipChat shared].conversation.delegate = [ConversationUpdatedDelegate shared];
-}
-
-RCT_EXPORT_METHOD(addOpenChatListener) {
-    [UAirshipChat shared].openChatDelegate = [OpenChatDelegate shared];
 }
 
 RCT_EXPORT_METHOD(setUseCustomChatUI:(bool *)useCustomUI) {

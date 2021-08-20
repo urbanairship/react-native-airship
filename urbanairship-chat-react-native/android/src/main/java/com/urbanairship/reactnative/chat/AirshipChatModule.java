@@ -46,6 +46,7 @@ public class AirshipChatModule extends ReactContextBaseJavaModule {
     public AirshipChatModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        addOpenChatListener();
     }
 
     @Override
@@ -54,13 +55,17 @@ public class AirshipChatModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void addOpenChatListener() {
+    private void addOpenChatListener() {
         Chat.shared().setOpenChatListener(new Chat.OnShowChatListener() {
             @Override
             public boolean onOpenChat(String message) {
-                Event event = new OpenChatEvent(message);
-                EventEmitter.shared().sendEvent(event);
-                return !useCustomChatUI;
+                if (useCustomChatUI) {
+                    Event event = new OpenChatEvent(message);
+                    EventEmitter.shared().sendEvent(event);
+                    return true;
+                } else {
+                    return false;
+                }
             }
         });
     }
