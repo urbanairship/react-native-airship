@@ -1,66 +1,106 @@
 #import "AirshipChatModule.h"
-#import "ConversationUpdatedDelegate.h"
-#import "OpenChatDelegate.h"
-@import Airship;
-@implementation AirshipChatModule
+#import "UARCTEventEmitter.h"
 
-bool useCustomChatUI;
+@import Airship;
+
+static NSString * const AirshipChatModuleCustomUIKey = @"com.urbanairship.react.chat.custom_ui";
+
+
+@implementation AirshipChatModule
 
 RCT_EXPORT_MODULE()
 
 - (instancetype)init{
     self = [super init];
     if (self) {
-        [UAirshipChat shared].openChatDelegate = [OpenChatDelegate shared];
+        if (@available(iOS 13.0, *)) {
+            [UAirshipChat shared].conversation.delegate = self;
+            [self updateOpenChatDelegate];
+        }
     }
     return self;
 }
 
 RCT_EXPORT_METHOD(openChat) {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [[UAirshipChat shared] openChat];
+        if (@available(iOS 13.0, *)) {
+            [[UAirshipChat shared] openChat];
+        }
     }];
 }
 
 RCT_EXPORT_METHOD(sendMessage:(NSString *)message) {
-    [[UAirshipChat shared].conversation sendMessage:message];
+    if (@available(iOS 13.0, *)) {
+        [[UAirshipChat shared].conversation sendMessage:message];
+    }
 }
 
 RCT_EXPORT_METHOD(sendMessageWithAttachment:(NSString *)message
                   :(NSURL *)attachmentUrl) {
-    [[UAirshipChat shared].conversation sendMessage:message attachment:attachmentUrl];
+    if (@available(iOS 13.0, *)) {
+        [[UAirshipChat shared].conversation sendMessage:message attachment:attachmentUrl];
+    }
 }
 
 RCT_REMAP_METHOD(getMessages,
                  getMessages_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    [[UAirshipChat shared].conversation fetchMessagesWithCompletionHandler:^(NSArray<UAChatMessage *> *messages) {
-        NSMutableArray *mutableMessages = [messages mutableCopy];
-        for (UAChatMessage *message in messages) {
-            NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
-            [messageInfo setValue:message.messageID forKey:@"messageId"];
-            [messageInfo setValue:message.text forKey:@"text"];
-            double timestamp = message.timestamp.timeIntervalSince1970 * 1000.0;
-            [messageInfo setValue:[NSNumber numberWithDouble:timestamp] forKey:@"createdOn"];
-            if (message.direction == UAChatMessageDirectionOutgoing) {
-                [messageInfo setValue:[NSNumber numberWithInt:0] forKey:@"direction"];
-            } else {
-                [messageInfo setValue:[NSNumber numberWithInt:1] forKey:@"direction"];
+    if (@available(iOS 13.0, *)) {
+        [[UAirshipChat shared].conversation fetchMessagesWithCompletionHandler:^(NSArray<UAChatMessage *> *messages) {
+            NSMutableArray *mutableMessages = [messages mutableCopy];
+            for (UAChatMessage *message in messages) {
+                NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
+                [messageInfo setValue:message.messageID forKey:@"messageId"];
+                [messageInfo setValue:message.text forKey:@"text"];
+                double timestamp = message.timestamp.timeIntervalSince1970 * 1000.0;
+                [messageInfo setValue:[NSNumber numberWithDouble:timestamp] forKey:@"createdOn"];
+                if (message.direction == UAChatMessageDirectionOutgoing) {
+                    [messageInfo setValue:[NSNumber numberWithInt:0] forKey:@"direction"];
+                } else {
+                    [messageInfo setValue:[NSNumber numberWithInt:1] forKey:@"direction"];
+                }
+                [messageInfo setValue:@(message.isDelivered) forKey:@"delivered"];
+                [mutableMessages addObject:messageInfo];
             }
-            [messageInfo setValue:@(message.isDelivered) forKey:@"delivered"];
-            [mutableMessages addObject:messageInfo];
+            resolve(mutableMessages);
+          }];
+    } else {
+        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
+                                              code:UARCTErrorCodeInvalidFeature
+                                          userInfo:@{NSLocalizedDescriptionKey:"Only available on iOS 13"}];
+        reject(100, "Only Avialble on iOS 13", error);
+    }
+}
+
+RCT_EXPORT_METHOD(setUseCustomChatUI:(BOOL)useCustomUI) {
+    if (@available(iOS 13.0, *)) {
+        [[NSUserDefaults standardUserDefaults] setBool:useCustomUI forKey:AirshipChatModuleCustomUIKey];
+        [self updateOpenChatDelegate];
+    }
+}
+
+- (void)updateOpenChatDelegate {
+    if (@available(iOS 13.0, *)) {
+        BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:AirshipChatModuleCustomUIKey];
+        if (enabled) {
+            [UAirshipChat shared].openChatDelegate = self;
+        } else {
+            [UAirshipChat shared].openChatDelegate = nil;
         }
-        resolve(mutableMessages);
-      }];
+    }
 }
 
-RCT_EXPORT_METHOD(addConversationListener) {
-    [UAirshipChat shared].conversation.delegate = [ConversationUpdatedDelegate shared];
+- (void)onConnectionStatusChanged {
+    // No event to trigger
 }
 
-RCT_EXPORT_METHOD(setUseCustomChatUI:(bool *)useCustomUI) {
-    useCustomChatUI = useCustomUI;
+- (void)onMessagesUpdated {
+    [[UARCTEventEmitter shared] conversationUpdated];
+}
+
+- (void)openChatWithMessage:(NSString * _Nullable)message {
+    [[UARCTEventEmitter shared] openChat:message];
 }
 
 @end

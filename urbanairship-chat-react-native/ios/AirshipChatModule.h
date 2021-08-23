@@ -1,5 +1,7 @@
 #import <React/RCTBridgeModule.h>
 
-@interface AirshipChatModule : NSObject <RCTBridgeModule>
+@import Airship;
+
+@interface AirshipChatModule : NSObject <RCTBridgeModule, UAConversationDelegate, UAirshipChatDelegate>
 
 @end

@@ -11,9 +11,14 @@ import {
   UrbanAirship,
 } from 'urbanairship-react-native'
 
+import { AirshipChat } from 'urbanairship-chat-react-native'
+
 
 AppRegistry.registerComponent(appName, () => App);
 
 UrbanAirship.addListener(EventType.PushReceived, async (event) => {
   console.log("Push Received: " + event.alert);
 })
+
+AirshipChat.setUseCustomChatUI(true);
+
