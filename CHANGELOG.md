@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 12.0.0 - August 23, 2021
+Major release that adds support for new privacy manager flags and the live chat module.
+
+- Updated iOS SDK to 14.6.1
+- Updated Android SDK to 14.6.0
+- Added missing `messageId` prop in the `MessageView`
+
+
 ## Version 11.0.2 - June 23, 2021
 Patch release updating the iOS and Android SDKs to 14.4.2 and 14.4.4 respectively.
 
