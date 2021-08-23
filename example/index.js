@@ -20,5 +20,5 @@ UrbanAirship.addListener(EventType.PushReceived, async (event) => {
   console.log("Push Received: " + event.alert);
 })
 
-AirshipChat.setUseCustomChatUI(true);
+AirshipChat.setUseCustomChatUI(false);
 

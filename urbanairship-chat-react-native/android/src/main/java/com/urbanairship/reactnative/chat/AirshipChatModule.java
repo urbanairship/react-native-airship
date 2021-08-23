@@ -4,6 +4,8 @@ package com.urbanairship.reactnative.chat;
 
 import android.util.Log;
 
+import android.preference.PreferenceManager;
+
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -37,29 +39,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AirshipChatModule extends ReactContextBaseJavaModule {
-
+    private static final String SHOW_CUSOTM_UI = "com.urbanairship.reactnative.chat.custom_ui";
     private final ReactApplicationContext reactContext;
-    List<ChatMessage> messagesList = new ArrayList<>();
-    WritableArray messagesArray;
-    boolean useCustomChatUI;
+    private boolean useCustomChatUI;
 
     public AirshipChatModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
-        addOpenChatListener();
-    }
-
-    @Override
-    public String getName() {
-        return "AirshipChatModule";
-    }
-
-    @ReactMethod
-    private void addOpenChatListener() {
         Chat.shared().setOpenChatListener(new Chat.OnShowChatListener() {
             @Override
             public boolean onOpenChat(String message) {
-                if (useCustomChatUI) {
+                if (isCustomChatUIEnabled()) {
                     Event event = new OpenChatEvent(message);
                     EventEmitter.shared().sendEvent(event);
                     return true;
@@ -70,11 +60,23 @@ public class AirshipChatModule extends ReactContextBaseJavaModule {
         });
     }
 
-    @ReactMethod
-    public void setUseCustomChatUI(boolean useCustomUI) {
-        useCustomChatUI = useCustomUI;
+    @Override
+    public String getName() {
+        return "AirshipChatModule";
     }
 
+    @ReactMethod
+    public void setUseCustomChatUI(boolean useCustomUI) {
+        PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext())
+                .edit()
+                .putBoolean(SHOW_CUSOTM_UI, useCustomUI)
+                .apply();
+    }
+
+    private boolean isCustomChatUIEnabled() {
+        return PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext())
+                .getBoolean(SHOW_CUSOTM_UI, false);
+    }
     @ReactMethod
     public void openChat() {
         Chat.shared().openChat();
@@ -92,32 +94,29 @@ public class AirshipChatModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getMessages(final Promise promise) {
-        messagesArray = Arguments.createArray();
-
         Chat.shared().getConversation().getMessages().addResultCallback(new ResultCallback<List<ChatMessage>>() {
                         @Override
                         public void onResult(@Nullable List<ChatMessage> result) {
-                            if (result != null) {
-                                messagesList = result;
-                            }
+                            WritableArray messagesArray = Arguments.createArray();
 
-                            for (ChatMessage message : messagesList) {
-                                WritableMap messageMap = new WritableNativeMap();
-                                messageMap.putString("messageId", message.getMessageId());
-                                messageMap.putString("text", message.getText());
-                                messageMap.putDouble("createdOn", message.getCreatedOn());
-                                if (message.getDirection() == ChatDirection.OUTGOING) {
-                                    messageMap.putInt("direction", 0);
-                                } else {
-                                    messageMap.putInt("direction", 1);
+                            if (result != null) {
+                                for (ChatMessage message : result) {
+                                    WritableMap messageMap = new WritableNativeMap();
+                                    messageMap.putString("messageId", message.getMessageId());
+                                    messageMap.putString("text", message.getText());
+                                    messageMap.putDouble("createdOn", message.getCreatedOn());
+                                    if (message.getDirection() == ChatDirection.OUTGOING) {
+                                        messageMap.putInt("direction", 0);
+                                    } else {
+                                        messageMap.putInt("direction", 1);
+                                    }
+                                    messageMap.putString("attachmentUrl", message.getAttachmentUrl());
+                                    messageMap.putBoolean("pending", message.getPending());
+                                    messagesArray.pushMap(messageMap);
                                 }
-                                messageMap.putString("attachmentUrl", message.getAttachmentUrl());
-                                messageMap.putBoolean("pending", message.getPending());
-                                messagesArray.pushMap(messageMap);
                             }
 
                             promise.resolve(messagesArray);
-
                         }
         });
     }
