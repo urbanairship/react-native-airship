@@ -1,10 +1,25 @@
 # Migration Guide
 
-# 2.x to 3.0.0
+# 11.x to 12.x
 
-Due to changes to the iOS SDK, location services now require an additional dependency on
-AirshipLocationKit. See the [location](https://docs.airship.com/platform/react-native/location)
-documentation for more details.
+Data collection enabled has been replaced with privacy manager.
+
+```
+// 11.x
+static setDataCollectionEnabled(enabled: boolean)
+static isDataCollectionEnabled(): Promise<boolean>
+
+
+// 12.x
+static enableFeature(features: Feature[]): Promise<boolean>
+static disableFeature(features: Feature[]): Promise<boolean>
+static isFeatureEnabled(features: Feature[]): Promise<boolean>
+```
+
+For more infomration on privacy manager, please read:
+- [Android docs](https://docs.airship.com/platform/android/data-collection/)
+- [iOS docs](https://docs.airship.com/platform/ios/data-collection/)
+
 
 # 7.x to 8.0.0
 
@@ -54,3 +69,9 @@ with a handful of small changes.
 As of 7.0.0 Flow typings are no longer provided, but existing apps written in Flow as well as
 plain JavaScript apps will continue to work with the module. For new apps needing static
 type checking, TypeScript is strongly recommended.
+
+# 2.x to 3.0.0
+
+Due to changes to the iOS SDK, location services now require an additional dependency on
+AirshipLocationKit. See the [location](https://docs.airship.com/platform/react-native/location)
+documentation for more details.
