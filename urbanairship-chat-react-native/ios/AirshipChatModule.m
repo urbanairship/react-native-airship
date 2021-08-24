@@ -66,10 +66,10 @@ RCT_REMAP_METHOD(getMessages,
             resolve(mutableMessages);
           }];
     } else {
-        NSError *error =  [NSError errorWithDomain:UARCTErrorDomain
-                                              code:UARCTErrorCodeInvalidFeature
-                                          userInfo:@{NSLocalizedDescriptionKey:"Only available on iOS 13"}];
-        reject(100, "Only Avialble on iOS 13", error);
+        NSError *error =  [NSError errorWithDomain:@"com.urbanairship"
+                                              code:100
+                                          userInfo:@{NSLocalizedDescriptionKey: @"Only available on iOS 13"}];
+        reject(@"UNAVAILABLE", @"Only availlble on iOS 13", error);
     }
 }
 
