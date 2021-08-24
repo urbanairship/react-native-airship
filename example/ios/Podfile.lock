@@ -17,7 +17,7 @@ PODS:
     - Airship/Core
   - Airship/MessageCenter (14.6.1):
     - Airship/Core
-  - AirshipExtensions/NotificationService (14.5.2)
+  - AirshipExtensions/NotificationService (14.6.1)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.64.0)
@@ -312,7 +312,7 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - AirshipExtensions/NotificationService (~> 14.5.2)
+  - AirshipExtensions/NotificationService (~> 14.6.1)
   - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../../node_modules/react-native/React/FBReactNativeSpec`)
@@ -437,7 +437,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Airship: 0206dfbd087a26bc518f0f2aabcaf5ddfd564a5c
-  AirshipExtensions: 0393b6bf0c2254cb4fbf316ac8ea43afb9589b4a
+  AirshipExtensions: ee261793112cbe30e34b62c118291c84eba60d90
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
@@ -477,6 +477,6 @@ SPEC CHECKSUMS:
   urbanairship-react-native: aee4e84fc591473b96eae158df2533285c43288c
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
-PODFILE CHECKSUM: 6b8d2868ffd14748e3ff7620bc05ca108801d3dc
+PODFILE CHECKSUM: 0b257859e14a7a015b476ca27b6bb45ea72ea964
 
 COCOAPODS: 1.10.2
