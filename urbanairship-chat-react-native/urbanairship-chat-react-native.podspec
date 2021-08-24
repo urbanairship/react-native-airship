@@ -3,7 +3,7 @@ require "json"
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::Spec.new do |s|
-  s.name         = "urbanairship-accengage-react-native"
+  s.name         = "urbanairship-chat-react-native"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.author       = package['author']
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React-Core"
-  s.dependency "Airship/Accengage", "14.6.1"
-
+  s.dependency "Airship/Chat", "14.6.1"
+  s.dependency "urbanairship-react-native"
 end
 

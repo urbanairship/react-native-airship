@@ -28,5 +28,6 @@ def getModuleVersion() {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation "com.urbanairship.android:urbanairship-location:$airshipVersion"
+    implementation "com.urbanairship.android:urbanairship-chat:$airshipVersion"
+    api project(':urbanairship-react-native')
 }

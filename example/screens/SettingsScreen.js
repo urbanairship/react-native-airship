@@ -24,6 +24,7 @@ import {
 
 import { UrbanAirship } from 'urbanairship-react-native'
 import { AirshipLocation } from 'urbanairship-location-react-native'
+import { AirshipChat } from 'urbanairship-chat-react-native'
 
 import styles from './../Styles';
 import { Subscription } from 'urbanairship-react-native';
@@ -57,6 +58,9 @@ export default class SettingsScreen extends Component {
     this.handleUpdateNamedUserText = this.handleUpdateNamedUserText.bind(this);
     this.handleRenderNamedUser = this.handleRenderNamedUser.bind(this);
     this.handleMessageCenterDisplay = this.handleMessageCenterDisplay.bind(this);
+
+    this.handleMessageSet = this.handleMessageSet.bind(this);
+    this.handleUpdateMessage = this.handleUpdateMessage.bind(this);
 
     this.handleUpdateTagsList();
     this.handleUpdateNamedUser();
@@ -102,6 +106,15 @@ export default class SettingsScreen extends Component {
     this.setState({ namedUserText: text })
   }
 
+  handleMessageSet(text) {
+    AirshipChat.sendMessage(text);
+    this.setState({ messageText: "" })
+  }
+
+  handleUpdateMessage(text) {
+    this.setState({ messageText: text })
+  }
+
   handleUpdateTagsList() {
     UrbanAirship.getTags().then((data) => {
       this.setState({
@@ -126,7 +139,11 @@ export default class SettingsScreen extends Component {
   }
 
   handleMessageCenterDisplay() {
-    UrbanAirship.displayMessageCenter()
+    UrbanAirship.displayMessageCenter();
+  }
+
+  openChat() {
+    AirshipChat.openChat();
   }
 
   componentDidMount() {
@@ -164,6 +181,14 @@ export default class SettingsScreen extends Component {
 
       UrbanAirship.addListener("notificationOptInStatus", (event) => {
         console.log('notificationOptInStatus:', JSON.stringify(event));
+      }),
+
+      AirshipChat.addConversationListener( (body) => {
+        console.log("Conversation updated, messages count : " + body);
+      }),
+
+      AirshipChat.addChatOpenListener( (body) => {
+        console.log("Chat opened : " + body);
       })
     ];
   }
@@ -204,6 +229,11 @@ export default class SettingsScreen extends Component {
             handleTagRemove={this.handleTagRemove}
             handleUpdateTagText={this.handleUpdateTagText}
           />
+          <MessageInputCell
+            messageText={this.state.messageText}
+            handleMessageSet={this.handleMessageSet}
+            handleUpdateMessage={this.handleUpdateMessage}
+          />
           <EnableLocationCell
             locationEnabled={this.state.locationEnabled}
             handleLocationEnabled={this.handleLocationEnabled}
@@ -212,6 +242,11 @@ export default class SettingsScreen extends Component {
             color='#0d6a83'
             onPress={() => this.handleMessageCenterDisplay()}
             title="Message Center"
+          />
+          <Button
+            color='#0d6a83'
+            onPress={() => this.openChat()}
+            title="Open chat"
           />
         </ScrollView>
       </View>
@@ -353,6 +388,30 @@ class TagInputCell extends Component {
             color='#0d6a83'
             onPress={() => this.props.handleTagAdd(this.props.tagText || '')}
             title="Add Tag"
+          />
+        </View>
+      </View>
+    );
+  }
+}
+
+class MessageInputCell extends Component {
+  render() {
+    return (
+      <View style={styles.miniCellContainer}>
+        <TextInput
+          style={styles.textInput}
+          autoCorrect={false}
+          autoCapitalize={'none'}
+          onSubmitEditing={(event) => this.props.handleMessageSet(this.props.messageText)}
+          onChangeText={(text) => this.props.handleUpdateMessage(text)}
+          value={this.props.messageText}
+        />
+        <View style={styles.inputButton}>
+          <Button
+            color='#0d6a83'
+            onPress={() => this.props.handleMessageSet(this.props.messageText)}
+            title="Send Chat Message"
           />
         </View>
       </View>

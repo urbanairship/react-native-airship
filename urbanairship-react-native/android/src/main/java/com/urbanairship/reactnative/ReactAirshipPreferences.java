@@ -134,4 +134,6 @@ public class ReactAirshipPreferences {
     public boolean getOptInStatus(Context context) {
         return getPreferences(context).getBoolean(NOTIFICATIONS_OPT_IN_KEY, false);
     }
+
+    
 }

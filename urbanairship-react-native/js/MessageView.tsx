@@ -110,6 +110,11 @@ export interface MessageViewProps  {
    * @param event: The message closed event.
    */
   onClose: (event: MessageClosedEvent) => void;
+
+  /**
+   * The message Id.
+   */
+  messageId: string;
 }
 
 /**

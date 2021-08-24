@@ -6,9 +6,8 @@
     "moduleResolution": "node",
     "strict": true,
     "target": "es5",
-    "noImplicitAny": true,
-    "skipLibCheck": true
+    "noImplicitAny": true
   },
-  "include": ["js/**/*.ts", "js/**/*.tsx"],
+  "include": ["js/**/*.ts"],
   "exclude": ["node_modules", "js/__tests__"]
 }

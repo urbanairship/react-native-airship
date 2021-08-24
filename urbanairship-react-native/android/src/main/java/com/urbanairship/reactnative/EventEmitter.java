@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
@@ -19,7 +20,7 @@ import java.util.Set;
 /**
  * Emits events to listeners in the JS layer.
  */
-class EventEmitter {
+public class EventEmitter {
     private static EventEmitter sharedInstance = new EventEmitter();
 
     private final List<Event> pendingForegroundEvents = new ArrayList<>();
@@ -62,7 +63,8 @@ class EventEmitter {
      *
      * @param event The event.
      */
-    void sendEvent(final Event event) {
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+    public void sendEvent(final Event event) {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
