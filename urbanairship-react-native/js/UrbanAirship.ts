@@ -525,10 +525,11 @@ export class UrbanAirship {
    * @param channel The channel's name.
    * @return A promise with the result.
    */
-  static getNotificationChannelStatus(channel: string) {
-    if (Platform.OS == 'android') {
-      return UrbanAirshipModule.getNotificationChannelStatus(channel);
+  static getNotificationChannelStatus(channel: string): Promise<string> {
+    if (Platform.OS != 'android') {
+      console.log("This feature is not supported on this platform.");
     }
+    return UrbanAirshipModule.getNotificationChannelStatus(channel);
   }
 
   /**

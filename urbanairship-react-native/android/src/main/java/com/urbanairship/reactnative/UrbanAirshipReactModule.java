@@ -3,6 +3,7 @@
 package com.urbanairship.reactnative;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.facebook.react.bridge.Arguments;
@@ -291,6 +293,32 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void isUserNotificationsOptedIn(Promise promise) {
         promise.resolve(UAirship.shared().getPushManager().isOptIn());
+    }
+
+    /**
+     * Checks if the app's notifications are enabled at the system level.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void isSystemNotificationsEnabledForApp(Promise promise) {
+        promise.resolve(NotificationManagerCompat.from(getReactApplicationContext()).areNotificationsEnabled());
+    }
+
+    @ReactMethod
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void getNotificationChannelStatus(String channelId, Promise promise) {
+        NotificationManager manager = (NotificationManager) getReactApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel channel = manager.getNotificationChannel(channelId);
+        if (channel == null) {
+            promise.resolve("unknown");
+        } else {
+            if (channel.getImportance() != NotificationManager.IMPORTANCE_NONE) {
+                promise.resolve("enabled");
+            } else {
+                promise.resolve("disabled");
+            }
+        }
     }
 
     /**
