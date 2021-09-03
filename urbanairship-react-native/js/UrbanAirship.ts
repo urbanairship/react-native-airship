@@ -508,6 +508,29 @@ export class UrbanAirship {
     return UrbanAirshipModule.isUserNotificationsOptedIn();
   }
 
+   /**
+   * Checks if app notifications are enabled at a system level or not. Its possible to have `userNotificationsEnabled`
+   * but app notifications being disabled if the user opted out of notifications.
+   *
+   * @return A promise with the result.
+   */
+  static isSystemNotificationsEnabledForApp(): Promise<boolean> {
+    return UrbanAirshipModule.isSystemNotificationsEnabledForApp();
+  }
+
+  /**
+   * Gets the status of the specified Notification Channel.
+   * This method is only supported on Android. iOS will no-op.
+   *
+   * @param channel The channel's name.
+   * @return A promise with the result.
+   */
+  static getNotificationChannelStatus(channel: string) {
+    if (Platform.OS == 'android') {
+      return UrbanAirshipModule.getNotificationChannelStatus(channel);
+    }
+  }
+
   /**
    * Sets the named user.
    *

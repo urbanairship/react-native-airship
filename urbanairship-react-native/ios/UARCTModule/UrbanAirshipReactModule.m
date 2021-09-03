@@ -178,6 +178,13 @@ RCT_REMAP_METHOD(isUserNotificationsEnabled,
 RCT_REMAP_METHOD(isUserNotificationsOptedIn,
                  isUserNotificationsOptedIn_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    BOOL optedIn = [[UAirship push] userPushNotificationsEnabled];
+    resolve(@(optedIn));
+}
+
+RCT_REMAP_METHOD(isSystemNotificationsEnabledForApp,
+                 isSystemNotificationsEnabledForApp_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
     BOOL optedIn = [UAirship push].authorizedNotificationSettings != 0;
     resolve(@(optedIn));
 }
@@ -185,7 +192,6 @@ RCT_REMAP_METHOD(isUserNotificationsOptedIn,
 RCT_REMAP_METHOD(enableUserPushNotifications,
                  enableUserPushNotifications_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-
     [[UAirship push] enableUserPushNotifications:^(BOOL success) {
         resolve(@(success));
     }];
