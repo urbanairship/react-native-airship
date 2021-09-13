@@ -178,8 +178,23 @@ RCT_REMAP_METHOD(isUserNotificationsEnabled,
 RCT_REMAP_METHOD(isUserNotificationsOptedIn,
                  isUserNotificationsOptedIn_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    BOOL optedIn = [[UAirship push] userPushNotificationsEnabled];
-    resolve(@(optedIn));
+        BOOL optedIn = YES;
+        if (![UAirship push].deviceToken) {
+            UA_LTRACE(@"Opted out: missing device token");
+            optedIn = NO;
+        }
+
+        if (![UAirship push].userPushNotificationsEnabled) {
+            UA_LTRACE(@"Opted out: user push notifications disabled");
+            optedIn = NO;
+        }
+
+        if (![UAirship push].authorizedNotificationSettings) {
+            UA_LTRACE(@"Opted out: no authorized notification settings");
+            optedIn = NO;
+        }
+
+        resolve(@(optedIn));
 }
 
 RCT_REMAP_METHOD(isSystemNotificationsEnabledForApp,

@@ -520,14 +520,14 @@ export class UrbanAirship {
 
   /**
    * Gets the status of the specified Notification Channel.
-   * This method is only supported on Android. iOS will no-op.
+   * This method is only supported on Android. iOS will throw an error.
    *
    * @param channel The channel's name.
    * @return A promise with the result.
    */
   static getNotificationChannelStatus(channel: string): Promise<string> {
     if (Platform.OS != 'android') {
-      console.log("This feature is not supported on this platform.");
+      throw new Error("This method is only supported on Android devices.");
     }
     return UrbanAirshipModule.getNotificationChannelStatus(channel);
   }
