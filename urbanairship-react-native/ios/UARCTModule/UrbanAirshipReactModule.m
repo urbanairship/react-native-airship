@@ -198,7 +198,6 @@ RCT_REMAP_METHOD(isUserNotificationsOptedIn,
             UA_LTRACE(@"Opted out: push is disabled");
             optedIn = NO;
         }
-
         resolve(@(optedIn));
 }
 
