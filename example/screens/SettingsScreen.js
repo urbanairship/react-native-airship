@@ -322,7 +322,7 @@ class NamedUserInputCell extends Component {
           onChangeText={(text) => this.props.handleUpdateNamedUserText(text)}
           value={this.props.namedUserText}
         />
-        <View style={styles.inputButton}>
+        <View>
           <Button
             color='#0d6a83'
             onPress={() => this.props.handleNamedUserSet(this.props.namedUserText)}
@@ -383,7 +383,7 @@ class TagInputCell extends Component {
           onChangeText={(text) => this.props.handleUpdateTagText(text)}
           value={this.props.tagText}
         />
-        <View style={styles.inputButton}>
+        <View>
           <Button
             color='#0d6a83'
             onPress={() => this.props.handleTagAdd(this.props.tagText || '')}
@@ -407,7 +407,7 @@ class MessageInputCell extends Component {
           onChangeText={(text) => this.props.handleUpdateMessage(text)}
           value={this.props.messageText}
         />
-        <View style={styles.inputButton}>
+        <View>
           <Button
             color='#0d6a83'
             onPress={() => this.props.handleMessageSet(this.props.messageText)}
