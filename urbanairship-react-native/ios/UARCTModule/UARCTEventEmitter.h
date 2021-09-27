@@ -60,10 +60,11 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 
 /**
  * Creates a push map for a given notification content.
- * @param content The notification content.
+ * @param userInfo The notification info.
+ * @param identifier The notification identifier.
  * @return Push map.
  */
-+ (NSMutableDictionary *)eventBodyForNotificationContent:(UANotificationContent *)content;
++ (NSMutableDictionary *)eventBodyForNotificationContent:(NSDictionary *)userInfo notificationIdentifier:(NSString *)identifier;
 
 /**
  * Gets and removes any pending events for the given type.

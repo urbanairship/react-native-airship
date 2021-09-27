@@ -7,6 +7,7 @@
 #import "UARCTModuleVersion.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
+NSString * const UADeepLinkActionDefaultRegistryName = @"deep_link_action";
 NSString *const UARCTAirshipRecommendedVersion = @"14.3.0";
 
 @implementation UARCTAutopilot
@@ -19,17 +20,22 @@ static BOOL disabled = NO;
 
 + (void)load {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:[UARCTAutopilot class] selector:@selector(takeOff) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    [center addObserverForName:UIApplicationDidFinishLaunchingNotification
+                                                      object:nil
+                                                       queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        
+        [self takeOffWithLaunchOptions:note.userInfo];
+    }];
 }
 
-+ (void)takeOff {
++ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions {
     if (disabled) {
         return;
     }
 
     static dispatch_once_t takeOffdispatchOnce_;
     dispatch_once(&takeOffdispatchOnce_, ^{
-        [UAirship takeOff];
+        [UAirship takeOffWithLaunchOptions:launchOptions];
 
         UA_LINFO(@"Airship ReactNative version: %@, SDK version: %@", [UARCTModuleVersion get], [UAirshipVersion get]);
         [[UAirship analytics] registerSDKExtension:UASDKExtensionReactNative version:[UARCTModuleVersion get]];

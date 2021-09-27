@@ -56,7 +56,7 @@ RCT_EXPORT_MODULE();
 - (instancetype)init{
     self = [super init];
     if (self) {
-        [UARCTAutopilot takeOff];
+        [UARCTAutopilot takeOffWithLaunchOptions:nil];
     }
     return self;
 }
@@ -248,17 +248,22 @@ RCT_REMAP_METHOD(getTags,
 }
 
 RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
-    [UAirship shared].analytics.enabled = enabled;
+    if (enabled) {
+        [[UAirship shared].privacyManager enableFeatures:UAFeaturesAnalytics];
+    } else {
+        [[UAirship shared].privacyManager disableFeatures:UAFeaturesAnalytics];
+    }
+    
 }
 
 RCT_REMAP_METHOD(isAnalyticsEnabled,
                  isAnalyticsEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve(@([UAirship shared].analytics.enabled));
+    resolve(@([[UAirship shared].privacyManager isEnabled:UAFeaturesAnalytics]));
 }
 
 RCT_EXPORT_METHOD(trackScreen:(NSString *)screen) {
-    [[UAirship shared].analytics trackScreen:screen];
+    [UAirship.analytics trackScreen:screen];
 }
 
 RCT_REMAP_METHOD(getChannelId,
@@ -276,9 +281,9 @@ RCT_REMAP_METHOD(getRegistrationToken,
 RCT_REMAP_METHOD(associateIdentifier,
                  key:(NSString *)key
                  identifier:(NSString *)identifier) {
-    UAAssociatedIdentifiers *identifiers = [[UAirship shared].analytics currentAssociatedDeviceIdentifiers];
+    UAAssociatedIdentifiers *identifiers = [UAirship.analytics currentAssociatedDeviceIdentifiers];
     [identifiers setIdentifier:identifier forKey:key];
-    [[UAirship shared].analytics associateDeviceIdentifiers:identifiers];
+    [UAirship.analytics associateDeviceIdentifiers:identifiers];
 }
 
 RCT_REMAP_METHOD(runAction,
@@ -303,13 +308,13 @@ RCT_REMAP_METHOD(runAction,
                                 if (actionResult.value) {
                                     //if the action completed with a result value, serialize into JSON
                                     //accepting fragments so we can write lower level JSON values
-                                    resultString = [NSJSONSerialization stringWithObject:actionResult.value acceptingFragments:YES error:&error];
+                                    resultString = [NSJSONSerialization JSONObjectWithData:actionResult.value options: NSJSONReadingFragmentsAllowed error:&error];
                                     // If there was an error serializing, fall back to a string description.
                                     if (error) {
                                         error = error;
                                         UA_LDEBUG(@"Unable to serialize result value %@, falling back to string description", actionResult.value);
                                         // JSONify the result string
-                                        resultString = [NSJSONSerialization stringWithObject:[actionResult.value description] acceptingFragments:YES];
+                                        resultString = [NSJSONSerialization JSONObjectWithData:[actionResult.value description] options: NSJSONReadingFragmentsAllowed error:&error];
                                     }
                                 }
                                 //in the case where there is no result value, pass null
@@ -420,7 +425,7 @@ RCT_REMAP_METHOD(isAutobadgeEnabled,
                  isAutobadgeEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    resolve(@([UAirship push].isAutobadgeEnabled));
+    resolve(@([UAirship push].autobadgeEnabled));
 }
 
 RCT_EXPORT_METHOD(setBadgeNumber:(NSInteger)badgeNumber) {
@@ -570,8 +575,8 @@ RCT_REMAP_METHOD(getActiveNotifications,
     [[UNUserNotificationCenter currentNotificationCenter] getDeliveredNotificationsWithCompletionHandler:^(NSArray<UNNotification *> * _Nonnull notifications) {
         NSMutableArray *result = [NSMutableArray array];
         for(UNNotification *unnotification in notifications) {
-            UANotificationContent *content = [UANotificationContent notificationWithUNNotification:unnotification];
-            [result addObject:[UARCTEventEmitter eventBodyForNotificationContent:content]];
+            UNNotificationContent *content = unnotification.request.content;
+            [result addObject:[UARCTEventEmitter eventBodyForNotificationContent:content notificationIdentifier:unnotification.request.identifier]];
         }
 
         resolve(result);

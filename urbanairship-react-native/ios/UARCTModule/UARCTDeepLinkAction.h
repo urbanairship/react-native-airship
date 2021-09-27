@@ -22,7 +22,7 @@
 /**
  * Custom deep link action that forwards incoming deep links to a delegate.
  */
-@interface UARCTDeepLinkAction : UAAction
+@interface UARCTDeepLinkAction : NSObject <UAAction>
 
 /**
  * Deep link delegate.

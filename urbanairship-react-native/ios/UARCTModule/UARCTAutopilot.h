@@ -24,7 +24,8 @@ extern NSString *const UARCTAirshipRecommendedVersion;
 
 /**
  * Performs takeOff.
+ * @launchOptions the lunch options.
  */
-+ (void)takeOff;
++ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions;
 
 @end

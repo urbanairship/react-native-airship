@@ -16,7 +16,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UARCTMessageView : RCTView <WKNavigationDelegate, UANativeBridgeDelegate>
+@interface UARCTMessageView : RCTView <UANavigationDelegate, UANativeBridgeDelegate>
 
 @property (nonatomic, copy) RCTDirectEventBlock onLoadStarted;
 @property (nonatomic, copy) RCTDirectEventBlock onLoadFinished;
