@@ -25,6 +25,7 @@ import {
 import { UrbanAirship } from 'urbanairship-react-native'
 import { AirshipLocation } from 'urbanairship-location-react-native'
 import { AirshipChat } from 'urbanairship-chat-react-native'
+import { AirshipPreferenceCenter } from 'urbanairship-preference-center-react-native'
 
 import styles from './../Styles';
 import { Subscription } from 'urbanairship-react-native';
@@ -146,6 +147,10 @@ export default class SettingsScreen extends Component {
     AirshipChat.openChat();
   }
 
+  openPreferenceCenter() {
+    AirshipPreferenceCenter.openPreferenceCenter("neat");
+  }
+
   componentDidMount() {
     this.subscriptions = [];
 
@@ -248,6 +253,11 @@ export default class SettingsScreen extends Component {
             onPress={() => this.openChat()}
             title="Open chat"
           />
+          <Button
+                      color='#0d6a83'
+                      onPress={() => this.openPreferenceCenter()}
+                      title="Preference Center"
+                    />
         </ScrollView>
       </View>
 

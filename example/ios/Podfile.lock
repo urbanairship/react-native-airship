@@ -20,6 +20,8 @@ PODS:
     - Airship/Core
   - Airship/MessageCenter (15.0.1):
     - Airship/Core
+  - Airship/PreferenceCenter (15.0.1):
+    - Airship/Core
   - AirshipExtensions/NotificationService (15.0.1)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
@@ -309,6 +311,10 @@ PODS:
   - urbanairship-location-react-native (12.0.1):
     - Airship/Location (= 15.0.1)
     - React-Core
+  - urbanairship-preference-center-react-native (12.0.1):
+    - Airship/PreferenceCenter (= 15.0.1)
+    - React-Core
+    - urbanairship-react-native
   - urbanairship-react-native (12.0.1):
     - Airship (= 15.0.1)
     - React-Core
@@ -353,6 +359,7 @@ DEPENDENCIES:
   - urbanairship-accengage-react-native (from `../../urbanairship-accengage-react-native`)
   - urbanairship-chat-react-native (from `../../urbanairship-chat-react-native`)
   - urbanairship-location-react-native (from `../../urbanairship-location-react-native`)
+  - urbanairship-preference-center-react-native (from `../../urbanairship-preference-center-react-native`)
   - urbanairship-react-native (from `../../urbanairship-react-native`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
@@ -433,6 +440,8 @@ EXTERNAL SOURCES:
     :path: "../../urbanairship-chat-react-native"
   urbanairship-location-react-native:
     :path: "../../urbanairship-location-react-native"
+  urbanairship-preference-center-react-native:
+    :path: "../../urbanairship-preference-center-react-native"
   urbanairship-react-native:
     :path: "../../urbanairship-react-native"
   Yoga:
@@ -477,6 +486,7 @@ SPEC CHECKSUMS:
   urbanairship-accengage-react-native: 77e10c41266a3099e77992afea630ae67ac663d9
   urbanairship-chat-react-native: 0b37d8edca4c5882bb145a927b327cdf545fb251
   urbanairship-location-react-native: 08323a1fbda29af37ee3bc98bd8e68cf12e64ad5
+  urbanairship-preference-center-react-native: 59f5016aaca9267774c0109d71604fbde0eaded9
   urbanairship-react-native: 34f2526f5974b3b4037db700cd3c130f462efea5
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 

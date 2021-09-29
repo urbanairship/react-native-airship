@@ -17,7 +17,8 @@
     "urbanairship-accengage-react-native": "*",
     "urbanairship-react-native": "*",
     "urbanairship-location-react-native": "*",
-    "urbanairship-chat-react-native": "*"
+    "urbanairship-chat-react-native": "*",
+    "urbanairship-preference-center-react-native": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
