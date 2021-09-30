@@ -148,6 +148,7 @@ export default class SettingsScreen extends Component {
   }
 
   openPreferenceCenter() {
+    //AirshipPreferenceCenter.setUseCustomPreferenceCenterUI(true, "neat");
     AirshipPreferenceCenter.openPreferenceCenter("neat");
   }
 
@@ -194,7 +195,13 @@ export default class SettingsScreen extends Component {
 
       AirshipChat.addChatOpenListener( (body) => {
         console.log("Chat opened : " + body);
+      }),
+
+      AirshipPreferenceCenter.addPrefereceCenterOpenListener( (body) => {
+        //Navigate to custom UI
+        console.log("Preference center opened : " + body);
       })
+
     ];
   }
 

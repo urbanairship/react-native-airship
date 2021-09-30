@@ -53,6 +53,12 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 - (void)openChat:(NSString *)message;
 
 /**
+ * Sends an open preference center event
+ * @param preferenceCenterID The preference center ID
+ */
+- (void) openPreferenceCenterForID:(NSString *)preferenceCenterID;
+
+/**
  * Sends an show inbox message event.
  * @param messageID The message ID.
  */

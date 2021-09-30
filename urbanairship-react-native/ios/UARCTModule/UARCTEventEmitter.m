@@ -17,7 +17,7 @@ NSString *const UARCTInboxUpdatedEventName = @"com.urbanairship.inbox_updated";
 NSString *const UARCTShowInboxEventName = @"com.urbanairship.show_inbox";
 NSString *const UARCTConversationUpdatedEventName = @"com.urbanairship.conversation_updated";
 NSString *const UARCTOpenChatEventName = @"com.urbanairship.open_chat";
-
+NSString *const UARCTOpenPreferenceCenterEventName = @"com.urbanairship.open_preference_center";
 NSString *const UAChannelUpdatedEventChannelKey = @"com.urbanairship.channel.identifier";
 
 NSString *const UARCTNotificationPresentationAlertKey = @"alert";
@@ -231,9 +231,19 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (void)openChat:(NSString *)message {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
-    [body setValue:message forKey:@"message"];
+    [body setValue:message forKey:@"preferenceCenterID"];
     
     [self sendEventWithName:UARCTOpenChatEventName body:body];
+}
+
+#pragma mark -
+#pragma mark Preference center
+
+- (void) openPreferenceCenterForID:(NSString *)preferenceCenterID {
+    NSMutableDictionary *body = [NSMutableDictionary dictionary];
+    [body setValue:preferenceCenterID forKey:@"message"];
+
+    [self sendEventWithName:UARCTOpenPreferenceCenterEventName body:body];
 }
 
 #pragma mark -
