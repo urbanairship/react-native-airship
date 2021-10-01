@@ -68,8 +68,6 @@ export default class SettingsScreen extends Component {
     this.setState({ notificationsEnabled: enabled });
   }
 
-}
-
   handleUpdateNamedUser() {
     UrbanAirship.getNamedUser().then((data) => {
       this.setState({
