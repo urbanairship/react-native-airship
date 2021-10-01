@@ -16,8 +16,6 @@ PODS:
     - Airship/Basement
   - Airship/ExtendedActions (15.0.1):
     - Airship/Core
-  - Airship/Location (15.0.1):
-    - Airship/Core
   - Airship/MessageCenter (15.0.1):
     - Airship/Core
   - Airship/PreferenceCenter (15.0.1):
@@ -308,9 +306,6 @@ PODS:
     - Airship/Chat (= 15.0.1)
     - React-Core
     - urbanairship-react-native
-  - urbanairship-location-react-native (13.0.0):
-    - Airship/Location (= 15.0.1)
-    - React-Core
   - urbanairship-preference-center-react-native (13.0.0):
     - Airship/PreferenceCenter (= 15.0.1)
     - React-Core
@@ -358,7 +353,6 @@ DEPENDENCIES:
   - RNScreens (from `../../node_modules/react-native-screens`)
   - urbanairship-accengage-react-native (from `../../urbanairship-accengage-react-native`)
   - urbanairship-chat-react-native (from `../../urbanairship-chat-react-native`)
-  - urbanairship-location-react-native (from `../../urbanairship-location-react-native`)
   - urbanairship-preference-center-react-native (from `../../urbanairship-preference-center-react-native`)
   - urbanairship-react-native (from `../../urbanairship-react-native`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
@@ -438,8 +432,6 @@ EXTERNAL SOURCES:
     :path: "../../urbanairship-accengage-react-native"
   urbanairship-chat-react-native:
     :path: "../../urbanairship-chat-react-native"
-  urbanairship-location-react-native:
-    :path: "../../urbanairship-location-react-native"
   urbanairship-preference-center-react-native:
     :path: "../../urbanairship-preference-center-react-native"
   urbanairship-react-native:
@@ -485,7 +477,6 @@ SPEC CHECKSUMS:
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   urbanairship-accengage-react-native: 0f2281eac5b036e79c56fbfdeffb8735e5bb5e71
   urbanairship-chat-react-native: f231192a4f8e5130af89f40bf85225aab2cd5747
-  urbanairship-location-react-native: 7fed0b23df56dc35738ecf6ad341650330f31ea2
   urbanairship-preference-center-react-native: b66443c0ec7d51900e89f7f51210d18f557328e0
   urbanairship-react-native: 5567ba6490cbb56a258ae60be8bab5a8cae97ee6
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
