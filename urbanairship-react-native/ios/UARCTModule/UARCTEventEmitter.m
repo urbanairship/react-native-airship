@@ -231,7 +231,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (void)openChat:(NSString *)message {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
-    [body setValue:message forKey:@"preferenceCenterID"];
+    [body setValue:message forKey:@"message"];
     
     [self sendEventWithName:UARCTOpenChatEventName body:body];
 }
@@ -241,7 +241,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (void) openPreferenceCenterForID:(NSString *)preferenceCenterID {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
-    [body setValue:preferenceCenterID forKey:@"message"];
+    [body setValue:preferenceCenterID forKey:@"preferenceCenterID"];
 
     [self sendEventWithName:UARCTOpenPreferenceCenterEventName body:body];
 }

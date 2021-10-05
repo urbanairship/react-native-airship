@@ -17,6 +17,81 @@ const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
  */
 const EventEmitter = new UAEventEmitter();
 
+ /**
+  *Preference section item.
+  */
+ export interface Item {
+
+  /**
+   * The item identifier.
+   */
+  id: String;
+
+  /**
+   * Optional display info.
+   */
+  display: CommonDisplay;
+
+ }
+
+ /**
+  *Common display info.
+  */
+ export interface CommonDisplay {
+
+  /**
+   *The optional name/title.
+   */
+  name?: String;
+
+  /**
+   *The optional description/subtitle.
+   */
+  description?: String;
+
+  }
+
+ /**
+  *Preference section.
+  */
+ export interface Section {
+
+  /**
+   * Section identifier.
+   */
+   id: String;
+
+   /**
+   * Section items.
+   */
+   items: Item[];
+
+   /**
+   * Optional display info.
+   */
+   display: CommonDisplay;
+ }
+
+ /**
+ * Preference center config
+ */
+ export interface PreferenceCenterConfig {
+  /**
+   * The config identifier.
+   */
+  id: string;
+
+  /**
+   * The preference center sections.
+   */
+  sections: Section[];
+
+  /**
+   * Optional common display info.
+   */
+  display: CommonDisplay;
+ }
+
 /**
  * A listener subscription.
  */
@@ -42,8 +117,12 @@ export class AirshipPreferenceCenter {
     AirshipPreferenceCenterModule.connect();
   }
 
-  static openPreferenceCenter(preferenceID: String) {
-    AirshipPreferenceCenterModule.open(preferenceID);
+  static openPreferenceCenter(preferenceCenterID: String) {
+    AirshipPreferenceCenterModule.open(preferenceCenterID);
+  }
+
+  static getConfiguration(preferenceCenterID: String): Promise<PreferenceCenterConfig> {
+      return AirshipPreferenceCenterModule.getConfiguration(preferenceCenterID);
   }
 
   static setUseCustomPreferenceCenterUI(useCustomUI: boolean, preferenceCenterID:String) {
