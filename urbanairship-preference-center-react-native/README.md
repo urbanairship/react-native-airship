@@ -40,5 +40,5 @@ cd ios && pod install
 
 ## Usage
 ```javascript
-import AirshipChat from 'urbanairship-preference-center-react-native';
+import AirshipPreferenceCenter from 'urbanairship-preference-center-react-native';
 ```

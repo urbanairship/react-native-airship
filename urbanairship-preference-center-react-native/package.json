@@ -40,7 +40,7 @@
   "scripts": {
     "prepare": "bob build",
     "test": "jest --verbose",
-    "generate-docs": "typedoc --out docs"
+    "generate-docs": "typedoc --out docs  --exclude **/index.ts"
   },
   "types": "lib/typescript/index.d.ts",
   "main": "lib/commonjs/index.js",
