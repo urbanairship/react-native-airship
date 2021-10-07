@@ -4,7 +4,7 @@
 #import "UADefaultMessageCenterMessageViewController.h"
 #import "UAMessageCenterMessageViewDelegate.h"
 #else
-@import Airship;
+@import AirshipKit;
 #endif
 
 @interface UARCTMessageViewController : UADefaultMessageCenterMessageViewController<UAMessageCenterMessageViewDelegate>

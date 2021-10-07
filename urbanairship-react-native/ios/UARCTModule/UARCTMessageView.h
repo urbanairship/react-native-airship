@@ -11,7 +11,7 @@
 #import "UAMessageCenter.h"
 #import "UADefaultMessageCenterUI.h"
 #else
-@import Airship;
+@import AirshipKit;
 #endif
 
 NS_ASSUME_NONNULL_BEGIN

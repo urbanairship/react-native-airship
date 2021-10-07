@@ -1,7 +1,7 @@
 #import "AirshipPreferenceCenterModule.h"
 #import "UARCTEventEmitter.h"
 
-@import Airship;
+@import AirshipKit;
 
 @implementation AirshipPreferenceCenterModule
 

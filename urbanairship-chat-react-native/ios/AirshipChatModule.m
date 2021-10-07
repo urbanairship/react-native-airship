@@ -1,7 +1,7 @@
 #import "AirshipChatModule.h"
 #import "UARCTEventEmitter.h"
 
-@import Airship;
+@import AirshipKit;
 
 static NSString * const AirshipChatModuleCustomUIKey = @"com.urbanairship.react.chat.custom_ui";
 

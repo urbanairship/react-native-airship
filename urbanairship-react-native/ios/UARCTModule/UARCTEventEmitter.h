@@ -8,7 +8,7 @@
 #import "UAMessageCenter.h"
 #import "UAInboxMessageList.h"
 #else
-@import Airship;
+@import AirshipKit;
 #endif
 
 extern NSString *const UARCTNotificationPresentationAlertKey;

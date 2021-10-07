@@ -1,6 +1,6 @@
 #import <React/RCTBridgeModule.h>
 
-@import Airship;
+@import AirshipKit;
 
 @interface AirshipPreferenceCenterModule : NSObject <RCTBridgeModule, UAPreferenceCenterOpenDelegate>
 

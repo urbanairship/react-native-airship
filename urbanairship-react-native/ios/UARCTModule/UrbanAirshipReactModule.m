@@ -12,7 +12,7 @@
 #import "UAMessageCenterResources.h"
 #import "UAInboxMessage.h"
 #else
-@import Airship;
+@import AirshipKit;
 #endif
 
 @interface UrbanAirshipReactModule()

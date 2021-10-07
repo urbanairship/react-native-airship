@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React-Core"
-  s.dependency "Airship/Accengage", "15.0.1"
+  s.dependency "Airship/Accengage", "16.0.0"
 
 end
 
