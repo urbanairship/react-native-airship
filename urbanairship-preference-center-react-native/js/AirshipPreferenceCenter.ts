@@ -113,10 +113,6 @@ export class Subscription {
  */
 export class AirshipPreferenceCenter {
 
-  static connect() {
-    AirshipPreferenceCenterModule.connect();
-  }
-
   static openPreferenceCenter(preferenceCenterID: String) {
     AirshipPreferenceCenterModule.open(preferenceCenterID);
   }
