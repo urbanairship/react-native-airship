@@ -241,7 +241,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
 - (void) openPreferenceCenterForID:(NSString *)preferenceCenterID {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
-    [body setValue:preferenceCenterID forKey:@"preferenceCenterID"];
+    [body setValue:preferenceCenterID forKey:@"preferenceCenterId"];
 
     [self sendEventWithName:UARCTOpenPreferenceCenterEventName body:body];
 }

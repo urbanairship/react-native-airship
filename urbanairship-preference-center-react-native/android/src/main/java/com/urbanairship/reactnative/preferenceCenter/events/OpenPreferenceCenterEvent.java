@@ -10,10 +10,10 @@ import com.urbanairship.reactnative.Event;
 public class OpenPreferenceCenterEvent implements Event {
 
     private static final String OPEN_PREFERENCE_CENTER_EVENT = "com.urbanairship.open_preference_center";
-    private final String preferenceCenterID;
+    private final String preferenceCenterId;
 
-    public OpenPreferenceCenterEvent(String preferenceCenterID) {
-        this.preferenceCenterID = preferenceCenterID;
+    public OpenPreferenceCenterEvent(String preferenceCenterId) {
+        this.preferenceCenterId = preferenceCenterId;
     }
 
     @NonNull
@@ -27,8 +27,8 @@ public class OpenPreferenceCenterEvent implements Event {
     public ReadableMap getBody() {
         WritableMap map = Arguments.createMap();
 
-        if (preferenceCenterID != null) {
-            map.putString("preferenceCenterID", preferenceCenterID);
+        if (preferenceCenterId != null) {
+            map.putString("preferenceCenterId", preferenceCenterId);
         }
         return map;
     }
