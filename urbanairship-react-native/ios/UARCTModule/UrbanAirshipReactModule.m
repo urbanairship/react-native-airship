@@ -247,15 +247,6 @@ RCT_REMAP_METHOD(getTags,
     resolve([UAirship channel].tags ?: [NSArray array]);
 }
 
-RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
-    if (enabled) {
-        [[UAirship shared].privacyManager enableFeatures:UAFeaturesAnalytics];
-    } else {
-        [[UAirship shared].privacyManager disableFeatures:UAFeaturesAnalytics];
-    }
-    
-}
-
 RCT_REMAP_METHOD(isAnalyticsEnabled,
                  isAnalyticsEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
