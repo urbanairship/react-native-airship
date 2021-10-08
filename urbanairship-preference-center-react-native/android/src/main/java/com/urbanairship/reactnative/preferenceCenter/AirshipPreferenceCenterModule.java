@@ -42,9 +42,9 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
         this.reactContext = reactContext;
         PreferenceCenter.shared().setOpenListener(new PreferenceCenter.OnOpenListener() {
             @Override
-            public boolean onOpenPreferenceCenter(String preferenceCenterID) {
-                if (isCustomPreferenceCenterUIEnabled(preferenceCenterID)) {
-                    Event event = new OpenPreferenceCenterEvent(preferenceCenterID);
+            public boolean onOpenPreferenceCenter(String preferenceCenterId) {
+                if (isCustomPreferenceCenterUiEnabled(preferenceCenterId)) {
+                    Event event = new OpenPreferenceCenterEvent(preferenceCenterId);
                     EventEmitter.shared().sendEvent(event);
                     return true;
                 } else {
@@ -60,20 +60,20 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
         return NAME;
     }
 
-    private boolean isCustomPreferenceCenterUIEnabled(String preferenceCenterID) {
+    private boolean isCustomPreferenceCenterUiEnabled(String preferenceCenterId) {
         return PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext())
-                .getBoolean(preferenceCenterID, false);
+                .getBoolean(preferenceCenterId, false);
     }
 
     @ReactMethod
-    public void open(String preferenceCenterID) {
-        PreferenceCenter.shared().open(preferenceCenterID);
+    public void open(String preferenceCenterId) {
+        PreferenceCenter.shared().open(preferenceCenterId);
     }
 
     @ReactMethod
-    public void getConfiguration(String preferenceCenterID, final Promise promise) {
+    public void getConfiguration(String preferenceCenterId, final Promise promise) {
 
-        PreferenceCenter.shared().getConfig(preferenceCenterID).addResultCallback(new ResultCallback<PreferenceCenterConfig>() {
+        PreferenceCenter.shared().getConfig(preferenceCenterId).addResultCallback(new ResultCallback<PreferenceCenterConfig>() {
             @Override
             public void onResult(@Nullable PreferenceCenterConfig configPendingResult) {
 
@@ -135,8 +135,8 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getConfig(String preferenceCenterID, final Promise promise) {
-        PendingResult<PreferenceCenterConfig> configPendingResult = PreferenceCenter.shared().getConfig(preferenceCenterID);
+    public void getConfig(String preferenceCenterId, final Promise promise) {
+        PendingResult<PreferenceCenterConfig> configPendingResult = PreferenceCenter.shared().getConfig(preferenceCenterId);
         if (configPendingResult.getResult() != null) {
 
             WritableMap configMap = new WritableNativeMap();
