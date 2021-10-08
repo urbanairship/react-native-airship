@@ -113,16 +113,16 @@ export class Subscription {
  */
 export class AirshipPreferenceCenter {
 
-  static openPreferenceCenter(preferenceCenterID: String) {
-    AirshipPreferenceCenterModule.open(preferenceCenterID);
+  static openPreferenceCenter(preferenceCenterId: String) {
+    AirshipPreferenceCenterModule.open(preferenceCenterId);
   }
 
-  static getConfiguration(preferenceCenterID: String): Promise<PreferenceCenterConfig> {
-      return AirshipPreferenceCenterModule.getConfiguration(preferenceCenterID);
+  static getConfiguration(preferenceCenterId: String): Promise<PreferenceCenterConfig> {
+      return AirshipPreferenceCenterModule.getConfiguration(preferenceCenterId);
   }
 
-  static setUseCustomPreferenceCenterUI(useCustomUI: boolean, preferenceCenterID:String) {
-    AirshipPreferenceCenterModule.setUseCustomPreferenceCenterUI(useCustomUI, preferenceCenterID);
+  static setUseCustomPreferenceCenterUi(useCustomUi: boolean, preferenceCenterId:String) {
+    AirshipPreferenceCenterModule.setUseCustomPreferenceCenterUi(useCustomUi, preferenceCenterId);
   }
 
   static addPrefereceCenterOpenListener(listener: (...args: any[]) => any): Subscription {

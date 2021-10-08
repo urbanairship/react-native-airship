@@ -100,7 +100,7 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
                                         WritableMap commonDisplayMap = new WritableNativeMap();
                                         commonDisplayMap.putString("name", commonDisplay.getName());
                                         commonDisplayMap.putString("description", commonDisplay.getDescription());
-                                        itemMap.putMap("CommonDisplay", (ReadableMap) commonDisplayMap);
+                                        itemMap.putMap("display", (ReadableMap) commonDisplayMap);
                                     }
                                     itemArray.pushMap(itemMap);
                                 }
@@ -112,7 +112,7 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
                             if (sectionCommonDisplay != null) {
                                 sectionCommonDisplayMap.putString("name", sectionCommonDisplay.getName());
                                 sectionCommonDisplayMap.putString("description", sectionCommonDisplay.getDescription());
-                                sectionMap.putMap("CommonDisplay", (ReadableMap) sectionCommonDisplayMap);
+                                sectionMap.putMap("display", (ReadableMap) sectionCommonDisplayMap);
                             }
 
                             sectionArray.pushMap(sectionMap);
@@ -125,7 +125,7 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
                     if (configCommonDisplay != null) {
                         configCommonDisplayMap.putString("name", configCommonDisplay.getName());
                         configCommonDisplayMap.putString("description", configCommonDisplay.getDescription());
-                        configMap.putMap("CommonDisplay", (ReadableMap) configCommonDisplayMap);
+                        configMap.putMap("display", (ReadableMap) configCommonDisplayMap);
                     }
                 }
 

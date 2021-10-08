@@ -14,24 +14,24 @@ RCT_EXPORT_MODULE()
     return self;
 }
 
-RCT_EXPORT_METHOD(open:(NSString *)preferenceCenterID) {
+RCT_EXPORT_METHOD(open:(NSString *)preferenceCenterId) {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [[UAPreferenceCenter shared] openPreferenceCenter:preferenceCenterID];
+        [[UAPreferenceCenter shared] openPreferenceCenter:preferenceCenterId];
     }];
 }
 
-RCT_EXPORT_METHOD(setUseCustomPreferenceCenterUI:(BOOL)useCustomUI forpreferenceID:(NSString *)preferenceID) {
+RCT_EXPORT_METHOD(setUseCustomPreferenceCenterUi:(BOOL)useCustomUi forpreferenceId:(NSString *)preferenceId) {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [[NSUserDefaults standardUserDefaults] setBool:useCustomUI forKey:preferenceID];
-        [self updateOpenPreferenceCenterDelegate:preferenceID];
+        [[NSUserDefaults standardUserDefaults] setBool:useCustomUi forKey:preferenceId];
+        [self updateOpenPreferenceCenterDelegate:preferenceId];
     }];
 }
 
-RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterID
+RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                  getConfiguration_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
     
-    [[UAPreferenceCenter shared] configForPreferenceCenterID:preferenceCenterID completionHandler:^(UAPreferenceCenterConfig *config) {
+    [[UAPreferenceCenter shared] configForPreferenceCenterID:preferenceCenterId completionHandler:^(UAPreferenceCenterConfig *config) {
         
         if (config) {
             NSMutableDictionary *configurationDictionary = [NSMutableDictionary dictionary];
@@ -60,7 +60,7 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterID
                                 NSMutableDictionary *itemDisplayDictionary = [NSMutableDictionary dictionary];
                                 [itemDisplayDictionary setValue:itemCommonDisplay.title forKey:@"name"];
                                 [itemDisplayDictionary setValue:itemCommonDisplay.subtitle forKey:@"description"];
-                                [itemDictionary setValue:itemDisplayDictionary forKey:@"CommonDisplay"];
+                                [itemDictionary setValue:itemDisplayDictionary forKey:@"display"];
                             }
                             [itemArray addObject:itemDictionary];
                         }
@@ -72,7 +72,7 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterID
                             NSMutableDictionary *sectionDisplayDictionary = [NSMutableDictionary dictionary];
                             [sectionDisplayDictionary setValue:sectionCommonDisplay.title forKey:@"name"];
                             [sectionDisplayDictionary setValue:sectionCommonDisplay.subtitle forKey:@"description"];
-                            [sectionDictionary setValue:sectionDisplayDictionary forKey:@"CommonDisplay"];
+                            [sectionDictionary setValue:sectionDisplayDictionary forKey:@"display"];
                         }
                         [sectionArray addObject:sectionDictionary];
                         
@@ -88,7 +88,7 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterID
                 NSMutableDictionary *configDisplayDictionary = [NSMutableDictionary dictionary];
                 [configDisplayDictionary setValue:configCommonDisplay.title forKey:@"name"];
                 [configDisplayDictionary setValue:configCommonDisplay.subtitle forKey:@"description"];
-                [configurationDictionary setValue:configDisplayDictionary forKey:@"CommonDisplay"];
+                [configurationDictionary setValue:configDisplayDictionary forKey:@"display"];
             }
             
             
@@ -110,9 +110,9 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterID
 #pragma mark -
 #pragma mark UAPreferenceCenterOpenDelegate
 
-- (BOOL)openPreferenceCenter:(NSString * _Nonnull)preferenceCenterID {
-    [[UARCTEventEmitter shared] openPreferenceCenterForID:preferenceCenterID];
-    return [[NSUserDefaults standardUserDefaults] boolForKey:preferenceCenterID];
+- (BOOL)openPreferenceCenter:(NSString * _Nonnull)preferenceCenterId {
+    [[UARCTEventEmitter shared] openPreferenceCenterForID:preferenceCenterId];
+    return [[NSUserDefaults standardUserDefaults] boolForKey:preferenceCenterId];
 }
 
 @end
