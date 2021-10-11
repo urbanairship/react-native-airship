@@ -21,6 +21,14 @@ RCT_EXPORT_MODULE()
     return self;
 }
 
+RCT_EXPORT_METHOD(connect) {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        if (@available(iOS 13.0, *)) {
+            [[[UAChat shared] conversation] connect];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(openChat) {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         if (@available(iOS 13.0, *)) {
