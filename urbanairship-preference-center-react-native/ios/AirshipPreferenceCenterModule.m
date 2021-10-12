@@ -45,9 +45,10 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                 NSMutableArray *sectionArray = [NSMutableArray array];
                 for (id<UAPreferenceSection> section in sections) {
                     NSMutableDictionary *sectionDictionary = [NSMutableDictionary dictionary];
-                    
+                    // Section identifier
                     [sectionDictionary setValue:section.identifier forKey:@"id"];
                     
+                    // Section items
                     NSArray* items = section.items;
                     if (items) {
                         NSMutableArray *itemArray = [NSMutableArray array];
@@ -66,12 +67,12 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                         }
                         [sectionDictionary setValue:itemArray forKey:@"item"];
                         
-                        
-                        UAPreferenceCommonDisplay* sectionCommonDisplay = section.display;
-                        if (sectionCommonDisplay) {
+                        // Section display
+                        UAPreferenceCommonDisplay* sectionDisplay = section.display;
+                        if (sectionDisplay) {
                             NSMutableDictionary *sectionDisplayDictionary = [NSMutableDictionary dictionary];
-                            [sectionDisplayDictionary setValue:sectionCommonDisplay.title forKey:@"name"];
-                            [sectionDisplayDictionary setValue:sectionCommonDisplay.subtitle forKey:@"description"];
+                            [sectionDisplayDictionary setValue:sectionDisplay.title forKey:@"name"];
+                            [sectionDisplayDictionary setValue:sectionDisplay.subtitle forKey:@"description"];
                             [sectionDictionary setValue:sectionDisplayDictionary forKey:@"display"];
                         }
                         [sectionArray addObject:sectionDictionary];
@@ -82,12 +83,12 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                 [configurationDictionary setValue:sectionArray forKey:@"sections"];
             }
             
-            //Common display
-            UAPreferenceCommonDisplay* configCommonDisplay = config.display;
-            if (configCommonDisplay) {
+            //Display
+            UAPreferenceCommonDisplay* configDisplay = config.display;
+            if (configDisplay) {
                 NSMutableDictionary *configDisplayDictionary = [NSMutableDictionary dictionary];
-                [configDisplayDictionary setValue:configCommonDisplay.title forKey:@"name"];
-                [configDisplayDictionary setValue:configCommonDisplay.subtitle forKey:@"description"];
+                [configDisplayDictionary setValue:configDisplay.title forKey:@"name"];
+                [configDisplayDictionary setValue:configDisplay.subtitle forKey:@"description"];
                 [configurationDictionary setValue:configDisplayDictionary forKey:@"display"];
             }
             
