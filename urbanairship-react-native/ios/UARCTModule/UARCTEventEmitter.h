@@ -18,7 +18,7 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 /**
  * Listeners for Urban Airship events and emits them to the JS layer.
  */
-@interface UARCTEventEmitter : NSObject <UARCTDeepLinkDelegate, UAPushNotificationDelegate, UARegistrationDelegate>
+@interface UARCTEventEmitter : NSObject <UAPushNotificationDelegate, UARegistrationDelegate, UADeepLinkDelegate>
 
 /**
  * The RCTBridge. Assigned by `UrbanAirshipReactModule`.

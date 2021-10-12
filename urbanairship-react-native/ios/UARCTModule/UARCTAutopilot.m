@@ -7,7 +7,6 @@
 #import "UARCTModuleVersion.h"
 
 NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.presentation_options";
-NSString * const UADeepLinkActionDefaultRegistryName = @"deep_link_action";
 NSString *const UARCTAirshipRecommendedVersion = @"14.3.0";
 
 @implementation UARCTAutopilot
@@ -44,10 +43,8 @@ static BOOL disabled = NO;
         [UAirship push].registrationDelegate = [UARCTEventEmitter shared];
         [UAMessageCenter shared].displayDelegate  = [UARCTMessageCenter shared];
 
-        // Register custom deep link action
-        UARCTDeepLinkAction *dle = [[UARCTDeepLinkAction alloc] init];
-        [[UAirship shared].actionRegistry updateAction:dle forEntryWithName:UADeepLinkActionDefaultRegistryName];
-        dle.deepLinkDelegate = [UARCTEventEmitter shared];
+        // Add deep link delegate
+        UAirship.shared.deepLinkDelegate = [UARCTEventEmitter shared];
 
         // Add observer for inbox updated event
         [[NSNotificationCenter defaultCenter] addObserver:[UARCTEventEmitter shared]
