@@ -144,7 +144,7 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setUseCustomPreferenceCenterUI(boolean useCustomUI, String preferenceID) {
+    public void setUseCustomPreferenceCenterUi(boolean useCustomUI, String preferenceID) {
       PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).edit().putBoolean(preferenceID, useCustomUI).apply();
     }
 

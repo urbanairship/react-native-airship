@@ -8,7 +8,7 @@ import { CustomEvent } from "./CustomEvent";
 import { TagGroupEditor, TagGroupOperation } from "./TagGroupEditor";
 import { AttributeEditor, AttributeOperation } from "./AttributeEditor";
 import { UAEventEmitter } from "./UAEventEmitter";
-import { SubscriptionListEditor } from "./SubscriptionListEditor";
+import { SubscriptionListEditor, SubscriptionListUpdate} from "./SubscriptionListEditor";
 import { JsonObject, JsonValue } from "./Json";
 
 /**
@@ -623,6 +623,17 @@ export class UrbanAirship {
   }
 
   /**
+   * Edit the subscription List.
+   *
+   * @return A promise with the result.
+   */
+  static editSubscriptionLists(): SubscriptionListEditor {
+    return new SubscriptionListEditor((subscriptionListUpdates: SubscriptionListUpdate[]) => {
+        UrbanAirshipModule.editSubscriptionLists(subscriptionListUpdates);
+    });
+  }
+
+  /**
    * Enables or disables analytics.
    *
    * Disabling analytics will delete any locally stored events
@@ -661,17 +672,6 @@ export class UrbanAirship {
    */
   static getChannelId(): Promise<string | null | undefined> {
     return UrbanAirshipModule.getChannelId();
-  }
-
-  /**
-  * Edit the subscription List.
-  *
-  * @return A promise with the result.
-  */
-  static editSubscriptionLists(): Promise<SubscriptionListEditor> {
-    return new SubscriptionListEditor((subscriptionListUpdates: SubscriptionListUpdate[]) => {
-          UrbanAirshipModule.editSubscriptionLists(subscriptionListUpdates);
-    });
   }
 
   /**

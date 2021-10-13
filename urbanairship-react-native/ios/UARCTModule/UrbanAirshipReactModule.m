@@ -263,24 +263,6 @@ RCT_REMAP_METHOD(getChannelId,
     resolve([UAirship channel].identifier);
 }
 
-RCT_EXPORT_METHOD(editSubscriptionLists:(NSArray *)subscriptionListUpdates) {
-    
-    UASubscriptionListEditor* subscriptionListEditor = [[UAirship channel] editSubscriptionLists];
-    for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
-        NSString* listId = subscriptionListUpdate[@"listId"];
-        NSString* type = subscriptionListUpdate[@"type"];
-        if (listId && type) {
-            if ([type isEqualToString:@"subscribe"]) {
-                [subscriptionListEditor subscribe:listId];
-            } else if ([type isEqualToString:@"unsubscribe"]) {
-                [subscriptionListEditor unsubscribe:listId];
-            }
-        }
-    }
-    [subscriptionListEditor apply];
-    
-}
-
 
 RCT_REMAP_METHOD(getRegistrationToken,
                  getRegistrationToken_resolver:(RCTPromiseResolveBlock)resolve
@@ -397,6 +379,24 @@ RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
 RCT_EXPORT_METHOD(editNamedUserAttributes:(NSArray *)operations) {
     UAAttributeMutations *mutations = [self mutationsWithOperations:operations];
     [[UAirship namedUser] applyAttributeMutations:mutations];
+}
+
+RCT_EXPORT_METHOD(editSubscriptionLists:(NSArray *)subscriptionListUpdates) {
+
+    UASubscriptionListEditor* subscriptionListEditor = [[UAirship channel] editSubscriptionLists];
+    for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
+        NSString* listId = subscriptionListUpdate[@"listId"];
+        NSString* type = subscriptionListUpdate[@"type"];
+        if (listId && type) {
+            if ([type isEqualToString:@"subscribe"]) {
+                [subscriptionListEditor subscribe:listId];
+            } else if ([type isEqualToString:@"unsubscribe"]) {
+                [subscriptionListEditor unsubscribe:listId];
+            }
+        }
+    }
+    [subscriptionListEditor apply];
+
 }
 
 RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {
