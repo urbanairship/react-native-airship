@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 12.1.0 - October 15, 2021
+## Version 12.1.0 - October 18, 2021
 Minor release adding opt-in changes.
 
 - Update the iOS method `isUserNotificationsOptedIn` to use the `UAPush` method.
