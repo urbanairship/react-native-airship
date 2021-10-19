@@ -4,7 +4,8 @@ BASE_MODULE=urbanairship-react-native
 SUBMODULES=(
   urbanairship-accengage-react-native
   urbanairship-hms-react-native
-  urbanairship-location-react-native
+  urbanairship-chat-react-native
+  urbanairship-preference-center-react-native
 )
 
 print_usage() {
@@ -50,7 +51,6 @@ done
 # Update module versions in iOS native code
 sed -i '' "s/\(airshipModuleVersionString *= *@\)\".*\"/\1\"$VERSION\"/g" urbanairship-react-native/ios/UARCTModule/UARCTModuleVersion.m
 sed -i '' "s/\(moduleVersionString *= *@\)\".*\"/\1\"$VERSION\"/g" urbanairship-accengage-react-native/ios/AirshipAccengageReactModuleVersion.m
-sed -i '' "s/\(airshipLocationModuleVersionString *= *@\)\".*\"/\1\"$VERSION\"/g" urbanairship-location-react-native/ios/AirshipLocationReactModuleVersion.m
 
 # Update iOS example dependencies
 sed -i '' "s/\(pod *'AirshipExtensions\/NotificationService', *'~> *\).*'/\1$IOS_VERSION'/g" example/ios/Podfile
