@@ -7,13 +7,6 @@
 
 RCT_EXPORT_MODULE()
 
-- (instancetype)init{
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
-
 RCT_EXPORT_METHOD(open:(NSString *)preferenceCenterId) {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [[UAPreferenceCenter shared] openPreferenceCenter:preferenceCenterId];
