@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 12.1.0 - October 18, 2021
+Minor release adding opt-in changes.
+
+- Update the iOS method `isUserNotificationsOptedIn` to use the `UAPush` method.
+- Add the new method `isSystemNotificationsEnabledForApp` to check if the app notifications are enabled at a system level or not.
+- Add the new Android method `getNotificationChannelStatus` to get the status of the specified Notification Channel. The status can be: enabled, disabled, or unknown(if the channel id not created yet).
+
 ## Version 12.0.0 - August 23, 2021
 Major release that adds support for new privacy manager flags and the live chat module.
 
