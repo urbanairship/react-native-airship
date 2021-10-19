@@ -125,7 +125,7 @@ export class AirshipPreferenceCenter {
     AirshipPreferenceCenterModule.setUseCustomPreferenceCenterUi(useCustomUi, preferenceCenterId);
   }
 
-  static addPrefereceCenterOpenListener(listener: (...args: any[]) => any): Subscription {
+  static addPreferenceCenterOpenListener(listener: (...args: any[]) => any): Subscription {
     EventEmitter.addListener("com.urbanairship.open_preference_center", listener);
       return new Subscription(() => {
         EventEmitter.removeListener("com.urbanairship.open_preference_center", listener);
