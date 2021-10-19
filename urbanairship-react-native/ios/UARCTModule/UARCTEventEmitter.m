@@ -273,21 +273,41 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
     // remove extraneous key/value pairs
     NSMutableDictionary *extras = [NSMutableDictionary dictionaryWithDictionary:userInfo];
-
+    
+    //Fill in the notification title, subtitle and body if exists
     if([[extras allKeys] containsObject:@"aps"]) {
+        NSDictionary* aps = extras[@"aps"];
+        
+        if ([[aps allKeys] containsObject:@"alert"]) {
+            
+            NSDictionary *alert = aps[@"alert"];
+            if ([[alert allKeys] containsObject:@"title"]) {
+                [pushBody setValue:alert[@"title"] forKey:@"title"];
+            }
+            if ([[alert allKeys] containsObject:@"body"]) {
+                [pushBody setValue:alert[@"body"] forKey:@"alert"];
+            }
+            if ([[alert allKeys] containsObject:@"subtitle"]) {
+                [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
+            }
+        }
         [extras removeObjectForKey:@"aps"];
     }
-
+    
     if([[extras allKeys] containsObject:@"_"]) {
         [extras removeObjectForKey:@"_"];
     }
 
+    //Fill in the notification extras
     if (extras.count) {
         [pushBody setValue:extras forKey:@"extras"];
     }
 
+    //Fill in the notification identifier if exists
     if (@available(iOS 10.0, *)) {
-        [pushBody setValue:identifier forKey:@"notificationId"];
+        if (identifier) {
+            [pushBody setValue:identifier forKey:@"notificationId"];
+        }
     }
 
     return pushBody;
