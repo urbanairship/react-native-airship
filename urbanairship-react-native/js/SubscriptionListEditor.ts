@@ -44,7 +44,7 @@ export class SubscriptionListEditor {
   /**
    * Subscribes to a list.
    *
-   * @param subscriptionListId The subscription list identifier..
+   * @param subscriptionListId The subscription list identifier.
    */
   subscribe(subscriptionListId: string) {
     const operation = {"listId": subscriptionListId, "type": SubscriptionListUpdateType.subscribe};
@@ -55,7 +55,7 @@ export class SubscriptionListEditor {
   /**
   * Unsubscribe from a list.
   *
-  * @param subscriptionListId The subscription list identifier..
+  * @param subscriptionListId The subscription list identifier.
   */
   unsubscribe(subscriptionListId: string) {
     const operation = {"listId": subscriptionListId, "type": SubscriptionListUpdateType.unsubscribe};
@@ -64,9 +64,8 @@ export class SubscriptionListEditor {
   }
 
   /**
-  * Subscribes to a list.
+  * Applies subscription list changes.
   *
-  * @param subscriptionListId The subscription list identifier..
   */
   apply() {
     this.onApply(this.subscriptionListUpdates)

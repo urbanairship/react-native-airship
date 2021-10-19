@@ -184,7 +184,7 @@ export default class SettingsScreen extends Component {
         console.log("Chat opened : " + body);
       }),
 
-      AirshipPreferenceCenter.addPrefereceCenterOpenListener( (body) => {
+      AirshipPreferenceCenter.addPreferenceCenterOpenListener( (body) => {
         //Navigate to custom UI
         console.log("Preference center opened : " + body);
       })

@@ -240,7 +240,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 #pragma mark -
 #pragma mark Preference center
 
-- (void) openPreferenceCenterForID:(NSString *)preferenceCenterID {
+- (void)openPreferenceCenterForID:(NSString *)preferenceCenterID {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
     [body setValue:preferenceCenterID forKey:@"preferenceCenterId"];
 
