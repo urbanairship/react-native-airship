@@ -918,6 +918,31 @@ export class UrbanAirship {
   }
 
   /**
+   * Overriding the locale.
+   *
+   * @param localeIdentifier The locale identifier.
+   */
+  static setCurrentLocale(localeIdentifier: String) {
+    UrbanAirshipModule.setCurrentLocale(localeIdentifier);
+  }
+
+  /**
+   * Getting the locale currently used by Airship.
+   *
+   */
+  static getCurrentLocale(): Promise<String> {
+    return UrbanAirshipModule.getCurrentLocale();
+  }
+
+  /**
+   * Resets the current locale.
+   *
+   */
+  static clearLocale() {
+    UrbanAirshipModule.clearLocale();
+  }
+
+  /**
    * Gets all the active notifications for the application.
    * Supported on Android Marshmallow (23)+ and iOS 10+.
    *
