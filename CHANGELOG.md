@@ -6,7 +6,7 @@ Major release to provide new features and include the latest iOS and Android SDK
 - Added urbanairship-preference-center-react-native module. 
 - Remove urbanairship-location-react-native module.
 - Added a sample preference center to the example app.
-- Support Locale overwrite missing.
+- Support overriding locale.
 - Setup android:exported explicitly on all activities.
 - Updated iOS SDK to 16.0.0
 - Updated Android SDK to 16.0.1
