@@ -6,7 +6,7 @@
 #if __has_include("AirshipLib.h")
 #import "AirshipLib.h"
 #else
-@import Airship;
+@import AirshipKit;
 #endif
 
 extern NSString *const UARCTPresentationOptionsStorageKey;
@@ -24,7 +24,8 @@ extern NSString *const UARCTAirshipRecommendedVersion;
 
 /**
  * Performs takeOff.
+ * @launchOptions the lunch options.
  */
-+ (void)takeOff;
++ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions;
 
 @end

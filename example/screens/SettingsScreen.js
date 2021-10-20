@@ -2,7 +2,7 @@
 /**
  * Sample React Native App
  *
- * SettingsScreen: Contains the application settings such as enable/disable push, Enable/disable location, add tags, add named user...
+ * SettingsScreen: Contains the application settings such as enable/disable push, add tags, add named user...
  */
 'use strict';
 
@@ -23,14 +23,13 @@ import {
 } from 'react-native';
 
 import { UrbanAirship } from 'urbanairship-react-native'
-import { AirshipLocation } from 'urbanairship-location-react-native'
 import { AirshipChat } from 'urbanairship-chat-react-native'
+import { AirshipPreferenceCenter } from 'urbanairship-preference-center-react-native'
 
 import styles from './../Styles';
 import { Subscription } from 'urbanairship-react-native';
 
 const notificationsEnabledKey = "com.urbanairship.notificationsEnabled"
-const locationEnabledKey = "com.urbanairship.locationEnabled"
 
 export default class SettingsScreen extends Component {
   constructor(props) {
@@ -38,7 +37,6 @@ export default class SettingsScreen extends Component {
 
     this.state = {
       notificationsEnabled: false,
-      locationEnabled: false,
       tags: [],
       tagText: "",
       namedUserText: "",
@@ -48,7 +46,6 @@ export default class SettingsScreen extends Component {
     UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
 
     this.handleNotificationsEnabled = this.handleNotificationsEnabled.bind(this);
-    this.handleLocationEnabled = this.handleLocationEnabled.bind(this);
 
     this.handleTagAdd = this.handleTagAdd.bind(this);
     this.handleTagRemove = this.handleTagRemove.bind(this);
@@ -69,11 +66,6 @@ export default class SettingsScreen extends Component {
   handleNotificationsEnabled(enabled) {
     UrbanAirship.setUserNotificationsEnabled(enabled)
     this.setState({ notificationsEnabled: enabled });
-  }
-
-  handleLocationEnabled(enabled) {
-    AirshipLocation.setLocationEnabled(enabled)
-    this.setState({ locationEnabled: enabled });
   }
 
   handleUpdateNamedUser() {
@@ -146,15 +138,16 @@ export default class SettingsScreen extends Component {
     AirshipChat.openChat();
   }
 
+  openPreferenceCenter() {
+    AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(false, "neat");
+    AirshipPreferenceCenter.openPreferenceCenter("neat");
+  }
+
   componentDidMount() {
     this.subscriptions = [];
 
     UrbanAirship.isUserNotificationsEnabled().then((enabled) => {
       this.setState({ notificationsEnabled: enabled })
-    })
-
-    AirshipLocation.isLocationEnabled().then((enabled) => {
-      this.setState({ locationEnabled: enabled })
     })
 
     this.subscriptions = [
@@ -189,7 +182,14 @@ export default class SettingsScreen extends Component {
 
       AirshipChat.addChatOpenListener( (body) => {
         console.log("Chat opened : " + body);
+      }),
+
+      AirshipPreferenceCenter.addPreferenceCenterOpenListener( (body) => {
+        //Navigate to custom UI
+        console.log("Preference center opened : " + body["preferenceCenterId"]);
+        
       })
+
     ];
   }
 
@@ -234,10 +234,6 @@ export default class SettingsScreen extends Component {
             handleMessageSet={this.handleMessageSet}
             handleUpdateMessage={this.handleUpdateMessage}
           />
-          <EnableLocationCell
-            locationEnabled={this.state.locationEnabled}
-            handleLocationEnabled={this.handleLocationEnabled}
-          />
           <Button
             color='#0d6a83'
             onPress={() => this.handleMessageCenterDisplay()}
@@ -248,6 +244,11 @@ export default class SettingsScreen extends Component {
             onPress={() => this.openChat()}
             title="Open chat"
           />
+          <Button
+                      color='#0d6a83'
+                      onPress={() => this.openPreferenceCenter()}
+                      title="Preference Center"
+                    />
         </ScrollView>
       </View>
 
@@ -266,23 +267,6 @@ class EnablePushCell extends Component {
           trackColor={{ true: "#0d6a83", false: null }}
           onValueChange={(value) => this.props.handleNotificationsEnabled(value)}
           value={this.props.notificationsEnabled}
-        />
-      </View>
-    );
-  }
-}
-
-class EnableLocationCell extends Component {
-  render() {
-    return (
-      <View style={styles.cellContainer}>
-        <Text style={styles.rowLabel}>
-          Enable Location
-        </Text>
-        <Switch
-          trackColor={{ true: "#0d6a83", false: null }}
-          onValueChange={(value) => this.props.handleLocationEnabled(value)}
-          value={this.props.locationEnabled}
         />
       </View>
     );
@@ -322,7 +306,7 @@ class NamedUserInputCell extends Component {
           onChangeText={(text) => this.props.handleUpdateNamedUserText(text)}
           value={this.props.namedUserText}
         />
-        <View style={styles.inputButton}>
+        <View>
           <Button
             color='#0d6a83'
             onPress={() => this.props.handleNamedUserSet(this.props.namedUserText)}
@@ -383,7 +367,7 @@ class TagInputCell extends Component {
           onChangeText={(text) => this.props.handleUpdateTagText(text)}
           value={this.props.tagText}
         />
-        <View style={styles.inputButton}>
+        <View>
           <Button
             color='#0d6a83'
             onPress={() => this.props.handleTagAdd(this.props.tagText || '')}
@@ -407,7 +391,7 @@ class MessageInputCell extends Component {
           onChangeText={(text) => this.props.handleUpdateMessage(text)}
           value={this.props.messageText}
         />
-        <View style={styles.inputButton}>
+        <View>
           <Button
             color='#0d6a83'
             onPress={() => this.props.handleMessageSet(this.props.messageText)}

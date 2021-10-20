@@ -8,7 +8,7 @@
 #import "UAMessageCenter.h"
 #import "UAInboxMessageList.h"
 #else
-@import Airship;
+@import AirshipKit;
 #endif
 
 extern NSString *const UARCTNotificationPresentationAlertKey;
@@ -18,7 +18,7 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 /**
  * Listeners for Urban Airship events and emits them to the JS layer.
  */
-@interface UARCTEventEmitter : NSObject <UARCTDeepLinkDelegate, UAPushNotificationDelegate, UARegistrationDelegate>
+@interface UARCTEventEmitter : NSObject <UAPushNotificationDelegate, UARegistrationDelegate, UADeepLinkDelegate>
 
 /**
  * The RCTBridge. Assigned by `UrbanAirshipReactModule`.
@@ -53,6 +53,12 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 - (void)openChat:(NSString *)message;
 
 /**
+ * Sends an open preference center event
+ * @param preferenceCenterID The preference center ID
+ */
+- (void) openPreferenceCenterForID:(NSString *)preferenceCenterID;
+
+/**
  * Sends an show inbox message event.
  * @param messageID The message ID.
  */
@@ -60,10 +66,11 @@ extern NSString *const UARCTNotificationPresentationSoundKey;
 
 /**
  * Creates a push map for a given notification content.
- * @param content The notification content.
+ * @param userInfo The notification info.
+ * @param identifier The notification identifier.
  * @return Push map.
  */
-+ (NSMutableDictionary *)eventBodyForNotificationContent:(UANotificationContent *)content;
++ (NSMutableDictionary *)eventBodyForNotificationContent:(NSDictionary *)userInfo notificationIdentifier:(NSString *)identifier;
 
 /**
  * Gets and removes any pending events for the given type.

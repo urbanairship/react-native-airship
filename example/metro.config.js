@@ -4,7 +4,7 @@ const extraNodeModules = new Proxy(
   {
     'urbanairship-react-native': path.resolve(__dirname, '../urbanairship-react-native'),
     'urbanairship-chat-react-native': path.resolve(__dirname, '../urbanairship-chat-react-native'),
-    'urbanairship-location-react-native': path.resolve(__dirname, '../urbanairship-location-react-native'),
+    'urbanairship-preference-center-react-native': path.resolve(__dirname, '../urbanairship-preference-center-react-native'),
   },
   {
     get: (target, name) => {
@@ -19,7 +19,7 @@ const extraNodeModules = new Proxy(
 const watchFolders = [
   path.resolve(__dirname, '../urbanairship-react-native'),
   path.resolve(__dirname, '../urbanairship-chat-react-native'),
-  path.resolve(__dirname, '../urbanairship-location-react-native'),
+  path.resolve(__dirname, '../urbanairship-preference-center-react-native'),
   path.resolve(__dirname, '../node_modules'),
 ];
 

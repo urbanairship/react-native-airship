@@ -19,17 +19,22 @@ static BOOL disabled = NO;
 
 + (void)load {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:[UARCTAutopilot class] selector:@selector(takeOff) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    [center addObserverForName:UIApplicationDidFinishLaunchingNotification
+                                                      object:nil
+                                                       queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        
+        [self takeOffWithLaunchOptions:note.userInfo];
+    }];
 }
 
-+ (void)takeOff {
++ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions {
     if (disabled) {
         return;
     }
 
     static dispatch_once_t takeOffdispatchOnce_;
     dispatch_once(&takeOffdispatchOnce_, ^{
-        [UAirship takeOff];
+        [UAirship takeOffWithLaunchOptions:launchOptions];
 
         UA_LINFO(@"Airship ReactNative version: %@, SDK version: %@", [UARCTModuleVersion get], [UAirshipVersion get]);
         [[UAirship analytics] registerSDKExtension:UASDKExtensionReactNative version:[UARCTModuleVersion get]];
@@ -38,10 +43,8 @@ static BOOL disabled = NO;
         [UAirship push].registrationDelegate = [UARCTEventEmitter shared];
         [UAMessageCenter shared].displayDelegate  = [UARCTMessageCenter shared];
 
-        // Register custom deep link action
-        UARCTDeepLinkAction *dle = [[UARCTDeepLinkAction alloc] init];
-        [[UAirship shared].actionRegistry updateAction:dle forEntryWithName:UADeepLinkActionDefaultRegistryName];
-        dle.deepLinkDelegate = [UARCTEventEmitter shared];
+        // Add deep link delegate
+        UAirship.shared.deepLinkDelegate = [UARCTEventEmitter shared];
 
         // Add observer for inbox updated event
         [[NSNotificationCenter defaultCenter] addObserver:[UARCTEventEmitter shared]

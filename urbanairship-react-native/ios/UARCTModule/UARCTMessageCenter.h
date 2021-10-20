@@ -6,7 +6,7 @@
 #import "UAMessageCenter.h"
 #import "UADefaultMessageCenterUI.h"
 #else
-@import Airship;
+@import AirshipKit;
 #endif
 
 extern NSString *const UARCTAutoLaunchMessageCenterKey;
