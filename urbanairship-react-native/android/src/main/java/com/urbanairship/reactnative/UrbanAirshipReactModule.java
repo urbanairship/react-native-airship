@@ -470,7 +470,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Edit a subscription lists.
+     * Edit a subscription list.
      *
      * @param subscriptionListUpdates The subscription lists.
      */
