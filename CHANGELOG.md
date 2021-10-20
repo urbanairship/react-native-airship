@@ -1,15 +1,15 @@
 # React Native Module Changelog
 
 ## Version 13.0.0 - October 20, 2020
-Major release to provide new features and include the latest iOS and Android SDKs.
+Major release to provide new features and include the latest iOS and Android SDKs. This version requires Xcode 13 for iOS and compileSdkVersion 31 and java 8 source compatibility for Android.
 
 - Added urbanairship-preference-center-react-native module. 
 - Remove urbanairship-location-react-native module.
 - Added a sample preference center to the example app.
 - Support overriding locale.
 - Setup android:exported explicitly on all activities.
-- Updated iOS SDK to 16.0.0
-- Updated Android SDK to 16.0.1
+- Updated iOS SDK to 16.0.1
+- Updated Android SDK to 16.0.0
 
 ## Version 12.1.0 - October 18, 2021
 Minor release adding opt-in changes.
