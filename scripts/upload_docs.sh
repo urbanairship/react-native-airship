@@ -20,7 +20,7 @@ cp -p $ROOT_PATH/documentation/index-for-docs.html index.html
 
 cp -rp $ROOT_PATH/urbanairship-accengage-react-native/docs urbanairship-accengage-react-native
 cp -rp $ROOT_PATH/urbanairship-hms-react-native/docs urbanairship-hms-react-native
-cp -rp $ROOT_PATH/urbanairship-location-react-native/docs urbanairship-location-react-native
+cp -rp $ROOT_PATH/urbanairship-preference-center-react-native/docs urbanairship-preference-center-react-native
 cp -rp $ROOT_PATH/urbanairship-react-native/docs urbanairship-react-native
 
 tar -czf $TAR_NAME *
