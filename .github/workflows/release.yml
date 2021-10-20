@@ -58,7 +58,10 @@ jobs:
           cd urbanairship-react-native/
           yarn generate-docs
           cd -
-          cd urbanairship-location-react-native/
+          cd urbanairship-preference-center-react-native/
+          yarn generate-docs
+          cd -
+          cd urbanairship-chat-react-native/
           yarn generate-docs
           cd -
           cd urbanairship-accengage-react-native/
@@ -79,7 +82,10 @@ jobs:
           cd urbanairship-react-native/
           yarn publish
           cd -
-          cd urbanairship-location-react-native/
+          cd urbanairship-preference-center-react-native/
+          yarn publish
+          cd -
+          cd urbanairship-chat-react-native/
           yarn publish
           cd -
           cd urbanairship-accengage-react-native/
