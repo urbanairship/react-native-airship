@@ -10,14 +10,17 @@
         <activity
             android:name="com.urbanairship.reactnative.CustomMessageCenterActivity"
             android:label="@string/ua_message_center_title"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.urbanairship.VIEW_RICH_PUSH_INBOX" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name="com.urbanairship.reactnative.CustomMessageActivity">
+        <activity
+            android:name="com.urbanairship.reactnative.CustomMessageActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.urbanairship.VIEW_RICH_PUSH_MESSAGE" />
                 <data android:scheme="message" />
