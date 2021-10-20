@@ -1,10 +1,10 @@
-# Airship Location React Native
+# urbanairship-preference-center-react-native
 
-A React Native location module for Airship's iOS and Android SDK.
+A React Native module for Airship's iOS and Android SDK.
 
 ### Resources
 
-* [Getting started guide](http://docs.airship.com/platform/react-native/location/)
+* [Getting started guide](http://docs.airship.com/platform/react-native/)
 * [API docs](http://docs.airship.com/reference/libraries/react-native/latest/index.html)
 
 ### Issues
@@ -22,12 +22,12 @@ Please visit https://support.airship.com/ for any issues integrating or using th
 
 ### using yarn
 ```
-yarn add urbanairship-location-react-native
+yarn add urbanairship-preference-center-react-native
 ```
 
 ### using npm
 ```
-npm install urbanairship-location-react-native --save
+npm install urbanairship-preference-center-react-native --save
 ```
 
 ## iOS Setup
@@ -40,6 +40,5 @@ cd ios && pod install
 
 ## Usage
 ```javascript
-import AirshipLocation from 'urbanairship-location-react-native';
-
+import AirshipPreferenceCenter from 'urbanairship-preference-center-react-native';
 ```

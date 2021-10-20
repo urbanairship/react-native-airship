@@ -38,6 +38,7 @@ import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
 import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.channel.AttributeEditor;
+import com.urbanairship.channel.SubscriptionListEditor;
 import com.urbanairship.channel.TagGroupsEditor;
 import com.urbanairship.messagecenter.Inbox;
 import com.urbanairship.messagecenter.Message;
@@ -79,6 +80,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String ATTRIBUTE_OPERATION_SET = "set";
     private static final String ATTRIBUTE_OPERATION_REMOVE = "remove";
     private static final String ATTRIBUTE_OPERATION_VALUETYPE = "type";
+
+    private static final String SUBSCRIBE_LIST_OPERATION_LISTID = "listId";
+    private static final String SUBSCRIBE_LIST_OPERATION_TYPE = "type";
 
     private static final String QUIET_TIME_START_HOUR = "startHour";
     private static final String QUIET_TIME_START_MINUTE = "startMinute";
@@ -464,6 +468,41 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void editNamedUserAttributes(ReadableArray operations) {
         applyAttributeOperations(UAirship.shared().getNamedUser().editAttributes(), operations);
     }
+
+    /**
+     * Edit a subscription list.
+     *
+     * @param subscriptionListUpdates The subscription lists.
+     */
+    @ReactMethod
+    public void editSubscriptionLists(ReadableArray subscriptionListUpdates) {
+
+        SubscriptionListEditor editor = UAirship.shared().getChannel().editSubscriptionLists();
+
+        for (int i = 0; i < subscriptionListUpdates.size(); i++) {
+
+            ReadableMap subscriptionListUpdate = subscriptionListUpdates.getMap(i);
+            if (subscriptionListUpdate == null) {
+                continue;
+            }
+
+            String listId = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_LISTID);
+            String type = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_TYPE);
+
+            if (listId == null || type == null) {
+                continue;
+            }
+
+            if ("subscribe".equals(type)) {
+                editor.subscribe(listId);
+            } else if ("unsubscribe".equals(type)) {
+                editor.unsubscribe(listId);
+            }
+
+        }
+        editor.apply();
+    }
+
 
     /**
      * Associated an identifier to the channel.

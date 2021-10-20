@@ -23,7 +23,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 - (instancetype) init {
     self = [super initWithFrame:CGRectZero];
     if (self) {
-        self.nativeBridge = [UANativeBridge nativeBridge];
+        self.nativeBridge = [[UANativeBridge alloc] init];
         self.nativeBridge.forwardNavigationDelegate = self;
         self.nativeBridge.nativeBridgeDelegate = self;
         self.nativeBridgeExtension = [[UAMessageCenterNativeBridgeExtension alloc] init];

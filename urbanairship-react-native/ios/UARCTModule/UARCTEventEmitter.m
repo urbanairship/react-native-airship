@@ -17,6 +17,8 @@ NSString *const UARCTInboxUpdatedEventName = @"com.urbanairship.inbox_updated";
 NSString *const UARCTShowInboxEventName = @"com.urbanairship.show_inbox";
 NSString *const UARCTConversationUpdatedEventName = @"com.urbanairship.conversation_updated";
 NSString *const UARCTOpenChatEventName = @"com.urbanairship.open_chat";
+NSString *const UARCTOpenPreferenceCenterEventName = @"com.urbanairship.open_preference_center";
+NSString *const UAChannelUpdatedEventChannelKey = @"com.urbanairship.channel.identifier";
 
 NSString *const UARCTNotificationPresentationAlertKey = @"alert";
 NSString *const UARCTNotificationPresentationBadgeKey = @"badge";
@@ -50,7 +52,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
         self.pendingEvents = [NSMutableArray array];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(channelRegistrationSucceeded:)
-                                                     name:UAChannelUpdatedEvent
+                                                     name:UAChannel.channelUpdatedEvent
                                                    object:nil];
     }
 
@@ -103,33 +105,29 @@ static UARCTEventEmitter *sharedEventEmitter_;
 }
 
 #pragma mark -
-#pragma mark UARCTDeepLinkDelegate
+#pragma mark UADeepLinkDelegate
 
--(void)deepLinkReceived:(NSString *)deepLink {
+-(void)receivedDeepLink:(NSURL *)deepLink completionHandler:(void (^)(void))completionHandler {
     id body = @{ @"deepLink" : deepLink };
     [self sendEventWithName:UARCTDeepLinkEventName body:body];
+    completionHandler();
 }
 
 #pragma mark -
 #pragma mark UAPushDelegate
-
--(void)receivedForegroundNotification:(UANotificationContent *)notificationContent
-                    completionHandler:(void (^)(void))completionHandler {
-
-    [self sendEventWithName:UARCTPushReceivedEventName body:[UARCTEventEmitter eventBodyForNotificationContent:notificationContent]];
+-(void)receivedForegroundNotification:(NSDictionary *)userInfo completionHandler:(void (^)(void))completionHandler {
+    [self sendEventWithName:UARCTPushReceivedEventName body:[UARCTEventEmitter eventBodyForNotificationContent:userInfo notificationIdentifier:nil]];
     completionHandler();
 }
 
--(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent
-                    completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [self sendEventWithName:UARCTPushReceivedEventName body:[UARCTEventEmitter eventBodyForNotificationContent:notificationContent]];
+-(void)receivedBackgroundNotification:(NSDictionary *)userInfo completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    [self sendEventWithName:UARCTPushReceivedEventName body:[UARCTEventEmitter eventBodyForNotificationContent:userInfo notificationIdentifier:nil]];
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
--(void)receivedNotificationResponse:(UANotificationResponse *)notificationResponse
-                  completionHandler:(void (^)(void))completionHandler {
+-(void)receivedNotificationResponse:(UNNotificationResponse *)notificationResponse completionHandler:(void (^)(void))completionHandler {
     // Ignore dismisses for now
-    if ([notificationResponse.actionIdentifier isEqualToString:UANotificationDismissActionIdentifier]) {
+    if ([notificationResponse.actionIdentifier isEqualToString:UNNotificationDismissActionIdentifier]) {
         completionHandler();
         return;
     }
@@ -240,16 +238,26 @@ static UARCTEventEmitter *sharedEventEmitter_;
 }
 
 #pragma mark -
+#pragma mark Preference center
+
+- (void)openPreferenceCenterForID:(NSString *)preferenceCenterID {
+    NSMutableDictionary *body = [NSMutableDictionary dictionary];
+    [body setValue:preferenceCenterID forKey:@"preferenceCenterId"];
+
+    [self sendEventWithName:UARCTOpenPreferenceCenterEventName body:body];
+}
+
+#pragma mark -
 #pragma mark Helper methods
 
-- (NSMutableDictionary *)eventBodyForNotificationResponse:(UANotificationResponse *)notificationResponse {
+- (NSMutableDictionary *)eventBodyForNotificationResponse:(UNNotificationResponse *)notificationResponse {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
-    [body setValue:[UARCTEventEmitter eventBodyForNotificationContent:notificationResponse.notificationContent] forKey:@"notification"];
+    [body setValue:[UARCTEventEmitter eventBodyForNotificationContent:notificationResponse.notification.request.content.userInfo notificationIdentifier:notificationResponse.notification.request.identifier] forKey:@"notification"];
 
-    if ([notificationResponse.actionIdentifier isEqualToString:UANotificationDefaultActionIdentifier]) {
+    if ([notificationResponse.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
         [body setValue:@(YES) forKey:@"isForeground"];
     } else {
-        UANotificationAction *notificationAction = [self notificationActionForCategory:notificationResponse.notificationContent.categoryIdentifier
+        UNNotificationAction *notificationAction = [self notificationActionForCategory:notificationResponse.notification.request.content.categoryIdentifier
                                                                       actionIdentifier:notificationResponse.actionIdentifier];
         BOOL isForeground = notificationAction.options & UNNotificationActionOptionForeground;
 
@@ -260,41 +268,58 @@ static UARCTEventEmitter *sharedEventEmitter_;
     return body;
 }
 
-+ (NSMutableDictionary *)eventBodyForNotificationContent:(UANotificationContent *)content {
++ (NSMutableDictionary *)eventBodyForNotificationContent:(NSDictionary *)userInfo notificationIdentifier:(NSString *)identifier {
     NSMutableDictionary *pushBody = [NSMutableDictionary dictionary];
-    [pushBody setValue:content.alertBody forKey:@"alert"];
-    [pushBody setValue:content.alertTitle forKey:@"title"];
 
     // remove extraneous key/value pairs
-    NSMutableDictionary *extras = [NSMutableDictionary dictionaryWithDictionary:content.notificationInfo];
-
+    NSMutableDictionary *extras = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+    
+    //Fill in the notification title, subtitle and body if exists
     if([[extras allKeys] containsObject:@"aps"]) {
+        NSDictionary* aps = extras[@"aps"];
+        
+        if ([[aps allKeys] containsObject:@"alert"]) {
+            
+            NSDictionary *alert = aps[@"alert"];
+            if ([[alert allKeys] containsObject:@"title"]) {
+                [pushBody setValue:alert[@"title"] forKey:@"title"];
+            }
+            if ([[alert allKeys] containsObject:@"body"]) {
+                [pushBody setValue:alert[@"body"] forKey:@"alert"];
+            }
+            if ([[alert allKeys] containsObject:@"subtitle"]) {
+                [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
+            }
+        }
         [extras removeObjectForKey:@"aps"];
     }
-
+    
     if([[extras allKeys] containsObject:@"_"]) {
         [extras removeObjectForKey:@"_"];
     }
 
+    //Fill in the notification extras
     if (extras.count) {
         [pushBody setValue:extras forKey:@"extras"];
     }
 
+    //Fill in the notification identifier if exists
     if (@available(iOS 10.0, *)) {
-        NSString *identifier = content.notification.request.identifier;
-        [pushBody setValue:identifier forKey:@"notificationId"];
+        if (identifier) {
+            [pushBody setValue:identifier forKey:@"notificationId"];
+        }
     }
 
     return pushBody;
 }
 
-- (UANotificationAction *)notificationActionForCategory:(NSString *)category actionIdentifier:(NSString *)identifier {
+- (UNNotificationAction *)notificationActionForCategory:(NSString *)category actionIdentifier:(NSString *)identifier {
     NSSet *categories = [UAirship push].combinedCategories;
 
-    UANotificationCategory *notificationCategory;
-    UANotificationAction *notificationAction;
+    UNNotificationCategory *notificationCategory;
+    UNNotificationAction *notificationAction;
 
-    for (UANotificationCategory *possibleCategory in categories) {
+    for (UNNotificationCategory *possibleCategory in categories) {
         if ([possibleCategory.identifier isEqualToString:category]) {
             notificationCategory = possibleCategory;
             break;
@@ -308,7 +333,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 
     NSMutableArray *possibleActions = [NSMutableArray arrayWithArray:notificationCategory.actions];
 
-    for (UANotificationAction *possibleAction in possibleActions) {
+    for (UNNotificationAction *possibleAction in possibleActions) {
         if ([possibleAction.identifier isEqualToString:identifier]) {
             notificationAction = possibleAction;
             break;

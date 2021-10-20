@@ -23,9 +23,6 @@
         deepLink = arguments.value;
     }
 
-    // Send DL event
-    [self.deepLinkDelegate deepLinkReceived:deepLink];
-
     completionHandler([UAActionResult resultWithValue:arguments.value]);
 }
 

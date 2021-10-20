@@ -1,7 +1,7 @@
 #import "AirshipChatModule.h"
 #import "UARCTEventEmitter.h"
 
-@import Airship;
+@import AirshipKit;
 
 static NSString * const AirshipChatModuleCustomUIKey = @"com.urbanairship.react.chat.custom_ui";
 
@@ -14,31 +14,39 @@ RCT_EXPORT_MODULE()
     self = [super init];
     if (self) {
         if (@available(iOS 13.0, *)) {
-            [UAirshipChat shared].conversation.delegate = self;
+            [UAChat shared].conversation.delegate = self;
             [self updateOpenChatDelegate];
         }
     }
     return self;
 }
 
+RCT_EXPORT_METHOD(connect) {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        if (@available(iOS 13.0, *)) {
+            [[[UAChat shared] conversation] connect];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(openChat) {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         if (@available(iOS 13.0, *)) {
-            [[UAirshipChat shared] openChat];
+            [[UAChat shared] openChat];
         }
     }];
 }
 
 RCT_EXPORT_METHOD(sendMessage:(NSString *)message) {
     if (@available(iOS 13.0, *)) {
-        [[UAirshipChat shared].conversation sendMessage:message];
+        [[UAChat shared].conversation sendMessage:message];
     }
 }
 
 RCT_EXPORT_METHOD(sendMessageWithAttachment:(NSString *)message
                   :(NSURL *)attachmentUrl) {
     if (@available(iOS 13.0, *)) {
-        [[UAirshipChat shared].conversation sendMessage:message attachment:attachmentUrl];
+        [[UAChat shared].conversation sendMessage:message attachment:attachmentUrl];
     }
 }
 
@@ -47,7 +55,7 @@ RCT_REMAP_METHOD(getMessages,
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
     if (@available(iOS 13.0, *)) {
-        [[UAirshipChat shared].conversation fetchMessagesWithCompletionHandler:^(NSArray<UAChatMessage *> *messages) {
+        [[UAChat shared].conversation fetchMessagesWithCompletionHandler:^(NSArray<UAChatMessage *> *messages) {
             NSMutableArray *mutableMessages = [messages mutableCopy];
             for (UAChatMessage *message in messages) {
                 NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
@@ -84,9 +92,9 @@ RCT_EXPORT_METHOD(setUseCustomChatUI:(BOOL)useCustomUI) {
     if (@available(iOS 13.0, *)) {
         BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:AirshipChatModuleCustomUIKey];
         if (enabled) {
-            [UAirshipChat shared].openChatDelegate = self;
+            [UAChat shared].openChatDelegate = self;
         } else {
-            [UAirshipChat shared].openChatDelegate = nil;
+            [UAChat shared].openChatDelegate = nil;
         }
     }
 }

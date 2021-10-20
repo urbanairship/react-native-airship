@@ -77,6 +77,12 @@ public class AirshipChatModule extends ReactContextBaseJavaModule {
         return PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext())
                 .getBoolean(SHOW_CUSOTM_UI, false);
     }
+
+    @ReactMethod
+    public void connect() {
+        Chat.shared().getConversation().connect();
+    }
+
     @ReactMethod
     public void openChat() {
         Chat.shared().openChat();
