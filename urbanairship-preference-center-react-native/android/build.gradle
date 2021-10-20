@@ -9,10 +9,10 @@ ext {
 android {
 
   // Android SDK Versions
-  compileSdkVersion 29
+  compileSdkVersion 31
 
   defaultConfig {
-    targetSdkVersion 29
+    targetSdkVersion 31
     minSdkVersion 21
 
     buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
