@@ -135,15 +135,6 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getConfig(String preferenceCenterId, final Promise promise) {
-        PendingResult<PreferenceCenterConfig> configPendingResult = PreferenceCenter.shared().getConfig(preferenceCenterId);
-        if (configPendingResult.getResult() != null) {
-            WritableMap configMap = new WritableNativeMap();
-            promise.resolve(configMap);
-        }
-    }
-
-    @ReactMethod
     public void setUseCustomPreferenceCenterUi(boolean useCustomUI, String preferenceID) {
       PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).edit().putBoolean(preferenceID, useCustomUI).apply();
     }
