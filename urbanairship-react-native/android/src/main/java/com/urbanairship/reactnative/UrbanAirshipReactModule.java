@@ -53,6 +53,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
@@ -857,6 +858,35 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                 .edit()
                 .putBoolean(AUTO_LAUNCH_MESSAGE_CENTER, enabled)
                 .apply();
+    }
+
+    /**
+     * Overriding the locale.
+     *
+     * @param localeIdentifier The locale identifier.
+     */
+    @ReactMethod
+    public void setCurrentLocale(String localeIdentifier) {
+        UAirship.shared().setLocaleOverride(new Locale(localeIdentifier));
+    }
+
+    /**
+     * Getting the locale currently used by Airship.
+     *
+     */
+    @ReactMethod
+    public void getCurrentLocale(Promise promise) {
+        Locale airshipLocale = UAirship.shared().getLocale();
+        promise.resolve(airshipLocale.getLanguage());
+    }
+
+    /**
+     * Resets the current locale.
+     *
+     */
+    @ReactMethod
+    public void clearLocale() {
+        UAirship.shared().setLocaleOverride(null);
     }
 
     /**

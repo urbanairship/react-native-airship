@@ -569,6 +569,21 @@ RCT_EXPORT_METHOD(setAutoLaunchDefaultMessageCenter:(BOOL)enabled) {
     [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:UARCTAutoLaunchMessageCenterKey];
 }
 
+RCT_EXPORT_METHOD(setCurrentLocale:(NSString *)localeIdentifier) {
+    [UAirship.shared.localeManager setCurrentLocale:[NSLocale localeWithLocaleIdentifier:localeIdentifier]];
+}
+
+RCT_REMAP_METHOD(getCurrentLocale,
+                 getCurrentLocale_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    NSLocale *airshipLocale = [[UAirship shared].localeManager currentLocale];
+    resolve(airshipLocale.localeIdentifier);
+}
+
+RCT_EXPORT_METHOD(clearLocale) {
+    [[UAirship shared].localeManager clearLocale];
+}
+
 RCT_EXPORT_METHOD(clearNotifications) {
     [[UNUserNotificationCenter currentNotificationCenter] removeAllDeliveredNotifications];
 }
