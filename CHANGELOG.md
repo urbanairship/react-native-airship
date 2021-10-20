@@ -1,11 +1,13 @@
 # React Native Module Changelog
 
-## Version 13.0.0 - October 19, 2020
+## Version 13.0.0 - October 20, 2020
 Major release to provide new features and include the latest iOS and Android SDKs.
 
 - Added urbanairship-preference-center-react-native module. 
 - Remove urbanairship-location-react-native module.
 - Added a sample preference center to the example app.
+- Support Locale overwrite missing.
+- Setup android:exported explicitly on all activities.
 - Updated iOS SDK to 16.0.0
 - Updated Android SDK to 16.0.1
 
