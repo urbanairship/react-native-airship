@@ -15,6 +15,8 @@ Please visit https://support.airship.com/ for any issues integrating or using th
  - Xcode 13+
  - iOS: Deployment target 11.0+
  - Android: minSdkVersion 21+, compileSdkVersion 31+
+ - Gradle Plugin to version 3.0.0 or higher
+ - Java 8
  - React Native >= 0.60.0
  - React Native cli >= 2.0.1
 
@@ -63,7 +65,51 @@ service extension by following the [iOS Notification Service Extension Guide](ht
 
 ## Android Setup
 
-1) Create the `airshipconfig.properties` file in the application's `app/src/main/assets`:
+1) Compile and Target SDK Versions:
+
+Urban Airship now requires `compileSdk` version 31 (Android 12) or higher.
+
+Please update the `build.gradle` file:
+
+```groovy
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 31
+
+        // ...
+    }
+}
+```
+2) Java 8 Source Compatibility:
+
+Urban Airship now requires Java 8 language features across all SDK modules.
+
+Please update Android Gradle Plugin to version `3.0.0` or higher and change the source and target
+compatibility for each module that uses Airship SDKs:
+
+```groovy
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+```
+
+Modules using Kotlin will also need to set the target version of the generated JVM bytecode:
+
+```groovy
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach  {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+```
+
+3) Create the `airshipconfig.properties` file in the application's `app/src/main/assets`:
 ```
 developmentAppKey = Your Development App Key
 developmentAppSecret = Your Development App Secret
