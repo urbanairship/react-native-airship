@@ -12,9 +12,9 @@ A React Native module for Airship's iOS and Android SDK.
 Please visit https://support.airship.com/ for any issues integrating or using this module.
 
 ### Requirements:
- - Xcode 12+
+ - Xcode 13+
  - iOS: Deployment target 11.0+
- - Android: minSdkVersion 16+, compileSdkVersion 29+
+ - Android: minSdkVersion 21+, compileSdkVersion 31+
  - React Native >= 0.60.0
  - React Native cli >= 2.0.1
 
