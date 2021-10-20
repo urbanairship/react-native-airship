@@ -139,7 +139,7 @@ export default class SettingsScreen extends Component {
   }
 
   openPreferenceCenter() {
-    //AirshipPreferenceCenter.setUseCustomPreferenceCenterUI(true, "neat");
+    AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(false, "neat");
     AirshipPreferenceCenter.openPreferenceCenter("neat");
   }
 
@@ -186,7 +186,8 @@ export default class SettingsScreen extends Component {
 
       AirshipPreferenceCenter.addPreferenceCenterOpenListener( (body) => {
         //Navigate to custom UI
-        console.log("Preference center opened : " + body);
+        console.log("Preference center opened : " + body["preferenceCenterId"]);
+        
       })
 
     ];
