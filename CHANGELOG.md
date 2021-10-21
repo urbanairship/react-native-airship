@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 13.0.0 - October 20, 2020
+## Version 13.0.0 - October 20, 2021
 Major release to provide new features and include the latest iOS and Android SDKs. This version requires Xcode 13 for iOS and compileSdkVersion 31 and java 8 source compatibility for Android.
 
 - Added urbanairship-preference-center-react-native module. 
