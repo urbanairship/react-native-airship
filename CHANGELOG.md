@@ -3,12 +3,15 @@
 ## Version 13.0.1 - November 5, 2021
 Patch release that fixes preferences resetting when upgrading to SDK 15/16. This update will restore old preferences that have not been modified in the new SDK version.
 
-Apps that have migrated to version 13.0.0 should update. Apps currently on version 12.1.0 and below should only migrate to 13.0.1 to avoid a bug in version 13.0.0.
+**Apps that have migrated to 13.0.0 from an older version should update. Apps currently on version 12.1.0 and below should only migrate to 13.0.1 to avoid a bug in version 13.0.0.**
 
 ### Changes
 - Updated iOS SDK to 16.0.2
 
 ## Version 13.0.0 - October 20, 2021
+
+**Due to a bug that mishandles persisted SDK settings, apps that are migrating from plugin 12.1.0 or older should avoid this version and instead use 13.0.1 or newer.**
+
 Major release to provide new features and include the latest iOS and Android SDKs. This version requires Xcode 13 for iOS and compileSdkVersion 31 and java 8 source compatibility for Android.
 
 - Added urbanairship-preference-center-react-native module. 
