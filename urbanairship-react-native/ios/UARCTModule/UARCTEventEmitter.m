@@ -281,17 +281,10 @@ static UARCTEventEmitter *sharedEventEmitter_;
         
         if ([[aps allKeys] containsObject:@"alert"]) {
             id alert = aps[@"alert"];
-            
             if ([alert isKindOfClass:[NSDictionary class]]) {
-                if ([[alert allKeys] containsObject:@"title"]) {
-                    [pushBody setValue:alert[@"title"] forKey:@"title"];
-                }
-                if ([[alert allKeys] containsObject:@"body"]) {
-                    [pushBody setValue:alert[@"body"] forKey:@"alert"];
-                }
-                if ([[alert allKeys] containsObject:@"subtitle"]) {
-                    [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
-                }
+                [pushBody setValue:alert[@"title"] forKey:@"title"];
+                [pushBody setValue:alert[@"body"] forKey:@"alert"];
+                [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
             } else {
                 [pushBody setValue:alert forKey:@"alert"];
             }
