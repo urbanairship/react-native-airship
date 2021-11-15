@@ -503,7 +503,7 @@ RCT_REMAP_METHOD(getInboxMessages,
         [messageInfo setValue:iconUrl forKey:@"listIconUrl"];
         [messageInfo setValue:message.unread ? @NO : @YES  forKey:@"isRead"];
         [messageInfo setValue:message.extra forKey:@"extras"];
-        [messageInfo setObject:message.deleted ? @NO : @YES forKey:@"isDeleted"];
+        [messageInfo setObject:message.deleted ? @YES : @NO forKey:@"isDeleted"];
 
         [messages addObject:messageInfo];
     }
