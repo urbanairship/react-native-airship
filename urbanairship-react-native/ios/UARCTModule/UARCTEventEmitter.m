@@ -108,7 +108,7 @@ static UARCTEventEmitter *sharedEventEmitter_;
 #pragma mark UADeepLinkDelegate
 
 -(void)receivedDeepLink:(NSURL *)deepLink completionHandler:(void (^)(void))completionHandler {
-    id body = @{ @"deepLink" : deepLink };
+    id body = @{ @"deepLink" : deepLink.absoluteString };
     [self sendEventWithName:UARCTDeepLinkEventName body:body];
     completionHandler();
 }
