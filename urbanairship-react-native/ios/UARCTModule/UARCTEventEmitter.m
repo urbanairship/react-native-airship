@@ -125,7 +125,8 @@ static UARCTEventEmitter *sharedEventEmitter_;
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
--(void)receivedNotificationResponse:(UNNotificationResponse *)notificationResponse completionHandler:(void (^)(void))completionHandler {
+-(void)receivedNotificationResponse:(UNNotificationResponse *)notificationResponse
+                  completionHandler:(void (^)(void))completionHandler {
     // Ignore dismisses for now
     if ([notificationResponse.actionIdentifier isEqualToString:UNNotificationDismissActionIdentifier]) {
         completionHandler();
@@ -279,16 +280,21 @@ static UARCTEventEmitter *sharedEventEmitter_;
         NSDictionary* aps = extras[@"aps"];
         
         if ([[aps allKeys] containsObject:@"alert"]) {
+            id alert = aps[@"alert"];
             
-            NSDictionary *alert = aps[@"alert"];
-            if ([[alert allKeys] containsObject:@"title"]) {
-                [pushBody setValue:alert[@"title"] forKey:@"title"];
-            }
-            if ([[alert allKeys] containsObject:@"body"]) {
-                [pushBody setValue:alert[@"body"] forKey:@"alert"];
-            }
-            if ([[alert allKeys] containsObject:@"subtitle"]) {
-                [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
+            if ([alert isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *alert = aps[@"alert"];
+                if ([[alert allKeys] containsObject:@"title"]) {
+                    [pushBody setValue:alert[@"title"] forKey:@"title"];
+                }
+                if ([[alert allKeys] containsObject:@"body"]) {
+                    [pushBody setValue:alert[@"body"] forKey:@"alert"];
+                }
+                if ([[alert allKeys] containsObject:@"subtitle"]) {
+                    [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
+                }
+            } else {
+                [pushBody setValue:alert forKey:@"alert"];
             }
         }
         [extras removeObjectForKey:@"aps"];
