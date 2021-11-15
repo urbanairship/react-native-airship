@@ -17,20 +17,15 @@
 
 @interface UrbanAirshipReactModule()
 @property (nonatomic, weak) UARCTMessageViewController *messageViewController;
-@property (nonatomic, weak) UAInAppMessageHTMLAdapter *htmlAdapter;
-@property (nonatomic, assign) BOOL factoryBlockAssigned;
 @end
 
 @implementation UrbanAirshipReactModule
 
 NSString * const UARCTErrorDomain = @"com.urbanairship.react";
-
 NSString *const UARCTStatusUnavailable = @"UNAVAILABLE";
 NSString *const UARCTStatusInvalidFeature = @"INVALID_FEATURE";
 NSString *const UARCTErrorDescriptionInvalidFeature = @"Invalid feature, cancelling the action.";
 int const UARCTErrorCodeInvalidFeature = 2;
-
-
 
 #pragma mark -
 #pragma mark Module setup
@@ -218,33 +213,39 @@ RCT_REMAP_METHOD(enableUserPushNotifications,
 
 RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {
     namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    [UAirship namedUser].identifier = namedUser.length ? namedUser : nil;
+    if (namedUser.length) {
+        [UAirship.contact identify:namedUser];
+    } else {
+        [UAirship.contact reset];
+    }
 }
 
 RCT_REMAP_METHOD(getNamedUser,
                  getNamedUser_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve([UAirship namedUser].identifier);
+    resolve(UAirship.contact.namedUserID);
 }
 
 RCT_EXPORT_METHOD(addTag:(NSString *)tag) {
     if (tag) {
-        [[UAirship channel] addTag:tag];
-        [[UAirship channel] updateRegistration];
+        [UAirship.channel editTags:^(UATagEditor *editor) {
+            [editor addTag:tag];
+        }];
     }
 }
 
 RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
     if (tag) {
-        [[UAirship channel] removeTag:tag];
-        [[UAirship channel] updateRegistration];
+        [UAirship.channel editTags:^(UATagEditor *editor) {
+            [editor removeTag:tag];
+        }];
     }
 }
 
 RCT_REMAP_METHOD(getTags,
                  getTags_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve([UAirship channel].tags ?: [NSArray array]);
+    resolve(UAirship.channel.tags ?: [NSArray array]);
 }
 
 RCT_REMAP_METHOD(isAnalyticsEnabled,
@@ -260,14 +261,14 @@ RCT_EXPORT_METHOD(trackScreen:(NSString *)screen) {
 RCT_REMAP_METHOD(getChannelId,
                  getChannelId_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve([UAirship channel].identifier);
+    resolve(UAirship.channel.identifier);
 }
 
 
 RCT_REMAP_METHOD(getRegistrationToken,
                  getRegistrationToken_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    resolve([UAirship push].deviceToken);
+    resolve(UAirship.push.deviceToken);
 }
 
 RCT_REMAP_METHOD(associateIdentifier,
@@ -300,13 +301,13 @@ RCT_REMAP_METHOD(runAction,
                                 if (actionResult.value) {
                                     //if the action completed with a result value, serialize into JSON
                                     //accepting fragments so we can write lower level JSON values
-                                    resultString = [NSJSONSerialization JSONObjectWithData:actionResult.value options: NSJSONReadingFragmentsAllowed error:&error];
+                                    resultString = [UAJSONUtils stringWithObject:actionResult.value options:NSJSONWritingFragmentsAllowed error:&error];
                                     // If there was an error serializing, fall back to a string description.
                                     if (error) {
                                         error = error;
                                         UA_LDEBUG(@"Unable to serialize result value %@, falling back to string description", actionResult.value);
                                         // JSONify the result string
-                                        resultString = [NSJSONSerialization JSONObjectWithData:[actionResult.value description] options: NSJSONReadingFragmentsAllowed error:&error];
+                                        resultString = [UAJSONUtils stringWithObject:[actionResult.value description] options:NSJSONWritingFragmentsAllowed error:&error];
                                     }
                                 }
                                 //in the case where there is no result value, pass null
@@ -341,48 +342,30 @@ RCT_REMAP_METHOD(runAction,
 }
 
 RCT_EXPORT_METHOD(editNamedUserTagGroups:(NSArray *)operations) {
-    UANamedUser *namedUser = [UAirship namedUser];
-    for (NSDictionary *operation in operations) {
-        NSString *group = operation[@"group"];
-        if ([operation[@"operationType"] isEqualToString:@"add"]) {
-            [namedUser addTags:operation[@"tags"] group:group];
-        } else if ([operation[@"operationType"] isEqualToString:@"remove"]) {
-            [namedUser removeTags:operation[@"tags"] group:group];
-        } else if ([operation[@"operationType"] isEqualToString:@"set"]) {
-            [namedUser setTags:operation[@"tags"] group:group];
-        }
-    }
-
-    [namedUser updateTags];
+    [UAirship.contact editTagGroups:^(UATagGroupsEditor * editor) {
+        [self applyTagGroupOperations:operations editor:editor];
+    }];
 }
 
 RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
-    for (NSDictionary *operation in operations) {
-        NSString *group = [operation objectForKey:@"group"];
-        if ([operation[@"operationType"] isEqualToString:@"add"]) {
-            [[UAirship channel] addTags:operation[@"tags"] group:group];
-        } else if ([operation[@"operationType"] isEqualToString:@"remove"]) {
-            [[UAirship channel] removeTags:operation[@"tags"] group:group];
-        } else if ([operation[@"operationType"] isEqualToString:@"set"]) {
-            [[UAirship channel] setTags:operation[@"tags"] group:group];
-        }
-    }
-
-    [[UAirship push] updateRegistration];
+    [UAirship.channel editTagGroups:^(UATagGroupsEditor * editor) {
+        [self applyTagGroupOperations:operations editor:editor];
+    }];
 }
 
 RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
-    UAAttributeMutations *mutations = [self mutationsWithOperations:operations];
-    [[UAirship channel] applyAttributeMutations:mutations];
+    [UAirship.channel editAttributes:^(UAAttributesEditor *editor) {
+        [self applyAttributeOperations:operations editor:editor];
+    }];
 }
 
 RCT_EXPORT_METHOD(editNamedUserAttributes:(NSArray *)operations) {
-    UAAttributeMutations *mutations = [self mutationsWithOperations:operations];
-    [[UAirship namedUser] applyAttributeMutations:mutations];
+    [UAirship.contact editAttributes:^(UAAttributesEditor *editor) {
+        [self applyAttributeOperations:operations editor:editor];
+    }];
 }
 
 RCT_EXPORT_METHOD(editSubscriptionLists:(NSArray *)subscriptionListUpdates) {
-
     UASubscriptionListEditor* subscriptionListEditor = [[UAirship channel] editSubscriptionLists];
     for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
         NSString* listId = subscriptionListUpdate[@"listId"];
@@ -600,8 +583,7 @@ RCT_REMAP_METHOD(getActiveNotifications,
     [[UNUserNotificationCenter currentNotificationCenter] getDeliveredNotificationsWithCompletionHandler:^(NSArray<UNNotification *> * _Nonnull notifications) {
         NSMutableArray *result = [NSMutableArray array];
         for(UNNotification *unnotification in notifications) {
-            UNNotificationContent *content = unnotification.request.content;
-            [result addObject:[UARCTEventEmitter eventBodyForNotificationContent:content notificationIdentifier:unnotification.request.identifier]];
+            [result addObject:[UARCTEventEmitter eventBodyForNotificationContent:unnotification.request.content.userInfo notificationIdentifier:unnotification.request.identifier]];
         }
 
         resolve(result);
@@ -611,9 +593,22 @@ RCT_REMAP_METHOD(getActiveNotifications,
 #pragma mark -
 #pragma mark Helper methods
 
-- (UAAttributeMutations *)mutationsWithOperations:(NSArray *)operations {
-    UAAttributeMutations *mutations = [UAAttributeMutations mutations];
+- (void)applyTagGroupOperations:(NSArray *)operations editor:(UATagGroupsEditor *)editor {
+    for (NSDictionary *operation in operations) {
+        NSArray *tags = operation[@"tags"] ?: @[];
+        NSString *group =  operation[@"group"];
+        NSString *operationType =  operation[@"operationType"];
 
+        if ([operationType isEqualToString:@"add"]) {
+            [editor addTags:tags group:group];
+        } else if ([operationType isEqualToString:@"remove"]) {
+            [editor removeTags:tags group:group];
+        } else if ([operationType isEqualToString:@"set"]) {
+            [editor setTags:tags group:group];
+        }
+    }
+}
+- (void)applyAttributeOperations:(NSArray *)operations editor:(UAAttributesEditor *)editor {
     for (NSDictionary *operation in operations) {
         NSString *action = operation[@"action"];
         NSString *name = operation[@"key"];
@@ -622,22 +617,23 @@ RCT_REMAP_METHOD(getActiveNotifications,
         if ([action isEqualToString:@"set"]) {
             NSString *valueType = operation[@"type"];
                 if ([valueType isEqualToString:@"string"]) {
-                    [mutations setString:value forAttribute:name];
+                    [editor setString:value attribute:name];
                 } else if ([valueType isEqualToString:@"number"]) {
-                    [mutations setNumber:value forAttribute:name];
+                    [editor setNumber:value attribute:name];
                 } else if ([valueType isEqualToString:@"date"]) {
                     // JavaScript's date type doesn't pass through the JS to native bridge. Dates are instead serialized as milliseconds since epoch.
                     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[(NSNumber *)value doubleValue] / 1000.0];
-                    [mutations setDate:date forAttribute:name];
+                    [editor setDate:date attribute:name];
                 } else {
                     UA_LWARN("Unknown channel attribute type: %@", valueType);
                 }
         } else if ([action isEqualToString:@"remove"]) {
-            [mutations removeAttribute:name];
+            [editor removeAttribute:name];
         }
     }
-    return mutations;
+    
 }
+
 
 - (BOOL)isValidFeature:(NSArray *)features {
     if (!features || [features count] == 0) {
