@@ -270,41 +270,28 @@ static UARCTEventEmitter *sharedEventEmitter_;
 }
 
 + (NSMutableDictionary *)eventBodyForNotificationContent:(NSDictionary *)userInfo notificationIdentifier:(NSString *)identifier {
+
     NSMutableDictionary *pushBody = [NSMutableDictionary dictionary];
+    [pushBody setValue:identifier forKey:@"notificationId"];
 
-    // remove extraneous key/value pairs
+    // Extras
     NSMutableDictionary *extras = [NSMutableDictionary dictionaryWithDictionary:userInfo];
-    
-    //Fill in the notification title, subtitle and body if exists
-    if([[extras allKeys] containsObject:@"aps"]) {
-        NSDictionary* aps = extras[@"aps"];
-        
-        if ([[aps allKeys] containsObject:@"alert"]) {
-            id alert = aps[@"alert"];
-            if ([alert isKindOfClass:[NSDictionary class]]) {
-                [pushBody setValue:alert[@"title"] forKey:@"title"];
-                [pushBody setValue:alert[@"body"] forKey:@"alert"];
-                [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
-            } else {
-                [pushBody setValue:alert forKey:@"alert"];
-            }
-        }
-        [extras removeObjectForKey:@"aps"];
-    }
-    
-    if([[extras allKeys] containsObject:@"_"]) {
-        [extras removeObjectForKey:@"_"];
-    }
-
-    //Fill in the notification extras
+    [extras removeObjectForKey:@"aps"];
+    [extras removeObjectForKey:@"_"];
     if (extras.count) {
         [pushBody setValue:extras forKey:@"extras"];
     }
-
-    //Fill in the notification identifier if exists
-    if (@available(iOS 10.0, *)) {
-        if (identifier) {
-            [pushBody setValue:identifier forKey:@"notificationId"];
+    
+    // Fill in the notification title, subtitle and body if exists
+    NSDictionary* aps = extras[@"aps"];
+    if (aps) {
+        id alert = aps[@"alert"];
+        if ([alert isKindOfClass:[NSDictionary class]]) {
+            [pushBody setValue:alert[@"title"] forKey:@"title"];
+            [pushBody setValue:alert[@"body"] forKey:@"alert"];
+            [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
+        } else {
+            [pushBody setValue:alert forKey:@"alert"];
         }
     }
 
