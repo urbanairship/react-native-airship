@@ -283,7 +283,6 @@ static UARCTEventEmitter *sharedEventEmitter_;
             id alert = aps[@"alert"];
             
             if ([alert isKindOfClass:[NSDictionary class]]) {
-                NSDictionary *alert = aps[@"alert"];
                 if ([[alert allKeys] containsObject:@"title"]) {
                     [pushBody setValue:alert[@"title"] forKey:@"title"];
                 }
