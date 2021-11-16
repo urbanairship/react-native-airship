@@ -47,6 +47,7 @@ import com.urbanairship.push.PushMessage;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.util.UAStringUtil;
+import com.urbanairship.contacts.Contact;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -359,10 +360,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         }
 
         if (UAStringUtil.isEmpty(namedUser)) {
-            namedUser = null;
+            UAirship.shared().getContact().reset();
+        } else {
+            UAirship.shared().getContact().identify(namedUser);
         }
-
-        UAirship.shared().getNamedUser().setId(namedUser);
     }
 
     /**
@@ -372,7 +373,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getNamedUser(Promise promise) {
-        promise.resolve(UAirship.shared().getNamedUser().getId());
+        promise.resolve(UAirship.shared().getContact().getNamedUserId());
     }
 
     /**
@@ -439,7 +440,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editNamedUserTagGroups(ReadableArray operations) {
-        applyTagGroupOperations(UAirship.shared().getNamedUser().editTagGroups(), operations);
+        applyTagGroupOperations(UAirship.shared().getContact().editTagGroups(), operations);
     }
 
     /**
@@ -467,7 +468,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editNamedUserAttributes(ReadableArray operations) {
-        applyAttributeOperations(UAirship.shared().getNamedUser().editAttributes(), operations);
+        applyAttributeOperations(UAirship.shared().getContact().editAttributes(), operations);
     }
 
     /**
