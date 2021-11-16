@@ -7,6 +7,7 @@ Minor release that updates to latest Airship SDKs and fixes several issues with 
 - Updated iOS and Android SDK to 16.1.0
 - Fixed null deep link on iOS
 - Fixed iOS crash when sending a notification without a title or subtitle
+- Fixed Message Center message `isDeleted` flag on iOS
 
 ## Version 13.0.1 - November 5, 2021
 Patch release that fixes preferences resetting when upgrading to SDK 15/16. This update will restore old preferences that have not been modified in the new SDK version.
