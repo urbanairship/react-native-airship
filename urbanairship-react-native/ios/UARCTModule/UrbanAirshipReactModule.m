@@ -48,14 +48,6 @@ RCT_EXPORT_MODULE();
     return YES;
 }
 
-- (instancetype)init{
-    self = [super init];
-    if (self) {
-        [UARCTAutopilot takeOffWithLaunchOptions:nil];
-    }
-    return self;
-}
-
 #pragma mark -
 #pragma mark Module methods
 
