@@ -299,18 +299,18 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - urbanairship-accengage-react-native (13.0.3):
+  - urbanairship-accengage-react-native (13.1.0):
     - Airship/Accengage (= 16.1.1)
     - React-Core
-  - urbanairship-chat-react-native (13.0.3):
+  - urbanairship-chat-react-native (13.1.0):
     - Airship/Chat (= 16.1.1)
     - React-Core
     - urbanairship-react-native
-  - urbanairship-preference-center-react-native (13.0.3):
+  - urbanairship-preference-center-react-native (13.1.0):
     - Airship/PreferenceCenter (= 16.1.1)
     - React-Core
     - urbanairship-react-native
-  - urbanairship-react-native (13.0.3):
+  - urbanairship-react-native (13.1.0):
     - Airship (= 16.1.1)
     - React-Core
   - Yoga (1.14.0)
@@ -475,10 +475,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  urbanairship-accengage-react-native: c5f337f7c760db8ed62eafa76d9ba146471b924f
-  urbanairship-chat-react-native: 2bd32aa696be17014df5a42e1ebf11f210f92839
-  urbanairship-preference-center-react-native: d1c315b0bb61a99fda976785ca0679f1d491663e
-  urbanairship-react-native: 2b28a1d4012804c4b8dac1ea849323bc68369601
+  urbanairship-accengage-react-native: 60d07b433274c40ba0543891d4648c93536a5a4e
+  urbanairship-chat-react-native: 17d806a13f2150fecd7cf3d142d628e632d17454
+  urbanairship-preference-center-react-native: 06bc57b92728acf285daf7b31b06863d77ef618f
+  urbanairship-react-native: 7bdd50f934a7bbb1a7c995124f9c16e8bfcdc0ee
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
 PODFILE CHECKSUM: 84f8662db7cf4a245c389661e1033886064e8d1d
