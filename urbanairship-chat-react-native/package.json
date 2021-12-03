@@ -1,6 +1,6 @@
 {
   "name": "urbanairship-chat-react-native",
-  "version": "13.0.2",
+  "version": "13.1.0",
   "description": "Airship chat module for React Native apps.",
   "author": "Airship",
   "homepage": "https://github.com/urbanairship/react-native-module",

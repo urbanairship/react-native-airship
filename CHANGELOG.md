@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 13.1.0 - December 2, 2021
+Minor release that updates to latest Airship SDKs and fixes several issues with the iOS module.
+
+### Changes
+- Updated iOS SDK to 16.1.1
+- Fixed Message Center navigation style on iOS 15
+- Fixed running actions from a notification action button
+- Fixed channel registration causing extra attribute operations in the RTDS stream
+
 ## Version 13.0.2 - November 16, 2021
 Minor release that updates to latest Airship SDKs and fixes several issues with the iOS module. Apps running 13.0.0-13.0.1 should update.
 

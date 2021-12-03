@@ -272,7 +272,9 @@ static UARCTEventEmitter *sharedEventEmitter_;
 + (NSMutableDictionary *)eventBodyForNotificationContent:(NSDictionary *)userInfo notificationIdentifier:(NSString *)identifier {
 
     NSMutableDictionary *pushBody = [NSMutableDictionary dictionary];
-    [pushBody setValue:identifier forKey:@"notificationId"];
+    if (identifier != nil) {
+        [pushBody setValue:identifier forKey:@"notificationId"];
+    }
 
     // Extras
     NSMutableDictionary *extras = [NSMutableDictionary dictionaryWithDictionary:userInfo];
