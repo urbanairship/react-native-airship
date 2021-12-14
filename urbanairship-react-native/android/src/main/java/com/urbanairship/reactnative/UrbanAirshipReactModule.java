@@ -533,7 +533,11 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setAnalyticsEnabled(boolean enabled) {
-        UAirship.shared().getAnalytics().setEnabled(enabled);
+        if (enabled) {
+            UAirship.shared().getPrivacyManager().enable(PrivacyManager.FEATURE_ANALYTICS);
+        } else {
+            UAirship.shared().getPrivacyManager().disable(PrivacyManager.FEATURE_ANALYTICS);
+        }
     }
 
     /**
@@ -543,7 +547,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isAnalyticsEnabled(Promise promise) {
-        promise.resolve(UAirship.shared().getAnalytics().isEnabled());
+        promise.resolve(UAirship.shared().getPrivacyManager().isEnabled(PrivacyManager.FEATURE_ANALYTICS));
     }
 
     /**
