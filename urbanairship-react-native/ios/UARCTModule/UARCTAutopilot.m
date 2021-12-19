@@ -28,13 +28,18 @@ static BOOL disabled = NO;
 }
 
 + (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions {
-    if (disabled) {
+    if (disabled || UAirship.isFlying) {
+        return;
+    }
+    
+    [UAirship takeOffWithLaunchOptions:launchOptions];
+    
+    if (!UAirship.isFlying) {
         return;
     }
 
     static dispatch_once_t takeOffdispatchOnce_;
     dispatch_once(&takeOffdispatchOnce_, ^{
-        [UAirship takeOffWithLaunchOptions:launchOptions];
 
         UA_LINFO(@"Airship ReactNative version: %@, SDK version: %@", [UARCTModuleVersion get], [UAirshipVersion get]);
         [[UAirship analytics] registerSDKExtension:UASDKExtensionReactNative version:[UARCTModuleVersion get]];
