@@ -21,8 +21,8 @@ RCT_EXPORT_METHOD(setUseCustomPreferenceCenterUi:(BOOL)useCustomUi forpreference
 }
 
 RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
-                 getConfiguration_resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
+                  getConfiguration_resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
     
     [[UAPreferenceCenter shared] configForPreferenceCenterID:preferenceCenterId completionHandler:^(UAPreferenceCenterConfig *config) {
         
@@ -45,18 +45,22 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                     NSArray* items = section.items;
                     if (items) {
                         NSMutableArray *itemArray = [NSMutableArray array];
-                        for (id<UAPreferenceItem> item in items) {
-                            NSMutableDictionary *itemDictionary = [NSMutableDictionary dictionary];
-                            [itemDictionary setValue:item.identifier forKey:@"id"];
-                            
-                            UAPreferenceCommonDisplay* itemCommonDisplay = item.display;
-                            if (itemCommonDisplay) {
-                                NSMutableDictionary *itemDisplayDictionary = [NSMutableDictionary dictionary];
-                                [itemDisplayDictionary setValue:itemCommonDisplay.title forKey:@"name"];
-                                [itemDisplayDictionary setValue:itemCommonDisplay.subtitle forKey:@"description"];
-                                [itemDictionary setValue:itemDisplayDictionary forKey:@"display"];
+                        for (id item in items) {
+                            if ([item isKindOfClass:[UAPreferenceChannelSubscriptionItem class]]) {
+                                NSMutableDictionary *itemDictionary = [NSMutableDictionary dictionary];
+                                UAPreferenceChannelSubscriptionItem* subscriptionItem = (UAPreferenceChannelSubscriptionItem*) item;
+                                [itemDictionary setValue:subscriptionItem.identifier forKey:@"id"];
+                                [itemDictionary setValue:subscriptionItem.type forKey:@"type"];
+                                [itemDictionary setValue:subscriptionItem.subscriptionID forKey:@"subscriptionId"];
+                                UAPreferenceCommonDisplay* itemCommonDisplay = subscriptionItem.display;
+                                if (itemCommonDisplay) {
+                                    NSMutableDictionary *itemDisplayDictionary = [NSMutableDictionary dictionary];
+                                    [itemDisplayDictionary setValue:itemCommonDisplay.title forKey:@"name"];
+                                    [itemDisplayDictionary setValue:itemCommonDisplay.subtitle forKey:@"description"];
+                                    [itemDictionary setValue:itemDisplayDictionary forKey:@"display"];
+                                }
+                                [itemArray addObject:itemDictionary];
                             }
-                            [itemArray addObject:itemDictionary];
                         }
                         [sectionDictionary setValue:itemArray forKey:@"item"];
                         
