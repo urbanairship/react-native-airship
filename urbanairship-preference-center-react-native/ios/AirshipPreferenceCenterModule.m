@@ -64,7 +64,6 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                                 [itemDictionary setValue:itemDisplayDictionary forKey:@"display"];
                             }
                             [itemArray addObject:itemDictionary];
-                            //                            }
                         }
                         [sectionDictionary setValue:itemArray forKey:@"item"];
                         
