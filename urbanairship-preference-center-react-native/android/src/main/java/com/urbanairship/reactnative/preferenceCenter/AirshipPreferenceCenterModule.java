@@ -94,6 +94,10 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
                                 for (Item item : items) {
                                     WritableMap itemMap = new WritableNativeMap();
                                     itemMap.putString("id", item.getId());
+                                    if (item instanceof Item.ChannelSubscription) {
+                                        Item.ChannelSubscription subscription = (Item.ChannelSubscription) item;
+                                        itemMap.putString("subscriptionId", subscription.getSubscriptionId());
+                                    }
 
                                     CommonDisplay commonDisplay = item.getDisplay();
                                     if (commonDisplay != null) {

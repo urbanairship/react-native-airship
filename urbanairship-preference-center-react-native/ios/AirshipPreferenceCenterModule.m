@@ -21,8 +21,8 @@ RCT_EXPORT_METHOD(setUseCustomPreferenceCenterUi:(BOOL)useCustomUi forpreference
 }
 
 RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
-                 getConfiguration_resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
+                  getConfiguration_resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
     
     [[UAPreferenceCenter shared] configForPreferenceCenterID:preferenceCenterId completionHandler:^(UAPreferenceCenterConfig *config) {
         
@@ -45,11 +45,18 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                     NSArray* items = section.items;
                     if (items) {
                         NSMutableArray *itemArray = [NSMutableArray array];
-                        for (id<UAPreferenceItem> item in items) {
-                            NSMutableDictionary *itemDictionary = [NSMutableDictionary dictionary];
-                            [itemDictionary setValue:item.identifier forKey:@"id"];
+                        for (id item in items) {
                             
-                            UAPreferenceCommonDisplay* itemCommonDisplay = item.display;
+                            id<UAPreferenceItem> preferenceItem = item;
+                            NSMutableDictionary *itemDictionary = [NSMutableDictionary dictionary];
+                            [itemDictionary setValue:preferenceItem.identifier forKey:@"id"];
+                            
+                            if ([item isKindOfClass:[UAPreferenceChannelSubscriptionItem class]]) {
+                                UAPreferenceChannelSubscriptionItem* subscriptionItem = (UAPreferenceChannelSubscriptionItem*) item;
+                                [itemDictionary setValue:subscriptionItem.subscriptionID forKey:@"subscriptionId"];
+                            }
+                            
+                            UAPreferenceCommonDisplay* itemCommonDisplay = preferenceItem.display;
                             if (itemCommonDisplay) {
                                 NSMutableDictionary *itemDisplayDictionary = [NSMutableDictionary dictionary];
                                 [itemDisplayDictionary setValue:itemCommonDisplay.title forKey:@"name"];

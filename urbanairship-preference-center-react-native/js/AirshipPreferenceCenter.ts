@@ -32,6 +32,11 @@ const EventEmitter = new UAEventEmitter();
    */
   display: CommonDisplay;
 
+  /**
+  * The subcription identifier.
+  */
+  subscriptionId: String;
+
  }
 
  /**
