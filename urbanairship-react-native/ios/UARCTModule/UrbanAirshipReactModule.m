@@ -37,6 +37,7 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)setBridge:(RCTBridge *)bridge {
+    [UARCTAutopilot takeOffWithLaunchOptions:bridge.launchOptions];
     [UARCTEventEmitter shared].bridge = bridge;
 }
 
