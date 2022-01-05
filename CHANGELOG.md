@@ -1,10 +1,11 @@
 # React Native Module Changelog
 
-## Version 13.1.1 - December 31, 2021
+## Version 13.1.1 - January 5, 2022
 Minor release that updates to latest Airship SDKs and fixes several issues.
 
 ### Changes
 - Updated iOS SDK to 16.1.2
+- Updated Android SDK to 16.1.1
 - Add missing subscriptionId to the preference center configuration
 - Prevents a crash if takeOff fails
 
