@@ -454,9 +454,13 @@ RCT_REMAP_METHOD(displayMessage,
     UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
     self.messageViewController = mvc;
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
-    });
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
+        });
+    } else {
+        resolve(@YES);
+    }
 }
 
 RCT_REMAP_METHOD(dismissMessage,
