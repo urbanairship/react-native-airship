@@ -448,18 +448,15 @@ RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UADefaultMessageCenterMessageViewController" bundle:[UAMessageCenterResources bundle]];
-    [mvc loadMessageForID:messageId];
-
-    UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
-    self.messageViewController = mvc;
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
+            [[UAMessageCenter shared] displayMessageForID:messageId];
         });
     } else {
-        resolve(@YES);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UAMessageCenter shared].defaultUI dismissMessageCenterAnimated:YES];
+        });
     }
 }
 
