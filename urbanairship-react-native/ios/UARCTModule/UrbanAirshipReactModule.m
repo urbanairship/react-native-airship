@@ -449,15 +449,9 @@ RCT_REMAP_METHOD(displayMessage,
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [[UAMessageCenter shared] displayMessageForID:messageId];
         });
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[UAMessageCenter shared].defaultUI dismissMessageCenterAnimated:YES];
-        });
-    }
 }
 
 RCT_REMAP_METHOD(dismissMessage,
