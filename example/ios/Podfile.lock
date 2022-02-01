@@ -1,26 +1,26 @@
 PODS:
-  - Airship (16.1.2):
-    - Airship/Automation (= 16.1.2)
-    - Airship/Basement (= 16.1.2)
-    - Airship/Core (= 16.1.2)
-    - Airship/ExtendedActions (= 16.1.2)
-    - Airship/MessageCenter (= 16.1.2)
-  - Airship/Accengage (16.1.2):
+  - Airship (16.2.0):
+    - Airship/Automation (= 16.2.0)
+    - Airship/Basement (= 16.2.0)
+    - Airship/Core (= 16.2.0)
+    - Airship/ExtendedActions (= 16.2.0)
+    - Airship/MessageCenter (= 16.2.0)
+  - Airship/Accengage (16.2.0):
     - Airship/Core
-  - Airship/Automation (16.1.2):
+  - Airship/Automation (16.2.0):
     - Airship/Core
-  - Airship/Basement (16.1.2)
-  - Airship/Chat (16.1.2):
+  - Airship/Basement (16.2.0)
+  - Airship/Chat (16.2.0):
     - Airship/Core
-  - Airship/Core (16.1.2):
+  - Airship/Core (16.2.0):
     - Airship/Basement
-  - Airship/ExtendedActions (16.1.2):
+  - Airship/ExtendedActions (16.2.0):
     - Airship/Core
-  - Airship/MessageCenter (16.1.2):
+  - Airship/MessageCenter (16.2.0):
     - Airship/Core
-  - Airship/PreferenceCenter (16.1.2):
+  - Airship/PreferenceCenter (16.2.0):
     - Airship/Core
-  - AirshipExtensions/NotificationService (16.1.2)
+  - AirshipServiceExtension (16.2.0)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.64.0)
@@ -300,23 +300,23 @@ PODS:
   - RNScreens (2.18.1):
     - React-Core
   - urbanairship-accengage-react-native (13.1.1):
-    - Airship/Accengage (= 16.1.2)
+    - Airship/Accengage (= 16.2.0)
     - React-Core
   - urbanairship-chat-react-native (13.1.1):
-    - Airship/Chat (= 16.1.2)
+    - Airship/Chat (= 16.2.0)
     - React-Core
     - urbanairship-react-native
   - urbanairship-preference-center-react-native (13.1.1):
-    - Airship/PreferenceCenter (= 16.1.2)
+    - Airship/PreferenceCenter (= 16.2.0)
     - React-Core
     - urbanairship-react-native
   - urbanairship-react-native (13.1.1):
-    - Airship (= 16.1.2)
+    - Airship (= 16.2.0)
     - React-Core
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - AirshipExtensions/NotificationService (~> 16.1.2)
+  - AirshipServiceExtension (~> 16.2.0)
   - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../../node_modules/react-native/React/FBReactNativeSpec`)
@@ -360,7 +360,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Airship
-    - AirshipExtensions
+    - AirshipServiceExtension
     - boost-for-react-native
 
 EXTERNAL SOURCES:
@@ -440,12 +440,12 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 3f565998d27fd301211fa42c86f3399fa54f92e0
-  AirshipExtensions: 51f01ca56ece58e123035b7c7ff89f93bd6a8215
+  Airship: 57df0122b4684cdbdc1cac6171f7065697e54155
+  AirshipServiceExtension: f616bafc8c72132ec23ac31f21d3f7b297deacd6
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: 2323ee42e2adfca409ee74ca1d9c914ff6f2eb2d
+  FBReactNativeSpec: 58cfc0f9b7f9454a6308e786859e74cdec2d7965
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
@@ -475,12 +475,12 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  urbanairship-accengage-react-native: 58ebf8d21e24f467e3eb954dc3ea2b6171600611
-  urbanairship-chat-react-native: 01483bc419535fa6413558dfea33ad8605f8d75c
-  urbanairship-preference-center-react-native: c49bfb195da1788e873355c4f8a8a0e14f6b33d8
-  urbanairship-react-native: 8daecf1f5e054eab26aa1ba6ca885cdfcb12eab7
+  urbanairship-accengage-react-native: 0edafc6e37ba6d651e6ce2c25385b5311a0cce16
+  urbanairship-chat-react-native: 6204ac120b0ee8beb04ab1abb6e8a8b37ddec8d3
+  urbanairship-preference-center-react-native: c8747e60b730ebf97f27337b79a4b6ad2929355c
+  urbanairship-react-native: 75895b219e12b8ea5e4d8c17b4032ae769ff7cef
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
-PODFILE CHECKSUM: f38b13a45b484738048ced6bad65006cc5ab7e0f
+PODFILE CHECKSUM: 447681dd5e20f0f837f0236f1fc430e2ae23dbe8
 
 COCOAPODS: 1.11.2
