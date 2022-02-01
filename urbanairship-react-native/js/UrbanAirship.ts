@@ -10,6 +10,7 @@ import { AttributeEditor, AttributeOperation } from "./AttributeEditor";
 import { UAEventEmitter } from "./UAEventEmitter";
 import { SubscriptionListEditor, SubscriptionListUpdate} from "./SubscriptionListEditor";
 import { JsonObject, JsonValue } from "./Json";
+import { SubscriptionLists, SubscriptionListType } from "./SubscriptionLists";
 
 /**
  * @hidden
@@ -576,6 +577,16 @@ export class UrbanAirship {
    */
   static getTags(): Promise<string[]> {
     return UrbanAirshipModule.getTags();
+  }
+
+  /**
+   * Gets the subscription lists.
+   *
+   * @param types The types of subscription lists. Defaults to an [`channel`].
+   * @return A promise with the result.
+   */
+   static getSubscriptionLists(types?: [SubscriptionListType]): Promise<SubscriptionLists> {
+    return UrbanAirshipModule.getSubscriptionLists(types ?? ['channel']);
   }
 
   /**
