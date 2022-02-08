@@ -2,6 +2,13 @@
 
 package com.urbanairship.reactnative;
 
+import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
+import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
+import static com.urbanairship.actions.ActionResult.STATUS_EXECUTION_ERROR;
+import static com.urbanairship.actions.ActionResult.STATUS_REJECTED_ARGUMENTS;
+import static com.urbanairship.reactnative.Utils.convertDynamic;
+import static com.urbanairship.reactnative.Utils.convertJsonValue;
+
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -28,7 +35,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.urbanairship.PrivacyManager;
 import com.urbanairship.UAirship;
@@ -47,22 +53,18 @@ import com.urbanairship.push.PushMessage;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.util.UAStringUtil;
-import com.urbanairship.contacts.Contact;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.urbanairship.actions.ActionResult.STATUS_ACTION_NOT_FOUND;
-import static com.urbanairship.actions.ActionResult.STATUS_COMPLETED;
-import static com.urbanairship.actions.ActionResult.STATUS_EXECUTION_ERROR;
-import static com.urbanairship.actions.ActionResult.STATUS_REJECTED_ARGUMENTS;
-import static com.urbanairship.reactnative.Utils.convertDynamic;
-import static com.urbanairship.reactnative.Utils.convertJsonValue;
+import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * React module for Urban Airship.
@@ -85,11 +87,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     private static final String SUBSCRIBE_LIST_OPERATION_LISTID = "listId";
     private static final String SUBSCRIBE_LIST_OPERATION_TYPE = "type";
-
-    private static final String QUIET_TIME_START_HOUR = "startHour";
-    private static final String QUIET_TIME_START_MINUTE = "startMinute";
-    private static final String QUIET_TIME_END_HOUR = "endHour";
-    private static final String QUIET_TIME_END_MINUTE = "endMinute";
 
     private static final String NOTIFICATION_ICON_KEY = "icon";
     private static final String NOTIFICATION_LARGE_ICON_KEY = "largeIcon";
@@ -115,6 +112,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         authorizedFeatures.put("FEATURE_LOCATION", PrivacyManager.FEATURE_LOCATION);
         authorizedFeatures.put("FEATURE_ALL", PrivacyManager.FEATURE_ALL);
     }
+
+    private static final Executor BG_EXECUTOR = Executors.newCachedThreadPool();
 
     /**
      * Default constructor.
@@ -407,12 +406,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getTags(Promise promise) {
-        WritableArray array = Arguments.createArray();
-        for (String tag : UAirship.shared().getChannel().getTags()) {
-            array.pushString(tag);
-        }
-
-        promise.resolve(array);
+        promise.resolve(toWritableArray(UAirship.shared().getChannel().getTags()));
     }
 
     /**
@@ -598,6 +592,58 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             array.pushMap(event.getBody());
         }
         promise.resolve(array);
+    }
+
+    enum SubscriptionListType {
+        CHANNEL
+    }
+    /**
+     * Gets the current subscription lists.
+     *
+     * @param types The types of
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void getSubscriptionLists(ReadableArray types, Promise promise) {
+        Log.v(getName(), "getSubscriptionLists(" + types + ")");
+
+        Set<SubscriptionListType> parsedTypes = new HashSet<>();
+        if (types != null) {
+            for (int i = 0; i < types.size(); i++) {
+                try {
+                    SubscriptionListType type = SubscriptionListType.valueOf(types.getString(0).toUpperCase(Locale.ROOT));
+                    parsedTypes.add(type);
+                } catch (Exception e) {
+                    promise.reject(e);
+                    return;
+                }
+            }
+        }
+
+        if (parsedTypes.isEmpty()) {
+            promise.reject(new Exception("Failed to fetch subscription lists, no types."));
+            return;
+        }
+
+        BG_EXECUTOR.execute(() -> {
+            WritableMap resultMap = Arguments.createMap();
+            try {
+                for (SubscriptionListType type : parsedTypes) {
+                    switch (type) {
+                        case CHANNEL:
+                            Set<String> lists = UAirship.shared().getChannel().getSubscriptionLists(true).get();
+                            if (lists == null) {
+                                promise.reject(new Exception("Failed to fetch subscription lists."));
+                                return;
+                            }
+                            resultMap.putArray("channel", toWritableArray(lists));
+                    }
+                }
+                promise.resolve(resultMap);
+            } catch (Exception e) {
+                promise.reject(e);
+            }
+        });
     }
 
     /**
@@ -1034,7 +1080,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * @param features The {@link PrivacyManager.Feature} int array to parse.
      * @return The String feature WritableNativeArray.
      */
-    private @NonNull WritableNativeArray featureToString(@PrivacyManager.Feature int features) {
+    private @NonNull WritableArray featureToString(@PrivacyManager.Feature int features) {
         List<String> stringFeatures = new ArrayList<>();
 
         if (features == PrivacyManager.FEATURE_ALL) {
@@ -1051,11 +1097,15 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             }
         }
 
-        WritableNativeArray array = new WritableNativeArray();
-        for (String feature : stringFeatures) {
-            array.pushString(feature);
+        return toWritableArray(stringFeatures);
+    }
+
+    private static WritableArray toWritableArray(Collection<String> strings) {
+        WritableArray result = Arguments.createArray();
+        for (String value : strings) {
+            result.pushString(value);
         }
-        return array;
+        return result;
     }
 
 }

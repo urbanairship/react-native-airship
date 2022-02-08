@@ -241,6 +241,49 @@ RCT_REMAP_METHOD(getTags,
     resolve(UAirship.channel.tags ?: [NSArray array]);
 }
 
+RCT_REMAP_METHOD(getSubscriptionLists,
+                 subscriptionTypes:(NSArray *)subscriptionTypes
+                 getSubscriptionLists_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    NSSet *typedSet = [NSSet setWithArray:subscriptionTypes];
+    if (!typedSet.count) {
+        NSError *error = [UAirshipErrors error:@"Failed to fetch subscription lists, no types."];
+        reject(error.description, error.description, error);
+        return;
+    }
+    
+    dispatch_group_t group = dispatch_group_create();
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    __block NSError *resultError;
+    
+    dispatch_group_enter(group);
+    
+    if ([typedSet containsObject:@"channel"]) {
+        dispatch_group_enter(group);
+        
+        [UAirship.channel fetchSubscriptionListsWithCompletionHandler:^(NSArray<NSString *> * lists, NSError *error) {
+            @synchronized (result) {
+                result[@"channel"] = lists ?: @[];
+                if (!resultError) {
+                    resultError = error;
+                }
+            }
+            dispatch_group_leave(group);
+        }];
+    }
+    
+    dispatch_group_leave(group);
+
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (resultError) {
+            reject(resultError.description, resultError.description, resultError);
+        } else {
+            resolve(result);
+        }
+    });
+}
+
 RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
     if (enabled) {
         [[UAirship shared].privacyManager enableFeatures:UAFeaturesAnalytics];
