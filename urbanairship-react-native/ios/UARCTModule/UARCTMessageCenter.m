@@ -52,7 +52,9 @@ int const UARCTErrorCodeInboxRefreshFailed = 1;
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated {
-    // no-op
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UARCTAutoLaunchMessageCenterKey]) {
+        [[UAMessageCenter shared].defaultUI dismissMessageCenterAnimated:animated];
+    }
 }
 
 @end
