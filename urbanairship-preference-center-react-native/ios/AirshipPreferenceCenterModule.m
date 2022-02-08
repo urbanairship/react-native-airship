@@ -65,7 +65,7 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                             }
                             [itemArray addObject:itemDictionary];
                         }
-                        [sectionDictionary setValue:itemArray forKey:@"item"];
+                        [sectionDictionary setValue:itemArray forKey:@"items"];
                         
                         // Section display
                         UAPreferenceCommonDisplay* sectionDisplay = section.display;

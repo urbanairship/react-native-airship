@@ -5,7 +5,6 @@
 #import "UARCTDeepLinkAction.h"
 #import "UARCTAutopilot.h"
 #import "UARCTMessageCenter.h"
-#import "UARCTMessageViewController.h"
 #import "UARCTUtils.h"
 
 #if __has_include("AirshipLib.h")
@@ -17,7 +16,6 @@
 #endif
 
 @interface UrbanAirshipReactModule()
-@property (nonatomic, weak) UARCTMessageViewController *messageViewController;
 @end
 
 @implementation UrbanAirshipReactModule
@@ -514,15 +512,10 @@ RCT_REMAP_METHOD(displayMessage,
                  messageId:(NSString *)messageId
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    UARCTMessageViewController *mvc = [[UARCTMessageViewController alloc] initWithNibName:@"UADefaultMessageCenterMessageViewController" bundle:[UAMessageCenterResources bundle]];
-    [mvc loadMessageForID:messageId];
 
-    UINavigationController *navController =  [[UINavigationController alloc] initWithRootViewController:mvc];
-    self.messageViewController = mvc;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navController animated:YES completion:nil];
-    });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UAMessageCenter shared] displayMessageForID:messageId];
+        });
 }
 
 RCT_REMAP_METHOD(dismissMessage,
@@ -530,8 +523,7 @@ RCT_REMAP_METHOD(dismissMessage,
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.messageViewController dismissViewControllerAnimated:YES completion:nil];
-        self.messageViewController = nil;
+        [[UAMessageCenter shared] dismiss:YES];
     });
 }
 
