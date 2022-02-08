@@ -5,7 +5,6 @@
 #import "UARCTDeepLinkAction.h"
 #import "UARCTAutopilot.h"
 #import "UARCTMessageCenter.h"
-#import "UARCTMessageViewController.h"
 
 #if __has_include("AirshipLib.h")
 #import "UAInAppMessageHTMLAdapter.h"
@@ -16,7 +15,6 @@
 #endif
 
 @interface UrbanAirshipReactModule()
-@property (nonatomic, weak) UARCTMessageViewController *messageViewController;
 @end
 
 @implementation UrbanAirshipReactModule
@@ -459,8 +457,7 @@ RCT_REMAP_METHOD(dismissMessage,
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.messageViewController dismissViewControllerAnimated:YES completion:nil];
-        self.messageViewController = nil;
+        [[UAMessageCenter shared] dismiss:YES];
     });
 }
 
