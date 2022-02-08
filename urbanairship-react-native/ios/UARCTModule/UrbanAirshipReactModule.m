@@ -462,10 +462,11 @@ RCT_REMAP_METHOD(getNotificationStatus,
                  rejecter:(RCTPromiseRejectBlock)reject) {
     
     UAPush *push = UAirship.push;
+    BOOL isSystemEnabled = push.authorizedNotificationSettings != 0;
     id result = @{
         @"airshipOptIn": @(push.isPushNotificationsOptedIn),
         @"airshipEnabled": @(push.userPushNotificationsEnabled),
-        @"systemEnabled": @(push.authorizedNotificationSettings != 0),
+        @"systemEnabled": @(isSystemEnabled),
         @"ios": @{
             @"authorizedSettings": [UARCTUtils authorizedSettingsArray:push.authorizedNotificationSettings],
             @"authorizedStatus": [UARCTUtils authorizedStatusString:push.authorizationStatus]

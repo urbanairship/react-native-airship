@@ -934,16 +934,6 @@ export class UrbanAirship {
   }
 
   /**
-   * Sets the notification options for iOS.
-   * This method is only supported on iOS. Android will no-op.
-   *
-   * @return A promise that returns the current authorized notification status.
-   */
-   static getAuthorizedNotificationStatus(): Promise<iOS.AuthorizedNotificationStatus> {
-    return UrbanAirshipModule.getAuthorizedNotificationStatus()
-  }
-
-  /**
    * Adds a listener for an Urban Airship event.
    *
    * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
