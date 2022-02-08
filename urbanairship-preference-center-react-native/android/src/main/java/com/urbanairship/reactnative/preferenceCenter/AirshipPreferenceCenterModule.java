@@ -108,7 +108,7 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
                                     }
                                     itemArray.pushMap(itemMap);
                                 }
-                                sectionMap.putArray("item", itemArray);
+                                sectionMap.putArray("items", itemArray);
                             }
 
                             CommonDisplay sectionCommonDisplay = section.getDisplay();
