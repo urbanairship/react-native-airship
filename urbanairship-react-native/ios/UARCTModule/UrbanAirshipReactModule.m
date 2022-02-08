@@ -6,6 +6,7 @@
 #import "UARCTAutopilot.h"
 #import "UARCTMessageCenter.h"
 #import "UARCTMessageViewController.h"
+#import "UARCTUtils.h"
 
 #if __has_include("AirshipLib.h")
 #import "UAInAppMessageHTMLAdapter.h"
@@ -426,33 +427,54 @@ RCT_EXPORT_METHOD(editSubscriptionLists:(NSArray *)subscriptionListUpdates) {
 
 }
 
-RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSDictionary *)options) {
+RCT_EXPORT_METHOD(setNotificationOptions:(NSArray *)options) {
+    UANotificationOptions notificationOptions = [UARCTUtils optionsFromOptionsArray:options];
+    UA_LDEBUG(@"Notification options set: %lu from dictionary: %@", (unsigned long)notificationOptions, options);
+    UAirship.push.notificationOptions = notificationOptions;
+    [UAirship.push updateRegistration];
+}
+
+RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSArray *)options) {
     UNNotificationPresentationOptions presentationOptions = UNNotificationPresentationOptionNone;
 
-    if (options[UARCTNotificationPresentationAlertKey] != nil) {
-        if ([options[UARCTNotificationPresentationAlertKey] boolValue]) {
-            presentationOptions = presentationOptions | UNNotificationPresentationOptionAlert;
-        }
+    if ([options containsObject:@"alert"]) {
+        presentationOptions = presentationOptions | UNNotificationPresentationOptionAlert;
     }
 
-    if (options[UARCTNotificationPresentationBadgeKey] != nil) {
-        if ([options[UARCTNotificationPresentationBadgeKey] boolValue]) {
-            presentationOptions = presentationOptions | UNNotificationPresentationOptionBadge;
-        }
+    if ([options containsObject:@"badge"]) {
+        presentationOptions = presentationOptions | UNNotificationPresentationOptionBadge;
     }
 
-    if (options[UARCTNotificationPresentationSoundKey] != nil) {
-        if ([options[UARCTNotificationPresentationSoundKey] boolValue]) {
-            presentationOptions = presentationOptions | UNNotificationPresentationOptionSound;
-        }
+    if ([options containsObject:@"sound"]) {
+        presentationOptions = presentationOptions | UNNotificationPresentationOptionSound;
     }
-
+    
     UA_LDEBUG(@"Foreground presentation options set: %lu from dictionary: %@", (unsigned long)presentationOptions, options);
 
     [UAirship push].defaultPresentationOptions = presentationOptions;
     [[NSUserDefaults standardUserDefaults] setInteger:presentationOptions
                                                forKey:UARCTPresentationOptionsStorageKey];
 }
+
+
+RCT_REMAP_METHOD(getNotificationStatus,
+                 getNotificationStatus_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    UAPush *push = UAirship.push;
+    id result = @{
+        @"airshipOptIn": @(push.isPushNotificationsOptedIn),
+        @"airshipEnabled": @(push.userPushNotificationsEnabled),
+        @"systemEnabled": @(push.authorizedNotificationSettings != 0),
+        @"ios": @{
+            @"authorizedSettings": [UARCTUtils authorizedSettingsArray:push.authorizedNotificationSettings],
+            @"authorizedStatus": [UARCTUtils authorizedStatusString:push.authorizationStatus]
+        }
+    };
+    
+    resolve(result);
+}
+
 
 RCT_EXPORT_METHOD(setAutobadgeEnabled:(BOOL)enabled) {
     [UAirship push].autobadgeEnabled = enabled;

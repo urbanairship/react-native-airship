@@ -11,10 +11,6 @@
 @import AirshipKit;
 #endif
 
-extern NSString *const UARCTNotificationPresentationAlertKey;
-extern NSString *const UARCTNotificationPresentationBadgeKey;
-extern NSString *const UARCTNotificationPresentationSoundKey;
-
 /**
  * Listeners for Urban Airship events and emits them to the JS layer.
  */
