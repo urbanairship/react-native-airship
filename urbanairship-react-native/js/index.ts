@@ -11,3 +11,5 @@
  export * from './UrbanAirship';
  export * from './MessageView';
  export * from './Json';
+ export * from './SubscriptionLists';
+ export * from './SubscriptionListEditor';
