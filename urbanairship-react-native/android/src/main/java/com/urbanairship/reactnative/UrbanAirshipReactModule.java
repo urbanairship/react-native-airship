@@ -49,6 +49,7 @@ import com.urbanairship.channel.TagGroupsEditor;
 import com.urbanairship.messagecenter.Inbox;
 import com.urbanairship.messagecenter.Message;
 import com.urbanairship.messagecenter.MessageCenter;
+import com.urbanairship.push.PushManager;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.reactnative.events.NotificationOptInEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
@@ -308,6 +309,21 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void isSystemNotificationsEnabledForApp(Promise promise) {
         promise.resolve(NotificationManagerCompat.from(getReactApplicationContext()).areNotificationsEnabled());
+    }
+
+    /**
+     * Gets the notification status.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void getNotificationStatus(Promise promise) {
+        WritableMap result = Arguments.createMap();
+        PushManager push = UAirship.shared().getPushManager();
+        result.putBoolean("airshipOptIn", push.isOptIn());
+        result.putBoolean("airshipEnabled", push.getUserNotificationsEnabled());
+        result.putBoolean("systemEnabled", NotificationManagerCompat.from(getReactApplicationContext()).areNotificationsEnabled());
+        promise.resolve(result);
     }
 
     @ReactMethod
