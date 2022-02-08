@@ -159,67 +159,202 @@ export interface NotificationResponseEvent {
 }
 
 /**
- * Enum of notification options. iOS only.
+ * iOS options
  */
-export enum NotificationOptionsIOS {
+export namespace iOS {
+
   /**
-   * Alerts.
+   * Enum of notification options. iOS only.
    */
-  Alert = "alert",
+  export enum NotificationOption {
+    /**
+     * Alerts.
+     */
+    Alert = "alert",
+    /**
+     * Sounds.
+     */
+    Sound = "sound",
+    /**
+     * Badges.
+     */
+    Badge = "badge",
+    /**
+     * Car play.
+     */
+    CarPlay = "carPlay",
+    /**
+     * Critical Alert.
+     */
+    CriticalAlert = "criticalAlert",
+    /**
+     * Provides app notification settings.
+     */
+    ProvidesAppNotificationSettings = "providesAppNotificationSettings",
+    /**
+     * Provisional.
+     */
+    Provisional = "provisional"
+  }
+
   /**
-   * Sounds.
+   * Enum of foreground notification options.
    */
-  Sound = "sound",
+  export enum ForegroundPresentationOption {
+    /**
+     * Alerts.
+     */
+    Alert = "alert",
+    /**
+     * Sounds.
+     */
+    Sound = "sound",
+    /**
+     * Badges.
+     */
+    Badge = "badge"
+  }
+
   /**
-   * Badges.
+   * Enum of authorized notification settings.
    */
-  Badge = "badge"
+  export enum AuthorizedNotificationSetting {
+    /**
+     * Alerts.
+     */
+    Alert = "alert",
+    /**
+     * Sounds.
+     */
+    Sound = "sound",
+    /**
+     * Badges.
+     */
+    Badge = "badge",
+    /**
+     * CarPlay.
+     */
+    CarPlay = "carPlay",
+    /**
+     * Lock screen.
+     */
+    LockScreen = "lockScreen",
+    /**
+     * Notification center.
+     */
+    NotificationCenter = "notificationCenter",
+    /**
+     * Critical alert.
+     */
+    CriticalAlert = "criticalAlert",
+    /**
+     * Announcement.
+     */
+    Announcement = "announcement",
+    /**
+     * Scheduled delivery.
+     */
+    ScheduledDelivery = "scheduledDelivery",
+    /**
+    * Time sensitive.
+    */
+    TimeSensitive = "timeSensitive"
+  }
+
+  /**
+   * Enum of authorized status.
+   */
+   export enum AuthorizedNotificationStatus {
+    /**
+     * Not determined.
+     */
+    NotDetermined = "notDetermined",
+    
+    /**
+     * Denied.
+     */
+    Denied = "denied",
+    
+    /**
+     * Authorized.
+     */
+    Authorized = "authorized",
+    
+    /**
+     * Provisional.
+     */
+    Provisional = "provisional",
+
+    /**
+     * Ephemeral.
+     */
+    Ephemeral = "ephemeral"
+  }
 }
+
+
+export interface NotificationStatus {
+  /**
+   * If airship is opted in for push notifications are not.
+   */
+  airshipOptIn: boolean
+
+  /**
+   * If notifications are enabled on Airship or not.
+   */
+  airshipEnabled: boolean
+
+  /**
+   * If notifications are enabled in the app settings or not.
+   */
+  systemEnabled: boolean
+
+  /**
+   * iOS status.
+   */
+  ios?: {
+    /**
+     * Authorized settings.
+     */
+    authorizedSettings: [iOS.AuthorizedNotificationSetting],
+
+    /**
+     * Authorized status.
+     */
+    authorizedStatus: [iOS.AuthorizedNotificationStatus]
+  }
+}
+
+/**
+ * Enum of notification options. iOS only.
+ * @deprecated This enum is poorly named and refers to foreground presentation
+ * options instead of notification options. Use iOS.ForegroundPresentationOption instead.
+ */
+export type NotificationOptionsIOS = iOS.ForegroundPresentationOption
 
 /**
  * A map of notification options. iOS only.
+ * @deprecated Not used.
  */
-export type NotificationOptionsMapIOS = { [option in NotificationOptionsIOS]: boolean }
+export type NotificationOptionsMapIOS = { [option in iOS.ForegroundPresentationOption]: boolean }
 
 /**
  * A map of foreground notification options. iOS only.
+ * @deprecated Use iOS.ForegroundPresentationOption[] instead of a map.
  */
-export type ForegroundNotificationOptionsIOS = { [option in NotificationOptionsIOS]: boolean | null | undefined }
+export type ForegroundNotificationOptionsIOS = { [option in iOS.ForegroundPresentationOption]: boolean | null | undefined }
 
 /**
  * Enum of authorized notification settings. iOS only.
+ * @deprecated Use iOS.AuthorizedNotificationSetting instead.
  */
-export enum AuthorizedNotificationSettingsIOS {
-  /**
-   * Alerts.
-   */
-  Alert = "alert",
-  /**
-   * Sounds.
-   */
-  Sound = "sound",
-  /**
-   * Badges.
-   */
-  Badge = "badge",
-  /**
-   * CarPlay.
-   */
-  CarPlay = "carPlay",
-  /**
-   * Lock screen.
-   */
-  LockScreen = "lockScreen",
-  /**
-   * Notification center.
-   */
-  NotificationCenter = "notificationCenter"
-}
+export type AuthorizedNotificationSettingsIOS = iOS.AuthorizedNotificationSetting
 
 /**
  * A map of authorized notification settings.
+ * @deprecated Use [iOS.AuthorizedNotificationSetting] instead.
  */
-export type iOSAuthorizedNotificationSettingsMap = { [setting in AuthorizedNotificationSettingsIOS]: boolean }
+export type iOSAuthorizedNotificationSettingsMap = { [setting in iOS.AuthorizedNotificationSetting]: boolean }
 
 /**
  * Event fired when the notification opt-in status changes.
@@ -228,12 +363,18 @@ export interface NotificationOptInStatusEvent {
   /**
    * Whether the user is opted in to notifications.
    */
-  optIn: boolean;
+  optIn: boolean
+
+  /**
+   * The authorized notification settings map. iOS only.
+   * @deprecated Use authorizedSettings instead.
+   */
+  authorizedNotificationSettings?: [AuthorizedNotificationSettingsIOS]
 
   /**
    * The authorized notification settings. iOS only.
    */
-  authorizedNotificationSettings?: AuthorizedNotificationSettingsIOS;
+  authorizedSettings?: [iOS.AuthorizedNotificationSetting]
 }
 
 /**
@@ -520,6 +661,14 @@ export class UrbanAirship {
    */
   static isSystemNotificationsEnabledForApp(): Promise<boolean> {
     return UrbanAirshipModule.isSystemNotificationsEnabledForApp()
+  }
+
+  /**
+   * Gets the notification status for the app.
+   *
+   * @return A promise with the result.
+   */
+  static getNotificationStatus(): Promise<NotificationStatus> {
     return UrbanAirshipModule.getNotificationStatus()
   }
 
@@ -746,20 +895,53 @@ export class UrbanAirship {
     return UrbanAirshipModule.runAction(name, value)
   }
 
-  }
-
   /**
-   * Sets the foregorund presentation options for iOS.
+   * Sets the foreground presentation options for iOS.
    * This method is only supported on iOS. Android will no-op.
    *
-   * @param options The map of options.
+   * @param options The array of foreground presentation options.
    */
-  static setForegroundPresentationOptions(options: ForegroundNotificationOptionsIOS) {
+  static setForegroundPresentationOptions(options: ForegroundNotificationOptionsIOS | [iOS.ForegroundPresentationOption]) {
     if (Platform.OS == 'ios') {
-      return UrbanAirshipModule.setForegroundPresentationOptions(options);
+      if (Array.isArray(options)) {
+        return UrbanAirshipModule.setForegroundPresentationOptions(options)
+      } else {
+        var converted = []
+        if (options.alert) {
+          converted.push(iOS.ForegroundPresentationOption.Alert)
+        } 
+        if (options.badge) {
+          converted.push(iOS.ForegroundPresentationOption.Badge)
+        } 
+        if (options.sound) {
+          converted.push(iOS.ForegroundPresentationOption.Sound)
+        } 
+        return UrbanAirshipModule.setForegroundPresentationOptions(converted)
+      }
     }
   }
 
+  /**
+   * Sets the notification options for iOS.
+   * This method is only supported on iOS. Android will no-op.
+   *
+   * @param options The array of notification options.
+   */
+   static setNotificationOptions(options: [iOS.NotificationOption]) {
+    if (Platform.OS == 'ios') {
+      return UrbanAirshipModule.setNotificationOptions(options)
+    }
+  }
+
+  /**
+   * Sets the notification options for iOS.
+   * This method is only supported on iOS. Android will no-op.
+   *
+   * @return A promise that returns the current authorized notification status.
+   */
+   static getAuthorizedNotificationStatus(): Promise<iOS.AuthorizedNotificationStatus> {
+    return UrbanAirshipModule.getAuthorizedNotificationStatus()
+  }
 
   /**
    * Adds a listener for an Urban Airship event.
