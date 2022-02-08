@@ -33,7 +33,7 @@ const EventEmitter = new UAEventEmitter();
   display: CommonDisplay;
 
   /**
-  * The subcription identifier.
+  * The subscription identifier.
   */
   subscriptionId: String;
 
@@ -66,7 +66,7 @@ const EventEmitter = new UAEventEmitter();
    */
    id: String;
 
-   /**
+  /**
    * Section items.
    */
    items: Item[];
