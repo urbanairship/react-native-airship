@@ -1,6 +1,7 @@
 /* Copyright Urban Airship and Contributors */
 
 #import "UARCTEventEmitter.h"
+#import "UARCTUtils.h"
 
 @interface UARCTEventEmitter()
 @property(nonatomic, strong) NSMutableArray *pendingEvents;
@@ -19,17 +20,6 @@ NSString *const UARCTConversationUpdatedEventName = @"com.urbanairship.conversat
 NSString *const UARCTOpenChatEventName = @"com.urbanairship.open_chat";
 NSString *const UARCTOpenPreferenceCenterEventName = @"com.urbanairship.open_preference_center";
 NSString *const UAChannelUpdatedEventChannelKey = @"com.urbanairship.channel.identifier";
-
-NSString *const UARCTNotificationPresentationAlertKey = @"alert";
-NSString *const UARCTNotificationPresentationBadgeKey = @"badge";
-NSString *const UARCTNotificationPresentationSoundKey = @"sound";
-
-NSString *const UARCTAuthorizedNotificationSettingsAlertKey = UARCTNotificationPresentationAlertKey;
-NSString *const UARCTAuthorizedNotificationSettingsBadgeKey = UARCTNotificationPresentationBadgeKey;
-NSString *const UARCTAuthorizedNotificationSettingsSoundKey = UARCTNotificationPresentationSoundKey;
-NSString *const UARCTAuthorizedNotificationSettingsCarPlayKey = @"carPlay";
-NSString *const UARCTAuthorizedNotificationSettingsLockScreenKey = @"lockScreen";
-NSString *const UARCTAuthorizedNotificationSettingsNotificationCenterKey = @"notificationCenter";
 
 NSString *const UARCTEventNameKey = @"name";
 NSString *const UARCTEventBodyKey = @"body";
@@ -154,51 +144,11 @@ static UARCTEventEmitter *sharedEventEmitter_;
 #pragma mark UARegistrationDelegate
 
 - (void)notificationAuthorizedSettingsDidChange:(UAAuthorizedNotificationSettings)authorizedSettings {
-    BOOL optedIn = NO;
-
-    BOOL alertBool = NO;
-    BOOL badgeBool = NO;
-    BOOL soundBool = NO;
-    BOOL carPlayBool = NO;
-    BOOL lockScreenBool = NO;
-    BOOL notificationCenterBool = NO;
-
-    if (authorizedSettings & UAAuthorizedNotificationSettingsAlert) {
-        alertBool = YES;
-    }
-
-    if (authorizedSettings & UAAuthorizedNotificationSettingsBadge) {
-        badgeBool = YES;
-    }
-
-    if (authorizedSettings & UAAuthorizedNotificationSettingsSound) {
-        soundBool = YES;
-    }
-
-    if (authorizedSettings & UAAuthorizedNotificationSettingsCarPlay) {
-        carPlayBool = YES;
-    }
-
-    if (authorizedSettings & UAAuthorizedNotificationSettingsLockScreen) {
-        lockScreenBool = YES;
-    }
-
-    if (authorizedSettings & UAAuthorizedNotificationSettingsNotificationCenter) {
-        notificationCenterBool = YES;
-    }
-
-    optedIn = authorizedSettings != UAAuthorizedNotificationSettingsNone;
-
-    NSDictionary *body = @{  @"optIn": @(optedIn),
-                             @"authorizedNotificationSettings" : @{
-                                     UARCTAuthorizedNotificationSettingsAlertKey : @(alertBool),
-                                     UARCTAuthorizedNotificationSettingsBadgeKey : @(badgeBool),
-                                     UARCTAuthorizedNotificationSettingsSoundKey : @(soundBool),
-                                     UARCTAuthorizedNotificationSettingsCarPlayKey : @(carPlayBool),
-                                     UARCTAuthorizedNotificationSettingsLockScreenKey : @(lockScreenBool),
-                                     UARCTAuthorizedNotificationSettingsNotificationCenterKey : @(notificationCenterBool)
-                             }};
-
+    NSDictionary *body = @{
+        @"optIn": @(authorizedSettings != UAAuthorizedNotificationSettingsNone),
+        @"authorizedNotificationSettings": [UARCTUtils authorizedSettingsDictionary:authorizedSettings],
+        @"authorizedSettings": [UARCTUtils authorizedSettingsArray:authorizedSettings]
+    };
     [self sendEventWithName:UARCTOptInStatusChangedEventName body:body];
 }
 
@@ -206,9 +156,10 @@ static UARCTEventEmitter *sharedEventEmitter_;
 #pragma mark Message Center
 
 - (void)inboxUpdated {
-    NSDictionary *body = @{ @"messageUnreadCount": @([UAMessageCenter shared].messageList.unreadCount),
-                            @"messageCount": @([UAMessageCenter shared].messageList.messageCount)
-                            };
+    NSDictionary *body = @{
+        @"messageUnreadCount": @([UAMessageCenter shared].messageList.unreadCount),
+        @"messageCount": @([UAMessageCenter shared].messageList.messageCount)
+    };
 
     [self sendEventWithName:UARCTInboxUpdatedEventName body:body];
 }

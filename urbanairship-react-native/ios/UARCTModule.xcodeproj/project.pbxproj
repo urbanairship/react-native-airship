@@ -11,6 +11,7 @@
 		6E42C7AF1EBA953100C85B3A /* UARCTAutopilot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C7AC1EBA953100C85B3A /* UARCTAutopilot.m */; };
 		6E42C7B01EBA953100C85B3A /* UrbanAirshipReactModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C7AE1EBA953100C85B3A /* UrbanAirshipReactModule.m */; };
 		6E42C8551EC0DD0900C85B3A /* UARCTEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */; };
+		6E6C3FA427AB41C8007F55C7 /* UARCTUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E6C3FA327AB41C8007F55C7 /* UARCTUtils.m */; };
 		6ED67C292318812700169F5C /* UARCTMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ED67C252318812700169F5C /* UARCTMessageView.m */; };
 		6ED67C2A2318812700169F5C /* UARCTMessageViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ED67C282318812700169F5C /* UARCTMessageViewManager.m */; };
 		6ED701FA1F6C91A400E67C37 /* UARCTDeepLinkAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ED701F91F6C91A400E67C37 /* UARCTDeepLinkAction.m */; };
@@ -39,6 +40,8 @@
 		6E42C8531EC0DD0900C85B3A /* UARCTEventEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UARCTEventEmitter.h; path = UARCTModule/UARCTEventEmitter.h; sourceTree = "<group>"; };
 		6E42C8541EC0DD0900C85B3A /* UARCTEventEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UARCTEventEmitter.m; path = UARCTModule/UARCTEventEmitter.m; sourceTree = "<group>"; };
 		6E4D17C21EBA7FAA0032DED3 /* libUARCTModule.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUARCTModule.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E6C3FA227AB41C8007F55C7 /* UARCTUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UARCTUtils.h; path = UARCTModule/UARCTUtils.h; sourceTree = "<group>"; };
+		6E6C3FA327AB41C8007F55C7 /* UARCTUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UARCTUtils.m; path = UARCTModule/UARCTUtils.m; sourceTree = "<group>"; };
 		6ED67C252318812700169F5C /* UARCTMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UARCTMessageView.m; path = UARCTModule/UARCTMessageView.m; sourceTree = "<group>"; };
 		6ED67C262318812700169F5C /* UARCTMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UARCTMessageView.h; path = UARCTModule/UARCTMessageView.h; sourceTree = "<group>"; };
 		6ED67C272318812700169F5C /* UARCTMessageViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UARCTMessageViewManager.h; path = UARCTModule/UARCTMessageViewManager.h; sourceTree = "<group>"; };
@@ -63,6 +66,8 @@
 		6E4D17341EBA7C100032DED3 /* UARCTModule */ = {
 			isa = PBXGroup;
 			children = (
+				6E6C3FA227AB41C8007F55C7 /* UARCTUtils.h */,
+				6E6C3FA327AB41C8007F55C7 /* UARCTUtils.m */,
 				6ED67C262318812700169F5C /* UARCTMessageView.h */,
 				6ED67C252318812700169F5C /* UARCTMessageView.m */,
 				6ED67C272318812700169F5C /* UARCTMessageViewManager.h */,
@@ -167,6 +172,7 @@
 			files = (
 				457511BA23A41C7A00E4B1AD /* UARCTModuleVersion.m in Sources */,
 				6E42C7AF1EBA953100C85B3A /* UARCTAutopilot.m in Sources */,
+				6E6C3FA427AB41C8007F55C7 /* UARCTUtils.m in Sources */,
 				6ED67C292318812700169F5C /* UARCTMessageView.m in Sources */,
 				6E42C8551EC0DD0900C85B3A /* UARCTEventEmitter.m in Sources */,
 				6E42C7B01EBA953100C85B3A /* UrbanAirshipReactModule.m in Sources */,

@@ -1,8 +1,8 @@
 /* Copyright Airship and Contributors */
 
-'use strict';
+'use strict'
 
-import { NativeModules, Platform } from "react-native";
+import { NativeModules, Platform } from "react-native"
 
 import { CustomEvent } from "./CustomEvent";
 import { TagGroupEditor, TagGroupOperation } from "./TagGroupEditor";
@@ -15,12 +15,12 @@ import { SubscriptionLists, SubscriptionListType } from "./SubscriptionLists";
 /**
  * @hidden
  */
-const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
+const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule
 
 /**
  * @hidden
  */
-const EventEmitter = new UAEventEmitter();
+const EventEmitter = new UAEventEmitter()
 
 /**
  * Enum of internal event type names used by UAEventEmitter
@@ -89,31 +89,31 @@ export interface InboxMessage {
   /**
    * The message ID. Needed to display, mark as read, or delete the message.
    */
-  id: string;
+  id: string
   /**
    * The message title.
    */
-  title: string;
+  title: string
   /**
    * The message sent date in milliseconds.
    */
-  sentDate: number;
+  sentDate: number
   /**
    * Optional - The icon url for the message.
    */
-  listIconUrl: string;
+  listIconUrl: string
   /**
    * The unread / read status of the message.
    */
-  isRead: boolean;
+  isRead: boolean
   /**
    * The deleted status of the message.
    */
-  isDeleted: boolean;
+  isDeleted: boolean
   /**
    * String to String map of any message extras.
    */
-  extras: Record<string, string>;
+  extras: Record<string, string>
 }
 
 /**
@@ -123,19 +123,19 @@ export interface PushReceivedEvent {
   /**
    * The alert.
    */
-  alert?: string;
+  alert?: string
   /**
    * The title.
    */
-  title?: string;
+  title?: string
   /**
    * The notification ID.
    */
-  notificationId: string;
+  notificationId: string
   /**
    * The notification extras.
    */
-  extras: JsonObject;
+  extras: JsonObject
 }
 
 /**
@@ -145,11 +145,11 @@ export interface NotificationResponseEvent {
   /**
    * The push notification.
    */
-  notification: PushReceivedEvent;
+  notification: PushReceivedEvent
   /**
    * The action button ID, if avilable.
    */
-  actionId?: string;
+  actionId?: string
   /**
    * Indicates whether the response was a foreground action.
    * This value is always if the user taps the main notification,
@@ -159,67 +159,202 @@ export interface NotificationResponseEvent {
 }
 
 /**
- * Enum of notification options. iOS only.
+ * iOS options
  */
-export enum NotificationOptionsIOS {
+export namespace iOS {
+
   /**
-   * Alerts.
+   * Enum of notification options. iOS only.
    */
-  Alert = "alert",
+  export enum NotificationOption {
+    /**
+     * Alerts.
+     */
+    Alert = "alert",
+    /**
+     * Sounds.
+     */
+    Sound = "sound",
+    /**
+     * Badges.
+     */
+    Badge = "badge",
+    /**
+     * Car play.
+     */
+    CarPlay = "carPlay",
+    /**
+     * Critical Alert.
+     */
+    CriticalAlert = "criticalAlert",
+    /**
+     * Provides app notification settings.
+     */
+    ProvidesAppNotificationSettings = "providesAppNotificationSettings",
+    /**
+     * Provisional.
+     */
+    Provisional = "provisional"
+  }
+
   /**
-   * Sounds.
+   * Enum of foreground notification options.
    */
-  Sound = "sound",
+  export enum ForegroundPresentationOption {
+    /**
+     * Alerts.
+     */
+    Alert = "alert",
+    /**
+     * Sounds.
+     */
+    Sound = "sound",
+    /**
+     * Badges.
+     */
+    Badge = "badge"
+  }
+
   /**
-   * Badges.
+   * Enum of authorized notification settings.
    */
-  Badge = "badge"
+  export enum AuthorizedNotificationSetting {
+    /**
+     * Alerts.
+     */
+    Alert = "alert",
+    /**
+     * Sounds.
+     */
+    Sound = "sound",
+    /**
+     * Badges.
+     */
+    Badge = "badge",
+    /**
+     * CarPlay.
+     */
+    CarPlay = "carPlay",
+    /**
+     * Lock screen.
+     */
+    LockScreen = "lockScreen",
+    /**
+     * Notification center.
+     */
+    NotificationCenter = "notificationCenter",
+    /**
+     * Critical alert.
+     */
+    CriticalAlert = "criticalAlert",
+    /**
+     * Announcement.
+     */
+    Announcement = "announcement",
+    /**
+     * Scheduled delivery.
+     */
+    ScheduledDelivery = "scheduledDelivery",
+    /**
+    * Time sensitive.
+    */
+    TimeSensitive = "timeSensitive"
+  }
+
+  /**
+   * Enum of authorized status.
+   */
+   export enum AuthorizedNotificationStatus {
+    /**
+     * Not determined.
+     */
+    NotDetermined = "notDetermined",
+    
+    /**
+     * Denied.
+     */
+    Denied = "denied",
+    
+    /**
+     * Authorized.
+     */
+    Authorized = "authorized",
+    
+    /**
+     * Provisional.
+     */
+    Provisional = "provisional",
+
+    /**
+     * Ephemeral.
+     */
+    Ephemeral = "ephemeral"
+  }
 }
+
+
+export interface NotificationStatus {
+  /**
+   * If airship is opted in for push notifications are not.
+   */
+  airshipOptIn: boolean
+
+  /**
+   * If notifications are enabled on Airship or not.
+   */
+  airshipEnabled: boolean
+
+  /**
+   * If notifications are enabled in the app settings or not.
+   */
+  systemEnabled: boolean
+
+  /**
+   * iOS status.
+   */
+  ios?: {
+    /**
+     * Authorized settings.
+     */
+    authorizedSettings: [iOS.AuthorizedNotificationSetting],
+
+    /**
+     * Authorized status.
+     */
+    authorizedStatus: [iOS.AuthorizedNotificationStatus]
+  }
+}
+
+/**
+ * Enum of notification options. iOS only.
+ * @deprecated This enum is poorly named and refers to foreground presentation
+ * options instead of notification options. Use iOS.ForegroundPresentationOption instead.
+ */
+export type NotificationOptionsIOS = iOS.ForegroundPresentationOption
 
 /**
  * A map of notification options. iOS only.
+ * @deprecated Not used.
  */
-export type NotificationOptionsMapIOS = { [option in NotificationOptionsIOS]: boolean }
+export type NotificationOptionsMapIOS = { [option in iOS.ForegroundPresentationOption]: boolean }
 
 /**
  * A map of foreground notification options. iOS only.
+ * @deprecated Use iOS.ForegroundPresentationOption[] instead of a map.
  */
-export type ForegroundNotificationOptionsIOS = { [option in NotificationOptionsIOS]: boolean | null | undefined }
+export type ForegroundNotificationOptionsIOS = { [option in iOS.ForegroundPresentationOption]: boolean | null | undefined }
 
 /**
  * Enum of authorized notification settings. iOS only.
+ * @deprecated Use iOS.AuthorizedNotificationSetting instead.
  */
-export enum AuthorizedNotificationSettingsIOS {
-  /**
-   * Alerts.
-   */
-  Alert = "alert",
-  /**
-   * Sounds.
-   */
-  Sound = "sound",
-  /**
-   * Badges.
-   */
-  Badge = "badge",
-  /**
-   * CarPlay.
-   */
-  CarPlay = "carPlay",
-  /**
-   * Lock screen.
-   */
-  LockScreen = "lockScreen",
-  /**
-   * Notification center.
-   */
-  NotificationCenter = "notificationCenter"
-}
+export type AuthorizedNotificationSettingsIOS = iOS.AuthorizedNotificationSetting
 
 /**
  * A map of authorized notification settings.
+ * @deprecated Use [iOS.AuthorizedNotificationSetting] instead.
  */
-export type iOSAuthorizedNotificationSettingsMap = { [setting in AuthorizedNotificationSettingsIOS]: boolean }
+export type iOSAuthorizedNotificationSettingsMap = { [setting in iOS.AuthorizedNotificationSetting]: boolean }
 
 /**
  * Event fired when the notification opt-in status changes.
@@ -228,12 +363,18 @@ export interface NotificationOptInStatusEvent {
   /**
    * Whether the user is opted in to notifications.
    */
-  optIn: boolean;
+  optIn: boolean
+
+  /**
+   * The authorized notification settings map. iOS only.
+   * @deprecated Use authorizedSettings instead.
+   */
+  authorizedNotificationSettings?: [AuthorizedNotificationSettingsIOS]
 
   /**
    * The authorized notification settings. iOS only.
    */
-  authorizedNotificationSettings?: AuthorizedNotificationSettingsIOS;
+  authorizedSettings?: [iOS.AuthorizedNotificationSetting]
 }
 
 /**
@@ -243,7 +384,7 @@ export interface InboxUpdatedEvent {
   /**
    * The unread message count.
    */
-  messageUnreadCount: number;
+  messageUnreadCount: number
   /**
    * The total message count.
    */
@@ -257,7 +398,7 @@ export interface ShowInboxEvent {
   /**
    * The message ID, if available.
    */
-  messageId?: string;
+  messageId?: string
 }
 
 /**
@@ -267,22 +408,22 @@ export interface DeepLinkEvent {
   /**
    * The deep link string.
    */
-  deepLink: string;
+  deepLink: string
 }
 
 /**
  * A listener subscription.
  */
 export class Subscription {
-  onRemove: () => void;
+  onRemove: () => void
   constructor(onRemove: () => void) {
-    this.onRemove = onRemove;
+    this.onRemove = onRemove
   }
   /**
    * Removes the listener.
    */
   remove(): void {
-    this.onRemove();
+    this.onRemove()
   }
 }
 
@@ -293,7 +434,7 @@ export interface RegistrationEvent {
   /**
    * The channel ID.
    */
-  channelId: string;
+  channelId: string
   /**
    * The registration token. The registration token might be undefined
    * if registration is currently in progress, if the app is not setup properly
@@ -309,24 +450,24 @@ export interface RegistrationEvent {
  */
 function convertEventEnum(type: EventType): string {
   if (type === EventType.NotificationResponse) {
-    return InternalEventType.NotificationResponse;
+    return InternalEventType.NotificationResponse
   } else if (type === EventType.PushReceived) {
-    return InternalEventType.PushReceived;
+    return InternalEventType.PushReceived
   } else if (type === EventType.Register || type === EventType.Registration) {
-    return InternalEventType.Registration;
+    return InternalEventType.Registration
   } else if (type == EventType.DeepLink) {
-    return InternalEventType.DeepLink;
+    return InternalEventType.DeepLink
   } else if (type == EventType.NotificationOptInStatus) {
-    return InternalEventType.NotificationOptInStatus;
+    return InternalEventType.NotificationOptInStatus
   } else if (type == EventType.InboxUpdated) {
-    return InternalEventType.InboxUpdated;
+    return InternalEventType.InboxUpdated
   } else if (type == EventType.ShowInbox) {
-    return InternalEventType.ShowInbox;
+    return InternalEventType.ShowInbox
   } else if (type == EventType.ConversationUpdated) {
-    return InternalEventType.ConversationUpdated;
+    return InternalEventType.ConversationUpdated
   }
 
-  throw new Error("Invalid event name: " + type);
+  throw new Error("Invalid event name: " + type)
 }
 
 function convertFeatureEnum(feature: String): Feature {
@@ -352,7 +493,7 @@ function convertFeatureEnum(feature: String): Feature {
     return Feature.FEATURE_ALL
   }
 
-  throw new Error("Invalid feature name: " + feature);
+  throw new Error("Invalid feature name: " + feature)
 }
 
 /**
@@ -362,15 +503,15 @@ export interface NotificationConfigAndroid {
   /**
    * The icon resource na,e.
    */
-  icon?: string;
+  icon?: string
   /**
    * The large icon resource name.
    */
-  largeIcon?: string;
+  largeIcon?: string
   /**
    * The default android notification channel ID.
    */
-  defaultChannelId?: string;
+  defaultChannelId?: string
 }
 
 /**
@@ -399,7 +540,7 @@ export class UrbanAirship {
    * @param config The notification config object.
    */
   static setAndroidNotificationConfig(config: NotificationConfigAndroid) {
-    UrbanAirshipModule.setAndroidNotificationConfig(config);
+    UrbanAirshipModule.setAndroidNotificationConfig(config)
   }
 
   /**
@@ -409,7 +550,7 @@ export class UrbanAirship {
    * @param enabled true to enable notifications, false to disable.
    */
   static setUserNotificationsEnabled(enabled: boolean) {
-    UrbanAirshipModule.setUserNotificationsEnabled(enabled);
+    UrbanAirshipModule.setUserNotificationsEnabled(enabled)
   }
 
   /**
@@ -418,7 +559,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static isUserNotificationsEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isUserNotificationsEnabled();
+    return UrbanAirshipModule.isUserNotificationsEnabled()
   }
 
   /**
@@ -431,7 +572,7 @@ export class UrbanAirship {
    * @return A promise that returns true if the enablement was authorized.
    */
   static setEnabledFeatures(features: Feature[]): Promise<boolean> {
-    return UrbanAirshipModule.setEnabledFeatures(features);
+    return UrbanAirshipModule.setEnabledFeatures(features)
   }
 
   /**
@@ -442,15 +583,15 @@ export class UrbanAirship {
   static getEnabledFeatures(): Promise<Feature[]> {
     return new Promise((resolve, reject) => {
       UrbanAirshipModule.getEnabledFeatures().then((features: String[]) => {
-        var convertedFeatures: Feature[] = new Array();        
+        var convertedFeatures: Feature[] = new Array()        
         for (const feature of features){
-          convertedFeatures.push(convertFeatureEnum(feature));
+          convertedFeatures.push(convertFeatureEnum(feature))
         }
-        resolve(convertedFeatures);
+        resolve(convertedFeatures)
       }), (error: Error) => {
-        reject(error);
-      };
-    });
+        reject(error)
+      }
+    })
   }
 
   /**
@@ -460,7 +601,7 @@ export class UrbanAirship {
    * @return A promise that returns true if the enablement was authorized.
    */
   static enableFeature(features: Feature[]): Promise<boolean> {
-    return UrbanAirshipModule.enableFeature(features);
+    return UrbanAirshipModule.enableFeature(features)
   }
 
   /**
@@ -470,7 +611,7 @@ export class UrbanAirship {
    * @return A promise that returns true if the disablement was authorized.
    */
   static disableFeature(features: Feature[]): Promise<boolean> {
-    return UrbanAirshipModule.disableFeature(features);
+    return UrbanAirshipModule.disableFeature(features)
   }
 
   /**
@@ -479,7 +620,7 @@ export class UrbanAirship {
    * @return A promise that returns true if the features are enabled, false otherwise.
    */
   static isFeatureEnabled(features: Feature[]): Promise<boolean> {
-    return UrbanAirshipModule.isFeatureEnabled(features);
+    return UrbanAirshipModule.isFeatureEnabled(features)
   }
 
   /**
@@ -489,7 +630,7 @@ export class UrbanAirship {
    * or false if enablement was rejected
    */
   static enableUserPushNotifications(): Promise<boolean> {
-    return UrbanAirshipModule.enableUserPushNotifications();
+    return UrbanAirshipModule.enableUserPushNotifications()
   }
 
   /**
@@ -497,7 +638,7 @@ export class UrbanAirship {
    * enabled in the config.
    */
   static enableChannelCreation() {
-    UrbanAirshipModule.enableChannelCreation();
+    UrbanAirshipModule.enableChannelCreation()
   }
 
   /**
@@ -505,19 +646,30 @@ export class UrbanAirship {
    * but app notifications being disabled if the user opted out of notifications.
    *
    * @return A promise with the result.
+   * @deprecated Use getNotificationStatus() instead.
    */
   static isUserNotificationsOptedIn(): Promise<boolean> {
-    return UrbanAirshipModule.isUserNotificationsOptedIn();
+    return UrbanAirshipModule.isUserNotificationsOptedIn()
   }
 
-   /**
+  /**
    * Checks if app notifications are enabled at a system level or not. Its possible to have `userNotificationsEnabled`
    * but app notifications being disabled if the user opted out of notifications.
    *
    * @return A promise with the result.
+   * @deprecated Use getNotificationStatus() instead.
    */
   static isSystemNotificationsEnabledForApp(): Promise<boolean> {
-    return UrbanAirshipModule.isSystemNotificationsEnabledForApp();
+    return UrbanAirshipModule.isSystemNotificationsEnabledForApp()
+  }
+
+  /**
+   * Gets the notification status for the app.
+   *
+   * @return A promise with the result.
+   */
+  static getNotificationStatus(): Promise<NotificationStatus> {
+    return UrbanAirshipModule.getNotificationStatus()
   }
 
   /**
@@ -529,9 +681,9 @@ export class UrbanAirship {
    */
   static getNotificationChannelStatus(channel: string): Promise<string> {
     if (Platform.OS != 'android') {
-      throw new Error("This method is only supported on Android devices.");
+      throw new Error("This method is only supported on Android devices.")
     }
-    return UrbanAirshipModule.getNotificationChannelStatus(channel);
+    return UrbanAirshipModule.getNotificationChannelStatus(channel)
   }
 
   /**
@@ -540,7 +692,7 @@ export class UrbanAirship {
    * @param namedUser The named user string, or null/undefined to clear the named user.
    */
   static setNamedUser(namedUser: string | null | undefined) {
-    UrbanAirshipModule.setNamedUser(namedUser);
+    UrbanAirshipModule.setNamedUser(namedUser)
   }
 
   /**
@@ -549,7 +701,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static getNamedUser(): Promise<string | null | undefined> {
-    return UrbanAirshipModule.getNamedUser();
+    return UrbanAirshipModule.getNamedUser()
   }
 
   /**
@@ -558,7 +710,7 @@ export class UrbanAirship {
    * @param tag A channel tag.
    */
   static addTag(tag: string) {
-    UrbanAirshipModule.addTag(tag);
+    UrbanAirshipModule.addTag(tag)
   }
 
   /**
@@ -567,7 +719,7 @@ export class UrbanAirship {
    * @param tag A channel tag.
    */
   static removeTag(tag: string) {
-    UrbanAirshipModule.removeTag(tag);
+    UrbanAirshipModule.removeTag(tag)
   }
 
   /**
@@ -576,7 +728,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static getTags(): Promise<string[]> {
-    return UrbanAirshipModule.getTags();
+    return UrbanAirshipModule.getTags()
   }
 
   /**
@@ -596,8 +748,8 @@ export class UrbanAirship {
    */
   static editNamedUserTagGroups(): TagGroupEditor {
     return new TagGroupEditor((operations: TagGroupOperation[]) => {
-      UrbanAirshipModule.editNamedUserTagGroups(operations);
-    });
+      UrbanAirshipModule.editNamedUserTagGroups(operations)
+    })
   }
 
   /**
@@ -607,8 +759,8 @@ export class UrbanAirship {
    */
   static editChannelTagGroups(): TagGroupEditor {
     return new TagGroupEditor((operations: TagGroupOperation[]) => {
-      UrbanAirshipModule.editChannelTagGroups(operations);
-    });
+      UrbanAirshipModule.editChannelTagGroups(operations)
+    })
   }
 
   /**
@@ -618,8 +770,8 @@ export class UrbanAirship {
    */
   static editChannelAttributes(): AttributeEditor {
     return new AttributeEditor((operations: AttributeOperation[]) => {
-      UrbanAirshipModule.editChannelAttributes(operations);
-    });
+      UrbanAirshipModule.editChannelAttributes(operations)
+    })
   }
 
   /**
@@ -629,8 +781,8 @@ export class UrbanAirship {
    */
   static editNamedUserAttributes(): AttributeEditor {
     return new AttributeEditor((operations: AttributeOperation[]) => {
-      UrbanAirshipModule.editNamedUserAttributes(operations);
-    });
+      UrbanAirshipModule.editNamedUserAttributes(operations)
+    })
   }
 
   /**
@@ -640,8 +792,8 @@ export class UrbanAirship {
    */
   static editSubscriptionLists(): SubscriptionListEditor {
     return new SubscriptionListEditor((subscriptionListUpdates: SubscriptionListUpdate[]) => {
-        UrbanAirshipModule.editSubscriptionLists(subscriptionListUpdates);
-    });
+        UrbanAirshipModule.editSubscriptionLists(subscriptionListUpdates)
+    })
   }
 
   /**
@@ -655,7 +807,7 @@ export class UrbanAirship {
    * @param enabled true to enable notifications, false to disable.
    */
   static setAnalyticsEnabled(enabled: boolean) {
-    UrbanAirshipModule.setAnalyticsEnabled(enabled);
+    UrbanAirshipModule.setAnalyticsEnabled(enabled)
   }
 
   /**
@@ -664,7 +816,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static isAnalyticsEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isAnalyticsEnabled();
+    return UrbanAirshipModule.isAnalyticsEnabled()
   }
 
   /**
@@ -673,7 +825,7 @@ export class UrbanAirship {
    * @param screen The screen's string identifier
    */
   static trackScreen(screen: string) {
-    UrbanAirshipModule.trackScreen(screen);
+    UrbanAirshipModule.trackScreen(screen)
   }
 
   /**
@@ -682,7 +834,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static getChannelId(): Promise<string | null | undefined> {
-    return UrbanAirshipModule.getChannelId();
+    return UrbanAirshipModule.getChannelId()
   }
 
   /**
@@ -694,7 +846,7 @@ export class UrbanAirship {
    * an Android device that has an outdated or missing version of Google Play Services.
    */
   static getRegistrationToken(): Promise<string | null | undefined> {
-    return UrbanAirshipModule.getRegistrationToken();
+    return UrbanAirshipModule.getRegistrationToken()
   }
 
   /**
@@ -704,7 +856,7 @@ export class UrbanAirship {
    * @param id The identifier's id, or null/undefined to clear.
    */
   static associateIdentifier(key: string, id?: string) {
-    UrbanAirshipModule.associateIdentifier(key, id);
+    UrbanAirshipModule.associateIdentifier(key, id)
   }
 
   /**
@@ -720,15 +872,15 @@ export class UrbanAirship {
       event_value: event._value,
       transaction_id: event._transactionId,
       properties: event._properties
-    };
+    }
 
     return new Promise((resolve, reject) => {
       UrbanAirshipModule.runAction("add_custom_event_action", actionArg).then(() => {
-        resolve();
+        resolve(null)
       }, (error: Error) => {
-        reject(error);
-      });
-    });
+        reject(error)
+      })
+    })
   }
 
   /**
@@ -740,18 +892,44 @@ export class UrbanAirship {
    * successfully runs, or the Error if the action was unable to be run.
    */
   static runAction(name: string, value?: JsonValue): Promise<JsonValue | Error> {
-    return UrbanAirshipModule.runAction(name, value);
+    return UrbanAirshipModule.runAction(name, value)
   }
 
   /**
-   * Sets the foregorund presentation options for iOS.
+   * Sets the foreground presentation options for iOS.
    * This method is only supported on iOS. Android will no-op.
    *
-   * @param options The map of options.
+   * @param options The array of foreground presentation options.
    */
-  static setForegroundPresentationOptions(options: ForegroundNotificationOptionsIOS) {
+  static setForegroundPresentationOptions(options: ForegroundNotificationOptionsIOS | [iOS.ForegroundPresentationOption]) {
     if (Platform.OS == 'ios') {
-      return UrbanAirshipModule.setForegroundPresentationOptions(options);
+      if (Array.isArray(options)) {
+        return UrbanAirshipModule.setForegroundPresentationOptions(options)
+      } else {
+        var converted = []
+        if (options.alert) {
+          converted.push(iOS.ForegroundPresentationOption.Alert)
+        } 
+        if (options.badge) {
+          converted.push(iOS.ForegroundPresentationOption.Badge)
+        } 
+        if (options.sound) {
+          converted.push(iOS.ForegroundPresentationOption.Sound)
+        } 
+        return UrbanAirshipModule.setForegroundPresentationOptions(converted)
+      }
+    }
+  }
+
+  /**
+   * Sets the notification options for iOS.
+   * This method is only supported on iOS. Android will no-op.
+   *
+   * @param options The array of notification options.
+   */
+   static setNotificationOptions(options: [iOS.NotificationOption]) {
+    if (Platform.OS == 'ios') {
+      return UrbanAirshipModule.setNotificationOptions(options)
     }
   }
 
@@ -765,10 +943,10 @@ export class UrbanAirship {
    * @return A subscription.
    */
   static addListener(eventType: EventType, listener: (...args: any[]) => any): Subscription {
-    EventEmitter.addListener(convertEventEnum(eventType), listener);
+    EventEmitter.addListener(convertEventEnum(eventType), listener)
     return new Subscription(() => {
-      UrbanAirship.removeListener(eventType, listener);
-    });
+      UrbanAirship.removeListener(eventType, listener)
+    })
   }
 
   /**
@@ -780,7 +958,7 @@ export class UrbanAirship {
    * @param listener The event listener. Should be a reference to the function passed into addListener.
    */
   static removeListener(eventType: EventType, listener: (...args: any[]) => any) {
-    EventEmitter.removeListener(convertEventEnum(eventType), listener);
+    EventEmitter.removeListener(convertEventEnum(eventType), listener)
   }
 
   /**
@@ -791,7 +969,7 @@ export class UrbanAirship {
    * EventType.InboxUpdated, or EventType.ShowInbox.
    */
   static removeAllListeners(eventType: EventType) {
-    EventEmitter.removeAllListeners(convertEventEnum(eventType));
+    EventEmitter.removeAllListeners(convertEventEnum(eventType))
   }
 
   /**
@@ -801,9 +979,9 @@ export class UrbanAirship {
    */
   static setAutobadgeEnabled(enabled: boolean) {
     if (Platform.OS == 'ios') {
-      UrbanAirshipModule.setAutobadgeEnabled(enabled);
+      UrbanAirshipModule.setAutobadgeEnabled(enabled)
     } else {
-      console.log("This feature is not supported on this platform.");
+      console.log("This feature is not supported on this platform.")
     }
   }
 
@@ -814,10 +992,10 @@ export class UrbanAirship {
    */
   static isAutobadgeEnabled(): Promise<boolean> {
     if (Platform.OS == 'ios') {
-      return UrbanAirshipModule.isAutobadgeEnabled();
+      return UrbanAirshipModule.isAutobadgeEnabled()
     } else {
-      console.log("This feature is not supported on this platform.");
-      return new Promise(resolve => resolve(false));
+      console.log("This feature is not supported on this platform.")
+      return new Promise(resolve => resolve(false))
     }
   }
 
@@ -828,9 +1006,9 @@ export class UrbanAirship {
    */
   static setBadgeNumber(badgeNumber: number) {
     if (Platform.OS == 'ios') {
-      UrbanAirshipModule.setBadgeNumber(badgeNumber);
+      UrbanAirshipModule.setBadgeNumber(badgeNumber)
     } else {
-      console.log("This feature is not supported on this platform.");
+      console.log("This feature is not supported on this platform.")
     }
   }
 
@@ -842,23 +1020,23 @@ export class UrbanAirship {
    */
   static getBadgeNumber(): Promise<number> {
     if (Platform.OS != 'ios') {
-      console.log("This feature is not supported on this platform.");
+      console.log("This feature is not supported on this platform.")
     }
-    return UrbanAirshipModule.getBadgeNumber();
+    return UrbanAirshipModule.getBadgeNumber()
   }
 
   /**
    * Displays the default message center.
    */
   static displayMessageCenter() {
-    UrbanAirshipModule.displayMessageCenter();
+    UrbanAirshipModule.displayMessageCenter()
   }
 
   /**
    * Dismisses the default message center.
    */
   static dismissMessageCenter() {
-    UrbanAirshipModule.dismissMessageCenter();
+    UrbanAirshipModule.dismissMessageCenter()
   }
 
   /**
@@ -868,14 +1046,14 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static displayMessage(messageId: string): Promise<boolean> {
-    return UrbanAirshipModule.displayMessage(messageId);
+    return UrbanAirshipModule.displayMessage(messageId)
   }
 
   /**
    * Dismisses the currently displayed inbox message.
    */
   static dismissMessage() {
-    UrbanAirshipModule.dismissMessage();
+    UrbanAirshipModule.dismissMessage()
   }
 
   /**
@@ -884,7 +1062,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static getInboxMessages(): Promise<InboxMessage[]> {
-    return UrbanAirshipModule.getInboxMessages();
+    return UrbanAirshipModule.getInboxMessages()
   }
 
   /**
@@ -894,7 +1072,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static deleteInboxMessage(messageId: string): Promise<boolean> {
-    return UrbanAirshipModule.deleteInboxMessage(messageId);
+    return UrbanAirshipModule.deleteInboxMessage(messageId)
   }
 
   /**
@@ -904,7 +1082,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static markInboxMessageRead(messageId: string): Promise<boolean> {
-    return UrbanAirshipModule.markInboxMessageRead(messageId);
+    return UrbanAirshipModule.markInboxMessageRead(messageId)
   }
 
   /**
@@ -915,7 +1093,7 @@ export class UrbanAirship {
    * @return{Promise.<boolean>} A promise with the result.
    */
   static refreshInbox(): Promise<boolean> {
-    return UrbanAirshipModule.refreshInbox();
+    return UrbanAirshipModule.refreshInbox()
   }
 
   /**
@@ -925,7 +1103,7 @@ export class UrbanAirship {
    * @param enabled true to automatically launch the default message center, false to disable.
    */
   static setAutoLaunchDefaultMessageCenter(enabled: boolean) {
-    UrbanAirshipModule.setAutoLaunchDefaultMessageCenter(enabled);
+    UrbanAirshipModule.setAutoLaunchDefaultMessageCenter(enabled)
   }
 
   /**
@@ -934,7 +1112,7 @@ export class UrbanAirship {
    * @param localeIdentifier The locale identifier.
    */
   static setCurrentLocale(localeIdentifier: String) {
-    UrbanAirshipModule.setCurrentLocale(localeIdentifier);
+    UrbanAirshipModule.setCurrentLocale(localeIdentifier)
   }
 
   /**
@@ -942,7 +1120,7 @@ export class UrbanAirship {
    *
    */
   static getCurrentLocale(): Promise<String> {
-    return UrbanAirshipModule.getCurrentLocale();
+    return UrbanAirshipModule.getCurrentLocale()
   }
 
   /**
@@ -950,7 +1128,7 @@ export class UrbanAirship {
    *
    */
   static clearLocale() {
-    UrbanAirshipModule.clearLocale();
+    UrbanAirshipModule.clearLocale()
   }
 
   /**
@@ -960,7 +1138,7 @@ export class UrbanAirship {
    * @return A promise with the result.
    */
   static getActiveNotifications(): Promise<PushReceivedEvent[]> {
-    return UrbanAirshipModule.getActiveNotifications();
+    return UrbanAirshipModule.getActiveNotifications()
   }
 
   /**
@@ -969,7 +1147,7 @@ export class UrbanAirship {
    * the badge number to 0 to clear notifications.
    */
   static clearNotifications() {
-    UrbanAirshipModule.clearNotifications();
+    UrbanAirshipModule.clearNotifications()
   }
 
   /**
@@ -981,6 +1159,7 @@ export class UrbanAirship {
    * under the "notificationId" field.
    */
   static clearNotification(identifier: string) {
-    UrbanAirshipModule.clearNotification(identifier);
+    UrbanAirshipModule.clearNotification(identifier)
   }
 }
+
