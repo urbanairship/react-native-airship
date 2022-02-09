@@ -1,7 +1,7 @@
 # React Native Module Changelog
 
 ## Version 13.2.0 - February 9, 2022
-Minor release that updates the Airship SDKs and fixes several issues.
+Minor release that updates the Airship SDKs, adding some new methods and fixes some issues.
 
 ### Changes
 - Updated iOS SDK to 16.2.0
