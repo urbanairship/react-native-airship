@@ -1,5 +1,17 @@
 # React Native Module Changelog
 
+## Version 13.2.0 - February 9, 2022
+Minor release that updates the Airship SDKs, adds some new methods and fixes some issues.
+
+### Changes
+- Updated iOS SDK to 16.2.0
+- Updated Android SDK to 16.2.0
+- Added a method `getSubscriptionLists` to get the subscription lists
+- Added a method `setNotificationOptions` to set the notification options for iOS
+- Added a method `getNotificationStatus` to get more context on the current state of notifications
+- Fixed iOS message center display when `autoLaunchMessageCenter` is set to false
+- Fixed the preference center config to return the items under the key `items`
+
 ## Version 13.1.1 - January 6, 2022
 Minor release that updates to latest Airship SDKs and fixes several issues.
 
