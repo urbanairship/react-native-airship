@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 13.2.1 - February 10, 2022
+Patch release that fixes a crash on Android due to the React Native use of androidx.appcompat:appcompat library.
+
+### Changes
+- Fixes a crash due to the React Native use of androidx.appcompat:appcompat library
+
 ## Version 13.2.0 - February 9, 2022
 Minor release that updates the Airship SDKs, adds some new methods and fixes some issues.
 
