@@ -28,5 +28,7 @@ def getModuleVersion() {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation "com.urbanairship.android:urbanairship-accengage:$airshipVersion"
+    implementation("com.urbanairship.android:urbanairship-accengage:$airshipVersion") {
+        exclude group:'androidx.appcompat', module: 'appcompat'
+    }
 }

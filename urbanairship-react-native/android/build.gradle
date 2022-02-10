@@ -40,11 +40,16 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'
 
     api ("com.urbanairship.android:urbanairship-fcm:$airshipVersion") {
-      exclude group: 'com.google.firebase', module: 'firebase-messaging'
+        exclude group: 'com.google.firebase', module: 'firebase-messaging'
+        exclude group:'androidx.appcompat', module: 'appcompat'
     }
 
-    api "com.urbanairship.android:urbanairship-message-center:$airshipVersion"
-    api "com.urbanairship.android:urbanairship-automation:$airshipVersion"
+    api ("com.urbanairship.android:urbanairship-message-center:$airshipVersion") {
+        exclude group:'androidx.appcompat', module: 'appcompat'
+    }
+    api ("com.urbanairship.android:urbanairship-automation:$airshipVersion") {
+        exclude group:'androidx.appcompat', module: 'appcompat'
+    }
 
     implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '22.0.0')}"
 }
