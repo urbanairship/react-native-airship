@@ -159,6 +159,16 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void addListener(String eventName) {
+        // Keep: Required for RN built in Event Emitter Calls.
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Keep: Required for RN built in Event Emitter Calls.
+    }
+
+    @ReactMethod
     public void setAndroidNotificationConfig(ReadableMap map) {
         Context context = getReactApplicationContext();
         ReactAirshipPreferences prefs = ReactAirshipPreferences.shared();
