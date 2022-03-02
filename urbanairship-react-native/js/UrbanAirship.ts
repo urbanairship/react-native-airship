@@ -9,6 +9,7 @@ import { TagGroupEditor, TagGroupOperation } from "./TagGroupEditor";
 import { AttributeEditor, AttributeOperation } from "./AttributeEditor";
 import { UAEventEmitter } from "./UAEventEmitter";
 import { SubscriptionListEditor, SubscriptionListUpdate} from "./SubscriptionListEditor";
+import { ScopedSubscriptionListEditor, ScopedSubscriptionListUpdate} from "./ScopedSubscriptionListEditor";
 import { JsonObject, JsonValue } from "./Json";
 import { SubscriptionLists, SubscriptionListType } from "./SubscriptionLists";
 
@@ -156,6 +157,16 @@ export interface NotificationResponseEvent {
    * otherwise it is defined by the notification action button.
    */
   isForeground: boolean
+}
+
+/**
+ * Subscription Scope types.
+ */
+ export enum SubscriptionScope {
+  App = "APP",
+  Web = "WEB",
+  Sms = "SMS",
+  Email = "EMAIL"
 }
 
 /**
@@ -734,10 +745,10 @@ export class UrbanAirship {
   /**
    * Gets the subscription lists.
    *
-   * @param types The types of subscription lists. Defaults to an [`channel`].
+   * @param types The types of subscription lists. Values: `channel`, `contact` (default: [`channel`]).
    * @return A promise with the result.
    */
-   static getSubscriptionLists(types?: [SubscriptionListType]): Promise<SubscriptionLists> {
+   static getSubscriptionLists(types?: [...SubscriptionListType[]]): Promise<SubscriptionLists> {
     return UrbanAirshipModule.getSubscriptionLists(types ?? ['channel']);
   }
 
@@ -789,10 +800,31 @@ export class UrbanAirship {
    * Edit the subscription List.
    *
    * @return A promise with the result.
+   * @deprecated Replaced by {@link editChannelSubscriptionLists()}.
    */
   static editSubscriptionLists(): SubscriptionListEditor {
+    return this.editChannelSubscriptionLists()
+  }
+
+  /**
+   * Edit the subscription lists associated with the current Channel.
+   *
+   * @return A promise with the result.
+   */
+  static editChannelSubscriptionLists(): SubscriptionListEditor {
     return new SubscriptionListEditor((subscriptionListUpdates: SubscriptionListUpdate[]) => {
-        UrbanAirshipModule.editSubscriptionLists(subscriptionListUpdates)
+        UrbanAirshipModule.editChannelSubscriptionLists(subscriptionListUpdates)
+    })
+  }
+
+  /**
+   * Edit the subscription lists associated with the current Contact.
+   *
+   * @return A promise with the result.
+   */
+  static editContactSubscriptionLists(): ScopedSubscriptionListEditor {
+    return new ScopedSubscriptionListEditor((subscriptionListUpdates: ScopedSubscriptionListUpdate[]) => {
+        UrbanAirshipModule.editContactSubscriptionLists(subscriptionListUpdates)
     })
   }
 
