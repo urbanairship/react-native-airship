@@ -22,7 +22,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import { UrbanAirship } from 'urbanairship-react-native'
+import { UrbanAirship, SubscriptionScope } from 'urbanairship-react-native'
 import { AirshipChat } from 'urbanairship-chat-react-native'
 import { AirshipPreferenceCenter } from 'urbanairship-preference-center-react-native'
 
@@ -143,6 +143,40 @@ export default class SettingsScreen extends Component {
     AirshipPreferenceCenter.openPreferenceCenter("neat");
   }
 
+  getSubscriptionLists() {
+    // UrbanAirship.getSubscriptionLists(["contact"]).then((contactSubs) => {
+    //   console.log('contact subs:', contactSubs)
+    // })
+
+    // UrbanAirship.getSubscriptionLists(["channel"]).then((channelSubs) => {
+    //   console.log('channel subs: ', channelSubs)
+    // })
+    
+    UrbanAirship.getSubscriptionLists(["channel", "contact"]).then((allSubs) => {
+      console.log('Subscriptions:', allSubs)
+    })
+  }
+
+  getPrefCenterConfig(id) {
+    AirshipPreferenceCenter.getConfiguration(id).then((config) => {
+      console.log('got config:', config)
+    }) 
+  }
+
+  editSubscriptions() {
+    
+    UrbanAirship.editContactSubscriptionLists()
+      .unsubscribe("dog_food", SubscriptionScope.App)
+      .subscribe("cat_facts", SubscriptionScope.App)
+      .apply()
+
+    // UrbanAirship.editChannelSubscriptionLists()
+    //   .subscribe("sports")
+    //   .subscribe("pizza_news")
+    //   .apply()
+
+  }
+
   componentDidMount() {
     this.subscriptions = [];
 
@@ -245,10 +279,25 @@ export default class SettingsScreen extends Component {
             title="Open chat"
           />
           <Button
-                      color='#0d6a83'
-                      onPress={() => this.openPreferenceCenter()}
-                      title="Preference Center"
-                    />
+            color='#0d6a83'
+            onPress={() => this.openPreferenceCenter()}
+            title="Preference Center"
+          />
+          <Button
+            color='#0d6a83'
+            onPress={() => this.getPrefCenterConfig("neat")}
+            title="Get Pref Center Config"
+          />
+          <Button
+            color='#0d6a83'
+            onPress={() => this.getSubscriptionLists()}
+            title="Get Subscription Lists"
+          />
+          <Button
+            color='#0d6a83'
+            onPress={() => this.editSubscriptions()}
+            title="Edit Subscriptions"
+          />
         </ScrollView>
       </View>
 
