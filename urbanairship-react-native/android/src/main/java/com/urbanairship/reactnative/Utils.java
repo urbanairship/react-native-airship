@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Module utils.
  */
-class Utils {
+public class Utils {
 
     /**
      * Converts a dynamic object into a {@link JsonValue}.
@@ -122,7 +122,7 @@ class Utils {
      * @param value The JsonValue.
      * @return The converted object.
      */
-    static Object convertJsonValue(JsonValue value) {
+    public static Object convertJsonValue(JsonValue value) {
         if (value.isNull()) {
             return null;
         }

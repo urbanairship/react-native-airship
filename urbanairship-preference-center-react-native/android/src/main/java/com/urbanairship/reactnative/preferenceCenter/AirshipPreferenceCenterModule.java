@@ -5,6 +5,7 @@ package com.urbanairship.reactnative.preferenceCenter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.annotation.SuppressLint;
 import android.preference.PreferenceManager;
 
 import com.facebook.react.bridge.Arguments;
@@ -17,16 +18,25 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
+import com.urbanairship.Cancelable;
 import com.urbanairship.PendingResult;
 import com.urbanairship.ResultCallback;
+import com.urbanairship.json.JsonList;
+import com.urbanairship.json.JsonMap;
+import com.urbanairship.json.JsonValue;
 import com.urbanairship.preferencecenter.PreferenceCenter;
 import com.urbanairship.UAirship;
 import com.urbanairship.preferencecenter.data.CommonDisplay;
 import com.urbanairship.preferencecenter.data.Item;
 import com.urbanairship.preferencecenter.data.PreferenceCenterConfig;
 import com.urbanairship.preferencecenter.data.Section;
+import com.urbanairship.reactive.Observable;
+import com.urbanairship.reactive.Observer;
+import com.urbanairship.reactive.Subscriber;
+import com.urbanairship.reactive.Subscription;
 import com.urbanairship.reactnative.Event;
 import com.urbanairship.reactnative.EventEmitter;
+import com.urbanairship.reactnative.Utils;
 import com.urbanairship.reactnative.preferenceCenter.events.OpenPreferenceCenterEvent;
 
 import java.util.List;
@@ -72,69 +82,13 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getConfiguration(String preferenceCenterId, final Promise promise) {
-
-        PreferenceCenter.shared().getConfig(preferenceCenterId).addResultCallback(new ResultCallback<PreferenceCenterConfig>() {
-            @Override
-            public void onResult(@Nullable PreferenceCenterConfig configPendingResult) {
-
-                WritableMap configMap = new WritableNativeMap();
-                if (configPendingResult != null) {
-                    configMap.putString("id", configPendingResult.getId());
-
-                    List<Section> sections = configPendingResult.getSections();
-                    if (sections != null) {
-                        WritableArray sectionArray = Arguments.createArray();
-                        for (Section section : sections) {
-                            WritableMap sectionMap = new WritableNativeMap();
-                            sectionMap.putString("id", section.getId());
-
-                            List<Item> items = section.getItems();
-                            if (items != null) {
-                                WritableArray itemArray = Arguments.createArray();
-                                for (Item item : items) {
-                                    WritableMap itemMap = new WritableNativeMap();
-                                    itemMap.putString("id", item.getId());
-                                    if (item instanceof Item.ChannelSubscription) {
-                                        Item.ChannelSubscription subscription = (Item.ChannelSubscription) item;
-                                        itemMap.putString("subscriptionId", subscription.getSubscriptionId());
-                                    }
-
-                                    CommonDisplay commonDisplay = item.getDisplay();
-                                    if (commonDisplay != null) {
-                                        WritableMap commonDisplayMap = new WritableNativeMap();
-                                        commonDisplayMap.putString("name", commonDisplay.getName());
-                                        commonDisplayMap.putString("description", commonDisplay.getDescription());
-                                        itemMap.putMap("display", (ReadableMap) commonDisplayMap);
-                                    }
-                                    itemArray.pushMap(itemMap);
-                                }
-                                sectionMap.putArray("items", itemArray);
-                            }
-
-                            CommonDisplay sectionCommonDisplay = section.getDisplay();
-                            WritableMap sectionCommonDisplayMap = new WritableNativeMap();
-                            if (sectionCommonDisplay != null) {
-                                sectionCommonDisplayMap.putString("name", sectionCommonDisplay.getName());
-                                sectionCommonDisplayMap.putString("description", sectionCommonDisplay.getDescription());
-                                sectionMap.putMap("display", (ReadableMap) sectionCommonDisplayMap);
-                            }
-
-                            sectionArray.pushMap(sectionMap);
-                        }
-                        configMap.putArray("sections", sectionArray);
-                    }
-
-                    CommonDisplay configCommonDisplay = configPendingResult.getDisplay();
-                    WritableMap configCommonDisplayMap = new WritableNativeMap();
-                    if (configCommonDisplay != null) {
-                        configCommonDisplayMap.putString("name", configCommonDisplay.getName());
-                        configCommonDisplayMap.putString("description", configCommonDisplay.getDescription());
-                        configMap.putMap("display", (ReadableMap) configCommonDisplayMap);
-                    }
-                }
-
-                promise.resolve(configMap);
+        getConfigJson(preferenceCenterId).addResultCallback(result -> {
+            if (result == null) {
+                promise.reject(new Exception("Failed to get preference center configuration."));
+                return;
             }
+
+            promise.resolve(Utils.convertJsonValue(result));
         });
     }
 
@@ -143,4 +97,32 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
       PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).edit().putBoolean(preferenceID, useCustomUI).apply();
     }
 
+    @SuppressLint("RestrictedApi")
+    private PendingResult<JsonValue> getConfigJson(final String prefCenterId) {
+        PendingResult<JsonValue> result = new PendingResult<>();
+
+        UAirship.shared().getRemoteData().payloadsForType("preference_forms")
+                .flatMap((payload) -> {
+                    JsonList forms = payload.getData().opt("preference_forms").optList();
+                    for (JsonValue formJson : forms) {
+                        JsonMap formMap = formJson.optMap().opt("form").optMap();
+                        if (formMap.opt("id").optString().equals(prefCenterId)) {
+                            return Observable.just(formMap.toJsonValue());
+                        }
+                    }
+                    return Observable.empty();
+                }).distinctUntilChanged()
+                .subscribe(new Subscriber<JsonValue>() {
+                    @Override
+                    public void onNext(@NonNull JsonValue value) {
+                        result.setResult(value);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Exception e) {
+                        result.setResult(null);
+                    }
+                });
+        return result;
+    }
 }
