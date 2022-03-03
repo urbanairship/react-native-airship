@@ -1,24 +1,24 @@
 PODS:
-  - Airship (16.2.0):
-    - Airship/Automation (= 16.2.0)
-    - Airship/Basement (= 16.2.0)
-    - Airship/Core (= 16.2.0)
-    - Airship/ExtendedActions (= 16.2.0)
-    - Airship/MessageCenter (= 16.2.0)
-  - Airship/Accengage (16.2.0):
+  - Airship (16.4.0):
+    - Airship/Automation (= 16.4.0)
+    - Airship/Basement (= 16.4.0)
+    - Airship/Core (= 16.4.0)
+    - Airship/ExtendedActions (= 16.4.0)
+    - Airship/MessageCenter (= 16.4.0)
+  - Airship/Accengage (16.4.0):
     - Airship/Core
-  - Airship/Automation (16.2.0):
+  - Airship/Automation (16.4.0):
     - Airship/Core
-  - Airship/Basement (16.2.0)
-  - Airship/Chat (16.2.0):
+  - Airship/Basement (16.4.0)
+  - Airship/Chat (16.4.0):
     - Airship/Core
-  - Airship/Core (16.2.0):
+  - Airship/Core (16.4.0):
     - Airship/Basement
-  - Airship/ExtendedActions (16.2.0):
+  - Airship/ExtendedActions (16.4.0):
     - Airship/Core
-  - Airship/MessageCenter (16.2.0):
+  - Airship/MessageCenter (16.4.0):
     - Airship/Core
-  - Airship/PreferenceCenter (16.2.0):
+  - Airship/PreferenceCenter (16.4.0):
     - Airship/Core
   - AirshipServiceExtension (16.2.0)
   - boost-for-react-native (1.63.0)
@@ -299,19 +299,19 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - urbanairship-accengage-react-native (13.1.1):
-    - Airship/Accengage (= 16.2.0)
+  - urbanairship-accengage-react-native (13.3.0):
+    - Airship/Accengage (= 16.4.0)
     - React-Core
-  - urbanairship-chat-react-native (13.1.1):
-    - Airship/Chat (= 16.2.0)
-    - React-Core
-    - urbanairship-react-native
-  - urbanairship-preference-center-react-native (13.1.1):
-    - Airship/PreferenceCenter (= 16.2.0)
+  - urbanairship-chat-react-native (13.3.0):
+    - Airship/Chat (= 16.4.0)
     - React-Core
     - urbanairship-react-native
-  - urbanairship-react-native (13.1.1):
-    - Airship (= 16.2.0)
+  - urbanairship-preference-center-react-native (13.3.0):
+    - Airship/PreferenceCenter (= 16.4.0)
+    - React-Core
+    - urbanairship-react-native
+  - urbanairship-react-native (13.3.0):
+    - Airship (= 16.4.0)
     - React-Core
   - Yoga (1.14.0)
 
@@ -440,7 +440,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 57df0122b4684cdbdc1cac6171f7065697e54155
+  Airship: 755b12485ab6001bc846001edf31a9bceb675689
   AirshipServiceExtension: f616bafc8c72132ec23ac31f21d3f7b297deacd6
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
@@ -475,10 +475,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  urbanairship-accengage-react-native: 0edafc6e37ba6d651e6ce2c25385b5311a0cce16
-  urbanairship-chat-react-native: 6204ac120b0ee8beb04ab1abb6e8a8b37ddec8d3
-  urbanairship-preference-center-react-native: c8747e60b730ebf97f27337b79a4b6ad2929355c
-  urbanairship-react-native: 75895b219e12b8ea5e4d8c17b4032ae769ff7cef
+  urbanairship-accengage-react-native: efbaf7f607f51e7850199b1908bef0f7196a527b
+  urbanairship-chat-react-native: 8114b34dd95125986916b78ceb35ccf03bfc6e4d
+  urbanairship-preference-center-react-native: cf2a079b37d4ad0bc33df870a1a662d2d2998218
+  urbanairship-react-native: c8d7a011dccba8ab698b24bc08139f82d3b6ee1d
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
 PODFILE CHECKSUM: 447681dd5e20f0f837f0236f1fc430e2ae23dbe8
