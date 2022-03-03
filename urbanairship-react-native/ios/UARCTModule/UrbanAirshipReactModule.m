@@ -408,7 +408,7 @@ RCT_EXPORT_METHOD(editNamedUserAttributes:(NSArray *)operations) {
     }];
 }
 
-RCT_EXPORT_METHOD(editSubscriptionLists:(NSArray *)subscriptionListUpdates) {
+RCT_EXPORT_METHOD(editChannelSubscriptionLists:(NSArray *)subscriptionListUpdates) {
     UASubscriptionListEditor* subscriptionListEditor = [[UAirship channel] editSubscriptionLists];
     for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
         NSString* listId = subscriptionListUpdate[@"listId"];
@@ -422,7 +422,41 @@ RCT_EXPORT_METHOD(editSubscriptionLists:(NSArray *)subscriptionListUpdates) {
         }
     }
     [subscriptionListEditor apply];
+}
 
+RCT_EXPORT_METHOD(editContactSubscriptionLists:(NSArray *)subscriptionListUpdates) {
+    UAScopedSubscriptionListEditor* subscriptionListEditor = [[UAirship contact] editSubscriptionLists];
+
+    for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
+        NSString *listId = subscriptionListUpdate[@"listId"];
+        NSString *type = subscriptionListUpdate[@"type"];
+        NSString *scopeString = [subscriptionListUpdate[@"scope"] lowercaseString];
+
+        if (!listId || !type) {
+            continue;
+        }
+
+        UAChannelScope scope;
+        if ([scopeString isEqualToString:@"sms"]) {
+            scope = UAChannelScopeSms;
+        } else if ([scopeString isEqualToString:@"email"]) {
+            scope = UAChannelScopeEmail;
+        } else if ([scopeString isEqualToString:@"app"]) {
+            scope = UAChannelScopeApp;
+        } else if ([scopeString isEqualToString:@"web"]) {
+            scope = UAChannelScopeWeb;
+        } else {
+            continue;
+        }
+
+        if ([type isEqualToString:@"subscribe"]) {
+            [subscriptionListEditor subscribe:listId scope:scope];
+        } else if ([type isEqualToString:@"unsubscribe"]) {
+            [subscriptionListEditor unsubscribe:listId scope:scope];
+        }
+    }
+
+    [subscriptionListEditor apply];
 }
 
 RCT_EXPORT_METHOD(setNotificationOptions:(NSArray *)options) {
