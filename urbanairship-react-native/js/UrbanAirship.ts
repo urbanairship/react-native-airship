@@ -756,10 +756,20 @@ export class UrbanAirship {
    * Creates an editor to modify the named user tag groups.
    *
    * @return A tag group editor instance.
+   * @deprecated Replaced by {@link editContactTagGroups()}.
    */
   static editNamedUserTagGroups(): TagGroupEditor {
+    return this.editContactTagGroups()
+  }
+
+  /**
+   * Creates an editor to modify the contact tag groups.
+   *
+   * @return A tag group editor instance.
+   */
+   static editContactTagGroups(): TagGroupEditor {
     return new TagGroupEditor((operations: TagGroupOperation[]) => {
-      UrbanAirshipModule.editNamedUserTagGroups(operations)
+      UrbanAirshipModule.editContactTagGroups(operations)
     })
   }
 
@@ -789,10 +799,20 @@ export class UrbanAirship {
    * Creates an editor to modify the named user attributes.
    *
    * @return An attribute editor instance.
+   * @deprecated Replaced by {@link editChannelSubscriptionLists()}.
    */
   static editNamedUserAttributes(): AttributeEditor {
+    return this.editContactAttributes()
+  }
+
+  /**
+   * Creates an editor to modify the contact attributes.
+   *
+   * @return An attribute editor instance.
+   */
+  static editContactAttributes(): AttributeEditor {
     return new AttributeEditor((operations: AttributeOperation[]) => {
-      UrbanAirshipModule.editNamedUserAttributes(operations)
+      UrbanAirshipModule.editContactAttributes(operations)
     })
   }
 

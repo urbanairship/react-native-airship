@@ -453,7 +453,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Edits the named user tag groups.
+     * Edits the contact tag groups.
      * Operations should each be a map with the following:
      * - operationType: Either add or remove
      * - group: The group to modify
@@ -462,7 +462,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * @param operations An array of operations.
      */
     @ReactMethod
-    public void editNamedUserTagGroups(ReadableArray operations) {
+    public void editContactTagGroups(ReadableArray operations) {
         applyTagGroupOperations(UAirship.shared().getContact().editTagGroups(), operations);
     }
 
@@ -481,7 +481,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Edits the named user attributes.
+     * Edits the contact attributes.
      * Operations should each be a map with the following:
      * - action: Either set or remove
      * - value: The group to modify
@@ -490,7 +490,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * @param operations An array of operations.
      */
     @ReactMethod
-    public void editNamedUserAttributes(ReadableArray operations) {
+    public void editContactAttributes(ReadableArray operations) {
         applyAttributeOperations(UAirship.shared().getContact().editAttributes(), operations);
     }
 

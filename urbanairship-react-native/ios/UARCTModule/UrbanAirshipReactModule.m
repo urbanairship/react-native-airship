@@ -384,7 +384,7 @@ RCT_REMAP_METHOD(runAction,
                     }];
 }
 
-RCT_EXPORT_METHOD(editNamedUserTagGroups:(NSArray *)operations) {
+RCT_EXPORT_METHOD(editContactTagGroups:(NSArray *)operations) {
     [UAirship.contact editTagGroups:^(UATagGroupsEditor * editor) {
         [self applyTagGroupOperations:operations editor:editor];
     }];
@@ -402,7 +402,7 @@ RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
     }];
 }
 
-RCT_EXPORT_METHOD(editNamedUserAttributes:(NSArray *)operations) {
+RCT_EXPORT_METHOD(editContactAttributes:(NSArray *)operations) {
     [UAirship.contact editAttributes:^(UAAttributesEditor *editor) {
         [self applyAttributeOperations:operations editor:editor];
     }];
