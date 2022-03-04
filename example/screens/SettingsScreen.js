@@ -144,13 +144,13 @@ export default class SettingsScreen extends Component {
   }
 
   getSubscriptionLists() {
-    // UrbanAirship.getSubscriptionLists(["contact"]).then((contactSubs) => {
-    //   console.log('contact subs:', contactSubs)
-    // })
+    UrbanAirship.getSubscriptionLists(["contact"]).then((contactSubs) => {
+      console.log('contact subs:', contactSubs)
+    })
 
-    // UrbanAirship.getSubscriptionLists(["channel"]).then((channelSubs) => {
-    //   console.log('channel subs: ', channelSubs)
-    // })
+    UrbanAirship.getSubscriptionLists(["channel"]).then((channelSubs) => {
+      console.log('channel subs: ', channelSubs)
+    })
     
     UrbanAirship.getSubscriptionLists(["channel", "contact"]).then((allSubs) => {
       console.log('Subscriptions:', allSubs)
@@ -160,20 +160,27 @@ export default class SettingsScreen extends Component {
   getPrefCenterConfig(id) {
     AirshipPreferenceCenter.getConfiguration(id).then((config) => {
       console.log('got config:', config)
+
+      config.sections.forEach( (section) => {
+        console.log(section.display?.name, "-", section.display?.description)
+        section.items.forEach((item) => {
+            console.log(item.display.name, "(", item.subscription_id, ")")
+        })
+      })
     }) 
   }
 
   editSubscriptions() {
     
     UrbanAirship.editContactSubscriptionLists()
-      .unsubscribe("dog_food", SubscriptionScope.App)
-      .subscribe("cat_facts", SubscriptionScope.App)
+      .subscribe("dog_food", SubscriptionScope.Email)
+      .subscribe("cat_facts", SubscriptionScope.Email)
       .apply()
 
-    // UrbanAirship.editChannelSubscriptionLists()
-    //   .subscribe("sports")
-    //   .subscribe("pizza_news")
-    //   .apply()
+    UrbanAirship.editChannelSubscriptionLists()
+      .subscribe("sports")
+      .subscribe("pizza_news")
+      .apply()
 
   }
 

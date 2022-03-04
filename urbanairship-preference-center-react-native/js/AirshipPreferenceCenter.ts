@@ -5,6 +5,7 @@
 import { NativeModules } from 'react-native';
 import {  UrbanAirship, JsonValue } from 'urbanairship-react-native'
 import { UAEventEmitter } from 'urbanairship-react-native/js/UAEventEmitter'
+import { PreferenceCenter } from './PreferenceCenter';
 
 /**
  * @hidden
@@ -42,7 +43,7 @@ export class AirshipPreferenceCenter {
     AirshipPreferenceCenterModule.open(preferenceCenterId);
   }
 
-  static getConfiguration(preferenceCenterId: String): Promise<JsonValue> {
+  static getConfiguration(preferenceCenterId: String): Promise<PreferenceCenter> {
     return AirshipPreferenceCenterModule.getConfiguration(preferenceCenterId);
   }
 

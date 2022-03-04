@@ -799,7 +799,7 @@ export class UrbanAirship {
    * Creates an editor to modify the named user attributes.
    *
    * @return An attribute editor instance.
-   * @deprecated Replaced by {@link editChannelSubscriptionLists()}.
+   * @deprecated Replaced by {@link editContactAttributes()}.
    */
   static editNamedUserAttributes(): AttributeEditor {
     return this.editContactAttributes()

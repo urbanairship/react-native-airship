@@ -272,6 +272,22 @@ RCT_REMAP_METHOD(getSubscriptionLists,
         }];
     }
     
+    if ([typedSet containsObject:@"contact"]) {
+        dispatch_group_enter(group);
+        
+        [UAirship.contact fetchSubscriptionListsWithCompletionHandler:^(NSDictionary<NSString *,UAChannelScopes *> * lists, NSError *error) {
+            @synchronized (result) {
+                // TODO: need to map UAChannelScope back to lowercase strings to chuck over the fence... :-/
+                result[@"contact"] = lists ?: @{};
+                if (!resultError) {
+                    resultError = error;
+                }
+            }
+            dispatch_group_leave(group);
+        }];
+    
+    }
+    
     dispatch_group_leave(group);
 
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
