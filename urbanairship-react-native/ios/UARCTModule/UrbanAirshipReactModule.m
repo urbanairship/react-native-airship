@@ -276,9 +276,21 @@ RCT_REMAP_METHOD(getSubscriptionLists,
         dispatch_group_enter(group);
         
         [UAirship.contact fetchSubscriptionListsWithCompletionHandler:^(NSDictionary<NSString *,UAChannelScopes *> * lists, NSError *error) {
+            
             @synchronized (result) {
-                // TODO: need to map UAChannelScope back to lowercase strings to chuck over the fence... :-/
-                result[@"contact"] = lists ?: @{};
+                NSMutableDictionary *converted = [NSMutableDictionary dictionary];
+                for (NSString* identifier in lists.allKeys) {
+                    UAChannelScopes *scopes = lists[identifier];
+                    NSMutableArray *scopesArray = [NSMutableArray array];
+                    for (id scope in scopes.values) {
+                        UAChannelScope channelScope = (UAChannelScope)[scope intValue];
+                        [scopesArray addObject:[self getScopeString:channelScope]];
+                    }
+                    [converted setValue:scopesArray forKey:identifier];
+                }
+
+                result[@"contact"] = converted;
+
                 if (!resultError) {
                     resultError = error;
                 }
@@ -297,6 +309,19 @@ RCT_REMAP_METHOD(getSubscriptionLists,
             resolve(result);
         }
     });
+}
+
+- (NSString *)getScopeString:(UAChannelScope )scope {
+    switch (scope) {
+        case UAChannelScopeSms:
+            return @"sms";
+        case UAChannelScopeEmail:
+            return @"email";
+        case UAChannelScopeApp:
+            return @"app";
+        case UAChannelScopeWeb:
+            return @"web";
+    }
 }
 
 RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
