@@ -738,7 +738,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                             for (Map.Entry<String, Set<Scope>> entry : contactSubs.entrySet()) {
                                 WritableArray scopesArray = Arguments.createArray();
                                 for (Scope s : entry.getValue()) {
-                                    scopesArray.pushString(s.name());
+                                    scopesArray.pushString(s.toString());
                                 }
                                 contactSubsMap.putArray(entry.getKey(), scopesArray);
                             }

@@ -163,10 +163,10 @@ export interface NotificationResponseEvent {
  * Subscription Scope types.
  */
  export enum SubscriptionScope {
-  App = "APP",
-  Web = "WEB",
-  Sms = "SMS",
-  Email = "EMAIL"
+  App = "app",
+  Web = "web",
+  Sms = "sms",
+  Email = "email"
 }
 
 /**
