@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 import groovy.json.JsonSlurper
 
 ext {
-  airshipVersion = "16.2.0"
+  airshipVersion = "16.3.3"
 }
 
 android {
@@ -16,6 +16,11 @@ android {
     minSdkVersion 21
 
     buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
   }
 }
 

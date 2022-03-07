@@ -272,6 +272,34 @@ RCT_REMAP_METHOD(getSubscriptionLists,
         }];
     }
     
+    if ([typedSet containsObject:@"contact"]) {
+        dispatch_group_enter(group);
+        
+        [UAirship.contact fetchSubscriptionListsWithCompletionHandler:^(NSDictionary<NSString *,UAChannelScopes *> * lists, NSError *error) {
+            
+            @synchronized (result) {
+                NSMutableDictionary *converted = [NSMutableDictionary dictionary];
+                for (NSString* identifier in lists.allKeys) {
+                    UAChannelScopes *scopes = lists[identifier];
+                    NSMutableArray *scopesArray = [NSMutableArray array];
+                    for (id scope in scopes.values) {
+                        UAChannelScope channelScope = (UAChannelScope)[scope intValue];
+                        [scopesArray addObject:[self getScopeString:channelScope]];
+                    }
+                    [converted setValue:scopesArray forKey:identifier];
+                }
+
+                result[@"contact"] = converted;
+
+                if (!resultError) {
+                    resultError = error;
+                }
+            }
+            dispatch_group_leave(group);
+        }];
+    
+    }
+    
     dispatch_group_leave(group);
 
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
@@ -281,6 +309,19 @@ RCT_REMAP_METHOD(getSubscriptionLists,
             resolve(result);
         }
     });
+}
+
+- (NSString *)getScopeString:(UAChannelScope )scope {
+    switch (scope) {
+        case UAChannelScopeSms:
+            return @"sms";
+        case UAChannelScopeEmail:
+            return @"email";
+        case UAChannelScopeApp:
+            return @"app";
+        case UAChannelScopeWeb:
+            return @"web";
+    }
 }
 
 RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
@@ -384,7 +425,7 @@ RCT_REMAP_METHOD(runAction,
                     }];
 }
 
-RCT_EXPORT_METHOD(editNamedUserTagGroups:(NSArray *)operations) {
+RCT_EXPORT_METHOD(editContactTagGroups:(NSArray *)operations) {
     [UAirship.contact editTagGroups:^(UATagGroupsEditor * editor) {
         [self applyTagGroupOperations:operations editor:editor];
     }];
@@ -402,13 +443,13 @@ RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
     }];
 }
 
-RCT_EXPORT_METHOD(editNamedUserAttributes:(NSArray *)operations) {
+RCT_EXPORT_METHOD(editContactAttributes:(NSArray *)operations) {
     [UAirship.contact editAttributes:^(UAAttributesEditor *editor) {
         [self applyAttributeOperations:operations editor:editor];
     }];
 }
 
-RCT_EXPORT_METHOD(editSubscriptionLists:(NSArray *)subscriptionListUpdates) {
+RCT_EXPORT_METHOD(editChannelSubscriptionLists:(NSArray *)subscriptionListUpdates) {
     UASubscriptionListEditor* subscriptionListEditor = [[UAirship channel] editSubscriptionLists];
     for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
         NSString* listId = subscriptionListUpdate[@"listId"];
@@ -422,7 +463,41 @@ RCT_EXPORT_METHOD(editSubscriptionLists:(NSArray *)subscriptionListUpdates) {
         }
     }
     [subscriptionListEditor apply];
+}
 
+RCT_EXPORT_METHOD(editContactSubscriptionLists:(NSArray *)subscriptionListUpdates) {
+    UAScopedSubscriptionListEditor* subscriptionListEditor = [[UAirship contact] editSubscriptionLists];
+
+    for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
+        NSString *listId = subscriptionListUpdate[@"listId"];
+        NSString *type = subscriptionListUpdate[@"type"];
+        NSString *scopeString = [subscriptionListUpdate[@"scope"] lowercaseString];
+
+        if (!listId || !type) {
+            continue;
+        }
+
+        UAChannelScope scope;
+        if ([scopeString isEqualToString:@"sms"]) {
+            scope = UAChannelScopeSms;
+        } else if ([scopeString isEqualToString:@"email"]) {
+            scope = UAChannelScopeEmail;
+        } else if ([scopeString isEqualToString:@"app"]) {
+            scope = UAChannelScopeApp;
+        } else if ([scopeString isEqualToString:@"web"]) {
+            scope = UAChannelScopeWeb;
+        } else {
+            continue;
+        }
+
+        if ([type isEqualToString:@"subscribe"]) {
+            [subscriptionListEditor subscribe:listId scope:scope];
+        } else if ([type isEqualToString:@"unsubscribe"]) {
+            [subscriptionListEditor unsubscribe:listId scope:scope];
+        }
+    }
+
+    [subscriptionListEditor apply];
 }
 
 RCT_EXPORT_METHOD(setNotificationOptions:(NSArray *)options) {

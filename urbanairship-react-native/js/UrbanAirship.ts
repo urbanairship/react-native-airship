@@ -9,6 +9,7 @@ import { TagGroupEditor, TagGroupOperation } from "./TagGroupEditor";
 import { AttributeEditor, AttributeOperation } from "./AttributeEditor";
 import { UAEventEmitter } from "./UAEventEmitter";
 import { SubscriptionListEditor, SubscriptionListUpdate} from "./SubscriptionListEditor";
+import { ScopedSubscriptionListEditor, ScopedSubscriptionListUpdate} from "./ScopedSubscriptionListEditor";
 import { JsonObject, JsonValue } from "./Json";
 import { SubscriptionLists, SubscriptionListType } from "./SubscriptionLists";
 
@@ -156,6 +157,16 @@ export interface NotificationResponseEvent {
    * otherwise it is defined by the notification action button.
    */
   isForeground: boolean
+}
+
+/**
+ * Subscription Scope types.
+ */
+ export enum SubscriptionScope {
+  App = "app",
+  Web = "web",
+  Sms = "sms",
+  Email = "email"
 }
 
 /**
@@ -734,10 +745,10 @@ export class UrbanAirship {
   /**
    * Gets the subscription lists.
    *
-   * @param types The types of subscription lists. Defaults to an [`channel`].
+   * @param types The types of subscription lists. Values: `channel`, `contact` (default: [`channel`]).
    * @return A promise with the result.
    */
-   static getSubscriptionLists(types?: [SubscriptionListType]): Promise<SubscriptionLists> {
+   static getSubscriptionLists(types?: [...SubscriptionListType[]]): Promise<SubscriptionLists> {
     return UrbanAirshipModule.getSubscriptionLists(types ?? ['channel']);
   }
 
@@ -745,10 +756,20 @@ export class UrbanAirship {
    * Creates an editor to modify the named user tag groups.
    *
    * @return A tag group editor instance.
+   * @deprecated Replaced by {@link editContactTagGroups()}.
    */
   static editNamedUserTagGroups(): TagGroupEditor {
+    return this.editContactTagGroups()
+  }
+
+  /**
+   * Creates an editor to modify the contact tag groups.
+   *
+   * @return A tag group editor instance.
+   */
+   static editContactTagGroups(): TagGroupEditor {
     return new TagGroupEditor((operations: TagGroupOperation[]) => {
-      UrbanAirshipModule.editNamedUserTagGroups(operations)
+      UrbanAirshipModule.editContactTagGroups(operations)
     })
   }
 
@@ -778,10 +799,20 @@ export class UrbanAirship {
    * Creates an editor to modify the named user attributes.
    *
    * @return An attribute editor instance.
+   * @deprecated Replaced by {@link editContactAttributes()}.
    */
   static editNamedUserAttributes(): AttributeEditor {
+    return this.editContactAttributes()
+  }
+
+  /**
+   * Creates an editor to modify the contact attributes.
+   *
+   * @return An attribute editor instance.
+   */
+  static editContactAttributes(): AttributeEditor {
     return new AttributeEditor((operations: AttributeOperation[]) => {
-      UrbanAirshipModule.editNamedUserAttributes(operations)
+      UrbanAirshipModule.editContactAttributes(operations)
     })
   }
 
@@ -789,10 +820,31 @@ export class UrbanAirship {
    * Edit the subscription List.
    *
    * @return A promise with the result.
+   * @deprecated Replaced by {@link editChannelSubscriptionLists()}.
    */
   static editSubscriptionLists(): SubscriptionListEditor {
+    return this.editChannelSubscriptionLists()
+  }
+
+  /**
+   * Edit the subscription lists associated with the current Channel.
+   *
+   * @return A promise with the result.
+   */
+  static editChannelSubscriptionLists(): SubscriptionListEditor {
     return new SubscriptionListEditor((subscriptionListUpdates: SubscriptionListUpdate[]) => {
-        UrbanAirshipModule.editSubscriptionLists(subscriptionListUpdates)
+        UrbanAirshipModule.editChannelSubscriptionLists(subscriptionListUpdates)
+    })
+  }
+
+  /**
+   * Edit the subscription lists associated with the current Contact.
+   *
+   * @return A promise with the result.
+   */
+  static editContactSubscriptionLists(): ScopedSubscriptionListEditor {
+    return new ScopedSubscriptionListEditor((subscriptionListUpdates: ScopedSubscriptionListUpdate[]) => {
+        UrbanAirshipModule.editContactSubscriptionLists(subscriptionListUpdates)
     })
   }
 

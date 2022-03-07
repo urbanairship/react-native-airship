@@ -46,6 +46,8 @@ import com.urbanairship.analytics.AssociatedIdentifiers;
 import com.urbanairship.channel.AttributeEditor;
 import com.urbanairship.channel.SubscriptionListEditor;
 import com.urbanairship.channel.TagGroupsEditor;
+import com.urbanairship.contacts.Scope;
+import com.urbanairship.contacts.ScopedSubscriptionListEditor;
 import com.urbanairship.messagecenter.Inbox;
 import com.urbanairship.messagecenter.Message;
 import com.urbanairship.messagecenter.MessageCenter;
@@ -88,6 +90,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     private static final String SUBSCRIBE_LIST_OPERATION_LISTID = "listId";
     private static final String SUBSCRIBE_LIST_OPERATION_TYPE = "type";
+    private static final String SUBSCRIBE_LIST_OPERATION_SCOPE = "scope";
 
     private static final String NOTIFICATION_ICON_KEY = "icon";
     private static final String NOTIFICATION_LARGE_ICON_KEY = "largeIcon";
@@ -450,7 +453,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Edits the named user tag groups.
+     * Edits the contact tag groups.
      * Operations should each be a map with the following:
      * - operationType: Either add or remove
      * - group: The group to modify
@@ -459,7 +462,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * @param operations An array of operations.
      */
     @ReactMethod
-    public void editNamedUserTagGroups(ReadableArray operations) {
+    public void editContactTagGroups(ReadableArray operations) {
         applyTagGroupOperations(UAirship.shared().getContact().editTagGroups(), operations);
     }
 
@@ -478,7 +481,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Edits the named user attributes.
+     * Edits the contact attributes.
      * Operations should each be a map with the following:
      * - action: Either set or remove
      * - value: The group to modify
@@ -487,7 +490,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * @param operations An array of operations.
      */
     @ReactMethod
-    public void editNamedUserAttributes(ReadableArray operations) {
+    public void editContactAttributes(ReadableArray operations) {
         applyAttributeOperations(UAirship.shared().getContact().editAttributes(), operations);
     }
 
@@ -495,10 +498,25 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * Edit a subscription list.
      *
      * @param subscriptionListUpdates The subscription lists.
+     * @deprecated Use {@link #editChannelSubscriptionLists(ReadableArray)} instead.
      */
     @ReactMethod
+    @Deprecated
     public void editSubscriptionLists(ReadableArray subscriptionListUpdates) {
+        editChannelSubscriptionLists(subscriptionListUpdates);
+    }
 
+    /**
+     * Edit subscription lists associated with the current Channel.
+     *
+     * List updates should each be a map with the following:
+     * - type: Either subscribe or unsubscribe.
+     * - listId: ID of the subscription list to subscribe to or unsubscribe from.
+     *
+     * @param subscriptionListUpdates The subscription lists.
+     */
+    @ReactMethod
+    public void editChannelSubscriptionLists(ReadableArray subscriptionListUpdates) {
         SubscriptionListEditor editor = UAirship.shared().getChannel().editSubscriptionLists();
 
         for (int i = 0; i < subscriptionListUpdates.size(); i++) {
@@ -525,6 +543,51 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         editor.apply();
     }
 
+
+    /**
+     * Edit subscription lists associated with the current Channel.
+     *
+     * List updates should each be a map with the following:
+     * - type: Either subscribe or unsubscribe.
+     * - listId: ID of the subscription list to subscribe to or unsubscribe from.
+     * - scope: Subscription scope (one of: app, web, sms, email).
+     *
+     * @param scopedSubscriptionListUpdates The subscription list updates.
+     */
+    @ReactMethod
+    public void editContactSubscriptionLists(ReadableArray scopedSubscriptionListUpdates) {
+        ScopedSubscriptionListEditor editor = UAirship.shared().getContact().editSubscriptionLists();
+
+        for (int i = 0; i < scopedSubscriptionListUpdates.size(); i++) {
+            ReadableMap subscriptionListUpdate = scopedSubscriptionListUpdates.getMap(i);
+            if (subscriptionListUpdate == null) {
+                continue;
+            }
+
+            String listId = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_LISTID);
+            String type = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_TYPE);
+            String scopeString = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_SCOPE);
+
+            if (listId == null || type == null || scopeString == null) {
+                continue;
+            }
+
+            Scope scope;
+            try {
+                scope = Scope.valueOf(scopeString.toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException e){
+                continue;
+            }
+
+            if ("subscribe".equals(type)) {
+                editor.subscribe(listId, scope);
+            } else if ("unsubscribe".equals(type)) {
+                editor.unsubscribe(listId, scope);
+            }
+        }
+
+        editor.apply();
+    }
 
     /**
      * Associated an identifier to the channel.
@@ -621,7 +684,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     enum SubscriptionListType {
-        CHANNEL
+        CHANNEL,
+        CONTACT
     }
     /**
      * Gets the current subscription lists.
@@ -654,15 +718,31 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         BG_EXECUTOR.execute(() -> {
             WritableMap resultMap = Arguments.createMap();
             try {
+                UAirship ua = UAirship.shared();
                 for (SubscriptionListType type : parsedTypes) {
                     switch (type) {
                         case CHANNEL:
-                            Set<String> lists = UAirship.shared().getChannel().getSubscriptionLists(true).get();
-                            if (lists == null) {
-                                promise.reject(new Exception("Failed to fetch subscription lists."));
+                            Set<String> channelSubs = ua.getChannel().getSubscriptionLists(true).get();
+                            if (channelSubs == null) {
+                                promise.reject(new Exception("Failed to fetch channel subscription lists."));
                                 return;
                             }
-                            resultMap.putArray("channel", toWritableArray(lists));
+                            resultMap.putArray("channel", toWritableArray(channelSubs));
+                        case CONTACT:
+                            Map<String, Set<Scope>> contactSubs = ua.getContact().getSubscriptionLists(true).get();
+                            if (contactSubs == null) {
+                                promise.reject(new Exception("Failed to fetch contact subscription lists."));
+                                return;
+                            }
+                            WritableMap contactSubsMap = Arguments.createMap();
+                            for (Map.Entry<String, Set<Scope>> entry : contactSubs.entrySet()) {
+                                WritableArray scopesArray = Arguments.createArray();
+                                for (Scope s : entry.getValue()) {
+                                    scopesArray.pushString(s.toString());
+                                }
+                                contactSubsMap.putArray(entry.getKey(), scopesArray);
+                            }
+                            resultMap.putMap("contact", contactSubsMap);
                     }
                 }
                 promise.resolve(resultMap);
@@ -1133,5 +1213,4 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         }
         return result;
     }
-
 }

@@ -23,79 +23,23 @@ RCT_EXPORT_METHOD(setUseCustomPreferenceCenterUi:(BOOL)useCustomUi forpreference
 RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
                   getConfiguration_resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
-    
-    [[UAPreferenceCenter shared] configForPreferenceCenterID:preferenceCenterId completionHandler:^(UAPreferenceCenterConfig *config) {
-        
-        if (config) {
-            NSMutableDictionary *configurationDictionary = [NSMutableDictionary dictionary];
-            
-            //Identifier
-            [configurationDictionary setValue:config.identifier forKey:@"id"];
-            
-            //Sections
-            NSArray* sections = config.sections;
-            if (sections) {
-                NSMutableArray *sectionArray = [NSMutableArray array];
-                for (id<UAPreferenceSection> section in sections) {
-                    NSMutableDictionary *sectionDictionary = [NSMutableDictionary dictionary];
-                    // Section identifier
-                    [sectionDictionary setValue:section.identifier forKey:@"id"];
-                    
-                    // Section items
-                    NSArray* items = section.items;
-                    if (items) {
-                        NSMutableArray *itemArray = [NSMutableArray array];
-                        for (id item in items) {
-                            
-                            id<UAPreferenceItem> preferenceItem = item;
-                            NSMutableDictionary *itemDictionary = [NSMutableDictionary dictionary];
-                            [itemDictionary setValue:preferenceItem.identifier forKey:@"id"];
-                            
-                            if ([item isKindOfClass:[UAPreferenceChannelSubscriptionItem class]]) {
-                                UAPreferenceChannelSubscriptionItem* subscriptionItem = (UAPreferenceChannelSubscriptionItem*) item;
-                                [itemDictionary setValue:subscriptionItem.subscriptionID forKey:@"subscriptionId"];
-                            }
-                            
-                            UAPreferenceCommonDisplay* itemCommonDisplay = preferenceItem.display;
-                            if (itemCommonDisplay) {
-                                NSMutableDictionary *itemDisplayDictionary = [NSMutableDictionary dictionary];
-                                [itemDisplayDictionary setValue:itemCommonDisplay.title forKey:@"name"];
-                                [itemDisplayDictionary setValue:itemCommonDisplay.subtitle forKey:@"description"];
-                                [itemDictionary setValue:itemDisplayDictionary forKey:@"display"];
-                            }
-                            [itemArray addObject:itemDictionary];
-                        }
-                        [sectionDictionary setValue:itemArray forKey:@"items"];
-                        
-                        // Section display
-                        UAPreferenceCommonDisplay* sectionDisplay = section.display;
-                        if (sectionDisplay) {
-                            NSMutableDictionary *sectionDisplayDictionary = [NSMutableDictionary dictionary];
-                            [sectionDisplayDictionary setValue:sectionDisplay.title forKey:@"name"];
-                            [sectionDisplayDictionary setValue:sectionDisplay.subtitle forKey:@"description"];
-                            [sectionDictionary setValue:sectionDisplayDictionary forKey:@"display"];
-                        }
-                        [sectionArray addObject:sectionDictionary];
-                        
-                    }
-                }
-                
-                [configurationDictionary setValue:sectionArray forKey:@"sections"];
+
+    UARemoteDataManager *remoteData = (UARemoteDataManager *)[UAirship componentForClassName:@"UARemoteDataManager"];
+
+    __block UADisposable *disposable = [remoteData subscribeWithTypes:@[@"preference_forms"] block:^(NSArray<UARemoteDataPayload *> *payloads) {
+        NSArray *forms = [payloads firstObject].data[@"preference_forms"];
+
+        id result;
+        for (id form in forms) {
+            NSString *formID = form[@"form"][@"id"];
+            if ([formID isEqualToString:preferenceCenterId]) {
+                result = form[@"form"];
+                break;
             }
-            
-            //Display
-            UAPreferenceCommonDisplay* configDisplay = config.display;
-            if (configDisplay) {
-                NSMutableDictionary *configDisplayDictionary = [NSMutableDictionary dictionary];
-                [configDisplayDictionary setValue:configDisplay.title forKey:@"name"];
-                [configDisplayDictionary setValue:configDisplay.subtitle forKey:@"description"];
-                [configurationDictionary setValue:configDisplayDictionary forKey:@"display"];
-            }
-            
-            
-            resolve(configurationDictionary);
         }
-        
+
+        [disposable dispose];
+        resolve(result);
     }];
 }
 

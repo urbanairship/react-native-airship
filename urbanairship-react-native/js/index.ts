@@ -13,3 +13,4 @@
  export * from './Json';
  export * from './SubscriptionLists';
  export * from './SubscriptionListEditor';
+ export * from './ScopedSubscriptionListEditor';

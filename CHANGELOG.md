@@ -1,5 +1,16 @@
 # React Native Module Changelog
 
+## Version 14.0.0 - March 7, 2022
+Major release that adds support for multi-channel Preference Center.
+
+### Changes
+- Updated iOS SDK to 16.4.0
+- Updated Android SDK to 16.3.3
+- Deprecated named user tag and attribute methods in favor of contact based ones
+- Added scoped subscription lists to modify a subscription list on a contact
+- Breaking Change: Updated AirshipPreferenceCenter.getConfiguration(identifier) to return the full config from Airship
+
+
 ## Version 13.2.1 - February 10, 2022
 Patch release that fixes a crash on Android due to the React Native use of androidx.appcompat:appcompat library.
 
