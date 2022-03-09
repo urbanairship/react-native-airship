@@ -9,8 +9,6 @@
 @import AirshipKit;
 #endif
 
-extern NSString *const UARCTPresentationOptionsStorageKey;
-extern NSString *const UARCTAirshipRecommendedVersion;
 
 /**
  * Handles takeOff for the Urban Airship SDK.
@@ -25,7 +23,8 @@ extern NSString *const UARCTAirshipRecommendedVersion;
 /**
  * Performs takeOff.
  * @launchOptions the lunch options.
+ * @returns True if takeOff was called
  */
-+ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions;
++ (BOOL)takeOffWithLaunchOptions:(NSDictionary *)launchOptions;
 
 @end

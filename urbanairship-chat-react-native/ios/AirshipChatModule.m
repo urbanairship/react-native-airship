@@ -1,43 +1,64 @@
 #import "AirshipChatModule.h"
 #import "UARCTEventEmitter.h"
+#import "UARCTStorage.h"
 
 @import AirshipKit;
 
-static NSString * const AirshipChatModuleCustomUIKey = @"com.urbanairship.react.chat.custom_ui";
-
+NSString *const UARCTConversationUpdatedEventName = @"com.urbanairship.conversation_updated";
+NSString *const UARCTOpenChatEventName = @"com.urbanairship.open_chat";
 
 @implementation AirshipChatModule
 
 RCT_EXPORT_MODULE()
 
+- (dispatch_queue_t)methodQueue {
+    return dispatch_get_main_queue();
+}
+
++ (BOOL)requiresMainQueueSetup {
+    return YES;
+}
+
 - (instancetype)init{
     self = [super init];
     if (self) {
-        if (@available(iOS 13.0, *)) {
-            [UAChat shared].conversation.delegate = self;
-            [self updateOpenChatDelegate];
+        if (UAirship.isFlying) {
+            [self onAirshipReady];
+        } else {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(onAirshipReady)
+                                                         name:UAirship.airshipReadyNotification
+                                                       object:nil];
         }
     }
     return self;
 }
 
 RCT_EXPORT_METHOD(connect) {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        if (@available(iOS 13.0, *)) {
-            [[[UAChat shared] conversation] connect];
-        }
-    }];
+    if (!UAirship.isFlying) {
+        return;
+    }
+
+    if (@available(iOS 13.0, *)) {
+        [[[UAChat shared] conversation] connect];
+    }
 }
 
 RCT_EXPORT_METHOD(openChat) {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        if (@available(iOS 13.0, *)) {
-            [[UAChat shared] openChat];
-        }
-    }];
+    if (!UAirship.isFlying) {
+        return;
+    }
+
+    if (@available(iOS 13.0, *)) {
+        [[UAChat shared] openChat];
+    }
 }
 
 RCT_EXPORT_METHOD(sendMessage:(NSString *)message) {
+    if (!UAirship.isFlying) {
+        return;
+    }
+
     if (@available(iOS 13.0, *)) {
         [[UAChat shared].conversation sendMessage:message];
     }
@@ -45,6 +66,10 @@ RCT_EXPORT_METHOD(sendMessage:(NSString *)message) {
 
 RCT_EXPORT_METHOD(sendMessageWithAttachment:(NSString *)message
                   :(NSURL *)attachmentUrl) {
+    if (!UAirship.isFlying) {
+        return;
+    }
+
     if (@available(iOS 13.0, *)) {
         [[UAChat shared].conversation sendMessage:message attachment:attachmentUrl];
     }
@@ -53,6 +78,11 @@ RCT_EXPORT_METHOD(sendMessageWithAttachment:(NSString *)message
 RCT_REMAP_METHOD(getMessages,
                  getMessages_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+
+    if (!UAirship.isFlying) {
+        reject(@"TAKEOFF_NOT_CALLED", @"Airship not ready, takeOff not called", nil);
+        return;
+    }
 
     if (@available(iOS 13.0, *)) {
         [[UAChat shared].conversation fetchMessagesWithCompletionHandler:^(NSArray<UAChatMessage *> *messages) {
@@ -83,18 +113,21 @@ RCT_REMAP_METHOD(getMessages,
 
 RCT_EXPORT_METHOD(setUseCustomChatUI:(BOOL)useCustomUI) {
     if (@available(iOS 13.0, *)) {
-        [[NSUserDefaults standardUserDefaults] setBool:useCustomUI forKey:AirshipChatModuleCustomUIKey];
+        UARCTStorage.autoLaunchChat = !useCustomUI;
         [self updateOpenChatDelegate];
     }
 }
 
 - (void)updateOpenChatDelegate {
+    if (!UAirship.isFlying) {
+        return;
+    }
+
     if (@available(iOS 13.0, *)) {
-        BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:AirshipChatModuleCustomUIKey];
-        if (enabled) {
-            [UAChat shared].openChatDelegate = self;
-        } else {
+        if (UARCTStorage.autoLaunchChat) {
             [UAChat shared].openChatDelegate = nil;
+        } else {
+            [UAChat shared].openChatDelegate = self;
         }
     }
 }
@@ -104,11 +137,20 @@ RCT_EXPORT_METHOD(setUseCustomChatUI:(BOOL)useCustomUI) {
 }
 
 - (void)onMessagesUpdated {
-    [[UARCTEventEmitter shared] conversationUpdated];
+    [[UARCTEventEmitter shared] sendEventWithName:UARCTConversationUpdatedEventName];
 }
 
 - (void)openChatWithMessage:(NSString * _Nullable)message {
-    [[UARCTEventEmitter shared] openChat:message];
+    NSMutableDictionary *body = [NSMutableDictionary dictionary];
+    [body setValue:message forKey:@"message"];
+    [[UARCTEventEmitter shared] sendEventWithName:UARCTOpenChatEventName body:body];
+}
+
+- (void)onAirshipReady {
+    if (@available(iOS 13.0, *)) {
+        [UAChat shared].conversation.delegate = self;
+        [self updateOpenChatDelegate];
+    }
 }
 
 @end

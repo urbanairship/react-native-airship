@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<NSString *> *)authorizedSettingsArray:(UAAuthorizedNotificationSettings)settings;
 + (NSDictionary *)authorizedSettingsDictionary:(UAAuthorizedNotificationSettings)settings;
 + (NSString *)authorizedStatusString:(UAAuthorizationStatus)status;
+
++ (NSDictionary *)eventBodyForNotificationContent:(NSDictionary *)userInfo notificationIdentifier:(nullable NSString *)identifier;
+
++ (NSDictionary *)eventBodyForNotificationResponse:(UNNotificationResponse *)notificationResponse;
 @end
 
 NS_ASSUME_NONNULL_END
