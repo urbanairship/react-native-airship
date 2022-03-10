@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.XmlRes;
 
+import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Autopilot;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.DeepLinkListener;
@@ -36,6 +37,8 @@ import com.urbanairship.reactnative.events.ShowInboxEvent;
  */
 public class ReactAutopilot extends Autopilot {
     public static final String EXTENDER_MANIFEST_KEY = "com.urbanairship.reactnative.AIRSHIP_EXTENDER";
+
+    private AirshipConfigOptions configOptions;
 
     @Override
     public void onAirshipReady(@NonNull UAirship airship) {
@@ -71,18 +74,12 @@ public class ReactAutopilot extends Autopilot {
             public void onChannelCreated(@NonNull String channelId) {
                 Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getPushToken());
                 EventEmitter.shared().sendEvent(event);
-
-                // If the opt-in status changes send an event
-                UrbanAirshipReactModule.checkOptIn(context);
             }
 
             @Override
             public void onChannelUpdated(@NonNull String channelId) {
                 Event event = new RegistrationEvent(channelId, UAirship.shared().getPushManager().getPushToken());
                 EventEmitter.shared().sendEvent(event);
-
-                // If the opt-in status changes send an event
-                UrbanAirshipReactModule.checkOptIn(context);
             }
         });
 
@@ -126,10 +123,11 @@ public class ReactAutopilot extends Autopilot {
             }
         });
 
+        ReactAirshipPreferences preferences = ReactAirshipPreferences.shared(context);
         MessageCenter.shared().setOnShowMessageCenterListener(new MessageCenter.OnShowMessageCenterListener() {
             @Override
             public boolean onShowMessageCenter(@Nullable String messageId) {
-                if (PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext()).getBoolean(UrbanAirshipReactModule.AUTO_LAUNCH_MESSAGE_CENTER, true)) {
+                if (preferences.isAutoLaunchMessageCenterEnabled()) {
                     return false;
                 } else {
                     sendShowInboxEvent(messageId);
@@ -203,5 +201,25 @@ public class ReactAutopilot extends Autopilot {
             PluginLogger.error(e, "Unable to create extender: " + classname);
         }
         return null;
+    }
+
+    @Override
+    public boolean isReady(@NonNull Context context) {
+        configOptions = AirshipConfigOptions.newBuilder()
+                .applyDefaultProperties(context)
+                .build();
+
+        try {
+            configOptions.validate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Nullable
+    @Override
+    public AirshipConfigOptions createAirshipConfigOptions(@NonNull Context context) {
+        return configOptions;
     }
 }

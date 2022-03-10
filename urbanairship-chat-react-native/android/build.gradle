@@ -17,6 +17,12 @@ android {
 
         buildConfigField("String", "MODULE_VERSION", "\"${getModuleVersion()}\"")
     }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 def getModuleVersion() {

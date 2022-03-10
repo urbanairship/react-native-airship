@@ -1049,7 +1049,7 @@ RCT_REMAP_METHOD(getActiveNotifications,
     }
 
     if (reject) {
-        reject(@"TAKEOFF_NOT_CALLED", @"Airship not ready, takeOff not called", nil);
+        reject(@"TAKE_OFF_NOT_CALLED", @"Airship not ready, takeOff not called", nil);
     }
     return NO;
 }

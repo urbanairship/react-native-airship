@@ -52,7 +52,7 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
 
 
     if (!UAirship.isFlying) {
-        reject(@"TAKEOFF_NOT_CALLED", @"Airship not ready, takeOff not called", nil);
+        reject(@"TAKE_OFF_NOT_CALLED", @"Airship not ready, takeOff not called", nil);
         return;
     }
 

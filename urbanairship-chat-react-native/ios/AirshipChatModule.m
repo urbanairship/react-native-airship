@@ -80,7 +80,7 @@ RCT_REMAP_METHOD(getMessages,
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
     if (!UAirship.isFlying) {
-        reject(@"TAKEOFF_NOT_CALLED", @"Airship not ready, takeOff not called", nil);
+        reject(@"TAKE_OFF_NOT_CALLED", @"Airship not ready, takeOff not called", nil);
         return;
     }
 
