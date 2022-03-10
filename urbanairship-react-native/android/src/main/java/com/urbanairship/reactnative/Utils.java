@@ -15,12 +15,15 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.urbanairship.PrivacyManager;
 import com.urbanairship.UAirship;
 import com.urbanairship.json.JsonMap;
 import com.urbanairship.json.JsonValue;
 import com.urbanairship.util.UAStringUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +31,20 @@ import java.util.Map;
  * Module utils.
  */
 public class Utils {
+
+    private static final Map<String, Integer> featureMap = new HashMap<>();
+    static {
+        featureMap.put("FEATURE_NONE", PrivacyManager.FEATURE_NONE);
+        featureMap.put("FEATURE_IN_APP_AUTOMATION", PrivacyManager.FEATURE_IN_APP_AUTOMATION);
+        featureMap.put("FEATURE_MESSAGE_CENTER", PrivacyManager.FEATURE_MESSAGE_CENTER);
+        featureMap.put("FEATURE_PUSH", PrivacyManager.FEATURE_PUSH);
+        featureMap.put("FEATURE_CHAT", PrivacyManager.FEATURE_CHAT);
+        featureMap.put("FEATURE_ANALYTICS", PrivacyManager.FEATURE_ANALYTICS);
+        featureMap.put("FEATURE_TAGS_AND_ATTRIBUTES", PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES);
+        featureMap.put("FEATURE_CONTACTS", PrivacyManager.FEATURE_CONTACTS);
+        featureMap.put("FEATURE_LOCATION", PrivacyManager.FEATURE_LOCATION);
+        featureMap.put("FEATURE_ALL", PrivacyManager.FEATURE_ALL);
+    }
 
     /**
      * Converts a dynamic object into a {@link JsonValue}.
@@ -55,15 +72,7 @@ public class Utils {
 
             case Map:
                 ReadableMap map = object.asMap();
-                JsonMap.Builder mapBuilder = JsonMap.newBuilder();
-
-                ReadableMapKeySetIterator iterator = map.keySetIterator();
-                while (iterator.hasNextKey()) {
-                    String key = iterator.nextKey();
-                    mapBuilder.putOpt(key, convertDynamic(map.getDynamic(key)));
-                }
-
-                return mapBuilder.build().toJsonValue();
+                return convertMap(map).toJsonValue();
 
             case Array:
                 List<JsonValue> jsonValues = new ArrayList<>();
@@ -77,6 +86,21 @@ public class Utils {
             default:
                 return JsonValue.NULL;
         }
+    }
+
+    public static JsonMap convertMap(@Nullable ReadableMap map) {
+        if (map == null) {
+            return JsonMap.EMPTY_MAP;
+        }
+
+        JsonMap.Builder mapBuilder = JsonMap.newBuilder();
+        ReadableMapKeySetIterator iterator = map.keySetIterator();
+        while (iterator.hasNextKey()) {
+            String key = iterator.nextKey();
+            mapBuilder.putOpt(key, convertDynamic(map.getDynamic(key)));
+        }
+
+        return mapBuilder.build();
     }
 
     /**
@@ -235,4 +259,31 @@ public class Utils {
         }
     }
 
+    @PrivacyManager.Feature
+    public static int parseFeature(String feature) {
+        Integer value = featureMap.get(feature);
+        if (value != null) {
+            return value;
+        }
+        throw new IllegalArgumentException("Invalid feature: " + feature);
+    }
+
+    public static List<String> convertFeatures(@PrivacyManager.Feature int features) {
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : featureMap.entrySet()) {
+            int value = entry.getValue();
+            if (value == PrivacyManager.FEATURE_ALL && features == value) {
+                return Collections.singletonList(entry.getKey());
+            }
+
+            if (value == PrivacyManager.FEATURE_NONE && features == value) {
+                return Collections.singletonList(entry.getKey());
+            }
+
+            if ((value & features) != 0) {
+                result.add(entry.getKey());
+            }
+        }
+        return result;
+    }
 }

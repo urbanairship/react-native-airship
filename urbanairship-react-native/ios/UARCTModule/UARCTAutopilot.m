@@ -2,7 +2,8 @@
 
 #import "UARCTAutopilot.h"
 #import "UARCTModuleVersion.h"
-
+#import "UARCTStorage.h"
+#import "UARCTUtils.h"
 
 @implementation UARCTAutopilot
 
@@ -12,27 +13,26 @@ static BOOL disabled = NO;
     disabled = YES;
 }
 
-+ (BOOL)takeOffWithLaunchOptions:(NSDictionary *)launchOptions {
++ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions onTakeOff:(void(^)(void))callback {
     if (disabled || UAirship.isFlying) {
-        return NO;
+        return;
     }
-    
-    [UAirship takeOffWithLaunchOptions:launchOptions];
-    
+
+    UAConfig *config = [self config];
+    [UAirship takeOff:config launchOptions:launchOptions];
+
     if (!UAirship.isFlying) {
-        return NO;
+        return;
     }
 
     static dispatch_once_t takeOffdispatchOnce_;
     dispatch_once(&takeOffdispatchOnce_, ^{
-
         UA_LINFO(@"Airship ReactNative version: %@, SDK version: %@", [UARCTModuleVersion get], [UAirshipVersion get]);
         [[UAirship analytics] registerSDKExtension:UASDKExtensionReactNative version:[UARCTModuleVersion get]];
 
         [self loadCustomNotificationCategories];
+        callback();
     });
-
-    return YES;
 }
 
 + (void)loadCustomNotificationCategories {
@@ -46,4 +46,163 @@ static BOOL disabled = NO;
     }
 }
 
++ (UAConfig *)config {
+    UAConfig *config = [UAConfig defaultConfig];
+
+    NSDictionary *storedConfig = UARCTStorage.airshipConfig;
+    if (!storedConfig.count) {
+        return config;
+    }
+
+    id defaultEnvironment = [self parseDictionaryForKey:@"default" from:storedConfig];
+    id prodEnvironment = [self parseDictionaryForKey:@"production" from:storedConfig];
+    id devEnvironment = [self parseDictionaryForKey:@"development" from:storedConfig];
+
+    // Environments
+    if (defaultEnvironment) {
+        config.defaultAppKey = [self parseStringForKey:@"appKey" from:defaultEnvironment];
+        config.defaultAppSecret = [self parseStringForKey:@"appSecret" from:defaultEnvironment];
+    }
+
+    if (prodEnvironment) {
+        config.productionAppKey = [self parseStringForKey:@"appKey" from:prodEnvironment];
+        config.productionAppSecret = [self parseStringForKey:@"appSecret" from:prodEnvironment];
+    }
+
+    if (devEnvironment) {
+        config.developmentAppKey = [self parseStringForKey:@"appKey" from:devEnvironment];
+        config.developmentAppSecret = [self parseStringForKey:@"appSecret" from:devEnvironment];
+    }
+
+    NSString *productionLogLevel = [self parseStringForKey:@"logLevel" from:prodEnvironment];
+    NSString *developmentLogLevel = [self parseStringForKey:@"logLevel" from:devEnvironment];
+    NSString *defaultLogLevel = [self parseStringForKey:@"logLevel" from:defaultEnvironment];
+
+    if (productionLogLevel || defaultLogLevel) {
+        config.productionLogLevel = [self logLevelFromString:productionLogLevel ?: defaultLogLevel
+                                                defaultValue:UALogLevelError];
+    }
+
+    if (developmentLogLevel || defaultLogLevel) {
+        config.developmentLogLevel = [self logLevelFromString:developmentLogLevel ?: defaultLogLevel
+                                                defaultValue:UALogLevelDebug];
+    }
+
+    if (storedConfig[@"inProduction"]) {
+        config.inProduction = [storedConfig[@"inProduction"] boolValue];
+    }
+
+    // Site
+    NSString *site = [self parseStringForKey:@"site" from:storedConfig];
+    config.site = [self siteFromString:site];
+
+    // Allow lists
+    NSArray *allowList = [self parseStringArrayForKey:@"urlAllowList" from:storedConfig];
+    if (allowList) {
+        config.URLAllowList = allowList;
+    }
+
+    NSArray *allowListOpenURL = [self parseStringArrayForKey:@"urlAllowListScopeOpenUrl" from:storedConfig];
+    if (allowListOpenURL) {
+        config.URLAllowListScopeOpenURL = allowListOpenURL;
+    }
+
+    NSArray *allowListJS = [self parseStringArrayForKey:@"urlAllowListScopeJavaScriptInterface" from:storedConfig];
+    if (allowListJS) {
+        config.URLAllowListScopeJavaScriptInterface = allowListJS;
+    }
+
+    // Channel creation delay
+    if (storedConfig[@"isChannelCreationDelayEnabled"]) {
+        config.isChannelCreationDelayEnabled = [storedConfig[@"isChannelCreationDelayEnabled"] boolValue];
+    }
+
+    // Initail remote config
+    if (storedConfig[@"requireInitialRemoteConfigEnabled"]) {
+        config.requireInitialRemoteConfigEnabled = [storedConfig[@"requireInitialRemoteConfigEnabled"] boolValue];
+    }
+
+    // Features
+    NSArray *enabledFeatures = [self parseStringArrayForKey:@"enabledFeatures" from:storedConfig];
+    if (enabledFeatures) {
+        config.enabledFeatures = [UARCTUtils stringArrayToFeatures:enabledFeatures];
+    }
+
+    // Chat
+    id chat = [self parseDictionaryForKey:@"chat" from:storedConfig];
+    if (chat) {
+        config.chatURL = [self parseStringForKey:@"url" from:chat];
+        config.chatWebSocketURL = [self parseStringForKey:@"webSocketUrl" from:chat];
+    }
+
+    // Itunes ID
+    id iOS = [self parseDictionaryForKey:@"ios" from:storedConfig];
+    NSString *itunesID = [self parseStringForKey:@"itunesId" from:iOS];
+    if (itunesID) {
+        config.itunesID = itunesID;
+    }
+
+    return config;
+}
+
++ (NSDictionary *)parseDictionaryForKey:(NSString *)key from:(NSDictionary *)dictionary {
+    id value = dictionary[key];
+    if ([value isKindOfClass:[NSDictionary class]]) {
+        return value;
+    }
+    return nil;
+}
+
++ (NSArray *)parseStringArrayForKey:(NSString *)key from:(NSDictionary *)dictionary {
+    id array = dictionary[key];
+    if (![array isKindOfClass:[NSArray class]]) {
+        return nil;
+    }
+
+    for (id value in array) {
+        if (![value isKindOfClass:[NSString class]]) {
+            return nil;
+        }
+    }
+
+    return array;
+}
+
+
++ (NSString *)parseStringForKey:(NSString *)key from:(NSDictionary *)dictionary {
+    id value = dictionary[key];
+    if ([value isKindOfClass:[NSString class]]) {
+        return value;
+    }
+    return nil;
+}
+
++ (UALogLevel)logLevelFromString:(NSString *)string defaultValue:(UALogLevel)defaultValue {
+    if ([string isEqualToString:@"verbose"]) {
+        return UALogLevelTrace;
+    } else if ([string isEqualToString:@"debug"]) {
+        return UALogLevelDebug;
+    } else if ([string isEqualToString:@"info"]) {
+        return UALogLevelInfo;
+    } else if ([string isEqualToString:@"warning"]) {
+        return UALogLevelWarn;
+    } else if ([string isEqualToString:@"error"]) {
+        return UALogLevelError;
+    } else if ([string isEqualToString:@"none"]) {
+        return UALogLevelNone;
+    }
+    return defaultValue;
+}
+
++ (UACloudSite)siteFromString:(NSString *)string {
+    if ([string isEqualToString:@"eu"]) {
+        return UACloudSiteEU;
+    } else if ([string isEqualToString:@"us"]) {
+        return UACloudSiteUS;
+    }
+
+    return UACloudSiteUS;
+}
+
 @end
+

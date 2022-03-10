@@ -6,6 +6,7 @@ static NSString *const UARCTPresentationOptionsStorageKey = @"com.urbanairship.p
 static NSString *const UARCTAutoLaunchMessageCenterKey = @"com.urbanairship.auto_launch_message_center";
 static NSString *const UARCTAirshipChatModuleCustomUIKey = @"com.urbanairship.react.chat.custom_ui";
 static NSString *const UARCTPreferenceCenterKeyFormat = @"com.urbanairship.react.preference_%@_autolaunch";
+static NSString *const UARCTAirshipConfigKey = @"com.urbanairship.react.airship_config";
 
 @implementation UARCTStorage
 
@@ -49,8 +50,24 @@ static NSString *const UARCTPreferenceCenterKeyFormat = @"com.urbanairship.react
     [self setBool:autoLaunchChat forKey:UARCTAirshipChatModuleCustomUIKey];
 }
 
++ (NSDictionary *)airshipConfig {
+    return [self dictionaryForKey:UARCTAirshipConfigKey defaultValue:@{}];
+}
+
++ (void)setAirshipConfig:(NSDictionary *)airshipConfig {
+    return [self setValue:airshipConfig forKey:UARCTAirshipConfigKey];
+}
+
 +(NSString *)preferenceCenterKey:(NSString *)preferenceCenterID {
     return [NSString stringWithFormat:UARCTPreferenceCenterKeyFormat, preferenceCenterID];
+}
+
++ (NSDictionary *)dictionaryForKey:(NSString *)key defaultValue:(NSDictionary *)defaultValue {
+    return [[NSUserDefaults standardUserDefaults] dictionaryForKey:key];
+}
+
++ (void)setValue:(id)value forKey:(NSString *)key {
+    [[NSUserDefaults standardUserDefaults] setValue:value forKey:key];
 }
 
 + (NSInteger)integerForKey:(NSString *)key defaultValue:(NSInteger)defaultValue {

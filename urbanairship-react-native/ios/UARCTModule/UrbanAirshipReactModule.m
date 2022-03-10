@@ -59,7 +59,7 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)attemptTakeOff {
-    if ([UARCTAutopilot takeOffWithLaunchOptions:self.bridge.launchOptions]) {
+    [UARCTAutopilot takeOffWithLaunchOptions:self.bridge.launchOptions onTakeOff:^{
         self.airshipListener = [[UARCTAirshipListener alloc] initWithEventEmitter:[UARCTEventEmitter shared]];
 
         UAirship.shared.deepLinkDelegate = self.airshipListener;
@@ -70,7 +70,7 @@ RCT_EXPORT_MODULE();
         if (UARCTStorage.isForegroundPresentationOptionsSet) {
             [UAirship push].defaultPresentationOptions = UARCTStorage.foregroundPresentationOptions;
         }
-    }
+    }];
 }
 
 #pragma mark -
@@ -86,6 +86,21 @@ RCT_EXPORT_METHOD(onAirshipListenerAdded:(NSString *)eventName) {
     [[UARCTEventEmitter shared] onAirshipListenerAddedForType:eventName];
 }
 
+RCT_REMAP_METHOD(takeOff,
+                 config:(NSDictionary *)config
+                 takeOff_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    UARCTStorage.airshipConfig = config;
+    [self attemptTakeOff];
+    resolve(@(UAirship.isFlying));
+}
+
+RCT_REMAP_METHOD(isFlying,
+                 isFlying_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    resolve(@(UAirship.isFlying));
+}
+
 RCT_REMAP_METHOD(takePendingEvents,
                  type:(NSString *)type
                  takePendingEvents_resolver:(RCTPromiseResolveBlock)resolve
@@ -93,7 +108,6 @@ RCT_REMAP_METHOD(takePendingEvents,
 
     resolve([[UARCTEventEmitter shared] takePendingEventsWithType:type]);
 }
-
 
 RCT_EXPORT_METHOD(setUserNotificationsEnabled:(BOOL)enabled) {
     if (![self ensureAirshipReady]) {
@@ -120,8 +134,9 @@ RCT_REMAP_METHOD(setEnabledFeatures,
         return;
     }
 
-    if ([self isValidFeature:features]) {
-        [UAirship shared].privacyManager.enabledFeatures = [self stringToFeature:features];
+
+    if ([UARCTUtils isValidFeatureArray:features]) {
+        [UAirship shared].privacyManager.enabledFeatures = [UARCTUtils stringArrayToFeatures:features];
         resolve(@(YES));
     } else {
         NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
@@ -140,7 +155,7 @@ RCT_REMAP_METHOD(getEnabledFeatures,
         return;
     }
 
-    resolve([self featureToString:[UAirship shared].privacyManager.enabledFeatures]);
+    resolve([UARCTUtils featureToStringArray:[UAirship shared].privacyManager.enabledFeatures]);
 }
 
 RCT_REMAP_METHOD(enableFeature,
@@ -151,8 +166,8 @@ RCT_REMAP_METHOD(enableFeature,
         return;
     }
 
-    if ([self isValidFeature:features]) {
-        [[UAirship shared].privacyManager enableFeatures:[self stringToFeature:features]];
+    if ([UARCTUtils isValidFeatureArray:features]) {
+        [[UAirship shared].privacyManager enableFeatures:[UARCTUtils stringArrayToFeatures:features]];
         resolve(@(YES));
     } else {
         NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
@@ -172,8 +187,8 @@ RCT_REMAP_METHOD(disableFeature,
         return;
     }
 
-    if ([self isValidFeature:features]) {
-        [[UAirship shared].privacyManager disableFeatures:[self stringToFeature:features]];
+    if ([UARCTUtils isValidFeatureArray:features]) {
+        [[UAirship shared].privacyManager disableFeatures:[UARCTUtils stringArrayToFeatures:features]];
         resolve(@(YES));
     } else {
         NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
@@ -194,8 +209,8 @@ RCT_REMAP_METHOD(isFeatureEnabled,
         return;
     }
 
-    if ([self isValidFeature:features]) {
-        resolve(@([[UAirship shared].privacyManager isEnabled:[self stringToFeature:features]]));
+    if ([UARCTUtils isValidFeatureArray:features]) {
+        resolve(@([[UAirship shared].privacyManager isEnabled:[UARCTUtils stringArrayToFeatures:features]]));
     } else {
         NSString *code = [NSString stringWithFormat:UARCTStatusInvalidFeature];
         NSString *errorMessage = [NSString stringWithFormat:UARCTErrorDescriptionInvalidFeature];
@@ -969,73 +984,6 @@ RCT_REMAP_METHOD(getActiveNotifications,
         }
     }
     
-}
-
-
-- (BOOL)isValidFeature:(NSArray *)features {
-    if (!features || [features count] == 0) {
-        return NO;
-    }
-    NSDictionary *authorizedFeatures = [self authorizedFeatures];
-
-    for (NSString *feature in features) {
-        if (![authorizedFeatures objectForKey:feature]) {
-            return NO;
-        }
-    }
-    return YES;
-}
-
-- (UAFeatures)stringToFeature:(NSArray *)features {
-    NSDictionary *authorizedFeatures = [self authorizedFeatures];
-    
-    NSNumber* objectFeature = authorizedFeatures[[features objectAtIndex:0]];
-    UAFeatures convertedFeatures = [objectFeature longValue];
-    
-    if ([features count] > 1) {
-        int i;
-        for (i = 1; i < [features count]; i++) {
-            NSNumber* objectFeature = authorizedFeatures[[features objectAtIndex:i]];
-            convertedFeatures |= [objectFeature longValue];
-        }
-    }
-    return convertedFeatures;
-}
-
-- (NSArray *)featureToString:(UAFeatures)features {
-    NSMutableArray *convertedFeatures = [[NSMutableArray alloc] init];
-
-    NSDictionary *authorizedFeatures = [self authorizedFeatures];
-    
-    if (features == UAFeaturesAll) {
-        [convertedFeatures addObject:@"FEATURE_ALL"];
-    } else if (features == UAFeaturesNone) {
-        [convertedFeatures addObject:@"FEATURE_NONE"];
-    } else {
-        for (NSString *feature in authorizedFeatures) {
-            NSNumber *objectFeature = authorizedFeatures[feature];
-            long longFeature = [objectFeature longValue];
-            if ((longFeature & features) && (longFeature != UAFeaturesAll)) {
-                [convertedFeatures addObject:feature];
-            }
-        }
-    }
-    return convertedFeatures;
-}
-
-- (NSDictionary *)authorizedFeatures {
-    NSMutableDictionary *authorizedFeatures = [[NSMutableDictionary alloc] init];
-    [authorizedFeatures setValue:@(UAFeaturesNone) forKey:@"FEATURE_NONE"];
-    [authorizedFeatures setValue:@(UAFeaturesInAppAutomation) forKey:@"FEATURE_IN_APP_AUTOMATION"];
-    [authorizedFeatures setValue:@(UAFeaturesMessageCenter) forKey:@"FEATURE_MESSAGE_CENTER"];
-    [authorizedFeatures setValue:@(UAFeaturesPush) forKey:@"FEATURE_PUSH"];
-    [authorizedFeatures setValue:@(UAFeaturesChat) forKey:@"FEATURE_CHAT"];
-    [authorizedFeatures setValue:@(UAFeaturesAnalytics) forKey:@"FEATURE_ANALYTICS"];
-    [authorizedFeatures setValue:@(UAFeaturesTagsAndAttributes) forKey:@"FEATURE_TAGS_AND_ATTRIBUTES"];
-    [authorizedFeatures setValue:@(UAFeaturesContacts) forKey:@"FEATURE_CONTACTS"];
-    [authorizedFeatures setValue:@(UAFeaturesLocation) forKey:@"FEATURE_LOCATION"];
-    [authorizedFeatures setValue:@(UAFeaturesAll) forKey:@"FEATURE_ALL"];
-    return authorizedFeatures;
 }
 
 - (BOOL)ensureAirshipReady {

@@ -170,6 +170,135 @@ export interface NotificationResponseEvent {
 }
 
 /**
+ * Airship config environment
+ */
+export interface ConfigEnvironment {
+  /**
+   * App key.
+   */
+  appKey: string
+
+  /**
+   * App secret.
+   */
+  appSecret: string
+
+  /**
+   * Optional log level.
+   */
+  logLevel?: LogLevel
+}
+
+/**
+ * Possible sites.
+ */
+export type Site = "us" | "eu";
+
+/**
+ * Log levels.
+ */
+export type LogLevel = "verbose" | "debug" | "info" | "warning" | "error" | "none";
+
+/**
+ * Airship config
+ */
+export interface AirshipConfig {
+  /**
+   * Default environment.
+   */
+  default?: ConfigEnvironment,
+
+  /**
+   * Development environment. Overrides default environment if inProduction is false.
+   */
+  development?: ConfigEnvironment,
+
+  /**
+   * Production environment. Overrides default environment if inProduction is true.
+   */
+  production?: ConfigEnvironment,
+
+  /**
+   * Cloud site.
+   */
+  site?: Site
+
+  /**
+   * Switches the environment from development or production. If the value is not
+   * set, Airship will determine the value at runtime.
+   */
+  inProduction?: boolean,
+
+  /**
+   * URL allow list.
+   */
+  urlAllowList?: string[],
+
+  /**
+   * URL allow list for open URL scope.
+   */
+  urlAllowListScopeOpenUrl?: string[],
+
+  /**
+   * URL allow list for JS bridge injection.
+   */
+  urlAllowListScopeJavaScriptInterface?: string[],
+
+  /**
+   * Enables delayed channel creation.
+   */
+  isChannelCreationDelayEnabled?: boolean,
+
+  /**
+   * Enables/disables requiring initial remote config fetch before
+   * creating a channel.
+   */
+  requireInitialRemoteConfigEnabled?: boolean,
+
+  /**
+   * Enabled features. Defaults to all.
+   */
+  enabledFeatures?: Feature[],
+
+  /**
+   * Chat config. Only needed with the chat module.
+   */
+  chat?:{
+    webSocketUrl: string,
+    url: string
+  }
+  /**
+   * iOS config.
+   */
+  ios?: {
+    /**
+     * itunesId for rate app and app store deep links.
+     */
+    itunesId?: string
+  },
+
+  /**
+   * Android config.
+   */
+  android?: {
+    /**
+     * App store URI
+     */
+    appStoreUri?: string,
+
+    /**
+     * Fcm app name if using multiple FCM projects.
+     */
+    fcmFirebaseAppName?: string,
+    
+    /**
+     * Notification config.
+     */
+    notificationConfig?: NotificationConfigAndroid
+  }
+}
+
+/**
  * Subscription Scope types.
  */
  export enum SubscriptionScope {
@@ -537,7 +666,7 @@ function convertFeatureEnum(feature: String): Feature {
  */
 export interface NotificationConfigAndroid {
   /**
-   * The icon resource na,e.
+   * The icon resource name.
    */
   icon?: string
   /**
@@ -548,6 +677,10 @@ export interface NotificationConfigAndroid {
    * The default android notification channel ID.
    */
   defaultChannelId?: string
+  /**
+   * The accent color. Must be a hex value #AARRGGBB.
+   */
+  accentColor?: string
 }
 
 /**
@@ -570,6 +703,26 @@ export enum Feature {
 * The main Airship API.
 */
 export class UrbanAirship {
+
+  /**
+   * Calls takeOff. If Airship is already initialized the new config will be applied on next app init.
+   *
+   * @param config The airship config.
+   * @return A promise with the result. The result will be true if Airship is initialized, otherwise false.
+   */
+  static takeOff(config: AirshipConfig): Promise<boolean> {
+    return UrbanAirshipModule.takeOff(config)
+  }
+
+  /**
+   * Checks if Airship is initialized.
+   *
+   * @return A promise with the result. The result will be true if Airship is initialized, otherwise false.
+   */
+  static isFlying(): Promise<boolean> {
+    return UrbanAirshipModule.isFlying()
+  }
+  
   /**
    * Sets the Android notification config. Values not set will fallback to any values set in the airship config options.
    *
@@ -1239,4 +1392,3 @@ export class UrbanAirship {
     UrbanAirshipModule.clearNotification(identifier)
   }
 }
-

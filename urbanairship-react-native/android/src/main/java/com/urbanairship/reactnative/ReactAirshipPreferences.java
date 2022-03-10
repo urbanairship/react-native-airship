@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactMethod;
 import com.urbanairship.UAirship;
+import com.urbanairship.json.JsonException;
+import com.urbanairship.json.JsonMap;
+import com.urbanairship.json.JsonValue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,6 +38,7 @@ public class ReactAirshipPreferences {
     private static final String NOTIFICATION_ACCENT_COLOR_KEY = "notification_accent_color";
     private static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "default_notification_channel_id";
     private static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
+    private static final String AIRSHIP_CONFIG = "airship_config";
 
     private AtomicBoolean created = new AtomicBoolean(false);
     private Context context;
@@ -121,6 +125,25 @@ public class ReactAirshipPreferences {
      */
     public void setDefaultNotificationChannelId(@Nullable String value) {
         edit().putString(DEFAULT_NOTIFICATION_CHANNEL_ID, value).apply();
+    }
+
+    @Nullable
+    public JsonMap getAirshipConfig() {
+        String config = getString(AIRSHIP_CONFIG, null);
+        if (config == null) {
+            return JsonMap.EMPTY_MAP;
+        }
+
+        try {
+            return JsonValue.parseString(config).getMap();
+        } catch (JsonException e) {
+            PluginLogger.error("Failed to parse config.", e);
+            return null;
+        }
+    }
+
+    public void setAirshipConfig(JsonMap config) {
+        edit().putString(AIRSHIP_CONFIG, config.toString()).apply();
     }
 
     /**

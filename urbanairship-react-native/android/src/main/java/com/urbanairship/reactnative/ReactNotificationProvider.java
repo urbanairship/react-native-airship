@@ -69,7 +69,6 @@ public class ReactNotificationProvider extends AirshipNotificationProvider {
         if (accentHexColor != null) {
             return Utils.getHexColor(accentHexColor, super.getDefaultAccentColor());
         }
-
         return super.getDefaultAccentColor();
     }
 }

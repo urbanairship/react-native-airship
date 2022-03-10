@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (class, nonatomic, readonly) BOOL isForegroundPresentationOptionsSet;
 @property (class, nonatomic, assign) BOOL autoLaunchChat;
 
+@property (class, nonatomic, copy) NSDictionary *airshipConfig;
+
+
 + (BOOL)autoLaunchPreferencesForID:(NSString *)preferenceCenterID;
 + (void)setAutoLaunch:(BOOL)autoLaunch preferencesForID:(NSString *)preferenceCenterID;
 

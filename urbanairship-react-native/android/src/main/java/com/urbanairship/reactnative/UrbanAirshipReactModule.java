@@ -36,6 +36,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.urbanairship.Autopilot;
 import com.urbanairship.PrivacyManager;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.ActionArguments;
@@ -49,6 +50,7 @@ import com.urbanairship.channel.SubscriptionListEditor;
 import com.urbanairship.channel.TagGroupsEditor;
 import com.urbanairship.contacts.Scope;
 import com.urbanairship.contacts.ScopedSubscriptionListEditor;
+import com.urbanairship.json.JsonMap;
 import com.urbanairship.messagecenter.Inbox;
 import com.urbanairship.messagecenter.Message;
 import com.urbanairship.messagecenter.MessageCenter;
@@ -93,30 +95,15 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String SUBSCRIBE_LIST_OPERATION_TYPE = "type";
     private static final String SUBSCRIBE_LIST_OPERATION_SCOPE = "scope";
 
-    private static final String NOTIFICATION_ICON_KEY = "icon";
-    private static final String NOTIFICATION_LARGE_ICON_KEY = "largeIcon";
-    private static final String ACCENT_COLOR_KEY = "accentColor";
-    private static final String DEFAULT_CHANNEL_ID_KEY = "defaultChannelId";
+    static final String NOTIFICATION_ICON_KEY = "icon";
+    static final String NOTIFICATION_LARGE_ICON_KEY = "largeIcon";
+    static final String ACCENT_COLOR_KEY = "accentColor";
+    static final String DEFAULT_CHANNEL_ID_KEY = "defaultChannelId";
 
     static final String CLOSE_MESSAGE_CENTER = "CLOSE";
 
     private static final String INVALID_FEATURE_ERROR_CODE = "INVALID_FEATURE";
     private static final String INVALID_FEATURE_ERROR_MESSAGE = "Invalid feature, cancelling the action.";
-
-    private static final Map<String, Integer> authorizedFeatures = new HashMap<>();
-
-    static {
-        authorizedFeatures.put("FEATURE_NONE", PrivacyManager.FEATURE_NONE);
-        authorizedFeatures.put("FEATURE_IN_APP_AUTOMATION", PrivacyManager.FEATURE_IN_APP_AUTOMATION);
-        authorizedFeatures.put("FEATURE_MESSAGE_CENTER", PrivacyManager.FEATURE_MESSAGE_CENTER);
-        authorizedFeatures.put("FEATURE_PUSH", PrivacyManager.FEATURE_PUSH);
-        authorizedFeatures.put("FEATURE_CHAT", PrivacyManager.FEATURE_CHAT);
-        authorizedFeatures.put("FEATURE_ANALYTICS", PrivacyManager.FEATURE_ANALYTICS);
-        authorizedFeatures.put("FEATURE_TAGS_AND_ATTRIBUTES", PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES);
-        authorizedFeatures.put("FEATURE_CONTACTS", PrivacyManager.FEATURE_CONTACTS);
-        authorizedFeatures.put("FEATURE_LOCATION", PrivacyManager.FEATURE_LOCATION);
-        authorizedFeatures.put("FEATURE_ALL", PrivacyManager.FEATURE_ALL);
-    }
 
     private static final Executor BG_EXECUTOR = Executors.newCachedThreadPool();
     private final ReactAirshipPreferences preferences;
@@ -192,6 +179,19 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void takeOff(ReadableMap config, Promise promise) {
+        JsonMap jsonMap = Utils.convertMap(config);
+        preferences.setAirshipConfig(jsonMap);
+        Autopilot.automaticTakeOff(getReactApplicationContext());
+        promise.resolve(UAirship.isFlying() || UAirship.isTakingOff());
+    }
+
+    @ReactMethod
+    public void isFlying(Promise promise) {
+        promise.resolve(UAirship.isFlying() || UAirship.isTakingOff());
+    }
+
+    @ReactMethod
     public void setAndroidNotificationConfig(ReadableMap map) {
         preferences.setNotificationIcon(map.hasKey(NOTIFICATION_ICON_KEY) ? map.getString(NOTIFICATION_ICON_KEY) : null);
         preferences.setNotificationLargeIcon(map.hasKey(NOTIFICATION_LARGE_ICON_KEY) ? map.getString(NOTIFICATION_LARGE_ICON_KEY) : null);
@@ -258,11 +258,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        if (isValidFeature(features)) {
-            UAirship.shared().getPrivacyManager().setEnabledFeatures(stringToFeature(features));
-            promise.resolve(true);
-        } else {
-            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE);
+        try {
+            UAirship.shared().getPrivacyManager().setEnabledFeatures(parseFeatures(features));
+        } catch (Exception e) {
+            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE, e);
         }
     }
 
@@ -278,7 +277,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        promise.resolve(featureToString(UAirship.shared().getPrivacyManager().getEnabledFeatures()));
+        promise.resolve(Utils.convertFeatures(UAirship.shared().getPrivacyManager().getEnabledFeatures()));
     }
 
     /**
@@ -293,11 +292,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        if (isValidFeature(features)) {
-            UAirship.shared().getPrivacyManager().enable(stringToFeature(features));
-            promise.resolve(true);
-        } else {
-            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE);
+        try {
+            UAirship.shared().getPrivacyManager().enable(parseFeatures(features));
+        } catch (Exception e) {
+            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE, e);
         }
     }
 
@@ -313,11 +311,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        if (isValidFeature(features)) {
-            UAirship.shared().getPrivacyManager().disable(stringToFeature(features));
-            promise.resolve(true);
-        } else {
-            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE);
+        try {
+            UAirship.shared().getPrivacyManager().disable(parseFeatures(features));
+        } catch (Exception e) {
+            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE, e);
         }
     }
 
@@ -334,10 +331,11 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        if (isValidFeature(features)) {
-            promise.resolve(UAirship.shared().getPrivacyManager().isEnabled(stringToFeature(features)));
-        } else {
-            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE);
+        try {
+            boolean enabled = UAirship.shared().getPrivacyManager().isEnabled(parseFeatures(features));
+            promise.resolve(enabled);
+        } catch (Exception e) {
+            promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE, e);
         }
     }
 
@@ -1314,67 +1312,18 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Helper method to verify if a Feature is authorized.
-     *
-     * @param features The String features to verify.
-     * @return {@code true} if the provided features are authorized, otherwise {@code false}.
-     */
-    private boolean isValidFeature(ReadableArray features) {
-        if (features == null || features.size() == 0) {
-            return false;
-        }
-
-        for (int i = 0; i < features.size(); i++) {
-            if (!authorizedFeatures.containsKey(features.getString(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Helper method to parse a String features array into {@link PrivacyManager.Feature} int array.
+     * Helper method to parse a String features array into {@link PrivacyManager.Feature}.
      *
      * @param features The String features to parse.
-     * @return The {@link PrivacyManager.Feature} int array.
+     * @return The resulting feature flag.
      */
     @PrivacyManager.Feature
-    private @NonNull
-    int[] stringToFeature(@NonNull ReadableArray features) {
-        @PrivacyManager.Feature
-        int[] intFeatures = new int[features.size()];
-
+    private int parseFeatures(@NonNull ReadableArray features) throws IllegalArgumentException {
+        int result = PrivacyManager.FEATURE_NONE;
         for (int i = 0; i < features.size(); i++) {
-            intFeatures[i] = (int) authorizedFeatures.get(features.getString(i));
+            result |= Utils.parseFeature(features.getString(i));
         }
-        return intFeatures;
-    }
-
-    /**
-     * Helper method to parse a {@link PrivacyManager.Feature} int array into a String features WritableNativeArray.
-     *
-     * @param features The {@link PrivacyManager.Feature} int array to parse.
-     * @return The String feature WritableNativeArray.
-     */
-    private @NonNull
-    WritableArray featureToString(@PrivacyManager.Feature int features) {
-        List<String> stringFeatures = new ArrayList<>();
-
-        if (features == PrivacyManager.FEATURE_ALL) {
-            stringFeatures.add("FEATURE_ALL");
-        } else if (features == PrivacyManager.FEATURE_NONE) {
-            stringFeatures.add("FEATURE_NONE");
-        } else {
-            for (String feature : authorizedFeatures.keySet()) {
-                @PrivacyManager.Feature
-                int intFeature = (int) authorizedFeatures.get(feature);
-                if (((intFeature & features) != 0) && (intFeature != PrivacyManager.FEATURE_ALL)) {
-                    stringFeatures.add(feature);
-                }
-            }
-        }
-
-        return toWritableArray(stringFeatures);
+        return result;
     }
 
     private static WritableArray toWritableArray(Collection<String> strings) {
