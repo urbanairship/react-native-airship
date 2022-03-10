@@ -47,7 +47,7 @@ static NSString *const UARCTAirshipConfigKey = @"com.urbanairship.react.airship_
 }
 
 + (void)setAutoLaunchChat:(BOOL)autoLaunchChat {
-    [self setBool:autoLaunchChat forKey:UARCTAirshipChatModuleCustomUIKey];
+    [self setBool:!autoLaunchChat forKey:UARCTAirshipChatModuleCustomUIKey];
 }
 
 + (NSDictionary *)airshipConfig {

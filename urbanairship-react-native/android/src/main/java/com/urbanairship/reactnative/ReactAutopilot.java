@@ -2,6 +2,7 @@
 
 package com.urbanairship.reactnative;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -231,9 +232,12 @@ public class ReactAutopilot extends Autopilot {
         return configOptions;
     }
 
+    @SuppressLint("RestrictedApi")
     private AirshipConfigOptions loadConfig(@NonNull Context context) {
+        Logger.setLogLevel(Log.ASSERT);
         AirshipConfigOptions.Builder builder = AirshipConfigOptions.newBuilder()
                 .applyDefaultProperties(context);
+        Logger.setLogLevel(Log.ERROR);
 
         JsonMap config = ReactAirshipPreferences.shared(context).getAirshipConfig();
         if (config == null || config.isEmpty()) {
@@ -242,7 +246,7 @@ public class ReactAutopilot extends Autopilot {
 
         JsonMap developmentEnvironment = config.opt("development").getMap();
         JsonMap productionEnvironment = config.opt("production").getMap();
-        JsonMap defaultEnvironment = config.opt("production").getMap();
+        JsonMap defaultEnvironment = config.opt("default").getMap();
 
         if (developmentEnvironment != null) {
             builder.setDevelopmentAppKey(developmentEnvironment.opt("appKey").getString())
@@ -392,7 +396,7 @@ public class ReactAutopilot extends Autopilot {
         }
 
         String[] result = new String[value.optList().size()];
-        for (int i = 0; i <= value.optList().size(); i++) {
+        for (int i = 0; i < value.optList().size(); i++) {
             String string = value.optList().get(i).getString();
             if (string == null) {
                 PluginLogger.error("Invalid string array: " + value);

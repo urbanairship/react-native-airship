@@ -272,15 +272,21 @@ public class Utils {
         List<String> result = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : featureMap.entrySet()) {
             int value = entry.getValue();
-            if (value == PrivacyManager.FEATURE_ALL && features == value) {
-                return Collections.singletonList(entry.getKey());
+            if (value == PrivacyManager.FEATURE_ALL) {
+                if (features == value) {
+                    return Collections.singletonList(entry.getKey());
+                }
+                continue;
             }
 
-            if (value == PrivacyManager.FEATURE_NONE && features == value) {
-                return Collections.singletonList(entry.getKey());
+            if (value == PrivacyManager.FEATURE_NONE) {
+                if (features == value) {
+                    return Collections.singletonList(entry.getKey());
+                }
+                continue;
             }
 
-            if ((value & features) != 0) {
+            if ((value & features) == value) {
                 result.add(entry.getKey());
             }
         }

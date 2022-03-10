@@ -122,6 +122,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     public void initialize() {
         super.initialize();
 
+        Autopilot.automaticTakeOff(getReactApplicationContext());
+
         EventEmitter.shared().attachReactContext(getReactApplicationContext());
 
         UAirship.shared(airship -> {
@@ -277,7 +279,8 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        promise.resolve(Utils.convertFeatures(UAirship.shared().getPrivacyManager().getEnabledFeatures()));
+        List<String> enabledFeatures = Utils.convertFeatures(UAirship.shared().getPrivacyManager().getEnabledFeatures());
+        promise.resolve(toWritableArray(enabledFeatures));
     }
 
     /**

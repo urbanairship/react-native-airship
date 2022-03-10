@@ -207,17 +207,23 @@
 }
 
 + (NSArray *)featureToStringArray:(UAFeatures)features {
-    if (features == UAFeaturesAll) {
-        return @[self.featureMap[@(UAFeaturesAll)]];
-    }
-
-    if (features == UAFeaturesNone) {
-        return @[self.featureMap[@(UAFeaturesNone)]];
-    }
-    
-
     NSMutableArray *result = [NSMutableArray array];
     for (NSNumber *key in self.featureMap.allKeys) {
+        NSUInteger value = [key unsignedIntegerValue];
+        if (value == UAFeaturesAll) {
+            if (features == UAFeaturesAll) {
+                return @[self.featureMap[key]];
+            }
+            continue;
+        }
+
+        if (value == UAFeaturesNone) {
+            if (features == UAFeaturesNone) {
+                return @[self.featureMap[key]];
+            }
+            continue;
+        }
+        
         if (features & [key unsignedIntegerValue]) {
             [result addObject:self.featureMap[key]];
         }
@@ -238,6 +244,8 @@
             @(UAFeaturesTagsAndAttributes): @"FEATURE_TAGS_AND_ATTRIBUTES",
             @(UAFeaturesContacts): @"FEATURE_CONTACTS",
             @(UAFeaturesLocation): @"FEATURE_LOCATION",
+            @(UAFeaturesNone): @"FEATURE_NONE",
+            @(UAFeaturesAll): @"FEATURE_ALL",
         };
     });
     return _featureMap;
