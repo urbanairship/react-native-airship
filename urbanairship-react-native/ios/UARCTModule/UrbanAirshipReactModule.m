@@ -46,8 +46,8 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)setBridge:(RCTBridge *)bridge {
-    [UARCTAutopilot takeOffWithLaunchOptions:bridge.launchOptions];
     [UARCTEventEmitter shared].bridge = bridge;
+    [self attemptTakeOff];
 }
 
 - (RCTBridge *)bridge {
@@ -58,7 +58,7 @@ RCT_EXPORT_MODULE();
     return YES;
 }
 
-- (void)takeOff {
+- (void)attemptTakeOff {
     if ([UARCTAutopilot takeOffWithLaunchOptions:self.bridge.launchOptions]) {
         self.airshipListener = [[UARCTAirshipListener alloc] initWithEventEmitter:[UARCTEventEmitter shared]];
 
