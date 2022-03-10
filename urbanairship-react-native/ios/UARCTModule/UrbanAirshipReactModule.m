@@ -58,7 +58,6 @@ RCT_EXPORT_MODULE();
     return YES;
 }
 
-
 - (void)takeOff {
     if ([UARCTAutopilot takeOffWithLaunchOptions:self.bridge.launchOptions]) {
         self.airshipListener = [[UARCTAirshipListener alloc] initWithEventEmitter:[UARCTEventEmitter shared]];
