@@ -1,9 +1,4 @@
-//
-//  UARCTStorage.m
-//  urbanairship-react-native
-//
-//  Created by Ryan Lepinski on 3/9/22.
-//
+/* Copyright Airship and Contributors */
 
 #import "UARCTStorage.h"
 
@@ -44,7 +39,6 @@ static NSString *const UARCTPreferenceCenterKeyFormat = @"com.urbanairship.react
     NSString *key = [self preferenceCenterKey:preferenceCenterID];
     [self setBool:autoLaunch forKey:key];
 }
-
 
 + (BOOL)autoLaunchChat {
     // Have to negate it

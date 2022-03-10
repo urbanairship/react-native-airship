@@ -60,6 +60,15 @@ NSString *const UARCTMessageViewErrorKey = @"error";
         self.onLoadStarted(@{ UARCTMessageViewMessageIDKey: messageID });
     }
 
+    if (!UAirship.isFlying) {
+        if (self.onLoadError) {
+            self.onLoadError(@{ UARCTMessageViewMessageIDKey: messageID,
+                                UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageNotAvailable,
+                                UARCTMessageViewRetryableKey: @(NO) });
+        }
+        return;
+    }
+
     UAInboxMessage *message = [[UAMessageCenter shared].messageList messageForID:messageID];
     if (message) {
         [self requestMessageBody:message];
