@@ -99,6 +99,11 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
     void startLoading(final String messageId) {
         notifyLoadStarted(messageId);
 
+        if (!Utils.ensureAirshipReady()) {
+            notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
+            return;
+        }
+
         this.message = MessageCenter.shared().getInbox().getMessage(messageId);
         if (this.message == null) {
             fetchMessageRequest = MessageCenter.shared().getInbox().fetchMessages(new Inbox.FetchMessagesCallback() {

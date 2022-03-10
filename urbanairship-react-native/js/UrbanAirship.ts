@@ -35,7 +35,9 @@ enum InternalEventType {
   InboxUpdated = "com.urbanairship.inbox_updated",
   NotificationOptInStatus = "com.urbanairship.notification_opt_in_status",
   ShowInbox = "com.urbanairship.show_inbox",
-  ConversationUpdated = "com.urbanairship.conversation_updated"
+  ConversationUpdated = "com.urbanairship.conversation_updated",
+  OpenChat = "com.urbanairship.open_chat",
+  OpenPreferenceCenter = "com.urbanairship.open_preference_center"
 }
 
 /**
@@ -80,7 +82,15 @@ export enum EventType {
   /**
    * Chat conversation updated.
    */
-  ConversationUpdated = "conversationUpdated"
+  ConversationUpdated = "conversationUpdated",
+  /**
+   * Open chat event.
+   */
+   OpenChat = "openChat",  
+   /**
+   * Open preference center event.
+   */
+  OpenPreferenceCenter = "openPreferenceCenter"
 }
 
 /**
@@ -148,7 +158,7 @@ export interface NotificationResponseEvent {
    */
   notification: PushReceivedEvent
   /**
-   * The action button ID, if avilable.
+   * The action button ID, if available.
    */
   actionId?: string
   /**
@@ -423,6 +433,17 @@ export interface DeepLinkEvent {
 }
 
 /**
+ * Event fired when a preference center requests to be displayed.
+ */
+ export interface OpenPreferenceCenterEvent {
+  /**
+   * The preference center Id.
+   */
+  preferenceCenterId: string
+}
+
+
+/**
  * A listener subscription.
  */
 export class Subscription {
@@ -476,6 +497,10 @@ function convertEventEnum(type: EventType): string {
     return InternalEventType.ShowInbox
   } else if (type == EventType.ConversationUpdated) {
     return InternalEventType.ConversationUpdated
+  } else if (type == EventType.OpenChat) {
+    return InternalEventType.OpenChat
+  } else if (type == EventType.OpenPreferenceCenter) {
+    return InternalEventType.OpenPreferenceCenter
   }
 
   throw new Error("Invalid event name: " + type)

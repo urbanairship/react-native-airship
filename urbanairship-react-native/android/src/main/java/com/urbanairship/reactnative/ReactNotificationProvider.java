@@ -13,17 +13,19 @@ import com.urbanairship.push.notifications.AirshipNotificationProvider;
 
 public class ReactNotificationProvider extends AirshipNotificationProvider {
 
-    protected final Context context;
+    private final Context context;
+    private final ReactAirshipPreferences preferences;
 
     public ReactNotificationProvider(@NonNull Context context, @NonNull AirshipConfigOptions configOptions) {
         super(context, configOptions);
         this.context = context;
+        this.preferences = ReactAirshipPreferences.shared(context);
     }
 
     @Override
     @NonNull
     public String getDefaultNotificationChannelId() {
-        String defaultChannelId = ReactAirshipPreferences.shared().getDefaultNotificationChannelId(context);
+        String defaultChannelId = preferences.getDefaultNotificationChannelId();
         if (defaultChannelId != null) {
             return defaultChannelId;
         }
@@ -34,7 +36,7 @@ public class ReactNotificationProvider extends AirshipNotificationProvider {
     @Override
     @DrawableRes
     public int getSmallIcon() {
-        String iconResourceName = ReactAirshipPreferences.shared().getNotificationIcon(context);
+        String iconResourceName = preferences.getNotificationIcon();
         if (iconResourceName != null) {
             int id = Utils.getNamedResource(context, iconResourceName, "drawable");
             if (id > 0) {
@@ -48,7 +50,7 @@ public class ReactNotificationProvider extends AirshipNotificationProvider {
     @Override
     @DrawableRes
     public int getLargeIcon() {
-        String largeIconResourceName = ReactAirshipPreferences.shared().getNotificationLargeIcon(context);
+        String largeIconResourceName = preferences.getNotificationLargeIcon();
 
         if (largeIconResourceName != null) {
             int id = Utils.getNamedResource(context, largeIconResourceName, "drawable");
@@ -63,9 +65,7 @@ public class ReactNotificationProvider extends AirshipNotificationProvider {
     @Override
     @ColorInt
     public int getDefaultAccentColor() {
-
-        String accentHexColor = ReactAirshipPreferences.shared().getNotificationAccentColor(context);
-
+        String accentHexColor = preferences.getNotificationAccentColor();
         if (accentHexColor != null) {
             return Utils.getHexColor(accentHexColor, super.getDefaultAccentColor());
         }

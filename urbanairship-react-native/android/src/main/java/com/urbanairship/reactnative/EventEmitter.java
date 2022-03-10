@@ -10,11 +10,9 @@ import androidx.annotation.RestrictTo;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
-import com.urbanairship.UAirship;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -45,14 +43,11 @@ public class EventEmitter {
      * @param reactContext The react context.
      */
     void attachReactContext(final ReactContext reactContext) {
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                EventEmitter.this.reactContext = reactContext;
-                synchronized (lock) {
-                    if (!pendingForegroundEvents.isEmpty()) {
-                        notifyPendingForegroundEvents();
-                    }
+        mainHandler.post(() -> {
+            EventEmitter.this.reactContext = reactContext;
+            synchronized (lock) {
+                if (!pendingForegroundEvents.isEmpty()) {
+                    notifyPendingForegroundEvents();
                 }
             }
         });
@@ -65,16 +60,15 @@ public class EventEmitter {
      */
     @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
     public void sendEvent(final Event event) {
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (lock) {
-                    if (event.isForeground()) {
-                        pendingForegroundEvents.add(event);
-                        notifyPendingForegroundEvents();
-                    } else {
-                        pendingBackgroundEvents.add(event);
-                        AirshipHeadlessEventService.startService(UAirship.getApplicationContext());
+        mainHandler.post(() -> {
+            synchronized (lock) {
+                if (event.isForeground()) {
+                    pendingForegroundEvents.add(event);
+                    notifyPendingForegroundEvents();
+                } else {
+                    pendingBackgroundEvents.add(event);
+                    if (reactContext != null) {
+                        AirshipHeadlessEventService.startService(reactContext.getApplicationContext());
                     }
                 }
             }
@@ -114,8 +108,8 @@ public class EventEmitter {
      */
     void onHostResume() {
         synchronized (lock) {
-            if (!pendingBackgroundEvents.isEmpty()) {
-                AirshipHeadlessEventService.startService(UAirship.getApplicationContext());
+            if (!pendingBackgroundEvents.isEmpty() && reactContext != null) {
+                AirshipHeadlessEventService.startService(reactContext.getApplicationContext());
             }
 
             if (!pendingForegroundEvents.isEmpty()) {
@@ -133,17 +127,14 @@ public class EventEmitter {
      * @param listener The listener.
      */
     void onAirshipListenerAdded(@NonNull final String listener) {
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (lock) {
-                    if (contains(pendingBackgroundEvents, listener)) {
-                        AirshipHeadlessEventService.startService(UAirship.getApplicationContext());
-                    }
+        mainHandler.post(() -> {
+            synchronized (lock) {
+                if (contains(pendingBackgroundEvents, listener) && reactContext != null) {
+                    AirshipHeadlessEventService.startService(reactContext);
+                }
 
-                    if (contains(pendingForegroundEvents, listener)) {
-                        notifyPendingForegroundEvents();
-                    }
+                if (contains(pendingForegroundEvents, listener)) {
+                    notifyPendingForegroundEvents();
                 }
             }
         });

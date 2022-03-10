@@ -100,4 +100,90 @@
     };
 }
 
+
++ (NSDictionary *)eventBodyForNotificationResponse:(UNNotificationResponse *)notificationResponse {
+    NSMutableDictionary *body = [NSMutableDictionary dictionary];
+    [body setValue:[self eventBodyForNotificationContent:notificationResponse.notification.request.content.userInfo notificationIdentifier:notificationResponse.notification.request.identifier]
+            forKey:@"notification"];
+
+    if ([notificationResponse.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
+        [body setValue:@(YES) forKey:@"isForeground"];
+    } else {
+        UNNotificationAction *notificationAction = [self notificationActionForCategory:notificationResponse.notification.request.content.categoryIdentifier
+                                                                      actionIdentifier:notificationResponse.actionIdentifier];
+        BOOL isForeground = notificationAction.options & UNNotificationActionOptionForeground;
+
+        [body setValue:@(isForeground) forKey:@"isForeground"];
+        [body setValue:notificationResponse.actionIdentifier forKey:@"actionId"];
+    }
+
+    return body;
+}
+
++ (NSMutableDictionary *)eventBodyForNotificationContent:(NSDictionary *)userInfo notificationIdentifier:(NSString *)identifier {
+
+    NSMutableDictionary *pushBody = [NSMutableDictionary dictionary];
+    if (identifier != nil) {
+        [pushBody setValue:identifier forKey:@"notificationId"];
+    }
+
+    // Extras
+    NSMutableDictionary *extras = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+    [extras removeObjectForKey:@"aps"];
+    [extras removeObjectForKey:@"_"];
+    if (extras.count) {
+        [pushBody setValue:extras forKey:@"extras"];
+    }
+
+    // Fill in the notification title, subtitle and body if exists
+    NSDictionary* aps = extras[@"aps"];
+    if (aps) {
+        id alert = aps[@"alert"];
+        if ([alert isKindOfClass:[NSDictionary class]]) {
+            [pushBody setValue:alert[@"title"] forKey:@"title"];
+            [pushBody setValue:alert[@"body"] forKey:@"alert"];
+            [pushBody setValue:alert[@"subtitle"] forKey:@"subtitle"];
+        } else {
+            [pushBody setValue:alert forKey:@"alert"];
+        }
+    }
+
+    return pushBody;
+}
+
++ (UNNotificationAction *)notificationActionForCategory:(NSString *)category actionIdentifier:(NSString *)identifier {
+    NSSet *categories = [UAirship push].combinedCategories;
+
+    UNNotificationCategory *notificationCategory;
+    UNNotificationAction *notificationAction;
+
+    for (UNNotificationCategory *possibleCategory in categories) {
+        if ([possibleCategory.identifier isEqualToString:category]) {
+            notificationCategory = possibleCategory;
+            break;
+        }
+    }
+
+    if (!notificationCategory) {
+        UA_LERR(@"Unknown notification category identifier %@", category);
+        return nil;
+    }
+
+    NSMutableArray *possibleActions = [NSMutableArray arrayWithArray:notificationCategory.actions];
+
+    for (UNNotificationAction *possibleAction in possibleActions) {
+        if ([possibleAction.identifier isEqualToString:identifier]) {
+            notificationAction = possibleAction;
+            break;
+        }
+    }
+
+    if (!notificationAction) {
+        UA_LERR(@"Unknown notification action identifier %@", identifier);
+        return nil;
+    }
+
+    return notificationAction;
+}
+
 @end

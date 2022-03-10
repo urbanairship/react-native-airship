@@ -43,6 +43,7 @@ import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
 import com.urbanairship.analytics.AssociatedIdentifiers;
+import com.urbanairship.channel.AirshipChannelListener;
 import com.urbanairship.channel.AttributeEditor;
 import com.urbanairship.channel.SubscriptionListEditor;
 import com.urbanairship.channel.TagGroupsEditor;
@@ -97,13 +98,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     private static final String ACCENT_COLOR_KEY = "accentColor";
     private static final String DEFAULT_CHANNEL_ID_KEY = "defaultChannelId";
 
-    static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
     static final String CLOSE_MESSAGE_CENTER = "CLOSE";
 
     private static final String INVALID_FEATURE_ERROR_CODE = "INVALID_FEATURE";
     private static final String INVALID_FEATURE_ERROR_MESSAGE = "Invalid feature, cancelling the action.";
 
     private static final Map<String, Integer> authorizedFeatures = new HashMap<>();
+
     static {
         authorizedFeatures.put("FEATURE_NONE", PrivacyManager.FEATURE_NONE);
         authorizedFeatures.put("FEATURE_IN_APP_AUTOMATION", PrivacyManager.FEATURE_IN_APP_AUTOMATION);
@@ -118,6 +119,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     }
 
     private static final Executor BG_EXECUTOR = Executors.newCachedThreadPool();
+    private final ReactAirshipPreferences preferences;
 
     /**
      * Default constructor.
@@ -126,17 +128,36 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     public UrbanAirshipReactModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        preferences = ReactAirshipPreferences.shared(reactContext);
     }
 
     @Override
     public void initialize() {
         super.initialize();
 
+        EventEmitter.shared().attachReactContext(getReactApplicationContext());
+
+        UAirship.shared(airship -> {
+            checkOptIn();
+
+            airship.getChannel().addChannelListener(new AirshipChannelListener() {
+                @Override
+                public void onChannelCreated(@NonNull String channelId) {
+                    checkOptIn();
+                }
+
+                @Override
+                public void onChannelUpdated(@NonNull String channelId) {
+                    checkOptIn();
+                }
+            });
+        });
+
         getReactApplicationContext().addLifecycleEventListener(new LifecycleEventListener() {
             @Override
             public void onHostResume() {
                 // If the opt-in status changes send an event
-                checkOptIn(getReactApplicationContext());
+                checkOptIn();
                 EventEmitter.shared().onHostResume();
             }
 
@@ -152,7 +173,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
         });
 
-        EventEmitter.shared().attachReactContext(getReactApplicationContext());
     }
 
     @NonNull
@@ -173,20 +193,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setAndroidNotificationConfig(ReadableMap map) {
-        Context context = getReactApplicationContext();
-        ReactAirshipPreferences prefs = ReactAirshipPreferences.shared();
-
-        prefs.setNotificationIcon(context,
-                map.hasKey(NOTIFICATION_ICON_KEY) ? map.getString(NOTIFICATION_ICON_KEY) : null);
-
-        prefs.setNotificationLargeIcon(context,
-                map.hasKey(NOTIFICATION_LARGE_ICON_KEY) ? map.getString(NOTIFICATION_LARGE_ICON_KEY) : null);
-
-        prefs.setNotificationAccentColor(context,
-                map.hasKey(ACCENT_COLOR_KEY) ? map.getString(ACCENT_COLOR_KEY) : null);
-
-        prefs.setDefaultNotificationChannelId(context,
-                map.hasKey(DEFAULT_CHANNEL_ID_KEY) ? map.getString(DEFAULT_CHANNEL_ID_KEY) : null);
+        preferences.setNotificationIcon(map.hasKey(NOTIFICATION_ICON_KEY) ? map.getString(NOTIFICATION_ICON_KEY) : null);
+        preferences.setNotificationLargeIcon(map.hasKey(NOTIFICATION_LARGE_ICON_KEY) ? map.getString(NOTIFICATION_LARGE_ICON_KEY) : null);
+        preferences.setNotificationAccentColor(map.hasKey(ACCENT_COLOR_KEY) ? map.getString(ACCENT_COLOR_KEY) : null);
+        preferences.setDefaultNotificationChannelId(map.hasKey(DEFAULT_CHANNEL_ID_KEY) ? map.getString(DEFAULT_CHANNEL_ID_KEY) : null);
     }
 
     /**
@@ -215,6 +225,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void enableUserPushNotifications(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
         UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
         promise.resolve(true);
     }
@@ -226,6 +239,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isUserNotificationsEnabled(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         promise.resolve(UAirship.shared().getPushManager().getUserNotificationsEnabled());
     }
 
@@ -237,6 +254,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setEnabledFeatures(ReadableArray features, Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         if (isValidFeature(features)) {
             UAirship.shared().getPrivacyManager().setEnabledFeatures(stringToFeature(features));
             promise.resolve(true);
@@ -248,11 +269,15 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Gets the current enabled features.
      *
-     * @param promise  The promise.
+     * @param promise The promise.
      * @return The enabled features.
      */
     @ReactMethod
     public void getEnabledFeatures(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         promise.resolve(featureToString(UAirship.shared().getPrivacyManager().getEnabledFeatures()));
     }
 
@@ -264,6 +289,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void enableFeature(ReadableArray features, Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         if (isValidFeature(features)) {
             UAirship.shared().getPrivacyManager().enable(stringToFeature(features));
             promise.resolve(true);
@@ -280,6 +309,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void disableFeature(ReadableArray features, Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         if (isValidFeature(features)) {
             UAirship.shared().getPrivacyManager().disable(stringToFeature(features));
             promise.resolve(true);
@@ -297,6 +330,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isFeatureEnabled(ReadableArray features, Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         if (isValidFeature(features)) {
             promise.resolve(UAirship.shared().getPrivacyManager().isEnabled(stringToFeature(features)));
         } else {
@@ -311,6 +348,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isUserNotificationsOptedIn(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         promise.resolve(UAirship.shared().getPushManager().isOptIn());
     }
 
@@ -321,6 +362,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isSystemNotificationsEnabledForApp(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         promise.resolve(NotificationManagerCompat.from(getReactApplicationContext()).areNotificationsEnabled());
     }
 
@@ -331,6 +376,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getNotificationStatus(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         WritableMap result = Arguments.createMap();
         PushManager push = UAirship.shared().getPushManager();
         result.putBoolean("airshipOptIn", push.isOptIn());
@@ -342,6 +391,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getNotificationChannelStatus(String channelId, Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         NotificationManager manager = (NotificationManager) getReactApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationChannel channel = manager.getNotificationChannel(channelId);
         if (channel == null) {
@@ -362,6 +415,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getChannelId(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         promise.resolve(UAirship.shared().getChannel().getId());
     }
 
@@ -372,6 +429,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getRegistrationToken(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         promise.resolve(UAirship.shared().getPushManager().getPushToken());
     }
 
@@ -383,6 +444,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setNamedUser(String namedUser) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         if (namedUser != null) {
             namedUser = namedUser.trim();
         }
@@ -401,6 +466,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getNamedUser(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
         promise.resolve(UAirship.shared().getContact().getNamedUserId());
     }
 
@@ -411,6 +479,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void addTag(String tag) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         if (tag != null) {
             UAirship.shared().getChannel().editTags().addTag(tag).apply();
         }
@@ -423,6 +495,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void removeTag(String tag) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         if (tag != null) {
             UAirship.shared().getChannel().editTags().removeTag(tag).apply();
         }
@@ -435,6 +511,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getTags(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
         promise.resolve(toWritableArray(UAirship.shared().getChannel().getTags()));
     }
 
@@ -449,6 +528,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editChannelTagGroups(ReadableArray operations) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         applyTagGroupOperations(UAirship.shared().getChannel().editTagGroups(), operations);
     }
 
@@ -463,6 +546,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editContactTagGroups(ReadableArray operations) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         applyTagGroupOperations(UAirship.shared().getContact().editTagGroups(), operations);
     }
 
@@ -477,6 +564,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editChannelAttributes(ReadableArray operations) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         applyAttributeOperations(UAirship.shared().getChannel().editAttributes(), operations);
     }
 
@@ -491,6 +582,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editContactAttributes(ReadableArray operations) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         applyAttributeOperations(UAirship.shared().getContact().editAttributes(), operations);
     }
 
@@ -503,12 +598,16 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     @Deprecated
     public void editSubscriptionLists(ReadableArray subscriptionListUpdates) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         editChannelSubscriptionLists(subscriptionListUpdates);
     }
 
     /**
      * Edit subscription lists associated with the current Channel.
-     *
+     * <p>
      * List updates should each be a map with the following:
      * - type: Either subscribe or unsubscribe.
      * - listId: ID of the subscription list to subscribe to or unsubscribe from.
@@ -517,15 +616,14 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editChannelSubscriptionLists(ReadableArray subscriptionListUpdates) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         SubscriptionListEditor editor = UAirship.shared().getChannel().editSubscriptionLists();
 
         for (int i = 0; i < subscriptionListUpdates.size(); i++) {
-
             ReadableMap subscriptionListUpdate = subscriptionListUpdates.getMap(i);
-            if (subscriptionListUpdate == null) {
-                continue;
-            }
-
             String listId = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_LISTID);
             String type = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_TYPE);
 
@@ -546,7 +644,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     /**
      * Edit subscription lists associated with the current Channel.
-     *
+     * <p>
      * List updates should each be a map with the following:
      * - type: Either subscribe or unsubscribe.
      * - listId: ID of the subscription list to subscribe to or unsubscribe from.
@@ -556,14 +654,14 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void editContactSubscriptionLists(ReadableArray scopedSubscriptionListUpdates) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         ScopedSubscriptionListEditor editor = UAirship.shared().getContact().editSubscriptionLists();
 
         for (int i = 0; i < scopedSubscriptionListUpdates.size(); i++) {
             ReadableMap subscriptionListUpdate = scopedSubscriptionListUpdates.getMap(i);
-            if (subscriptionListUpdate == null) {
-                continue;
-            }
-
             String listId = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_LISTID);
             String type = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_TYPE);
             String scopeString = subscriptionListUpdate.getString(SUBSCRIBE_LIST_OPERATION_SCOPE);
@@ -575,7 +673,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
             Scope scope;
             try {
                 scope = Scope.valueOf(scopeString.toUpperCase(Locale.ROOT));
-            } catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 continue;
             }
 
@@ -592,12 +690,17 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Associated an identifier to the channel.
      *
-     * @param key The identifier's key.
+     * @param key   The identifier's key.
      * @param value The identifier's value. If the value is null it will be removed from the current
-     * set of associated identifiers.
+     *              set of associated identifiers.
      */
     @ReactMethod
     public void associateIdentifier(String key, String value) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
+
         AssociatedIdentifiers.Editor editor = UAirship.shared().getAnalytics().editAssociatedIdentifiers();
 
         if (value == null) {
@@ -616,6 +719,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setAnalyticsEnabled(boolean enabled) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         if (enabled) {
             UAirship.shared().getPrivacyManager().enable(PrivacyManager.FEATURE_ANALYTICS);
         } else {
@@ -630,6 +737,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isAnalyticsEnabled(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
         promise.resolve(UAirship.shared().getPrivacyManager().isEnabled(PrivacyManager.FEATURE_ANALYTICS));
     }
 
@@ -640,6 +750,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void trackScreen(String screen) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         UAirship.shared().getAnalytics().trackScreen(screen);
     }
 
@@ -655,8 +769,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     /**
      * Removes and returns foreground events for the given type.
-     * @param type The type.
-     * @param promise  The promise.
+     *
+     * @param type    The type.
+     * @param promise The promise.
      */
     @ReactMethod
     public void takePendingForegroundEvents(String type, Promise promise) {
@@ -670,8 +785,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     /**
      * Removes and returns background events for the given type.
-     * @param type The type.
-     * @param promise  The promise.
+     *
+     * @param type    The type.
+     * @param promise The promise.
      */
     @ReactMethod
     public void takePendingBackgroundEvents(String type, Promise promise) {
@@ -687,15 +803,20 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         CHANNEL,
         CONTACT
     }
+
     /**
      * Gets the current subscription lists.
      *
-     * @param types The types of
+     * @param types   The types of
      * @param promise The JS promise.
      */
     @ReactMethod
     public void getSubscriptionLists(ReadableArray types, Promise promise) {
-        Log.v(getName(), "getSubscriptionLists(" + types + ")");
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
+        PluginLogger.debug("getSubscriptionLists(" + types + ")");
 
         Set<SubscriptionListType> parsedTypes = new HashSet<>();
         if (types != null) {
@@ -755,12 +876,16 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Runs an action.
      *
-     * @param name The action's name.
-     * @param value The action's value.
+     * @param name    The action's name.
+     * @param value   The action's value.
      * @param promise A JS promise to deliver the action result.
      */
     @ReactMethod
     public void runAction(final String name, Dynamic value, final Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         ActionRunRequest.createRequest(name)
                 .setValue(convertDynamic(value))
                 .run(new ActionCompletionCallback() {
@@ -795,6 +920,9 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getBadgeNumber(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
         promise.resolve(0);
     }
 
@@ -803,6 +931,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void displayMessageCenter() {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         MessageCenter.shared().showMessageCenter();
     }
 
@@ -811,6 +943,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void dismissMessageCenter() {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         Activity activity = getCurrentActivity();
         if (activity != null) {
             Intent intent = new Intent(activity, CustomMessageCenterActivity.class)
@@ -823,10 +959,14 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * Display an inbox message in the default message center.
      *
      * @param messageId The id of the message to be displayed.
-     * @param promise The JS promise.
+     * @param promise   The JS promise.
      */
     @ReactMethod
     public void displayMessage(String messageId, Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         MessageCenter.shared().showMessageCenter(messageId);
         promise.resolve(true);
     }
@@ -836,6 +976,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void dismissMessage() {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         Activity activity = getCurrentActivity();
         if (activity != null) {
             Intent intent = new Intent(activity, CustomMessageActivity.class)
@@ -852,6 +996,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getInboxMessages(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         WritableArray messagesArray = Arguments.createArray();
 
         for (Message message : MessageCenter.shared().getInbox().getMessages()) {
@@ -881,10 +1029,14 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * Deletes an inbox message.
      *
      * @param messageId The id of the message to be deleted.
-     * @param promise The JS promise.
+     * @param promise   The JS promise.
      */
     @ReactMethod
     public void deleteInboxMessage(String messageId, Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         Message message = MessageCenter.shared().getInbox().getMessage(messageId);
 
         if (message == null) {
@@ -899,10 +1051,14 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      * Marks an inbox message as read.
      *
      * @param messageId The id of the message to be marked as read.
-     * @param promise The JS promise.
+     * @param promise   The JS promise.
      */
     @ReactMethod
     public void markInboxMessageRead(String messageId, Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         Message message = MessageCenter.shared().getInbox().getMessage(messageId);
 
         if (message == null) {
@@ -933,7 +1089,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         int id;
         String tag = null;
         try {
-            id = Integer.valueOf(parts[0]);
+            id = Integer.parseInt(parts[0]);
         } catch (NumberFormatException e) {
             Log.e(getName(), "Invalid identifier: " + identifier);
             return;
@@ -942,7 +1098,6 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         if (parts.length == 2) {
             tag = parts[1];
         }
-
 
         NotificationManagerCompat.from(UAirship.getApplicationContext()).cancel(tag, id);
     }
@@ -992,6 +1147,10 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void refreshInbox(final Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
+
         MessageCenter.shared().getInbox().fetchMessages(new Inbox.FetchMessagesCallback() {
             @Override
             public void onFinished(boolean success) {
@@ -1011,10 +1170,11 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setAutoLaunchDefaultMessageCenter(boolean enabled) {
-        PreferenceManager.getDefaultSharedPreferences(UAirship.getApplicationContext())
-                .edit()
-                .putBoolean(AUTO_LAUNCH_MESSAGE_CENTER, enabled)
-                .apply();
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
+        preferences.setAutoLaunchMessageCenter(enabled);
     }
 
     /**
@@ -1024,22 +1184,27 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void setCurrentLocale(String localeIdentifier) {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         UAirship.shared().setLocaleOverride(new Locale(localeIdentifier));
     }
 
     /**
      * Getting the locale currently used by Airship.
-     *
      */
     @ReactMethod
     public void getCurrentLocale(Promise promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return;
+        }
         Locale airshipLocale = UAirship.shared().getLocale();
         promise.resolve(airshipLocale.getLanguage());
     }
 
     /**
      * Resets the current locale.
-     *
      */
     @ReactMethod
     public void clearLocale() {
@@ -1049,7 +1214,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Helper method to apply tag group changes.
      *
-     * @param editor The tag group editor.
+     * @param editor     The tag group editor.
      * @param operations A list of tag group operations.
      */
     private static void applyTagGroupOperations(@NonNull TagGroupsEditor editor, @NonNull ReadableArray operations) {
@@ -1090,7 +1255,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     /**
      * Helper method to apply attribute changes.
      *
-     * @param editor The attribute editor.
+     * @param editor     The attribute editor.
      * @param operations A list of attribute operations.
      */
     private static void applyAttributeOperations(@NonNull AttributeEditor editor, @NonNull ReadableArray operations) {
@@ -1133,15 +1298,16 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     /**
      * Helper to determine user notifications authorization status
-     *
-     * @param context The application context.
      */
-    static void checkOptIn(Context context) {
+    void checkOptIn() {
+        if (!Utils.ensureAirshipReady()) {
+            return;
+        }
+
         boolean optIn = UAirship.shared().getPushManager().isOptIn();
 
-        if (ReactAirshipPreferences.shared().getOptInStatus(context) != optIn) {
-            ReactAirshipPreferences.shared().setOptInStatus(optIn, context);
-
+        if (preferences.getOptInStatus() != optIn) {
+            preferences.setOptInStatus(optIn);
             Event optInEvent = new NotificationOptInEvent(optIn);
             EventEmitter.shared().sendEvent(optInEvent);
         }
@@ -1149,6 +1315,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     /**
      * Helper method to verify if a Feature is authorized.
+     *
      * @param features The String features to verify.
      * @return {@code true} if the provided features are authorized, otherwise {@code false}.
      */
@@ -1167,11 +1334,13 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     /**
      * Helper method to parse a String features array into {@link PrivacyManager.Feature} int array.
+     *
      * @param features The String features to parse.
      * @return The {@link PrivacyManager.Feature} int array.
      */
     @PrivacyManager.Feature
-    private @NonNull int[] stringToFeature(@NonNull ReadableArray features) {
+    private @NonNull
+    int[] stringToFeature(@NonNull ReadableArray features) {
         @PrivacyManager.Feature
         int[] intFeatures = new int[features.size()];
 
@@ -1183,10 +1352,12 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
     /**
      * Helper method to parse a {@link PrivacyManager.Feature} int array into a String features WritableNativeArray.
+     *
      * @param features The {@link PrivacyManager.Feature} int array to parse.
      * @return The String feature WritableNativeArray.
      */
-    private @NonNull WritableArray featureToString(@PrivacyManager.Feature int features) {
+    private @NonNull
+    WritableArray featureToString(@PrivacyManager.Feature int features) {
         List<String> stringFeatures = new ArrayList<>();
 
         if (features == PrivacyManager.FEATURE_ALL) {

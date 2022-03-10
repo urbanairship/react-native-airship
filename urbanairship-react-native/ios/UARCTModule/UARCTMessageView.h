@@ -1,6 +1,5 @@
 /* Copyright Airship and Contributors */
 
-
 #import <WebKit/WebKit.h>
 #import <React/RCTView.h>
 

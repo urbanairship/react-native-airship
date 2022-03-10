@@ -3,35 +3,13 @@
 'use strict';
 
 import { NativeModules } from 'react-native';
-import { UrbanAirship } from 'urbanairship-react-native'
-import { UAEventEmitter } from 'urbanairship-react-native/js/UAEventEmitter'
+import { EventType, UrbanAirship, Subscription } from 'urbanairship-react-native'
 
 /**
  * @hidden
  */
 const AirshipChatModule = NativeModules.AirshipChatModule;
-const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule;
 
-/**
- * @hidden
- */
-const EventEmitter = new UAEventEmitter();
-
-/**
- * A listener subscription.
- */
-export class Subscription {
-  onRemove: () => void;
-  constructor(onRemove: () => void) {
-    this.onRemove = onRemove;
-  }
-  /**
-   * Removes the listener.
-   */
-  remove(): void {
-    this.onRemove();
-  }
-}
 
 /**
  * Enum of possible message directions
@@ -101,19 +79,13 @@ export class AirshipChat {
   static getMessages(): Promise<ChatMessage[]> {
     return AirshipChatModule.getMessages();
   }
-
+  
   static addConversationListener(listener: (...args: any[]) => any): Subscription {
-    EventEmitter.addListener("com.urbanairship.conversation_updated", listener);
-    return new Subscription(() => {
-      EventEmitter.removeListener("com.urbanairship.conversation_updated", listener);
-    });
+    return UrbanAirship.addListener(EventType.ConversationUpdated, listener);
   }
 
   static addChatOpenListener(listener: (...args: any[]) => any): Subscription {
-    EventEmitter.addListener("com.urbanairship.open_chat", listener);
-    return new Subscription(() => {
-      EventEmitter.removeListener("com.urbanairship.open_chat", listener);
-    });
+    return UrbanAirship.addListener(EventType.OpenChat, listener);
   }
 
   static setUseCustomChatUI(useCustomUI: boolean) {

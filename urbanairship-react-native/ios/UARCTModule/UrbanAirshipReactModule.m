@@ -2,10 +2,10 @@
 
 #import "UrbanAirshipReactModule.h"
 #import "UARCTEventEmitter.h"
-#import "UARCTDeepLinkAction.h"
 #import "UARCTAutopilot.h"
-#import "UARCTMessageCenter.h"
 #import "UARCTUtils.h"
+#import "UARCTStorage.h"
+#import "UARCTAirshipListener.h"
 
 #if __has_include("AirshipLib.h")
 #import "UAInAppMessageHTMLAdapter.h"
@@ -16,9 +16,19 @@
 #endif
 
 @interface UrbanAirshipReactModule()
+@property(nonatomic, strong) UARCTAirshipListener *airshipListener;
 @end
 
 @implementation UrbanAirshipReactModule
+
+NSString *const UARCTStatusMessageNotFound = @"STATUS_MESSAGE_NOT_FOUND";
+NSString *const UARCTStatusInboxRefreshFailed = @"STATUS_INBOX_REFRESH_FAILED";
+NSString *const UARCTErrorDescriptionMessageNotFound = @"Message not found for provided id.";
+NSString *const UARCTErrorDescriptionInboxRefreshFailed = @"Failed to refresh inbox.";
+
+int const UARCTErrorCodeMessageNotFound = 0;
+int const UARCTErrorCodeInboxRefreshFailed = 1;
+
 
 NSString * const UARCTErrorDomain = @"com.urbanairship.react";
 NSString *const UARCTStatusUnavailable = @"UNAVAILABLE";
@@ -36,8 +46,8 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)setBridge:(RCTBridge *)bridge {
-    [UARCTAutopilot takeOffWithLaunchOptions:bridge.launchOptions];
     [UARCTEventEmitter shared].bridge = bridge;
+    [self attemptTakeOff];
 }
 
 - (RCTBridge *)bridge {
@@ -46,6 +56,21 @@ RCT_EXPORT_MODULE();
 
 + (BOOL)requiresMainQueueSetup {
     return YES;
+}
+
+- (void)attemptTakeOff {
+    if ([UARCTAutopilot takeOffWithLaunchOptions:self.bridge.launchOptions]) {
+        self.airshipListener = [[UARCTAirshipListener alloc] initWithEventEmitter:[UARCTEventEmitter shared]];
+
+        UAirship.shared.deepLinkDelegate = self.airshipListener;
+        UAirship.push.registrationDelegate = self.airshipListener;
+        UAirship.push.pushNotificationDelegate = self.airshipListener;
+        UAMessageCenter.shared.displayDelegate = self.airshipListener;
+
+        if (UARCTStorage.isForegroundPresentationOptionsSet) {
+            [UAirship push].defaultPresentationOptions = UARCTStorage.foregroundPresentationOptions;
+        }
+    }
 }
 
 #pragma mark -
@@ -71,10 +96,18 @@ RCT_REMAP_METHOD(takePendingEvents,
 
 
 RCT_EXPORT_METHOD(setUserNotificationsEnabled:(BOOL)enabled) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     [UAirship push].userPushNotificationsEnabled = enabled;
 }
 
 RCT_EXPORT_METHOD(enableChannelCreation) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     [[UAirship channel] enableChannelCreation];
 }
 
@@ -82,7 +115,11 @@ RCT_REMAP_METHOD(setEnabledFeatures,
                  features:(NSArray *) features
                  setEnabledFeatures_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-   
+
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     if ([self isValidFeature:features]) {
         [UAirship shared].privacyManager.enabledFeatures = [self stringToFeature:features];
         resolve(@(YES));
@@ -99,6 +136,10 @@ RCT_REMAP_METHOD(setEnabledFeatures,
 RCT_REMAP_METHOD(getEnabledFeatures,
                  getEnabledFeatures_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     resolve([self featureToString:[UAirship shared].privacyManager.enabledFeatures]);
 }
 
@@ -106,7 +147,10 @@ RCT_REMAP_METHOD(enableFeature,
                  features:(NSArray *) features
                  enableFeature_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     if ([self isValidFeature:features]) {
         [[UAirship shared].privacyManager enableFeatures:[self stringToFeature:features]];
         resolve(@(YES));
@@ -124,7 +168,10 @@ RCT_REMAP_METHOD(disableFeature,
                  features:(NSArray *) features
                  disableFeature_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     if ([self isValidFeature:features]) {
         [[UAirship shared].privacyManager disableFeatures:[self stringToFeature:features]];
         resolve(@(YES));
@@ -142,7 +189,11 @@ RCT_REMAP_METHOD(isFeatureEnabled,
                  features:(NSArray *)features
                  isFeatureEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     if ([self isValidFeature:features]) {
         resolve(@([[UAirship shared].privacyManager isEnabled:[self stringToFeature:features]]));
     } else {
@@ -158,6 +209,9 @@ RCT_REMAP_METHOD(isFeatureEnabled,
 RCT_REMAP_METHOD(isUserNotificationsEnabled,
                  isUserNotificationsEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
 
     resolve(@([UAirship push].userPushNotificationsEnabled));
 }
@@ -165,32 +219,40 @@ RCT_REMAP_METHOD(isUserNotificationsEnabled,
 RCT_REMAP_METHOD(isUserNotificationsOptedIn,
                  isUserNotificationsOptedIn_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-        BOOL optedIn = YES;
-        if (![UAirship push].deviceToken) {
-            UA_LTRACE(@"Opted out: missing device token");
-            optedIn = NO;
-        }
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
 
-        if (![UAirship push].userPushNotificationsEnabled) {
-            UA_LTRACE(@"Opted out: user push notifications disabled");
-            optedIn = NO;
-        }
+    BOOL optedIn = YES;
+    if (![UAirship push].deviceToken) {
+        UA_LTRACE(@"Opted out: missing device token");
+        optedIn = NO;
+    }
 
-        if (![UAirship push].authorizedNotificationSettings) {
-            UA_LTRACE(@"Opted out: no authorized notification settings");
-            optedIn = NO;
-        }
-    
-        if (![[UAirship shared].privacyManager isEnabled:UAFeaturesPush]) {
-            UA_LTRACE(@"Opted out: push is disabled");
-            optedIn = NO;
-        }
-        resolve(@(optedIn));
+    if (![UAirship push].userPushNotificationsEnabled) {
+        UA_LTRACE(@"Opted out: user push notifications disabled");
+        optedIn = NO;
+    }
+
+    if (![UAirship push].authorizedNotificationSettings) {
+        UA_LTRACE(@"Opted out: no authorized notification settings");
+        optedIn = NO;
+    }
+
+    if (![[UAirship shared].privacyManager isEnabled:UAFeaturesPush]) {
+        UA_LTRACE(@"Opted out: push is disabled");
+        optedIn = NO;
+    }
+    resolve(@(optedIn));
 }
 
 RCT_REMAP_METHOD(isSystemNotificationsEnabledForApp,
                  isSystemNotificationsEnabledForApp_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     BOOL optedIn = [UAirship push].authorizedNotificationSettings != 0;
     resolve(@(optedIn));
 }
@@ -198,12 +260,20 @@ RCT_REMAP_METHOD(isSystemNotificationsEnabledForApp,
 RCT_REMAP_METHOD(enableUserPushNotifications,
                  enableUserPushNotifications_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     [[UAirship push] enableUserPushNotifications:^(BOOL success) {
         resolve(@(success));
     }];
 }
 
 RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     namedUser = [namedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if (namedUser.length) {
         [UAirship.contact identify:namedUser];
@@ -215,10 +285,17 @@ RCT_EXPORT_METHOD(setNamedUser:(NSString *)namedUser) {
 RCT_REMAP_METHOD(getNamedUser,
                  getNamedUser_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     resolve(UAirship.contact.namedUserID);
 }
 
 RCT_EXPORT_METHOD(addTag:(NSString *)tag) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
     if (tag) {
         [UAirship.channel editTags:^(UATagEditor *editor) {
             [editor addTag:tag];
@@ -227,6 +304,10 @@ RCT_EXPORT_METHOD(addTag:(NSString *)tag) {
 }
 
 RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     if (tag) {
         [UAirship.channel editTags:^(UATagEditor *editor) {
             [editor removeTag:tag];
@@ -237,6 +318,9 @@ RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
 RCT_REMAP_METHOD(getTags,
                  getTags_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
     resolve(UAirship.channel.tags ?: [NSArray array]);
 }
 
@@ -244,7 +328,11 @@ RCT_REMAP_METHOD(getSubscriptionLists,
                  subscriptionTypes:(NSArray *)subscriptionTypes
                  getSubscriptionLists_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     NSSet *typedSet = [NSSet setWithArray:subscriptionTypes];
     if (!typedSet.count) {
         NSError *error = [UAirshipErrors error:@"Failed to fetch subscription lists, no types."];
@@ -325,6 +413,10 @@ RCT_REMAP_METHOD(getSubscriptionLists,
 }
 
 RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     if (enabled) {
         [[UAirship shared].privacyManager enableFeatures:UAFeaturesAnalytics];
     } else {
@@ -335,16 +427,27 @@ RCT_EXPORT_METHOD(setAnalyticsEnabled:(BOOL)enabled) {
 RCT_REMAP_METHOD(isAnalyticsEnabled,
                  isAnalyticsEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     resolve(@([[UAirship shared].privacyManager isEnabled:UAFeaturesAnalytics]));
 }
 
 RCT_EXPORT_METHOD(trackScreen:(NSString *)screen) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
     [UAirship.analytics trackScreen:screen];
 }
 
 RCT_REMAP_METHOD(getChannelId,
                  getChannelId_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     resolve(UAirship.channel.identifier);
 }
 
@@ -352,12 +455,20 @@ RCT_REMAP_METHOD(getChannelId,
 RCT_REMAP_METHOD(getRegistrationToken,
                  getRegistrationToken_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     resolve(UAirship.push.deviceToken);
 }
 
 RCT_REMAP_METHOD(associateIdentifier,
                  key:(NSString *)key
                  identifier:(NSString *)identifier) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     UAAssociatedIdentifiers *identifiers = [UAirship.analytics currentAssociatedDeviceIdentifiers];
     [identifiers setIdentifier:identifier forKey:key];
     [UAirship.analytics associateDeviceIdentifiers:identifiers];
@@ -368,6 +479,9 @@ RCT_REMAP_METHOD(runAction,
                  value:(id)value
                  runAction_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
 
     [UAActionRunner runActionWithName:name
                                 value:value
@@ -426,30 +540,50 @@ RCT_REMAP_METHOD(runAction,
 }
 
 RCT_EXPORT_METHOD(editContactTagGroups:(NSArray *)operations) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     [UAirship.contact editTagGroups:^(UATagGroupsEditor * editor) {
         [self applyTagGroupOperations:operations editor:editor];
     }];
 }
 
 RCT_EXPORT_METHOD(editChannelTagGroups:(NSArray *)operations) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     [UAirship.channel editTagGroups:^(UATagGroupsEditor * editor) {
         [self applyTagGroupOperations:operations editor:editor];
     }];
 }
 
 RCT_EXPORT_METHOD(editChannelAttributes:(NSArray *)operations) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     [UAirship.channel editAttributes:^(UAAttributesEditor *editor) {
         [self applyAttributeOperations:operations editor:editor];
     }];
 }
 
 RCT_EXPORT_METHOD(editContactAttributes:(NSArray *)operations) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     [UAirship.contact editAttributes:^(UAAttributesEditor *editor) {
         [self applyAttributeOperations:operations editor:editor];
     }];
 }
 
 RCT_EXPORT_METHOD(editChannelSubscriptionLists:(NSArray *)subscriptionListUpdates) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     UASubscriptionListEditor* subscriptionListEditor = [[UAirship channel] editSubscriptionLists];
     for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
         NSString* listId = subscriptionListUpdate[@"listId"];
@@ -466,6 +600,10 @@ RCT_EXPORT_METHOD(editChannelSubscriptionLists:(NSArray *)subscriptionListUpdate
 }
 
 RCT_EXPORT_METHOD(editContactSubscriptionLists:(NSArray *)subscriptionListUpdates) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     UAScopedSubscriptionListEditor* subscriptionListEditor = [[UAirship contact] editSubscriptionLists];
 
     for (NSDictionary *subscriptionListUpdate in subscriptionListUpdates) {
@@ -501,6 +639,10 @@ RCT_EXPORT_METHOD(editContactSubscriptionLists:(NSArray *)subscriptionListUpdate
 }
 
 RCT_EXPORT_METHOD(setNotificationOptions:(NSArray *)options) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     UANotificationOptions notificationOptions = [UARCTUtils optionsFromOptionsArray:options];
     UA_LDEBUG(@"Notification options set: %lu from dictionary: %@", (unsigned long)notificationOptions, options);
     UAirship.push.notificationOptions = notificationOptions;
@@ -508,6 +650,10 @@ RCT_EXPORT_METHOD(setNotificationOptions:(NSArray *)options) {
 }
 
 RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSArray *)options) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     UNNotificationPresentationOptions presentationOptions = UNNotificationPresentationOptionNone;
 
     if ([options containsObject:@"alert"]) {
@@ -525,14 +671,16 @@ RCT_EXPORT_METHOD(setForegroundPresentationOptions:(NSArray *)options) {
     UA_LDEBUG(@"Foreground presentation options set: %lu from dictionary: %@", (unsigned long)presentationOptions, options);
 
     [UAirship push].defaultPresentationOptions = presentationOptions;
-    [[NSUserDefaults standardUserDefaults] setInteger:presentationOptions
-                                               forKey:UARCTPresentationOptionsStorageKey];
+    UARCTStorage.foregroundPresentationOptions = presentationOptions;
 }
 
 
 RCT_REMAP_METHOD(getNotificationStatus,
                  getNotificationStatus_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
     
     UAPush *push = UAirship.push;
     BOOL isSystemEnabled = push.authorizedNotificationSettings != 0;
@@ -551,6 +699,10 @@ RCT_REMAP_METHOD(getNotificationStatus,
 
 
 RCT_EXPORT_METHOD(setAutobadgeEnabled:(BOOL)enabled) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     [UAirship push].autobadgeEnabled = enabled;
 }
 
@@ -558,29 +710,44 @@ RCT_REMAP_METHOD(isAutobadgeEnabled,
                  isAutobadgeEnabled_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     resolve(@([UAirship push].autobadgeEnabled));
 }
 
 RCT_EXPORT_METHOD(setBadgeNumber:(NSInteger)badgeNumber) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
     [[UAirship push] setBadgeNumber:badgeNumber];
 }
 
 RCT_REMAP_METHOD(getBadgeNumber,
                  getBadgeNumber_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     resolve(@([UIApplication sharedApplication].applicationIconBadgeNumber));
 }
 
 RCT_EXPORT_METHOD(displayMessageCenter) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAMessageCenter shared] display];
-    });
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
+    [[UAMessageCenter shared] display];
 }
 
 RCT_EXPORT_METHOD(dismissMessageCenter) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAMessageCenter shared] dismiss];
-    });
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
+    [[UAMessageCenter shared] dismiss];
 }
 
 RCT_REMAP_METHOD(displayMessage,
@@ -588,24 +755,34 @@ RCT_REMAP_METHOD(displayMessage,
                  displayMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[UAMessageCenter shared] displayMessageForID:messageId];
-        });
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
+    [[UAMessageCenter shared] displayMessageForID:messageId];
+    resolve(@YES);
 }
 
 RCT_REMAP_METHOD(dismissMessage,
                  dismissMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UAMessageCenter shared] dismiss:YES];
-    });
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
+    [[UAMessageCenter shared] dismiss:YES];
+    resolve(@YES);
 }
 
 RCT_REMAP_METHOD(getInboxMessages,
                  getInboxMessages_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+    
     NSMutableArray *messages = [NSMutableArray array];
     for (UAInboxMessage *message in [UAMessageCenter shared].messageList.messages) {
 
@@ -633,6 +810,10 @@ RCT_REMAP_METHOD(deleteInboxMessage,
                  deleteMessage_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     UAInboxMessage *message = [[UAMessageCenter shared].messageList messageForID:messageId];
 
     if (!message) {
@@ -653,6 +834,10 @@ RCT_REMAP_METHOD(markInboxMessageRead,
                  markMessageRead_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     UAInboxMessage *message = [[UAMessageCenter shared].messageList messageForID:messageId];
 
     if (!message) {
@@ -672,6 +857,10 @@ RCT_REMAP_METHOD(refreshInbox,
                  refreshInbox_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     [[UAMessageCenter shared].messageList retrieveMessageListWithSuccessBlock:^(){
         resolve(@YES);
     } withFailureBlock:^(){
@@ -683,21 +872,35 @@ RCT_REMAP_METHOD(refreshInbox,
 }
 
 RCT_EXPORT_METHOD(setAutoLaunchDefaultMessageCenter:(BOOL)enabled) {
-    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:UARCTAutoLaunchMessageCenterKey];
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+    UARCTStorage.autoLaunchMessageCenter = enabled;
 }
 
 RCT_EXPORT_METHOD(setCurrentLocale:(NSString *)localeIdentifier) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
     [UAirship.shared.localeManager setCurrentLocale:[NSLocale localeWithLocaleIdentifier:localeIdentifier]];
 }
 
 RCT_REMAP_METHOD(getCurrentLocale,
                  getCurrentLocale_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+
     NSLocale *airshipLocale = [[UAirship shared].localeManager currentLocale];
     resolve(airshipLocale.localeIdentifier);
 }
 
 RCT_EXPORT_METHOD(clearLocale) {
+    if (![self ensureAirshipReady]) {
+        return;
+    }
+
     [[UAirship shared].localeManager clearLocale];
 }
 
@@ -717,7 +920,7 @@ RCT_REMAP_METHOD(getActiveNotifications,
     [[UNUserNotificationCenter currentNotificationCenter] getDeliveredNotificationsWithCompletionHandler:^(NSArray<UNNotification *> * _Nonnull notifications) {
         NSMutableArray *result = [NSMutableArray array];
         for(UNNotification *unnotification in notifications) {
-            [result addObject:[UARCTEventEmitter eventBodyForNotificationContent:unnotification.request.content.userInfo notificationIdentifier:unnotification.request.identifier]];
+            [result addObject:[UARCTUtils eventBodyForNotificationContent:unnotification.request.content.userInfo notificationIdentifier:unnotification.request.identifier]];
         }
 
         resolve(result);
@@ -833,6 +1036,21 @@ RCT_REMAP_METHOD(getActiveNotifications,
     [authorizedFeatures setValue:@(UAFeaturesLocation) forKey:@"FEATURE_LOCATION"];
     [authorizedFeatures setValue:@(UAFeaturesAll) forKey:@"FEATURE_ALL"];
     return authorizedFeatures;
+}
+
+- (BOOL)ensureAirshipReady {
+    return [self ensureAirshipReady:nil];
+}
+
+- (BOOL)ensureAirshipReady:(RCTPromiseRejectBlock)reject {
+    if (UAirship.isFlying) {
+        return YES;
+    }
+
+    if (reject) {
+        reject(@"TAKE_OFF_NOT_CALLED", @"Airship not ready, takeOff not called", nil);
+    }
+    return NO;
 }
 
 @end

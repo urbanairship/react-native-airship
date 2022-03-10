@@ -5,14 +5,17 @@ import android.graphics.Color;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.urbanairship.UAirship;
 import com.urbanairship.json.JsonMap;
 import com.urbanairship.json.JsonValue;
 import com.urbanairship.util.UAStringUtil;
@@ -214,6 +217,22 @@ public class Utils {
         }
 
         return value.getValue();
+    }
+
+    public static boolean ensureAirshipReady() {
+        return ensureAirshipReady(null);
+    }
+
+    public static boolean ensureAirshipReady(@Nullable Promise promise) {
+        if (UAirship.isFlying() || UAirship.isTakingOff()) {
+            return true;
+        } else {
+            if (promise != null) {
+                promise.reject("TAKE_OFF_NOT_CALLED", "Airship not ready, takeOff not called");
+            }
+            PluginLogger.error("Airship not ready, unable to process command.");
+            return false;
+        }
     }
 
 }
