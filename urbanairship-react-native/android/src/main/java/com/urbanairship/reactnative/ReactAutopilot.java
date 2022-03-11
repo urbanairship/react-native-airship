@@ -2,9 +2,11 @@
 
 package com.urbanairship.reactnative;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -12,12 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.XmlRes;
 
+import com.facebook.react.views.view.ColorUtil;
 import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Autopilot;
+import com.urbanairship.Logger;
+import com.urbanairship.PrivacyManager;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.DeepLinkListener;
 import com.urbanairship.analytics.Analytics;
 import com.urbanairship.channel.AirshipChannelListener;
+import com.urbanairship.json.JsonList;
+import com.urbanairship.json.JsonMap;
+import com.urbanairship.json.JsonValue;
 import com.urbanairship.messagecenter.InboxListener;
 import com.urbanairship.messagecenter.MessageCenter;
 import com.urbanairship.push.NotificationActionButtonInfo;
@@ -31,6 +39,8 @@ import com.urbanairship.reactnative.events.NotificationResponseEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.reactnative.events.RegistrationEvent;
 import com.urbanairship.reactnative.events.ShowInboxEvent;
+
+import okhttp3.internal.Util;
 
 /**
  * Module's autopilot to customize Urban Airship.
@@ -111,7 +121,8 @@ public class ReactAutopilot extends Autopilot {
             }
 
             @Override
-            public void onNotificationDismissed(@NonNull NotificationInfo notificationInfo) {}
+            public void onNotificationDismissed(@NonNull NotificationInfo notificationInfo) {
+            }
         });
 
         // Register a listener for inbox update event
@@ -205,9 +216,7 @@ public class ReactAutopilot extends Autopilot {
 
     @Override
     public boolean isReady(@NonNull Context context) {
-        configOptions = AirshipConfigOptions.newBuilder()
-                .applyDefaultProperties(context)
-                .build();
+        configOptions = loadConfig(context);
 
         try {
             configOptions.validate();
@@ -221,5 +230,204 @@ public class ReactAutopilot extends Autopilot {
     @Override
     public AirshipConfigOptions createAirshipConfigOptions(@NonNull Context context) {
         return configOptions;
+    }
+
+    @SuppressLint("RestrictedApi")
+    private AirshipConfigOptions loadConfig(@NonNull Context context) {
+        Logger.setLogLevel(Log.ASSERT);
+        AirshipConfigOptions.Builder builder = AirshipConfigOptions.newBuilder()
+                .applyDefaultProperties(context);
+        Logger.setLogLevel(Log.ERROR);
+
+        JsonMap config = ReactAirshipPreferences.shared(context).getAirshipConfig();
+        if (config == null || config.isEmpty()) {
+            return builder.build();
+        }
+
+        JsonMap developmentEnvironment = config.opt("development").getMap();
+        JsonMap productionEnvironment = config.opt("production").getMap();
+        JsonMap defaultEnvironment = config.opt("default").getMap();
+
+        if (developmentEnvironment != null) {
+            builder.setDevelopmentAppKey(developmentEnvironment.opt("appKey").getString())
+                    .setDevelopmentAppSecret(developmentEnvironment.opt("appSecret").getString());
+
+            String logLevel = developmentEnvironment.opt("logLevel").getString();
+            if (logLevel != null) {
+                builder.setLogLevel(convertLogLevel(logLevel, Log.DEBUG));
+            }
+        }
+
+        if (productionEnvironment != null) {
+            builder.setProductionAppKey(productionEnvironment.opt("appKey").getString())
+                    .setProductionAppSecret(productionEnvironment.opt("appSecret").getString());
+
+            String logLevel = productionEnvironment.opt("logLevel").getString();
+            if (logLevel != null) {
+                builder.setProductionLogLevel(convertLogLevel(logLevel, Log.ERROR));
+            }
+        }
+
+        if (defaultEnvironment != null) {
+            builder.setAppKey(defaultEnvironment.opt("appKey").getString())
+                    .setAppSecret(defaultEnvironment.opt("appSecret").getString());
+
+            String logLevel = defaultEnvironment.opt("logLevel").getString();
+            if (logLevel != null) {
+                builder.setLogLevel(convertLogLevel(logLevel, Log.ERROR));
+            }
+        }
+
+        String site = config.opt("site").getString();
+        if (site != null) {
+            try {
+                builder.setSite(parseSite(site));
+            } catch (Exception e) {
+                PluginLogger.error("Invalid site " + site, e);
+            }
+        }
+
+        if (config.containsKey("inProduction")) {
+            builder.setInProduction(config.opt("inProduction").getBoolean(false));
+        }
+
+        if (config.containsKey("isChannelCreationDelayEnabled")) {
+            builder.setChannelCreationDelayEnabled(config.opt("isChannelCreationDelayEnabled").getBoolean(false));
+        }
+
+        if (config.containsKey("requireInitialRemoteConfigEnabled")) {
+            builder.setRequireInitialRemoteConfigEnabled(config.opt("requireInitialRemoteConfigEnabled").getBoolean(false));
+        }
+
+        String[] urlAllowList = parseArray(config.opt("urlAllowList"));
+        if (urlAllowList != null) {
+            builder.setUrlAllowList(urlAllowList);
+        }
+
+        String[] urlAllowListScopeJavaScriptInterface = parseArray(config.opt("urlAllowListScopeJavaScriptInterface"));
+        if (urlAllowListScopeJavaScriptInterface != null) {
+            builder.setUrlAllowListScopeJavaScriptInterface(urlAllowListScopeJavaScriptInterface);
+        }
+
+        String[] urlAllowListScopeOpenUrl = parseArray(config.opt("urlAllowListScopeOpenUrl"));
+        if (urlAllowListScopeOpenUrl != null) {
+            builder.setUrlAllowListScopeOpenUrl(urlAllowListScopeOpenUrl);
+        }
+
+        JsonMap chat = config.opt("chat").getMap();
+        if (chat != null) {
+            builder.setChatSocketUrl(chat.opt("webSocketUrl").optString())
+                    .setChatUrl(chat.opt("url").optString());
+        }
+
+        JsonMap android = config.opt("android").getMap();
+        if (android != null) {
+            if (android.containsKey("appStoreUri")) {
+                builder.setAppStoreUri(Uri.parse(android.opt("appStoreUri").optString()));
+            }
+
+            if (android.containsKey("fcmFirebaseAppName")) {
+                builder.setFcmFirebaseAppName(android.opt("fcmFirebaseAppName").optString());
+            }
+
+            if (android.containsKey("notificationConfig")) {
+                applyNotificationConfig(context, android.opt("notificationConfig").optMap(), builder);
+            }
+        }
+
+        JsonList enabledFeatures = config.opt("enabledFeatures").getList();
+        try {
+            if (enabledFeatures != null) {
+                builder.setEnabledFeatures(parseFeatures(enabledFeatures));
+            }
+        } catch (Exception e) {
+            PluginLogger.error("Invalid enabled features: " + enabledFeatures);
+        }
+
+        return builder.build();
+    }
+
+    private void applyNotificationConfig(@NonNull Context context, @NonNull JsonMap notificationConfig, @NonNull AirshipConfigOptions.Builder builder) {
+        String icon = notificationConfig.opt(UrbanAirshipReactModule.NOTIFICATION_ICON_KEY).getString();
+        if (icon != null) {
+            int resourceId = Utils.getNamedResource(context, icon, "drawable");
+            builder.setNotificationIcon(resourceId);
+        }
+
+        String largeIcon = notificationConfig.opt(UrbanAirshipReactModule.NOTIFICATION_LARGE_ICON_KEY).getString();
+        if (largeIcon != null) {
+            int resourceId = Utils.getNamedResource(context, largeIcon, "drawable");
+            builder.setNotificationLargeIcon(resourceId);
+        }
+
+        String accentColor = notificationConfig.opt(UrbanAirshipReactModule.ACCENT_COLOR_KEY).getString();
+        if (accentColor != null) {
+            builder.setNotificationAccentColor(Utils.getHexColor(accentColor, 0));
+        }
+
+        String channelId = notificationConfig.opt(UrbanAirshipReactModule.DEFAULT_CHANNEL_ID_KEY).getString();
+        if (channelId != null) {
+            builder.setNotificationChannel(channelId);
+        }
+    }
+
+    private static int convertLogLevel(@NonNull String logLevel, int defaultValue) {
+        switch (logLevel) {
+            case "verbose":
+                return Log.VERBOSE;
+            case "debug":
+                return Log.DEBUG;
+            case "info":
+                return Log.INFO;
+            case "warning":
+                return Log.WARN;
+            case "error":
+                return Log.ERROR;
+            case "none":
+                return Log.ASSERT;
+        }
+        return defaultValue;
+    }
+
+    @Nullable
+    private static String[] parseArray(@Nullable JsonValue value) {
+        if (value == null || !value.isJsonList()) {
+            return null;
+        }
+
+        String[] result = new String[value.optList().size()];
+        for (int i = 0; i < value.optList().size(); i++) {
+            String string = value.optList().get(i).getString();
+            if (string == null) {
+                PluginLogger.error("Invalid string array: " + value);
+                return null;
+            }
+            result[i] = string;
+        }
+
+        return result;
+    }
+
+    @PrivacyManager.Feature
+    private int parseFeatures(@NonNull JsonList jsonList) {
+        int result = PrivacyManager.FEATURE_NONE;
+        for (JsonValue value : jsonList) {
+            result |= Utils.parseFeature(value.optString());
+        }
+        return result;
+    }
+
+    @AirshipConfigOptions.Site
+    @NonNull
+    private String parseSite(@NonNull String value) {
+        switch (value) {
+            case "eu":
+                return AirshipConfigOptions.SITE_EU;
+
+            case "us":
+                return AirshipConfigOptions.SITE_US;
+        }
+
+        throw new IllegalArgumentException("Invalid site: " + value);
     }
 }

@@ -186,4 +186,68 @@
     return notificationAction;
 }
 
++ (BOOL)isValidFeatureArray:(NSArray *)stringArray {
+    for (id value in stringArray) {
+        if (![self.featureMap allKeysForObject:value].count) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
++ (UAFeatures)stringArrayToFeatures:(NSArray *)stringArray {
+    UAFeatures result = UAFeaturesNone;
+    for (id value in stringArray) {
+        NSNumber *featureValue = [[self.featureMap allKeysForObject:value] firstObject];
+        if (featureValue) {
+            result |= [featureValue unsignedIntegerValue];
+        }
+    }
+    return result;
+}
+
++ (NSArray *)featureToStringArray:(UAFeatures)features {
+    NSMutableArray *result = [NSMutableArray array];
+    for (NSNumber *key in self.featureMap.allKeys) {
+        NSUInteger value = [key unsignedIntegerValue];
+        if (value == UAFeaturesAll) {
+            if (features == UAFeaturesAll) {
+                return @[self.featureMap[key]];
+            }
+            continue;
+        }
+
+        if (value == UAFeaturesNone) {
+            if (features == UAFeaturesNone) {
+                return @[self.featureMap[key]];
+            }
+            continue;
+        }
+        
+        if (features & [key unsignedIntegerValue]) {
+            [result addObject:self.featureMap[key]];
+        }
+    }
+    return result;
+}
+
++ (NSDictionary *)featureMap {
+    static NSDictionary* _featureMap = nil;
+    static dispatch_once_t _featureMapOnceToken;
+    dispatch_once(&_featureMapOnceToken, ^{
+        _featureMap = @{
+            @(UAFeaturesInAppAutomation): @"FEATURE_IN_APP_AUTOMATION",
+            @(UAFeaturesMessageCenter): @"FEATURE_MESSAGE_CENTER",
+            @(UAFeaturesPush): @"FEATURE_PUSH",
+            @(UAFeaturesChat): @"FEATURE_CHAT",
+            @(UAFeaturesAnalytics): @"FEATURE_ANALYTICS",
+            @(UAFeaturesTagsAndAttributes): @"FEATURE_TAGS_AND_ATTRIBUTES",
+            @(UAFeaturesContacts): @"FEATURE_CONTACTS",
+            @(UAFeaturesLocation): @"FEATURE_LOCATION",
+            @(UAFeaturesNone): @"FEATURE_NONE",
+            @(UAFeaturesAll): @"FEATURE_ALL",
+        };
+    });
+    return _featureMap;
+}
 @end

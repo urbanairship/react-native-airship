@@ -20,11 +20,7 @@
  */
 + (void)disable;
 
-/**
- * Performs takeOff.
- * @launchOptions the lunch options.
- * @returns True if takeOff was called
- */
-+ (BOOL)takeOffWithLaunchOptions:(NSDictionary *)launchOptions;
++ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions onTakeOff:(void(^)(void))callback;
+
 
 @end

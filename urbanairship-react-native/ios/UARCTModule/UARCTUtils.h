@@ -16,6 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSDictionary *)eventBodyForNotificationContent:(NSDictionary *)userInfo notificationIdentifier:(nullable NSString *)identifier;
 
 + (NSDictionary *)eventBodyForNotificationResponse:(UNNotificationResponse *)notificationResponse;
+
++ (UAFeatures)stringArrayToFeatures:(NSArray *)stringArray;
++ (NSArray *)featureToStringArray:(UAFeatures)features;
++ (BOOL)isValidFeatureArray:(NSArray *)stringArray;
 @end
 
 NS_ASSUME_NONNULL_END
