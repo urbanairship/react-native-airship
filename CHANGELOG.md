@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 14.1.0 - March 16, 2022
+Minor release that makes it possible to call takeOff from ReactNative.
+
+### Changes
+- Added takeOff and isFlying methods
+- Takeoff is now optional
+- Added appcompat and lifecycle dependencies to the module
+
 ## Version 14.0.0 - March 7, 2022
 Major release that adds support for multi-channel Preference Center.
 
