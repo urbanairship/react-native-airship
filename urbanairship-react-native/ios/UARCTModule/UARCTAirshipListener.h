@@ -16,7 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UARCTAirshipListener : NSObject<UAPushNotificationDelegate, UARegistrationDelegate, UADeepLinkDelegate, UAMessageCenterDisplayDelegate>
 
-- (instancetype)initWithEventEmitter:(UARCTEventEmitter *)eventEmitter;
+/**
+ * Returns the shared instance.
+ * @returns the shared event airship listener instance.
+ */
++ (instancetype)shared;
 
 @end
 
