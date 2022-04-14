@@ -823,7 +823,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         if (types != null) {
             for (int i = 0; i < types.size(); i++) {
                 try {
-                    SubscriptionListType type = SubscriptionListType.valueOf(types.getString(0).toUpperCase(Locale.ROOT));
+                    SubscriptionListType type = SubscriptionListType.valueOf(types.getString(i).toUpperCase(Locale.ROOT));
                     parsedTypes.add(type);
                 } catch (Exception e) {
                     promise.reject(e);
@@ -850,6 +850,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                                 return;
                             }
                             resultMap.putArray("channel", toWritableArray(channelSubs));
+                            break;
                         case CONTACT:
                             Map<String, Set<Scope>> contactSubs = ua.getContact().getSubscriptionLists(true).get();
                             if (contactSubs == null) {
@@ -865,6 +866,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
                                 contactSubsMap.putArray(entry.getKey(), scopesArray);
                             }
                             resultMap.putMap("contact", contactSubsMap);
+                            break;
                     }
                 }
                 promise.resolve(resultMap);
