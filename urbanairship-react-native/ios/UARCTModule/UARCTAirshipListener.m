@@ -20,11 +20,20 @@ NSString *const UAChannelUpdatedEventChannelKey = @"com.urbanairship.channel.ide
 
 @implementation UARCTAirshipListener
 
-- (instancetype)initWithEventEmitter:(UARCTEventEmitter *)eventEmitter {
++ (UARCTAirshipListener *)shared {
+    static UARCTAirshipListener *airshipListener_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        airshipListener_ = [[UARCTAirshipListener alloc] init];
+    });
+    return airshipListener_;
+}
+
+- (instancetype)init {
     self = [super init];
     if (self) {
-        self.eventEmitter = eventEmitter;
-
+        self.eventEmitter = [UARCTEventEmitter shared];
+        
         // Add observer for inbox updated event
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(inboxUpdated)

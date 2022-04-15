@@ -60,7 +60,7 @@ RCT_EXPORT_MODULE();
 
 - (void)attemptTakeOff {
     [UARCTAutopilot takeOffWithLaunchOptions:self.bridge.launchOptions onTakeOff:^{
-        self.airshipListener = [[UARCTAirshipListener alloc] initWithEventEmitter:[UARCTEventEmitter shared]];
+        self.airshipListener = [UARCTAirshipListener shared];
 
         UAirship.shared.deepLinkDelegate = self.airshipListener;
         UAirship.push.registrationDelegate = self.airshipListener;
