@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 14.2.0 - April 15, 2022
+Minor release that updates the iOS SDK to 16.5.1 and fixes issues with getSubscriptionList method on Android.
+
+### Changes
+- Updated iOS SDK to 16.5.1
+- Fixed setting multiple listeners on iOS if the plugin is created multiple times.
+- Fixed getSubscriptionList method on Android.
+
+
 ## Version 14.1.0 - March 16, 2022
 Minor release that makes it possible to call takeOff from ReactNative.
 
