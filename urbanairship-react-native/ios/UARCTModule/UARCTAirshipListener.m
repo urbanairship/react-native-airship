@@ -20,13 +20,12 @@ NSString *const UAChannelUpdatedEventChannelKey = @"com.urbanairship.channel.ide
 
 @implementation UARCTAirshipListener
 
-static UARCTAirshipListener *airshipListener_;
-
-+ (void)load {
-    airshipListener_ = [[UARCTAirshipListener alloc] init];
-}
-
 + (UARCTAirshipListener *)shared {
+    static UARCTAirshipListener *airshipListener_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        airshipListener_ = [[UARCTAirshipListener alloc] init];
+    });
     return airshipListener_;
 }
 
