@@ -136,7 +136,7 @@
     }
 
     // Fill in the notification title, subtitle and body if exists
-    NSDictionary* aps = extras[@"aps"];
+    NSDictionary* aps = userInfo[@"aps"];
     if (aps) {
         id alert = aps[@"alert"];
         if ([alert isKindOfClass:[NSDictionary class]]) {
