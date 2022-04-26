@@ -1,5 +1,8 @@
 # React Native Module Changelog
 
+## Version 14.2.1 - April 26, 2022
+Patch release that fixes a bug with notification response callback.
+
 ## Version 14.2.0 - April 15, 2022
 Minor release that updates the iOS SDK to 16.5.1 and fixes issues with getSubscriptionList method on Android.
 
