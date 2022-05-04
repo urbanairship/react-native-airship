@@ -2,9 +2,6 @@
 
 package com.urbanairship.reactnative.preferenceCenter;
 
-import android.annotation.SuppressLint;
-import android.preference.PreferenceManager;
-
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Promise;
@@ -12,14 +9,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
-import com.urbanairship.PendingResult;
 import com.urbanairship.UAirship;
-import com.urbanairship.json.JsonList;
-import com.urbanairship.json.JsonMap;
-import com.urbanairship.json.JsonValue;
 import com.urbanairship.preferencecenter.PreferenceCenter;
-import com.urbanairship.reactive.Observable;
-import com.urbanairship.reactive.Subscriber;
 import com.urbanairship.reactnative.Event;
 import com.urbanairship.reactnative.EventEmitter;
 import com.urbanairship.reactnative.ReactAirshipPreferences;
@@ -69,7 +60,7 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        getConfigJson(preferenceCenterId).addResultCallback(result -> {
+        PreferenceCenter.shared().getJsonConfig(preferenceCenterId).addResultCallback(result -> {
             if (result == null) {
                 promise.reject(new Exception("Failed to get preference center configuration."));
                 return;
@@ -82,34 +73,5 @@ public class AirshipPreferenceCenterModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setUseCustomPreferenceCenterUi(boolean useCustomUI, String preferenceID) {
         preferences.setAutoLaunchPreferenceCenter(preferenceID, !useCustomUI);
-    }
-
-    @SuppressLint("RestrictedApi")
-    private PendingResult<JsonValue> getConfigJson(final String prefCenterId) {
-        PendingResult<JsonValue> result = new PendingResult<>();
-
-        UAirship.shared().getRemoteData().payloadsForType("preference_forms")
-                .flatMap((payload) -> {
-                    JsonList forms = payload.getData().opt("preference_forms").optList();
-                    for (JsonValue formJson : forms) {
-                        JsonMap formMap = formJson.optMap().opt("form").optMap();
-                        if (formMap.opt("id").optString().equals(prefCenterId)) {
-                            return Observable.just(formMap.toJsonValue());
-                        }
-                    }
-                    return Observable.empty();
-                }).distinctUntilChanged()
-                .subscribe(new Subscriber<JsonValue>() {
-                    @Override
-                    public void onNext(@NonNull JsonValue value) {
-                        result.setResult(value);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Exception e) {
-                        result.setResult(null);
-                    }
-                });
-        return result;
     }
 }
