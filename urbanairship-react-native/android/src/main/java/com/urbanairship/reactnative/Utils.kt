@@ -1,0 +1,254 @@
+/* Copyright Airship and Contributors */
+
+package com.urbanairship.reactnative
+
+import android.content.Context
+import android.graphics.Color
+import androidx.annotation.ColorInt
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.Dynamic
+import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.ReadableType
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableMap
+import com.urbanairship.PrivacyManager
+import com.urbanairship.UAirship
+import com.urbanairship.json.JsonMap
+import com.urbanairship.json.JsonValue
+import com.urbanairship.reactnative.PluginLogger.error
+import com.urbanairship.util.UAStringUtil
+
+/**
+ * Module utils.
+ */
+object Utils {
+
+    private val featureMap: MutableMap<String, Int> = HashMap()
+
+    init {
+        featureMap["FEATURE_NONE"] = PrivacyManager.FEATURE_NONE
+        featureMap["FEATURE_IN_APP_AUTOMATION"] = PrivacyManager.FEATURE_IN_APP_AUTOMATION
+        featureMap["FEATURE_MESSAGE_CENTER"] = PrivacyManager.FEATURE_MESSAGE_CENTER
+        featureMap["FEATURE_PUSH"] = PrivacyManager.FEATURE_PUSH
+        featureMap["FEATURE_CHAT"] = PrivacyManager.FEATURE_CHAT
+        featureMap["FEATURE_ANALYTICS"] = PrivacyManager.FEATURE_ANALYTICS
+        featureMap["FEATURE_TAGS_AND_ATTRIBUTES"] = PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES
+        featureMap["FEATURE_CONTACTS"] = PrivacyManager.FEATURE_CONTACTS
+        featureMap["FEATURE_LOCATION"] = PrivacyManager.FEATURE_LOCATION
+        featureMap["FEATURE_ALL"] = PrivacyManager.FEATURE_ALL
+    }
+
+    /**
+     * Converts a dynamic object into a [JsonValue].
+     *
+     * @param `object` The dynamic object.
+     * @return A [JsonValue].
+     */
+    @JvmStatic
+    fun convertDynamic(obj: Dynamic?): JsonValue {
+        return if (obj == null) {
+            JsonValue.NULL
+        } else when (obj.type) {
+            ReadableType.Null -> JsonValue.NULL
+            ReadableType.Boolean -> JsonValue.wrapOpt(obj.asBoolean())
+            ReadableType.String -> JsonValue.wrapOpt(obj.asString())
+            ReadableType.Number -> JsonValue.wrapOpt(obj.asDouble())
+            ReadableType.Map -> {
+                val map = obj.asMap()
+                convertMap(map).toJsonValue()
+            }
+            ReadableType.Array -> {
+                val jsonValues: MutableList<JsonValue> = ArrayList()
+                val array = obj.asArray()
+                var i = 0
+                while (i < array.size()) {
+                    jsonValues.add(convertDynamic(array.getDynamic(i)))
+                    i++
+                }
+                JsonValue.wrapOpt(jsonValues)
+            }
+            else -> JsonValue.NULL
+        }
+    }
+
+    @JvmStatic
+    fun convertMap(map: ReadableMap?): JsonMap {
+        if (map == null) {
+            return JsonMap.EMPTY_MAP
+        }
+        val mapBuilder = JsonMap.newBuilder()
+        val iterator = map.keySetIterator()
+        while (iterator.hasNextKey()) {
+            val key = iterator.nextKey()
+            mapBuilder.putOpt(key, convertDynamic(map.getDynamic(key)))
+        }
+        return mapBuilder.build()
+    }
+
+    /**
+     * Gets a resource value by name.
+     *
+     * @param context        The context.
+     * @param resourceName   The resource name.
+     * @param resourceFolder The resource folder.
+     * @return The resource ID or 0 if not found.
+     */
+    @JvmStatic
+    fun getNamedResource(context: Context, resourceName: String, resourceFolder: String): Int {
+        if (!UAStringUtil.isEmpty(resourceName)) {
+            val id = context.resources.getIdentifier(resourceName, resourceFolder, context.packageName)
+            if (id != 0) {
+                return id
+            } else {
+                error("Unable to find resource with name: %s", resourceName)
+            }
+        }
+        return 0
+    }
+
+    /**
+     * Gets a hex color as a color int.
+     *
+     * @param hexColor     The hex color.
+     * @param defaultColor Default value if the conversion was not successful.
+     * @return The color int.
+     */
+    @ColorInt
+    @JvmStatic
+    fun getHexColor(hexColor: String, @ColorInt defaultColor: Int): Int {
+        if (!UAStringUtil.isEmpty(hexColor)) {
+            try {
+                return Color.parseColor(hexColor)
+            } catch (e: IllegalArgumentException) {
+                error(e, "Unable to parse color: %s", hexColor)
+            }
+        }
+        return defaultColor
+    }
+
+    /**
+     * Converts a JsonValue into either a WritableArray, WritableMap, or primitive type.
+     *
+     * @param value The JsonValue.
+     * @return The converted object.
+     */
+    @JvmStatic
+    fun convertJsonValue(value: JsonValue): Any? {
+        if (value.isNull) {
+            return null
+        }
+        if (value.isJsonList) {
+            val array = Arguments.createArray()
+            for (arrayValue in value.optList()) {
+                if (arrayValue.isNull) {
+                    array.pushNull()
+                    continue
+                }
+                if (arrayValue.isBoolean) {
+                    array.pushBoolean(arrayValue.getBoolean(false))
+                    continue
+                }
+                if (arrayValue.isInteger) {
+                    array.pushInt(arrayValue.getInt(0))
+                    continue
+                }
+                if (arrayValue.isDouble || arrayValue.isNumber) {
+                    array.pushDouble(arrayValue.getDouble(0.0))
+                    continue
+                }
+                if (arrayValue.isString) {
+                    array.pushString(arrayValue.string)
+                    continue
+                }
+                if (arrayValue.isJsonList) {
+                    array.pushArray(convertJsonValue(arrayValue) as WritableArray?)
+                    continue
+                }
+                if (arrayValue.isJsonMap) {
+                    array.pushMap(convertJsonValue(arrayValue) as WritableMap?)
+                }
+            }
+            return array
+        }
+        if (value.isJsonMap) {
+            val map = Arguments.createMap()
+            for ((key, mapValue) in value.optMap().entrySet()) {
+                if (mapValue.isNull) {
+                    map.putNull(key)
+                    continue
+                }
+                if (mapValue.isBoolean) {
+                    map.putBoolean(key, mapValue.getBoolean(false))
+                    continue
+                }
+                if (mapValue.isInteger) {
+                    map.putInt(key, mapValue.getInt(0))
+                    continue
+                }
+                if (mapValue.isDouble || mapValue.isNumber) {
+                    map.putDouble(key, mapValue.getDouble(0.0))
+                    continue
+                }
+                if (mapValue.isString) {
+                    map.putString(key, mapValue.string)
+                    continue
+                }
+                if (mapValue.isJsonList) {
+                    map.putArray(key, convertJsonValue(mapValue) as WritableArray?)
+                    continue
+                }
+                if (mapValue.isJsonMap) {
+                    map.putMap(key, convertJsonValue(mapValue) as WritableMap?)
+                }
+            }
+            return map
+        }
+        return value.value
+    }
+
+    @JvmOverloads
+    @JvmStatic
+    fun ensureAirshipReady(promise: Promise? = null): Boolean {
+        return if (UAirship.isFlying() || UAirship.isTakingOff()) {
+            true
+        } else {
+            promise?.reject("TAKE_OFF_NOT_CALLED", "Airship not ready, takeOff not called")
+            error("Airship not ready, unable to process command.")
+            false
+        }
+    }
+
+    @PrivacyManager.Feature
+    @JvmStatic
+    fun parseFeature(feature: String): Int {
+        val value = featureMap[feature]
+        value?.let {
+            return it
+        }
+        throw IllegalArgumentException("Invalid feature: $feature")
+    }
+
+    @JvmStatic
+    fun convertFeatures(@PrivacyManager.Feature features: Int): List<String> {
+        val result: MutableList<String> = ArrayList()
+        for ((key, value) in featureMap) {
+            if (value == PrivacyManager.FEATURE_ALL) {
+                if (features == value) {
+                    return listOf(key)
+                }
+                continue
+            }
+            if (value == PrivacyManager.FEATURE_NONE) {
+                if (features == value) {
+                    return listOf(key)
+                }
+                continue
+            }
+            if (value and features == value) {
+                result.add(key)
+            }
+        }
+        return result
+    }
+}

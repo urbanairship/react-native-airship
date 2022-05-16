@@ -18,19 +18,5 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.urbanairship.reactnative.CustomMessageActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.urbanairship.VIEW_RICH_PUSH_MESSAGE" />
-                <data android:scheme="message" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name="com.urbanairship.reactnative.AirshipHeadlessEventService"
-            android:exported="false" />
-
     </application>
 </manifest>
