@@ -13,7 +13,7 @@ end
 target 'ServiceExtension' do
   platform :ios, '11.0'
   # Pods for Service Extension
-  pod 'AirshipServiceExtension', '~> 16.5.1'
+  pod 'AirshipServiceExtension', '~> 16.6.0'
 end
 
 # https://github.com/software-mansion/react-native-screens/issues/842

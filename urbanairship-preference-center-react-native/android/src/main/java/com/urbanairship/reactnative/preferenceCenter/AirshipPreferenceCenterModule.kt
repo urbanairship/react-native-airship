@@ -59,7 +59,7 @@ class AirshipPreferenceCenterModule(reactContext: ReactApplicationContext) : Rea
             return
         }
 
-        getConfigJson(preferenceCenterId).addResultCallback { result: JsonValue? ->
+        PreferenceCenter.shared().getJsonConfig(preferenceCenterId).addResultCallback { result: JsonValue? ->
             if (result == null) {
                 promise.reject(Exception("Failed to get preference center configuration."))
                 return@addResultCallback
@@ -71,33 +71,6 @@ class AirshipPreferenceCenterModule(reactContext: ReactApplicationContext) : Rea
     @ReactMethod
     fun setUseCustomPreferenceCenterUi(useCustomUI: Boolean, preferenceID: String) {
         preferences.setAutoLaunchPreferenceCenter(preferenceID, !useCustomUI)
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun getConfigJson(prefCenterId: String): PendingResult<JsonValue> {
-        val result = PendingResult<JsonValue>()
-
-        UAirship.shared().remoteData.payloadsForType("preference_forms")
-            .flatMap { payload: RemoteDataPayload ->
-                val forms = payload.data.opt("preference_forms").optList()
-                for (formJson in forms) {
-                    val formMap = formJson.optMap().opt("form").optMap()
-                    if (formMap.opt("id").optString() == prefCenterId) {
-                        return@flatMap Observable.just(formMap.toJsonValue())
-                    }
-                }
-                Observable.empty()
-            }.distinctUntilChanged()
-            .subscribe(object : Subscriber<JsonValue>() {
-                override fun onNext(value: JsonValue) {
-                    result.result = value
-                }
-
-                override fun onError(e: Exception) {
-                    result.result = null
-                }
-            })
-        return result
     }
 
     companion object {

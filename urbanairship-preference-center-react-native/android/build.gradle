@@ -5,7 +5,7 @@ apply plugin: "kotlin-android-extensions"
 import groovy.json.JsonSlurper
 
 ext {
-  airshipVersion = "16.3.3"
+  airshipVersion = "16.4.0"
 }
 
 android {

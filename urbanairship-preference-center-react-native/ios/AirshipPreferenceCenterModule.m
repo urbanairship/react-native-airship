@@ -56,25 +56,10 @@ RCT_EXPORT_METHOD(getConfiguration:(NSString *)preferenceCenterId
         return;
     }
 
-    UARemoteDataManager *remoteData = (UARemoteDataManager *)[UAirship componentForClassName:@"UARemoteDataManager"];
-
-    __block UADisposable *disposable = [remoteData subscribeWithTypes:@[@"preference_forms"] block:^(NSArray<UARemoteDataPayload *> *payloads) {
-        NSArray *forms = [payloads firstObject].data[@"preference_forms"];
-
-        id result;
-        for (id form in forms) {
-            NSString *formID = form[@"form"][@"id"];
-            if ([formID isEqualToString:preferenceCenterId]) {
-                result = form[@"form"];
-                break;
-            }
-        }
-
-        [disposable dispose];
-        resolve(result);
+    [[UAPreferenceCenter shared] jsonConfigForPreferenceCenterID:preferenceCenterId completionHandler:^(NSDictionary *config) {
+        resolve(config);
     }];
 }
-
 
 - (void)onAirshipReady {
     [UAPreferenceCenter shared].openDelegate = self;
