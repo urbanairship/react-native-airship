@@ -4,26 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { View, Text, Switch } from 'react-native';
 
-class AlertItem extends Component {
-  render() {
-    return (
-        <View style={{flexDirection: "row"}}>
-            <View style={{
-                borderColor: '#aaaaaa',
-                borderWidth: 1,
-                borderRadius: 3,
-                flex: 0.25,
-                backgroundColor: '#aaaaaa',
-            }}>
-                <Text>{this.props.name}</Text>
-                <Text>{this.props.description}</Text>
-            </View>
-        </View>
-    );
-  }
-}
-
-class ChanneSubscriptionItem extends Component {
+class ContactSubscriptionGroupItem extends Component {
   render() {
     return (
           <View style={{flexDirection: "row"}}>
@@ -36,26 +17,6 @@ class ChanneSubscriptionItem extends Component {
                 //onValueChange={(value) => this.onPreferenceChannelItemToggled(this.props.subscriptionId, value)}
                 //value={this.isSubscribedChannelSubscription(this.props.subscriptionId)}
             />
-          </View>
-    );
-  }
-}
-
-class ContactSubscriptionGroupItem extends Component {
-  render() {
-    return (
-          <View style={{flexDirection: "row"}}>
-            <View style={{ flex: 0.99 }}>
-              <Text>{this.props.name}</Text>
-              <Text>{this.props.description}</Text>
-            </View>
-            <Switch
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              //thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              //onValueChange={toggleSwitch}
-              //value={isEnabled}
-             />
           </View>
     );
   }
@@ -83,7 +44,6 @@ class ContactSubscriptionItem extends Component {
 }
 
 
-
 const PreferenceCell = props => {
   const style = {
     borderColor: '#aaaaaa',
@@ -101,11 +61,16 @@ const PreferenceCell = props => {
 //        name={props.data.label}
 //        description={props.data.message}
 //    />
-    <ChanneSubscriptionItem
+//    <ChanneSubscriptionItem
+//        name={props.data.name}
+//        description={props.data.description}
+//        subscriptionId={props.data.subscriptionId}
+//    />
+      <ContactSubscriptionItem
         name={props.data.name}
         description={props.data.description}
         subscriptionId={props.data.subscriptionId}
-    />
+      />
   );
 };
 

@@ -13,8 +13,11 @@ import React, {
 import {
   Text,
   View,
-  Button,
-  AppRegistry,
+  FlatList,
+  ActivityIndicator,
+  SafeAreaView,
+  Switch,
+  SectionList,
 } from 'react-native';
 
 import {
@@ -37,10 +40,10 @@ export default class PreferenceScreen extends Component {
     super(props);
     this.state = {
         preferenceCenterId: "neat",
-        preferenceCenterDisplay: {},
+        preferenceCenterConfig: {},
         activeChannelSubscriptions: [],
         activeContactSubscriptions: {},
-        sections: []
+        preferenceCenterData: []
     }
 
     this.initAirshipListeners();
@@ -49,33 +52,38 @@ export default class PreferenceScreen extends Component {
   }
 
   initAirshipListeners () {
-    UrbanAirship.addListener(EventType.OpenPreferenceCenter, (event) => {
-        console.log(EventType.OpenPreferenceCenter + ':', event);
+    AirshipPreferenceCenter.addPreferenceCenterOpenListener( (body) => {
+        //Navigate to custom UI
+        console.log("Preference center opened : " + body);
     });
   }
 
   fillInSubscriptionList() {
     UrbanAirship.getSubscriptionLists(["channel", "contact"]).then((subscriptionList) => {
         this.setState({
-            activeChannelSubscriptions: subscriptionList.channelSubscriptionLists,
-            activeContactSubscriptions: subscriptionList.ContactSubscriptionList
+            activeChannelSubscriptions: subscriptionList.channel,
+            activeContactSubscriptions: subscriptionList.contact
         });
     });
   }
 
   updatePreferenceCenterConfig() {
     AirshipPreferenceCenter.getConfiguration(this.state.preferenceCenterId).then((config) => {
-        this.setState({ preferenceCenterDisplay: config.display })
+        this.setState({ preferenceCenterConfig: config })
         var sections = config.sections;
         if (sections) {
-            this.setState({ sections: sections })
+           var data = []
+           sections.map((section) => {
+             data = data.concat({title: section.display, data: section.items});
+           });
+           this.setState({ preferenceCenterData: data })
         }
     });
   }
 
   isSubscribedChannelSubscription(subscriptionId) {
-    if (this.props.activeChannelSubscriptions != null) {
-        return this.props.activeChannelSubscriptions.includes(subscriptionId);
+    if (this.state.activeChannelSubscriptions != null) {
+        return this.state.activeChannelSubscriptions.includes(subscriptionId);
     }
     return false;
   }
@@ -98,33 +106,111 @@ export default class PreferenceScreen extends Component {
     return false;
   }
 
+  onPreferenceChannelItemToggled(subscriptionId, subscribe) {
+    var editor = UrbanAirship.editChannelSubscriptionLists();
+    var updatedArray = this.state.activeChannelSubscriptions;
+    if (subscribe) {
+      editor.subscribe(subscriptionId);
+      updatedArray.concat(subscriptionId)
+    } else {
+      editor.unsubscribe(subscriptionId);
+      updatedArray = updatedArray.filter((item) => item != subscriptionId);
+    }
+    editor.apply();
+    this.setState({
+        activeChannelSubscriptions: updatedArray
+    });
+    //setState(() {});
+  }
+
+  onPreferenceContactSubscriptionItemToggled(subscriptionId, scopes, subscribe) {
+      var editor = UrbanAirship.editContactSubscriptionLists();
+      if (subscribe) {
+        editor.subscribe(subscriptionId, scopes);
+      } else {
+        editor.unsubscribe(subscriptionId, scopes);
+      }
+      editor.apply();
+      applyContactSubscription(subscriptionId, scopes, subscribe);
+      //setState(() {});
+  }
+
+//  applyContactSubscription(subscriptionId, scopes, subscribe) {
+//    var currentScopes = this.state.activeContactSubscriptions[subscriptionId] ?? [];
+//    var newScopes = [];
+//    if (subscribe) {
+//        newScopes = new List.from(currentScopes)..addAll(scopes);
+//    } else {
+//        currentScopes.removeWhere((item) => scopes.contains(item));
+//        newScopes = currentScopes;
+//    }
+//    activeContactSubscriptions[subscriptionId] = newScopes;
+//  }
+
 render() {
 
-  return (
-    <View style={{ flex: 1 }}>
-      <TableView
-          reactModuleForCell="PreferenceCell"
-          style={{ flex: 1 }}
-          allowsToggle
-          allowsMultipleSelection
-        >
-
-        {this.state.sections.map(section => (
-            <Section label={section.display.name}>
-                {section.items.map(item => (
-                    <Item
-                        key = {item.id}
-                        name = {item.display.name}
-                        description = {item.display.description}
-                        subscriptionId = {item.subscription_id}
-                    />
-                ))}
-            </Section>
-        ))}
-
-      </TableView>
+  const AlertItem = ({ item }) => (
+    <View style={{flexDirection: "row"}}>
+        <View style={{
+            borderColor: '#aaaaaa',
+            borderWidth: 1,
+            borderRadius: 3,
+            flex: 0.25,
+            backgroundColor: '#aaaaaa',
+        }}>
+            <Text>{item.display.name}</Text>
+            <Text>{item.display.description}</Text>
+        </View>
     </View>
   );
+
+  const ChanneSubscriptionItem = ({ item }) => (
+    <View style={{flexDirection: "row"}}>
+        <View style={{ flex: 0.99 }}>
+            <Text>{item.display.name}</Text>
+            <Text>{item.display.description}</Text>
+        </View>
+        <Switch
+            trackColor={{ true: "#0d6a83", false: null }}
+            onValueChange={(value) => this.onPreferenceChannelItemToggled(item.subscription_id, value)}
+            value={this.isSubscribedChannelSubscription(item.subscription_id)}
+        />
+    </View>
+  );
+
+  const renderItem = ({ item }) =>
+   {
+       if (item.type == 'channel_subscription') {
+          return <ChanneSubscriptionItem item={item} />;
+       } else if (item.type == 'contact_subscription_group') {
+          return <ChanneSubscriptionItem item={item} />;
+       } else if (item.type == 'contact_subscription') {
+         return <ChanneSubscriptionItem item={item} />;
+       } else if (item.type == 'alert') {
+         return <ChanneSubscriptionItem item={item} />;
+       } else {
+         return <AlertItem item={item} />;
+       }
+   }
+
+  const renderSectionHeader = ({ section }) => (
+    <View>
+        <Text>{section.title.name}</Text>
+        <Text>{section.title.description}</Text>
+    </View>
+  );
+
+  return (
+    <SafeAreaView>
+        <SectionList
+            sections={this.state.preferenceCenterData}
+            keyExtractor={(item, index) => item.id}
+            renderItem={renderItem}
+            renderSectionHeader={renderSectionHeader}
+        />
+    </SafeAreaView>
+  );
+
 }
 
 };
