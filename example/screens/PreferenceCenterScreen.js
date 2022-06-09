@@ -18,6 +18,8 @@ import {
   SafeAreaView,
   Switch,
   SectionList,
+  TouchableHighlight,
+  StyleSheet,
 } from 'react-native';
 
 import {
@@ -39,7 +41,7 @@ export default class PreferenceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        preferenceCenterId: "neat",
+        preferenceCenterId: "test_mouna",
         preferenceCenterConfig: {},
         activeChannelSubscriptions: [],
         activeContactSubscriptions: {},
@@ -90,7 +92,7 @@ export default class PreferenceScreen extends Component {
 
   isSubscribedContactSubscription (subscriptionId, scopes) {
     if (this.state.activeContactSubscriptions != null) {
-        if (!scopes.length) {
+        if (scopes.length === 0) {
             return this.state.activeContactSubscriptions.includes(subscriptionId);
         }
 
@@ -120,34 +122,68 @@ export default class PreferenceScreen extends Component {
     this.setState({
         activeChannelSubscriptions: updatedArray
     });
-    //setState(() {});
   }
 
   onPreferenceContactSubscriptionItemToggled(subscriptionId, scopes, subscribe) {
       var editor = UrbanAirship.editContactSubscriptionLists();
-      if (subscribe) {
-        editor.subscribe(subscriptionId, scopes);
-      } else {
-        editor.unsubscribe(subscriptionId, scopes);
-      }
-      editor.apply();
-      applyContactSubscription(subscriptionId, scopes, subscribe);
-      //setState(() {});
+      scopes.map((scope) => {
+            if (subscribe) {
+              editor.subscribe(subscriptionId, scope);
+            } else {
+              editor.unsubscribe(subscriptionId, scope);
+            }
+            editor.apply();
+        }
+      )
+      this.applyContactSubscription(subscriptionId, scopes, subscribe);
   }
 
-//  applyContactSubscription(subscriptionId, scopes, subscribe) {
-//    var currentScopes = this.state.activeContactSubscriptions[subscriptionId] ?? [];
-//    var newScopes = [];
-//    if (subscribe) {
-//        newScopes = new List.from(currentScopes)..addAll(scopes);
-//    } else {
-//        currentScopes.removeWhere((item) => scopes.contains(item));
-//        newScopes = currentScopes;
-//    }
-//    activeContactSubscriptions[subscriptionId] = newScopes;
-//  }
+  applyContactSubscription(subscriptionId, scopes, subscribe) {
+    var currentScopes = this.state.activeContactSubscriptions[subscriptionId] ?? [];
+    var updatedArray = this.state.activeContactSubscriptions;
+    if (subscribe) {
+        currentScopes = currentScopes.concat(scopes);
+    } else {
+        currentScopes = currentScopes.filter((e) => !scopes.includes(e));
+    }
+    updatedArray[subscriptionId] = currentScopes;
+    this.setState({
+        activeContactSubscriptions: updatedArray
+    });
+  }
 
 render() {
+
+  const styles = StyleSheet.create({
+    container: {
+      justifyContent: "center",
+      paddingHorizontal: 10,
+      borderRadius: 20
+    },
+    subscribedScopeButton: {
+      alignItems: "center",
+      backgroundColor: "#FF0000",
+      padding: 10
+    },
+    unsubscribedScopeButton: {
+        alignItems: "center",
+        backgroundColor: "#FD959A",
+        padding: 10
+    },
+    scopeContainer: {
+      alignItems: "center",
+      padding: 10
+    },
+    scopeText: {
+      color:'white',
+      fontSize:12,
+      alignSelf: 'center'
+    }
+  });
+
+  const Separator = () => (
+    <View style={{flex: 1, height: 1, backgroundColor: 'gray'}} />
+  );
 
   const AlertItem = ({ item }) => (
     <View style={{flexDirection: "row"}}>
@@ -165,6 +201,24 @@ render() {
   );
 
   const ChanneSubscriptionItem = ({ item }) => (
+    <View>
+        <View style={{flexDirection: "row"}}>
+            <View style={{ flex: 0.99 }}>
+                <Text>{item.display.name}</Text>
+                <Text>{item.display.description}</Text>
+            </View>
+            <Switch
+                trackColor={{ true: "#0d6a83", false: null }}
+                onValueChange={(value) => this.onPreferenceChannelItemToggled(item.subscription_id, value)}
+                value={this.isSubscribedChannelSubscription(item.subscription_id)}
+            />
+        </View>
+        <Separator/>
+    </View>
+  );
+
+  const ContactSubscriptionItem = ({ item }) => (
+    <View>
     <View style={{flexDirection: "row"}}>
         <View style={{ flex: 0.99 }}>
             <Text>{item.display.name}</Text>
@@ -172,9 +226,38 @@ render() {
         </View>
         <Switch
             trackColor={{ true: "#0d6a83", false: null }}
-            onValueChange={(value) => this.onPreferenceChannelItemToggled(item.subscription_id, value)}
-            value={this.isSubscribedChannelSubscription(item.subscription_id)}
+            onValueChange={(value) => this.onPreferenceChannelItemToggled(item.subscription_id, [], value)}
+            value={this.isSubscribedContactSubscription(item.subscription_id, [])}
         />
+    </View>
+    <Separator/>
+    </View>
+  );
+
+  const ContactSubscriptionGroupItem = ({ item }) => (
+      <View>
+      <View>
+        <Text>{item.display.name}</Text>
+        <Text>{item.display.description}</Text>
+        <View style={{ flex:1, flexDirection:'row', flexWrap: 'wrap', paddingTop: 10, paddingBottom: 10}}>
+            {item.components.map(component => {
+              return (
+                <ScopeItem subscriptionId={item.subscription_id} component={component}/>
+              );
+            })}
+        </View>
+      </View>
+      <Separator/>
+      </View>
+  );
+
+  const ScopeItem = ({subscriptionId ,component }) => (
+    <View style={styles.container}>
+        <TouchableHighlight onPress={() => this.onPreferenceContactSubscriptionItemToggled(subscriptionId, component.scopes, !this.isSubscribedContactSubscription(subscriptionId, component.scopes))}>
+            <View style={styles.scopeButton}>
+                {this.isSubscribedContactSubscription(subscriptionId, component.scopes) ? <Text style={styles.subscribedScopeButton}>{component.display.name}</Text> :  <Text style={styles.unsubscribedScopeButton}>{component.display.name}</Text>}
+            </View>
+        </TouchableHighlight>
     </View>
   );
 
@@ -182,21 +265,19 @@ render() {
    {
        if (item.type == 'channel_subscription') {
           return <ChanneSubscriptionItem item={item} />;
-       } else if (item.type == 'contact_subscription_group') {
-          return <ChanneSubscriptionItem item={item} />;
        } else if (item.type == 'contact_subscription') {
-         return <ChanneSubscriptionItem item={item} />;
+          return <ContactSubscriptionItem item={item} />;
+       } else if (item.type == 'contact_subscription_group') {
+         return <ContactSubscriptionGroupItem item={item} />;
        } else if (item.type == 'alert') {
-         return <ChanneSubscriptionItem item={item} />;
-       } else {
          return <AlertItem item={item} />;
        }
    }
 
   const renderSectionHeader = ({ section }) => (
-    <View>
-        <Text>{section.title.name}</Text>
-        <Text>{section.title.description}</Text>
+    <View style={{backgroundColor: "#fff"}}>
+        <Text style={{fontSize: 25}}>{section.title.name}</Text>
+        <Text style={{fontSize: 15}}>{section.title.description}</Text>
     </View>
   );
 
