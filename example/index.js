@@ -6,6 +6,8 @@
 import { AppRegistry } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
+import PreferenceCell from './screens/PreferenceCell';
+
 import {
   EventType,
   UrbanAirship,
@@ -14,11 +16,15 @@ import {
 import { AirshipChat } from 'urbanairship-chat-react-native'
 
 
-AppRegistry.registerComponent(appName, () => App);
-
 UrbanAirship.addListener(EventType.PushReceived, async (event) => {
   console.log("Push Received: " + JSON.stringify(event));
 })
 
 AirshipChat.setUseCustomChatUI(false);
+
+AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(
+  'PreferenceCell',
+  () => PreferenceCell
+);
 
