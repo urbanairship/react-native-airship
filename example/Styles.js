@@ -126,5 +126,33 @@ export default StyleSheet.create({
     color: 'white',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  alertContainer: {
+    borderWidth: 1,
+    borderRadius: 3,
+    flex: 0.25,
+    backgroundColor: '#3399ff',
+  },
+  scopeContainer: {
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    borderRadius: 20
+  },
+  subscribedScopeButton: {
+    alignItems: "center",
+    backgroundColor: "#FF0000",
+    borderRadius:15,
+    padding: 10
+  },
+  unsubscribedScopeButton: {
+    alignItems: "center",
+    backgroundColor: "#FD959A",
+    borderRadius:15,
+    padding: 10
+  },
+  scopeText: {
+    color:'white',
+    fontSize:12,
+    alignSelf: 'center'
   }
 });

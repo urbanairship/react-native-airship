@@ -32,17 +32,14 @@ import {
   AirshipPreferenceCenter,
 } from 'urbanairship-preference-center-react-native'
 
-import { StatusBar } from 'react-native';
-import TableView from 'react-native-tableview';
-
-const { Section, Item } = TableView;
+import styles from './../Styles'
 
 export default class PreferenceScreen extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-        preferenceCenterId: "test_mouna",
+        preferenceCenterId: 'neat',//"test_mouna",
         isFetching: true,
         activeChannelSubscriptions: [],
         activeContactSubscriptions: {},
@@ -171,50 +168,21 @@ export default class PreferenceScreen extends Component {
 
 render() {
 
-  const styles = StyleSheet.create({
-    container: {
-      justifyContent: "center",
-      paddingHorizontal: 10,
-      borderRadius: 20
-    },
-    subscribedScopeButton: {
-      alignItems: "center",
-      backgroundColor: "#FF0000",
-      borderRadius:15,
-      padding: 10
-    },
-    unsubscribedScopeButton: {
-        alignItems: "center",
-        backgroundColor: "#FD959A",
-        borderRadius:15,
-        padding: 10
-    },
-    scopeContainer: {
-      alignItems: "center",
-      padding: 10
-    },
-    scopeText: {
-      color:'white',
-      fontSize:12,
-      alignSelf: 'center'
-    }
-  });
-
   const Separator = () => (
-    <View style={{flex: 1, height: 1, backgroundColor: 'gray'}} />
+    <View style={styles.itemSeparator} />
+  );
+
+  const SampleItem = ({ item }) => (
+    <View>
+        <Text style={styles.itemTitle}>{item.display.name}</Text>
+        <Text style={styles.itemSubtitle}>{item.display.description}</Text>
+    </View>
   );
 
   const AlertItem = ({ item }) => (
     <View style={{flexDirection: "row"}}>
-        <View style={{
-            borderColor: '#aaaaaa',
-            borderWidth: 1,
-            borderRadius: 3,
-            flex: 0.25,
-            backgroundColor: '#aaaaaa',
-        }}>
-            <Text>{item.display.name}</Text>
-            <Text>{item.display.description}</Text>
+        <View style={styles.alertContainer}>
+            <SampleItem item={item}/>
         </View>
     </View>
   );
@@ -222,9 +190,8 @@ render() {
   const ChanneSubscriptionItem = ({ item }) => (
     <View>
         <View style={{flexDirection: "row"}}>
-            <View style={{ flex: 0.99 }}>
-                <Text>{item.display.name}</Text>
-                <Text>{item.display.description}</Text>
+            <View style={{ flex: 1 }}>
+                <SampleItem item={item}/>
             </View>
             <Switch
                 trackColor={{ true: "#0d6a83", false: null }}
@@ -240,8 +207,7 @@ render() {
     <View>
     <View style={{flexDirection: "row"}}>
         <View style={{ flex: 0.99 }}>
-            <Text>{item.display.name}</Text>
-            <Text>{item.display.description}</Text>
+            <SampleItem item={item}/>
         </View>
         <Switch
             trackColor={{ true: "#0d6a83", false: null }}
@@ -256,12 +222,11 @@ render() {
   const ContactSubscriptionGroupItem = ({ item }) => (
       <View>
       <View>
-        <Text>{item.display.name}</Text>
-        <Text>{item.display.description}</Text>
+        <SampleItem item={item}/>
         <View style={{ flex:1, flexDirection:'row', flexWrap: 'wrap', paddingTop: 10, paddingBottom: 10}}>
             {item.components.map(component => {
               return (
-                <ScopeItem subscriptionId={item.subscription_id} component={component}/>
+                <ScopeItem subscriptionId={item.subscription_id} component={component} key={component.uniqueId}/>
               );
             })}
         </View>
@@ -271,7 +236,7 @@ render() {
   );
 
   const ScopeItem = ({subscriptionId ,component}) => (
-    <View style={styles.container} keyExtractor={component.display.name}>
+    <View style={styles.scopeContainer}>
         <TouchableHighlight style={[this.isSubscribedContactSubscription(subscriptionId, component.scopes) ? styles.subscribedScopeButton : styles.unsubscribedScopeButton]} onPress={() => this.onPreferenceContactSubscriptionItemToggled(subscriptionId, component.scopes, !this.isSubscribedContactSubscription(subscriptionId, component.scopes))}>
             <View style={styles.scopeButton}>
                 <Text>{component.display.name}</Text>
