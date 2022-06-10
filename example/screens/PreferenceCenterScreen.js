@@ -111,7 +111,7 @@ export default class PreferenceScreen extends Component {
     var updatedArray = this.state.activeChannelSubscriptions;
     if (subscribe) {
       editor.subscribe(subscriptionId);
-      updatedArray.concat(subscriptionId)
+      updatedArray = updatedArray.concat(subscriptionId)
     } else {
       editor.unsubscribe(subscriptionId);
       updatedArray = updatedArray.filter((item) => item != subscriptionId);
