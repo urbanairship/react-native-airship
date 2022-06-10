@@ -13,19 +13,15 @@ import React, {
 import {
   Text,
   View,
-  FlatList,
   ActivityIndicator,
-  SafeAreaView,
   Switch,
   SectionList,
   TouchableHighlight,
-  StyleSheet,
   RefreshControl,
 } from 'react-native';
 
 import {
-  UrbanAirship,
-  EventType
+  UrbanAirship
 } from 'urbanairship-react-native'
 
 import {
@@ -281,7 +277,6 @@ render() {
         }
     </View>
   );
-
 }
 
 };
