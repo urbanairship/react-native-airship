@@ -20,6 +20,7 @@ import {
   SectionList,
   TouchableHighlight,
   StyleSheet,
+  RefreshControl,
 } from 'react-native';
 
 import {
@@ -42,7 +43,7 @@ export default class PreferenceScreen extends Component {
     super(props);
     this.state = {
         preferenceCenterId: "test_mouna",
-        preferenceCenterConfig: {},
+        isFetching: true,
         activeChannelSubscriptions: [],
         activeContactSubscriptions: {},
         preferenceCenterData: []
@@ -50,7 +51,7 @@ export default class PreferenceScreen extends Component {
 
     this.initAirshipListeners();
     this.fillInSubscriptionList();
-    this.updatePreferenceCenterConfig();
+    this.refreshPreferenceCenterConfig();
   }
 
   initAirshipListeners () {
@@ -69,9 +70,8 @@ export default class PreferenceScreen extends Component {
     });
   }
 
-  updatePreferenceCenterConfig() {
+  refreshPreferenceCenterConfig() {
     AirshipPreferenceCenter.getConfiguration(this.state.preferenceCenterId).then((config) => {
-        this.setState({ preferenceCenterConfig: config })
         var sections = config.sections;
         if (sections) {
            var data = []
@@ -79,6 +79,7 @@ export default class PreferenceScreen extends Component {
              data = data.concat({title: section.display, data: section.items});
            });
            this.setState({ preferenceCenterData: data })
+           this.stopActivityIndicator()
         }
     });
   }
@@ -152,6 +153,22 @@ export default class PreferenceScreen extends Component {
     });
   }
 
+    startActivityIndicator() {
+      setTimeout(() => {
+        this.setState({
+          isFetching: true
+        });
+      }, 500);
+    }
+
+    stopActivityIndicator() {
+      setTimeout(() => {
+        this.setState({
+          isFetching: false
+        });
+      }, 500);
+    }
+
 render() {
 
   const styles = StyleSheet.create({
@@ -163,11 +180,13 @@ render() {
     subscribedScopeButton: {
       alignItems: "center",
       backgroundColor: "#FF0000",
+      borderRadius:15,
       padding: 10
     },
     unsubscribedScopeButton: {
         alignItems: "center",
         backgroundColor: "#FD959A",
+        borderRadius:15,
         padding: 10
     },
     scopeContainer: {
@@ -251,11 +270,11 @@ render() {
       </View>
   );
 
-  const ScopeItem = ({subscriptionId ,component }) => (
-    <View style={styles.container}>
-        <TouchableHighlight onPress={() => this.onPreferenceContactSubscriptionItemToggled(subscriptionId, component.scopes, !this.isSubscribedContactSubscription(subscriptionId, component.scopes))}>
+  const ScopeItem = ({subscriptionId ,component}) => (
+    <View style={styles.container} keyExtractor={component.display.name}>
+        <TouchableHighlight style={[this.isSubscribedContactSubscription(subscriptionId, component.scopes) ? styles.subscribedScopeButton : styles.unsubscribedScopeButton]} onPress={() => this.onPreferenceContactSubscriptionItemToggled(subscriptionId, component.scopes, !this.isSubscribedContactSubscription(subscriptionId, component.scopes))}>
             <View style={styles.scopeButton}>
-                {this.isSubscribedContactSubscription(subscriptionId, component.scopes) ? <Text style={styles.subscribedScopeButton}>{component.display.name}</Text> :  <Text style={styles.unsubscribedScopeButton}>{component.display.name}</Text>}
+                <Text>{component.display.name}</Text>
             </View>
         </TouchableHighlight>
     </View>
@@ -281,14 +300,34 @@ render() {
     </View>
   );
 
+  const onRefresh = () => {
+      this.startActivityIndicator;
+      this.refreshPreferenceCenterConfig();
+      return
+  };
+
   return (
     <SafeAreaView>
-        <SectionList
-            sections={this.state.preferenceCenterData}
-            keyExtractor={(item, index) => item.id}
-            renderItem={renderItem}
-            renderSectionHeader={renderSectionHeader}
-        />
+        {
+            (this.state.isFetching === true) ?
+                <View style={styles.loadingIndicator}>
+                    <ActivityIndicator size="large"
+                            animating={this.state.isFetching}
+                    />
+                </View> :
+            <SectionList
+                sections={this.state.preferenceCenterData}
+                keyExtractor={(item, index) => item.id}
+                renderItem={renderItem}
+                renderSectionHeader={renderSectionHeader}
+                refreshControl={
+                    <RefreshControl
+                      refreshing={this.state.isFetching}
+                      onRefresh={this.onRefresh}
+                    />
+                }
+            />
+        }
     </SafeAreaView>
   );
 
