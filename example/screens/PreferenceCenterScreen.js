@@ -69,6 +69,7 @@ export default class PreferenceScreen extends Component {
 
   refreshPreferenceCenterConfig() {
     AirshipPreferenceCenter.getConfiguration(this.state.preferenceCenterId).then((config) => {
+        console.log(config);
         var sections = config.sections;
         if (sections) {
            var data = []
@@ -174,8 +175,8 @@ render() {
 
   const SampleItem = ({ item }) => (
     <View>
-        <Text style={styles.itemTitle}>{item.display.name}</Text>
-        <Text style={styles.itemSubtitle}>{item.display.description}</Text>
+        <Text style={styles.cellTitle}>{item.display.name}</Text>
+        <Text style={styles.cellSubtitle}>{item.display.description}</Text>
     </View>
   );
 
@@ -188,7 +189,7 @@ render() {
   );
 
   const ChanneSubscriptionItem = ({ item }) => (
-    <View>
+    <View  style={styles.cellContainer}>
         <View style={{flexDirection: "row"}}>
             <View style={{ flex: 1 }}>
                 <SampleItem item={item}/>
@@ -204,35 +205,35 @@ render() {
   );
 
   const ContactSubscriptionItem = ({ item }) => (
-    <View>
-    <View style={{flexDirection: "row"}}>
-        <View style={{ flex: 0.99 }}>
-            <SampleItem item={item}/>
+    <View  style={styles.cellContainer}>
+        <View style={{flexDirection: "row"}}>
+            <View style={{ flex: 0.99 }}>
+                <SampleItem item={item}/>
+            </View>
+            <Switch
+                trackColor={{ true: "#0d6a83", false: null }}
+                onValueChange={(value) => this.onPreferenceChannelItemToggled(item.subscription_id, [], value)}
+                value={this.isSubscribedContactSubscription(item.subscription_id, [])}
+            />
         </View>
-        <Switch
-            trackColor={{ true: "#0d6a83", false: null }}
-            onValueChange={(value) => this.onPreferenceChannelItemToggled(item.subscription_id, [], value)}
-            value={this.isSubscribedContactSubscription(item.subscription_id, [])}
-        />
-    </View>
-    <Separator/>
+        <Separator/>
     </View>
   );
 
   const ContactSubscriptionGroupItem = ({ item }) => (
-      <View>
-      <View>
-        <SampleItem item={item}/>
-        <View style={{ flex:1, flexDirection:'row', flexWrap: 'wrap', paddingTop: 10, paddingBottom: 10}}>
+    <View style={styles.cellContainer}>
+        <View>
+            <SampleItem item={item}/>
+            <View style={{ flex:1, flexDirection:'row', flexWrap: 'wrap', paddingTop: 10, paddingBottom: 10}}>
             {item.components.map(component => {
               return (
                 <ScopeItem subscriptionId={item.subscription_id} component={component} key={component.uniqueId}/>
               );
             })}
-        </View>
-      </View>
+            </View>
+       </View>
       <Separator/>
-      </View>
+    </View>
   );
 
   const ScopeItem = ({subscriptionId ,component}) => (
@@ -259,9 +260,9 @@ render() {
    }
 
   const renderSectionHeader = ({ section }) => (
-    <View style={{backgroundColor: "#fff"}}>
-        <Text style={{fontSize: 25}}>{section.title.name}</Text>
-        <Text style={{fontSize: 15}}>{section.title.description}</Text>
+    <View style={styles.sectionHeaderContainer}>
+        <Text style={styles.sectionTitle}>{section.title.name}</Text>
+        <Text style={styles.sectionSubtitle}>{section.title.description}</Text>
     </View>
   );
 

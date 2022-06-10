@@ -127,6 +127,29 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  sectionHeaderContainer: {
+    paddingTop: 20,
+    paddingBottom: 10
+  },
+  sectionTitle: {
+    fontSize: 20,
+    color: '#0000FF',
+  },
+  sectionSubtitle: {
+    fontSize: 15,
+    color: '#0000FF',
+  },
+  cellContainer: {
+    backgroundColor: '#ffffff',
+  },
+  cellTitle: {
+    fontSize: 20,
+    color: '#000000',
+  },
+  cellSubtitle: {
+    fontSize: 15,
+    color: '#808080',
+  },
   alertContainer: {
     borderWidth: 1,
     borderRadius: 3,
