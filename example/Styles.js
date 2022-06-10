@@ -127,6 +127,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  pcContainer: {
+    padding: 10
+  },
   sectionHeaderContainer: {
     paddingTop: 20,
     paddingBottom: 10
@@ -137,10 +140,11 @@ export default StyleSheet.create({
   },
   sectionSubtitle: {
     fontSize: 15,
-    color: '#0000FF',
+    color: '#000000',
   },
-  cellContainer: {
+  pcCellContainer: {
     backgroundColor: '#ffffff',
+    padding: 5
   },
   cellTitle: {
     fontSize: 20,

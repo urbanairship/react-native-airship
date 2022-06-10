@@ -39,23 +39,15 @@ export default class PreferenceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        preferenceCenterId: 'neat',//"test_mouna",
+        preferenceCenterId: 'neat',
         isFetching: true,
         activeChannelSubscriptions: [],
         activeContactSubscriptions: {},
         preferenceCenterData: []
     }
 
-    this.initAirshipListeners();
     this.fillInSubscriptionList();
     this.refreshPreferenceCenterConfig();
-  }
-
-  initAirshipListeners () {
-    AirshipPreferenceCenter.addPreferenceCenterOpenListener( (body) => {
-        //Navigate to custom UI
-        console.log("Preference center opened : " + body);
-    });
   }
 
   fillInSubscriptionList() {
@@ -169,10 +161,6 @@ export default class PreferenceScreen extends Component {
 
 render() {
 
-  const Separator = () => (
-    <View style={styles.itemSeparator} />
-  );
-
   const SampleItem = ({ item }) => (
     <View>
         <Text style={styles.cellTitle}>{item.display.name}</Text>
@@ -189,7 +177,7 @@ render() {
   );
 
   const ChanneSubscriptionItem = ({ item }) => (
-    <View  style={styles.cellContainer}>
+    <View  style={styles.pcCellContainer}>
         <View style={{flexDirection: "row"}}>
             <View style={{ flex: 1 }}>
                 <SampleItem item={item}/>
@@ -200,12 +188,11 @@ render() {
                 value={this.isSubscribedChannelSubscription(item.subscription_id)}
             />
         </View>
-        <Separator/>
     </View>
   );
 
   const ContactSubscriptionItem = ({ item }) => (
-    <View  style={styles.cellContainer}>
+    <View  style={styles.pcCellContainer}>
         <View style={{flexDirection: "row"}}>
             <View style={{ flex: 0.99 }}>
                 <SampleItem item={item}/>
@@ -216,12 +203,11 @@ render() {
                 value={this.isSubscribedContactSubscription(item.subscription_id, [])}
             />
         </View>
-        <Separator/>
     </View>
   );
 
   const ContactSubscriptionGroupItem = ({ item }) => (
-    <View style={styles.cellContainer}>
+    <View style={styles.pcCellContainer}>
         <View>
             <SampleItem item={item}/>
             <View style={{ flex:1, flexDirection:'row', flexWrap: 'wrap', paddingTop: 10, paddingBottom: 10}}>
@@ -232,7 +218,6 @@ render() {
             })}
             </View>
        </View>
-      <Separator/>
     </View>
   );
 
@@ -273,7 +258,7 @@ render() {
   };
 
   return (
-    <SafeAreaView>
+    <View style={styles.pcContainer}>
         {
             (this.state.isFetching === true) ?
                 <View style={styles.loadingIndicator}>
@@ -294,7 +279,7 @@ render() {
                 }
             />
         }
-    </SafeAreaView>
+    </View>
   );
 
 }
