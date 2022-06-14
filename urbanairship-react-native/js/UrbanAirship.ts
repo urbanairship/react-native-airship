@@ -831,6 +831,13 @@ export class UrbanAirship {
   }
 
   /**
+   * Gets the count of Unread messages in the inbox.
+   */
+  static getUnreadMessageCount(): number {
+    return UrbanAirshipModule.getUnreadMessagesCount();
+  }
+
+  /**
    * Checks if app notifications are enabled or not. Its possible to have `userNotificationsEnabled`
    * but app notifications being disabled if the user opted out of notifications.
    *
