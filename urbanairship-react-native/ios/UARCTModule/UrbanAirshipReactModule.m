@@ -929,6 +929,16 @@ RCT_EXPORT_METHOD(clearNotification:(NSString *)identifier) {
     }
 }
 
+RCT_REMAP_METHOD(getUnreadMessagesCount,
+                 getUnreadMessagesCount_resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
+    if (![self ensureAirshipReady:reject]) {
+        return;
+    }
+    
+    resolve(@([UAMessageCenter shared].messageList.unreadCount));
+}
+
 RCT_REMAP_METHOD(getActiveNotifications,
                  getNotifications_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
