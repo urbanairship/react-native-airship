@@ -218,9 +218,11 @@ public class ReactAirshipPreferences {
     }
 
     private void ensurePreferences() {
-        if (!created.getAndSet(true)) {
+        if (preferences == null) {
             this.preferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        }
 
+        if (!created.getAndSet(true)) {
             // Migrate any data stored in default
             SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (defaultPreferences.contains(AUTO_LAUNCH_MESSAGE_CENTER)) {
