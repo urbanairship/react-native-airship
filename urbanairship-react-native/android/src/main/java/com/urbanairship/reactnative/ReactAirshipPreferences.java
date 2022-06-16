@@ -218,17 +218,19 @@ public class ReactAirshipPreferences {
     }
 
     private void ensurePreferences() {
-        if (preferences == null) {
-            this.preferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
-        }
+        synchronized (this) {
+            if (preferences == null) {
+                this.preferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+            }
 
-        if (!created.getAndSet(true)) {
-            // Migrate any data stored in default
-            SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            if (defaultPreferences.contains(AUTO_LAUNCH_MESSAGE_CENTER)) {
-                boolean autoLaunchMessageCenter = defaultPreferences.getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true);
-                defaultPreferences.edit().remove(AUTO_LAUNCH_MESSAGE_CENTER).apply();
-                this.preferences.edit().putBoolean(AUTO_LAUNCH_MESSAGE_CENTER, autoLaunchMessageCenter).apply();
+            if (!created.getAndSet(true)) {
+                // Migrate any data stored in default
+                SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                if (defaultPreferences.contains(AUTO_LAUNCH_MESSAGE_CENTER)) {
+                    boolean autoLaunchMessageCenter = defaultPreferences.getBoolean(AUTO_LAUNCH_MESSAGE_CENTER, true);
+                    defaultPreferences.edit().remove(AUTO_LAUNCH_MESSAGE_CENTER).apply();
+                    this.preferences.edit().putBoolean(AUTO_LAUNCH_MESSAGE_CENTER, autoLaunchMessageCenter).apply();
+                }
             }
         }
     }
