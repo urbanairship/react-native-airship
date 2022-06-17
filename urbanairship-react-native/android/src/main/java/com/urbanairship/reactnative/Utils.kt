@@ -24,20 +24,18 @@ import com.urbanairship.util.UAStringUtil
  */
 object Utils {
 
-    private val featureMap: MutableMap<String, Int> = HashMap()
-
-    init {
-        featureMap["FEATURE_NONE"] = PrivacyManager.FEATURE_NONE
-        featureMap["FEATURE_IN_APP_AUTOMATION"] = PrivacyManager.FEATURE_IN_APP_AUTOMATION
-        featureMap["FEATURE_MESSAGE_CENTER"] = PrivacyManager.FEATURE_MESSAGE_CENTER
-        featureMap["FEATURE_PUSH"] = PrivacyManager.FEATURE_PUSH
-        featureMap["FEATURE_CHAT"] = PrivacyManager.FEATURE_CHAT
-        featureMap["FEATURE_ANALYTICS"] = PrivacyManager.FEATURE_ANALYTICS
-        featureMap["FEATURE_TAGS_AND_ATTRIBUTES"] = PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES
-        featureMap["FEATURE_CONTACTS"] = PrivacyManager.FEATURE_CONTACTS
-        featureMap["FEATURE_LOCATION"] = PrivacyManager.FEATURE_LOCATION
-        featureMap["FEATURE_ALL"] = PrivacyManager.FEATURE_ALL
-    }
+    private val featureMap: Map<String, Int> = mapOf(
+        "FEATURE_NONE" to PrivacyManager.FEATURE_NONE,
+        "FEATURE_IN_APP_AUTOMATION" to PrivacyManager.FEATURE_IN_APP_AUTOMATION,
+        "FEATURE_MESSAGE_CENTER" to PrivacyManager.FEATURE_MESSAGE_CENTER,
+        "FEATURE_PUSH" to PrivacyManager.FEATURE_PUSH,
+        "FEATURE_CHAT" to PrivacyManager.FEATURE_CHAT,
+        "FEATURE_ANALYTICS" to PrivacyManager.FEATURE_ANALYTICS,
+        "FEATURE_TAGS_AND_ATTRIBUTES" to PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES,
+        "FEATURE_CONTACTS" to PrivacyManager.FEATURE_CONTACTS,
+        "FEATURE_LOCATION" to PrivacyManager.FEATURE_LOCATION,
+        "FEATURE_ALL" to PrivacyManager.FEATURE_ALL
+    )
 
     /**
      * Converts a dynamic object into a [JsonValue].

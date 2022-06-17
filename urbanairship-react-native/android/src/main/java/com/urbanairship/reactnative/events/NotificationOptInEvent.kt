@@ -13,18 +13,13 @@ import com.urbanairship.reactnative.Event
  */
 class NotificationOptInEvent(private val optInStatus: Boolean) : Event {
 
-    override val name: String
-        get() = NOTIFICATION_OPT_IN_STATUS_EVENT
+    override val name = NOTIFICATION_OPT_IN_STATUS_EVENT
 
-    override val body: ReadableMap
-        get() {
-            val map = Arguments.createMap()
-            map.putBoolean(OPT_IN, optInStatus)
-            return map
-        }
+    override val body: ReadableMap = Arguments.createMap().apply {
+        putBoolean(OPT_IN, optInStatus)
+    }
 
-    override val isForeground: Boolean
-        get() = true
+    override val isForeground = true
 
     companion object {
         private const val NOTIFICATION_OPT_IN_STATUS_EVENT = "com.urbanairship.notification_opt_in_status"

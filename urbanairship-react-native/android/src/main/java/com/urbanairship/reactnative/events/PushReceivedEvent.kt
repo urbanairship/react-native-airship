@@ -49,8 +49,7 @@ class PushReceivedEvent : Event {
         this.notificationTag = notificationTag
     }
 
-    override val name: String
-        get() = PUSH_RECEIVED_EVENT
+    override val name = PUSH_RECEIVED_EVENT
 
     override val body: ReadableMap
         get() {
@@ -70,8 +69,7 @@ class PushReceivedEvent : Event {
             return map
         }
 
-    override val isForeground: Boolean
-        get() = false
+    override val isForeground = false
 
     companion object {
         private const val PUSH_RECEIVED_EVENT = "com.urbanairship.push_received"

@@ -19,24 +19,19 @@ class NotificationResponseEvent(
     private val actionButtonInfo: NotificationActionButtonInfo? = null
 ) : Event {
 
-    override val name: String
-        get() = NOTIFICATION_RESPONSE_EVENT
+    override val name = NOTIFICATION_RESPONSE_EVENT
 
-    override val body: ReadableMap
-        get() {
-            val map = Arguments.createMap()
-            map.putMap(RESPONSE_NOTIFICATION, PushReceivedEvent(notificationInfo).body)
-            if (actionButtonInfo != null) {
-                map.putString(RESPONSE_ACTION_ID, actionButtonInfo.buttonId)
-                map.putBoolean(RESPONSE_FOREGROUND, actionButtonInfo.isForeground)
-            } else {
-                map.putBoolean(RESPONSE_FOREGROUND, true)
-            }
-            return map
+    override val body: ReadableMap = Arguments.createMap().apply {
+        putMap(RESPONSE_NOTIFICATION, PushReceivedEvent(notificationInfo).body)
+        if (actionButtonInfo != null) {
+            putString(RESPONSE_ACTION_ID, actionButtonInfo.buttonId)
+            putBoolean(RESPONSE_FOREGROUND, actionButtonInfo.isForeground)
+        } else {
+            putBoolean(RESPONSE_FOREGROUND, true)
         }
+    }
 
-    override val isForeground: Boolean
-        get() = actionButtonInfo?.isForeground ?: true
+    override val isForeground = actionButtonInfo?.isForeground ?: true
 
     companion object {
         private const val NOTIFICATION_RESPONSE_EVENT = "com.urbanairship.notification_response"

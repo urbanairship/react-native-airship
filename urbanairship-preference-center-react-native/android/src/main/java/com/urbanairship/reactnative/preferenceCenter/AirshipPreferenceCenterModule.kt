@@ -2,25 +2,20 @@
 
 package com.urbanairship.reactnative.preferenceCenter
 
-import android.annotation.SuppressLint
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
-import com.urbanairship.PendingResult
 import com.urbanairship.UAirship
 import com.urbanairship.json.JsonValue
 import com.urbanairship.preferencecenter.PreferenceCenter
 import com.urbanairship.preferencecenter.PreferenceCenter.OnOpenListener
-import com.urbanairship.reactive.Observable
-import com.urbanairship.reactive.Subscriber
 import com.urbanairship.reactnative.Event
 import com.urbanairship.reactnative.EventEmitter
 import com.urbanairship.reactnative.ReactAirshipPreferences
 import com.urbanairship.reactnative.Utils
 import com.urbanairship.reactnative.preferenceCenter.events.OpenPreferenceCenterEvent
-import com.urbanairship.remotedata.RemoteDataPayload
 
 @ReactModule(name = AirshipPreferenceCenterModule.NAME)
 class AirshipPreferenceCenterModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {

@@ -13,17 +13,13 @@ import com.urbanairship.reactnative.Event
  */
 class ShowInboxEvent(private val messageId: String?) : Event {
 
-    override val name: String
-        get() = SHOW_INBOX_EVENT
+    override val name = SHOW_INBOX_EVENT
 
-    override val body: ReadableMap
-        get() {
-            val map = Arguments.createMap()
-            map.putString(MESSAGE_ID, messageId)
-            return map
-        }
-    override val isForeground: Boolean
-        get() = true
+    override val body: ReadableMap = Arguments.createMap().apply {
+        putString(MESSAGE_ID, messageId)
+    }
+
+    override val isForeground = true
 
     companion object {
         private const val SHOW_INBOX_EVENT = "com.urbanairship.show_inbox"

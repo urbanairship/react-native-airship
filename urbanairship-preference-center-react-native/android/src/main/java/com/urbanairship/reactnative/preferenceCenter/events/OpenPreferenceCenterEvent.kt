@@ -8,24 +8,17 @@ import com.urbanairship.reactnative.Event
 
 class OpenPreferenceCenterEvent(private val preferenceCenterId: String?) : Event {
 
-    override val name: String
-        get() = OPEN_PREFERENCE_CENTER_EVENT
+    override val name = OPEN_PREFERENCE_CENTER_EVENT
 
-    override val body: ReadableMap
-        get() {
-            val map = Arguments.createMap()
-            preferenceCenterId?.let {
-                map.putString("preferenceCenterId", preferenceCenterId)
-            }
-            return map
+    override val body: ReadableMap = Arguments.createMap().apply {
+        preferenceCenterId?.let {
+            putString("preferenceCenterId", it)
         }
+    }
 
-    override val isForeground: Boolean
-        get() = false
+    override val isForeground = false
 
     companion object {
-
         private const val OPEN_PREFERENCE_CENTER_EVENT = "com.urbanairship.open_preference_center"
-
     }
 }

@@ -8,20 +8,15 @@ import com.urbanairship.reactnative.Event
 
 class OpenChatEvent(private val message: String?) : Event {
 
-    override val name: String
-        get() = OPEN_CHAT_EVENT
+    override val name = OPEN_CHAT_EVENT
 
-    override val body: ReadableMap
-        get() {
-            val map = Arguments.createMap()
-            message?.let {
-                map.putString("message", message)
-            }
-            return map
+    override val body: ReadableMap = Arguments.createMap().apply {
+        message?.let {
+            putString("message", it)
         }
+    }
 
-    override val isForeground: Boolean
-        get() = false
+    override val isForeground = false
 
     companion object {
         private const val OPEN_CHAT_EVENT = "com.urbanairship.open_chat"

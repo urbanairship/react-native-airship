@@ -14,21 +14,16 @@ import com.urbanairship.reactnative.Event
  */
 class RegistrationEvent(private val channelId: String, private val registrationToken: String?) : Event {
 
-    override val name: String
-        get() = CHANNEL_REGISTRATION_EVENT
+    override val name = CHANNEL_REGISTRATION_EVENT
 
-    override val body: ReadableMap
-        get() {
-            val map = Arguments.createMap()
-            map.putString(CHANNEL_ID, channelId)
-            registrationToken?.let {
-                map.putString(REGISTRATION_TOKEN, it)
-            }
-            return map
+    override val body: ReadableMap = Arguments.createMap().apply {
+        putString(CHANNEL_ID, channelId)
+        registrationToken?.let {
+            putString(REGISTRATION_TOKEN, it)
         }
+    }
 
-    override val isForeground: Boolean
-        get() = true
+    override val isForeground = true
 
     companion object {
         private const val CHANNEL_REGISTRATION_EVENT = "com.urbanairship.registration"

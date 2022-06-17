@@ -14,19 +14,14 @@ import com.urbanairship.reactnative.Event
  */
 class InboxUpdatedEvent(private val unreadCount: Int, private val count: Int) : Event {
 
-    override  val name: String
-        get() = INBOX_UPDATED_EVENT
+    override  val name = INBOX_UPDATED_EVENT
 
-    override val body: ReadableMap
-        get() {
-            val map = Arguments.createMap()
-            map.putInt(MESSAGE_UNREAD_COUNT, unreadCount)
-            map.putInt(MESSAGE_COUNT, count)
-            return map
-        }
+    override val body: ReadableMap = Arguments.createMap().apply {
+        putInt(MESSAGE_UNREAD_COUNT, unreadCount)
+        putInt(MESSAGE_COUNT, count)
+    }
 
-    override val isForeground: Boolean
-        get() = true
+    override val isForeground = true
 
     companion object {
         private const val INBOX_UPDATED_EVENT = "com.urbanairship.inbox_updated"
