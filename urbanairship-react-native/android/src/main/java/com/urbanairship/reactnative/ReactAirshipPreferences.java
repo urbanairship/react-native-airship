@@ -40,7 +40,7 @@ public class ReactAirshipPreferences {
     private static final String AUTO_LAUNCH_MESSAGE_CENTER = "com.urbanairship.auto_launch_message_center";
     private static final String AIRSHIP_CONFIG = "airship_config";
 
-    private AtomicBoolean created = new AtomicBoolean(false);
+    private final Object lock = new Object();
     private Context context;
 
     public ReactAirshipPreferences(@NonNull Context context) {
@@ -218,12 +218,10 @@ public class ReactAirshipPreferences {
     }
 
     private void ensurePreferences() {
-        synchronized (this) {
+        synchronized (lock) {
             if (preferences == null) {
                 this.preferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
-            }
 
-            if (!created.getAndSet(true)) {
                 // Migrate any data stored in default
                 SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 if (defaultPreferences.contains(AUTO_LAUNCH_MESSAGE_CENTER)) {
