@@ -1022,6 +1022,19 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
     }
 
     /**
+     * Gets the count of Unread messages in the inbox.
+     *
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    fun getUnreadMessagesCount(promise: Promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return
+        }
+        promise.resolve(MessageCenter.shared().inbox.unreadCount)
+    }
+
+    /**
      * Sets the default behavior when the message center is launched from a push notification. If set to false the message center must be manually launched.
      *
      * @param enabled `true` to automatically launch the default message center, `false` to disable.

@@ -20,7 +20,7 @@ class ReactAirshipPreferences(private val context: Context) {
         context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE)
     }
 
-    private val created = AtomicBoolean(false)
+    private val lock = Object()
 
     /**
      * Custom notification icon resource name.
@@ -124,7 +124,7 @@ class ReactAirshipPreferences(private val context: Context) {
     }
 
     private fun ensurePreferences() {
-        if (!created.getAndSet(true)) {
+        synchronized (lock) {
             // Migrate any data stored in default
             val defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             if (defaultPreferences.contains(AUTO_LAUNCH_MESSAGE_CENTER)) {
