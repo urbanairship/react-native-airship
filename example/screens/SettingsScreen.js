@@ -42,8 +42,8 @@ export default class SettingsScreen extends Component {
       namedUserText: "",
     }
 
-
     UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
+    AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(true, "neat");
 
     this.handleNotificationsEnabled = this.handleNotificationsEnabled.bind(this);
 
@@ -139,8 +139,11 @@ export default class SettingsScreen extends Component {
   }
 
   openPreferenceCenter() {
+    // I call the setUseCustomPreferenceCenterUi here to use OOTB preference center.
+    // Then I set it again to true to can use the custom preference center
     AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(false, "neat");
     AirshipPreferenceCenter.openPreferenceCenter("neat");
+    AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(true, "neat");
   }
 
   componentDidMount() {
@@ -186,8 +189,7 @@ export default class SettingsScreen extends Component {
 
       AirshipPreferenceCenter.addPreferenceCenterOpenListener( (body) => {
         //Navigate to custom UI
-        console.log("Preference center opened : " + body["preferenceCenterId"]);
-        
+        this.props.navigation.navigate('PreferenceCenter');
       })
 
     ];
@@ -245,10 +247,10 @@ export default class SettingsScreen extends Component {
             title="Open chat"
           />
           <Button
-                      color='#0d6a83'
-                      onPress={() => this.openPreferenceCenter()}
-                      title="Preference Center"
-                    />
+            color='#0d6a83'
+            onPress={() => this.openPreferenceCenter()}
+            title="Preference Center"
+          />
         </ScrollView>
       </View>
 
