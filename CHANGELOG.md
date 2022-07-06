@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 14.4.0 - July 5, 2022
+Minor release that updates the Airship SDKs.
+
+### Changes
+- Updated iOS SDK to 16.8.0
+- Updated Android SDK to 16.6.1
+
 ## Version 14.3.1 - June 21, 2022
 Patch release that fixes a crash on preferences. Also exposes unread inbox messages count.
 

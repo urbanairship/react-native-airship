@@ -987,7 +987,7 @@ RCT_REMAP_METHOD(getActiveNotifications,
                     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[(NSNumber *)value doubleValue] / 1000.0];
                     [editor setDate:date attribute:name];
                 } else {
-                    UA_LWARN("Unknown channel attribute type: %@", valueType);
+                    UA_LWARN(@"Unknown channel attribute type: %@", valueType);
                 }
         } else if ([action isEqualToString:@"remove"]) {
             [editor removeAttribute:name];
