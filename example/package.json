@@ -3,7 +3,7 @@
   "name": "example",
   "version": "1.0.0",
   "dependencies": {
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "@react-native-community/masked-view": "git+https://github.com/react-native-masked-view/masked-view.git#611398ecf7b060e937fc073ffbc09cb990ec8ccf",
