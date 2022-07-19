@@ -1,5 +1,8 @@
 # React Native Module Changelog
 
+## Version 14.4.1 - July 19, 2022
+Patch release that fixes a crash on message center with poor connection.
+
 ## Version 14.4.0 - July 14, 2022
 Minor release that updates the Airship SDKs.
 
