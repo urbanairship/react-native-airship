@@ -118,7 +118,7 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
                         return;
                     }
 
-                    webView.loadMessage(message);
+                    displayMessage();
                 }
             });
         } else {
@@ -126,6 +126,12 @@ public class ReactMessageView extends FrameLayout implements LifecycleEventListe
                 notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false);
                 return;
             }
+            displayMessage();
+        }
+    }
+
+    private void displayMessage() {
+        if (webView != null) {
             webView.loadMessage(this.message);
         }
     }
