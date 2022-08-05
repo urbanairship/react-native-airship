@@ -2,7 +2,7 @@ import groovy.json.JsonSlurper
 
 buildscript {
     ext {
-        airshipVersion = "16.5.1"
+        airshipVersion = "16.6.1"
 
         kotlinVersion = '1.5.31'
         androidToolsVersion = '4.1.3'

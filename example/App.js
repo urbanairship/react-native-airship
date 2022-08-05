@@ -12,6 +12,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import MessageCenterScreen from "./screens/MessageCenterScreen";
+import PreferenceCenterScreen from "./screens/PreferenceCenterScreen";
 import MessageScreen from "./screens/MessageScreen";
 
 const MessageCenterStack = createStackNavigator({
@@ -19,6 +20,18 @@ const MessageCenterStack = createStackNavigator({
         screen: MessageCenterScreen,
         navigationOptions: {
             headerTitle: 'Messages Center',
+        }
+    },
+    MessageDetails: {
+        screen: MessageScreen
+    }
+});
+
+const PreferenceCenterStack = createStackNavigator({
+    MessageList: {
+        screen: PreferenceCenterScreen,
+        navigationOptions: {
+            headerTitle: 'Preference Center',
         }
     },
     MessageDetails: {
@@ -37,6 +50,12 @@ const TabNavigator = createBottomTabNavigator({
         screen: MessageCenterStack,
         navigationOptions: {
             tabBarLabel: "Message Center"
+        }
+    },
+    PreferenceCenter: {
+        screen: PreferenceCenterStack,
+        navigationOptions: {
+            tabBarLabel: "Preference Center"
         }
     },
     Settings: {

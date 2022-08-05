@@ -126,5 +126,60 @@ export default StyleSheet.create({
     color: 'white',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  pcContainer: {
+    padding: 10
+  },
+  sectionHeaderContainer: {
+    paddingTop: 20,
+    paddingBottom: 10
+  },
+  sectionTitle: {
+    fontSize: 20,
+    color: '#0000FF',
+  },
+  sectionSubtitle: {
+    fontSize: 15,
+    color: '#000000',
+  },
+  pcCellContainer: {
+    backgroundColor: '#ffffff',
+    padding: 5
+  },
+  cellTitle: {
+    fontSize: 20,
+    color: '#000000',
+  },
+  cellSubtitle: {
+    fontSize: 15,
+    color: '#808080',
+  },
+  alertContainer: {
+    borderWidth: 1,
+    borderRadius: 3,
+    flex: 0.25,
+    backgroundColor: '#3399ff',
+  },
+  scopeContainer: {
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    borderRadius: 20
+  },
+  subscribedScopeButton: {
+    alignItems: "center",
+    backgroundColor: "#FF0000",
+    borderRadius:15,
+    padding: 10
+  },
+  unsubscribedScopeButton: {
+    alignItems: "center",
+    backgroundColor: "#FD959A",
+    borderRadius:15,
+    padding: 10
+  },
+  scopeText: {
+    color:'white',
+    fontSize:12,
+    alignSelf: 'center'
   }
 });

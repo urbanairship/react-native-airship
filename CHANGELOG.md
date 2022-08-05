@@ -1,5 +1,18 @@
 # React Native Module Changelog
 
+## Version 14.4.1 - July 21, 2022
+Patch release that fixes a crash on message center with poor connection.
+
+## Version 14.4.0 - July 14, 2022
+Minor release that updates the Airship SDKs.
+
+### Changes
+- Updated iOS SDK to 16.8.0
+- Updated Android SDK to 16.6.1
+
+## Version 14.3.1 - June 21, 2022
+Patch release that fixes a crash on preferences. Also exposes unread inbox messages count.
+
 ## Version 14.3.0 - May 4, 2022
 Minor release that updates Airship Android SDK to 16.4.0, and iOS SDK to 16.6.0. These SDK releases fix several issues with Scenes and Surveys. Apps using Scenes & Surveys should update.
 
