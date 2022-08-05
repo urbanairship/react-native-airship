@@ -299,18 +299,18 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - urbanairship-accengage-react-native (14.4.0):
+  - urbanairship-accengage-react-native (14.4.1):
     - Airship/Accengage (= 16.8.0)
     - React-Core
-  - urbanairship-chat-react-native (14.4.0):
+  - urbanairship-chat-react-native (14.4.1):
     - Airship/Chat (= 16.8.0)
     - React-Core
     - urbanairship-react-native
-  - urbanairship-preference-center-react-native (14.4.0):
+  - urbanairship-preference-center-react-native (14.4.1):
     - Airship/PreferenceCenter (= 16.8.0)
     - React-Core
     - urbanairship-react-native
-  - urbanairship-react-native (14.4.0):
+  - urbanairship-react-native (14.4.1):
     - Airship (= 16.8.0)
     - React-Core
   - Yoga (1.14.0)
@@ -445,7 +445,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: 2323ee42e2adfca409ee74ca1d9c914ff6f2eb2d
+  FBReactNativeSpec: 72f307e3ea9e80cf68fb886064a447aa7a3996ff
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
@@ -475,10 +475,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  urbanairship-accengage-react-native: 51efed6cdb75136e4b0d6dfa29181d79d6a65650
-  urbanairship-chat-react-native: 6e056afb22b88fc9b0a2c1e8243a9b65187c3143
-  urbanairship-preference-center-react-native: bf718b1269db84fd46390ef3e0439a7546033330
-  urbanairship-react-native: 00dc885c125f3abd81b9ea537a78bdf5ba0a0202
+  urbanairship-accengage-react-native: eb4331c050dace83391933e4f9a787682e309b19
+  urbanairship-chat-react-native: 18107f0cc3173edb5304906a165cfd1e8de6c326
+  urbanairship-preference-center-react-native: 2e21b5adf60d871e8586e8df18852c09cbee6b05
+  urbanairship-react-native: 7e2e9a84c541b1d04798e51f7f390a2d5806eac0
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
 PODFILE CHECKSUM: 0ac33f74cca01098af99ab55a29cc63c7ef373f6
