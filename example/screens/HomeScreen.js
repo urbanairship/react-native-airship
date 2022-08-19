@@ -48,6 +48,17 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
+    //console.log(UrbanAirship.getAirshipVersion());
+    // UrbanAirship.getAirshipVersion(value => {
+    //   console.log("Version : " + value);
+    //   this.setState({ channelId: value})
+    // })
+    // const urbanAirshipDeeplinkListener = UrbanAirship.addListener(
+    //   EventType.DeepLink,
+    //   async event => {
+    //     console.log("deeplink received");
+    //   },
+    // );
     UrbanAirship.getChannelId().then((channelId) => {
       this.setState({ channelId: channelId })
     });

@@ -17,6 +17,7 @@ import { SubscriptionLists, SubscriptionListType } from "./SubscriptionLists";
  * @hidden
  */
 const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule
+//const UrbanAirshipModule = NativeModules.UrbanAirshipReactModuleSwift
 
 /**
  * @hidden

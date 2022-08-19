@@ -14,6 +14,7 @@ static BOOL disabled = NO;
 }
 
 + (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions onTakeOff:(void(^)(void))callback {
+    NSLog(@"takeOff maybe");
     if (disabled || UAirship.isFlying) {
         return;
     }
@@ -47,6 +48,7 @@ static BOOL disabled = NO;
 }
 
 + (UAConfig *)config {
+    NSLog(@"config loaded ma gueule");
     UAConfig *config = [UAConfig defaultConfig];
 
     NSDictionary *storedConfig = UARCTStorage.airshipConfig;
