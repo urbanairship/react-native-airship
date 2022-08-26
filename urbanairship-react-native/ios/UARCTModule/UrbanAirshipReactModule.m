@@ -105,6 +105,8 @@ RCT_EXTERN_METHOD(dismissMessage:(RCTPromiseResolveBlock *)resolve rejecter:(RCT
 
 RCT_EXTERN_METHOD(getInboxMessages:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)
 
+RCT_EXTERN_METHOD(getUnreadMessageCount:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)
+
 RCT_EXTERN_METHOD(deleteInboxMessage:(NSString *)messageId resolver:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)
 
 RCT_EXTERN_METHOD(markInboxMessageRead:(NSString *)messageId resolver:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)

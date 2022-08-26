@@ -791,6 +791,16 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
+    func getUnreadMessageCount(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+        guard ensureAirshipReady()
+        else {
+            return
+        }
+        
+        resolve(MessageCenter.shared.messageList.unreadCount)
+    }
+    
+    @objc
     func deleteInboxMessage(_ messageId:String, resolver resolve:@escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
         guard ensureAirshipReady()
         else {

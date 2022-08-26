@@ -835,7 +835,7 @@ export class UrbanAirship {
    * Gets the count of Unread messages in the inbox.
    */
   static getUnreadMessageCount(): Promise<number> {
-    return UrbanAirshipModule.getUnreadMessagesCount();
+    return UrbanAirshipModule.getUnreadMessageCount();
   }
 
   /**
