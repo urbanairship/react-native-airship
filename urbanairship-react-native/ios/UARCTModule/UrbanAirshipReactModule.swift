@@ -438,7 +438,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func associateIdentifier(key:String, identifier:String) {
+    func associateIdentifier(_ key:String, identifier:String) {
         guard ensureAirshipReady()
         else {
             return

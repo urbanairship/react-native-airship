@@ -65,7 +65,7 @@ RCT_EXTERN_METHOD(getChannelId:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPr
 
 RCT_EXTERN_METHOD(getRegistrationToken:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)
 
-RCT_EXTERN_METHOD(associateIdentifier:(NSString *)key (NSString *)identifier)
+RCT_EXTERN_METHOD(associateIdentifier:(NSString *)key identifier:(NSString *))
 
 RCT_EXTERN_METHOD(runAction:(NSString *)name actionValue:(id *)value resolver:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)
 
