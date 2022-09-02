@@ -5,15 +5,27 @@
 #import "UARCTStorage.h"
 #import "UARCTUtils.h"
 
+#import "UARCTAirshipListener.h"
+
 @implementation UARCTAutopilot
 
 static BOOL disabled = NO;
+
++ (void)load {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserverForName:UIApplicationDidFinishLaunchingNotification
+                        object:nil
+                         queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+
+        [self takeOffWithLaunchOptions:note.userInfo];
+    }];
+}
 
 + (void)disable {
     disabled = YES;
 }
 
-+ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions onTakeOff:(void(^)(void))callback {
++ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions {
     if (disabled || UAirship.isFlying) {
         return;
     }
@@ -31,7 +43,17 @@ static BOOL disabled = NO;
         [[UAirship analytics] registerSDKExtension:UASDKExtensionReactNative version:[UARCTModuleVersion get]];
 
         [self loadCustomNotificationCategories];
-        callback();
+
+        UARCTAirshipListener *listener = [UARCTAirshipListener shared];
+
+        UAirship.shared.deepLinkDelegate = listener;
+        UAirship.push.registrationDelegate = listener;
+        UAirship.push.pushNotificationDelegate = listener;
+        UAMessageCenter.shared.displayDelegate = listener;
+
+        if (UARCTStorage.isForegroundPresentationOptionsSet) {
+            [UAirship push].defaultPresentationOptions = UARCTStorage.foregroundPresentationOptions;
+        }
     });
 }
 

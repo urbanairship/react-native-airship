@@ -20,7 +20,6 @@
  */
 + (void)disable;
 
-+ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions onTakeOff:(void(^)(void))callback;
-
++ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions;
 
 @end
