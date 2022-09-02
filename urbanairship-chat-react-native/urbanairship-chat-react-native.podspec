@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React-Core"
-  s.dependency "Airship/Chat", "16.8.0"
+  s.dependency "Airship/Chat", "16.9.2"
   s.dependency "urbanairship-react-native"
 end
 

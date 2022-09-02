@@ -59,18 +59,7 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)attemptTakeOff {
-    [UARCTAutopilot takeOffWithLaunchOptions:self.bridge.launchOptions onTakeOff:^{
-        self.airshipListener = [UARCTAirshipListener shared];
-
-        UAirship.shared.deepLinkDelegate = self.airshipListener;
-        UAirship.push.registrationDelegate = self.airshipListener;
-        UAirship.push.pushNotificationDelegate = self.airshipListener;
-        UAMessageCenter.shared.displayDelegate = self.airshipListener;
-
-        if (UARCTStorage.isForegroundPresentationOptionsSet) {
-            [UAirship push].defaultPresentationOptions = UARCTStorage.foregroundPresentationOptions;
-        }
-    }];
+    [UARCTAutopilot takeOffWithLaunchOptions:self.bridge.launchOptions];
 }
 
 #pragma mark -
