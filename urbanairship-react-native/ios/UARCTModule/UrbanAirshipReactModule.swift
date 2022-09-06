@@ -380,7 +380,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
         group.leave()
         
         group.notify(queue: DispatchQueue.main, execute: {
-            if (resultError == nil) {
+            if (resultError != nil) {
                 reject(resultError?.localizedDescription, resultError?.localizedDescription, resultError);
             } else {
                 resolve(result);
