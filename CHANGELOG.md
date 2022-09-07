@@ -4,6 +4,7 @@
 Patch release that fixes an IAA banner issue and potential crashes on Android due to Message Center database migrations.
 
 ### Changes
+- Fixed channel ID in channel registration event.
 - Updated Airship Android SDK to 16.7.2
 - Updated Airship iOS SDK to 16.9.3
 
