@@ -95,9 +95,6 @@ NSString *const UAChannelUpdatedEventChannelKey = @"com.urbanairship.channel.ide
     NSString *channelID = UAirship.channel.identifier;
     NSString *deviceToken = [UAirship push].deviceToken;
 
-    UA_LDEBUG(@"Channel ID: %@", UAirship.channel.identifier);
-    UA_LDEBUG(@"Old Channel ID: %@", notification.userInfo[UAChannelUpdatedEventChannelKey]);
-
     [registrationBody setValue:channelID forKey:@"channelId"];
     [registrationBody setValue:deviceToken forKey:@"registrationToken"];
     [self.eventEmitter sendEventWithName:UARCTRegistrationEventName body:registrationBody];
