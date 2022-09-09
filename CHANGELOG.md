@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 14.4.3 - September 6, 2022
+## Version 14.4.3 - September 9, 2022
 Patch release that fixes an IAA banner issue and potential crashes on Android due to Message Center database migrations.
 
 ### Changes
