@@ -1,5 +1,15 @@
 # React Native Module Changelog
 
+## Version 14.4.2 - September 2, 2022
+Patch release that fixes iOS notification actions on a cold launch. Applications running 14.1.0 or newer should update. 
+
+### Changes
+- Add launch method to set up Airship before `application:didFinishLaunching:` finishes
+- Fixed type on authorizedStatus to be a string instead of an array
+- Updated Airship Android SDK to 16.7.1
+- Updated Airship iOS SDK to 16.9.2
+
+
 ## Version 14.4.1 - July 21, 2022
 Patch release that fixes a crash on message center with poor connection.
 

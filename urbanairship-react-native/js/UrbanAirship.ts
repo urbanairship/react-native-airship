@@ -472,7 +472,7 @@ export interface NotificationStatus {
     /**
      * Authorized status.
      */
-    authorizedStatus: [iOS.AuthorizedNotificationStatus]
+    authorizedStatus: iOS.AuthorizedNotificationStatus
   }
 }
 
