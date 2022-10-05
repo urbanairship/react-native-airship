@@ -15,10 +15,12 @@ jobs:
       - name: Run CI
         run: bash ./scripts/run_ci_tasks.sh -a
   ios:
-    runs-on: macos-latest
+    runs-on: macOS-12
     env:
-      DEVELOPER_DIR: /Applications/Xcode_13.0.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_13.4.1.app/Contents/Developer
     steps:
       - uses: actions/checkout@v1
+      - name: Switch Xcode version
+        run: sudo xcode-select -s "/Applications/Xcode_13.4.1.app"
       - name: Run CI
         run: bash ./scripts/run_ci_tasks.sh -i
