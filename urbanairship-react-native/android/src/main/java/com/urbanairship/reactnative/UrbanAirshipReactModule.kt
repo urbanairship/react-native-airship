@@ -28,6 +28,7 @@ import com.urbanairship.UAirship
 import com.urbanairship.actions.ActionCompletionCallback
 import com.urbanairship.actions.ActionResult
 import com.urbanairship.actions.ActionRunRequest
+import com.urbanairship.automation.InAppAutomation
 import com.urbanairship.channel.AirshipChannelListener
 import com.urbanairship.channel.AttributeEditor
 import com.urbanairship.channel.TagGroupsEditor
@@ -40,6 +41,7 @@ import com.urbanairship.util.UAStringUtil
 import java.util.*
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * React module for Urban Airship.
@@ -867,6 +869,11 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             it.startActivity(intent)
         }
+    }
+
+    @ReactMethod
+    fun setInAppAutomationDisplayInterval(seconds: Double) {
+        InAppAutomation.shared().inAppMessageManager.setDisplayInterval(seconds.toLong(), TimeUnit.SECONDS)
     }
 
     /**

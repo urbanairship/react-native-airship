@@ -1353,6 +1353,15 @@ export class UrbanAirship {
   }
 
   /**
+   * Sets the in-app message display interval on the default display coordinator.
+   *
+   * @param seconds The minimum number of seconds between message displays.
+   */
+  static setInAppAutomationDisplayInterval(seconds: number) {
+      UrbanAirshipModule.setInAppAutomationDisplayInterval(seconds)
+  }
+
+  /**
    * Getting the locale currently used by Airship.
    *
    */
