@@ -44,6 +44,7 @@ import com.urbanairship.actions.ActionCompletionCallback;
 import com.urbanairship.actions.ActionResult;
 import com.urbanairship.actions.ActionRunRequest;
 import com.urbanairship.analytics.AssociatedIdentifiers;
+import com.urbanairship.automation.InAppAutomation;
 import com.urbanairship.channel.AirshipChannelListener;
 import com.urbanairship.channel.AttributeEditor;
 import com.urbanairship.channel.SubscriptionListEditor;
@@ -71,6 +72,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * React module for Urban Airship.
@@ -1224,6 +1226,14 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearLocale() {
         UAirship.shared().setLocaleOverride(null);
+    }
+
+    /**
+     * Sets the minimum number of seconds between IAA displays.
+     */
+    @ReactMethod
+    public void setInAppAutomationDisplayInterval(double seconds) {
+        InAppAutomation.shared().getInAppMessageManager().setDisplayInterval((long) seconds, TimeUnit.SECONDS);
     }
 
     /**

@@ -918,6 +918,10 @@ RCT_EXPORT_METHOD(clearNotification:(NSString *)identifier) {
     }
 }
 
+RCT_EXPORT_METHOD(setInAppAutomationDisplayInterval:(NSInteger)seconds) {
+    UAInAppAutomation.shared.inAppMessageManager.displayInterval = seconds;
+}
+
 RCT_REMAP_METHOD(getUnreadMessagesCount,
                  getUnreadMessagesCount_resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
