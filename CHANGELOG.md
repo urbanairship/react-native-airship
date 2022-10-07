@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 14.4.4 - October 6, 2022
+Patch release that adds support for setting the IAA message display interval.
+
+###
+- Add `UrbanAirship.setInAppAutomationDisplayInterval()` method
+- Updated Airship Android SDK to 16.7.5
+- Updated Airship iOS SDK to 16.9.4
+
 ## Version 14.4.3 - September 9, 2022
 Patch release that fixes an IAA banner issue and potential crashes on Android due to Message Center database migrations.
 
