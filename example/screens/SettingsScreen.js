@@ -23,11 +23,13 @@ import {
 } from 'react-native';
 
 import { UrbanAirship } from 'urbanairship-react-native'
+import { Feature } from 'urbanairship-react-native'
 import { AirshipChat } from 'urbanairship-chat-react-native'
 import { AirshipPreferenceCenter } from 'urbanairship-preference-center-react-native'
 
 import styles from './../Styles';
 import { Subscription } from 'urbanairship-react-native';
+import { act } from 'react-test-renderer';
 
 const notificationsEnabledKey = "com.urbanairship.notificationsEnabled"
 

@@ -69,6 +69,7 @@ static BOOL disabled = NO;
 }
 
 + (UAConfig *)config {
+    NSLog(@"config loaded ma gueule");
     UAConfig *config = [UAConfig defaultConfig];
 
     NSDictionary *storedConfig = UARCTStorage.airshipConfig;

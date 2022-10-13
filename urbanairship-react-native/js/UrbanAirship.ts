@@ -17,6 +17,7 @@ import { SubscriptionLists, SubscriptionListType } from "./SubscriptionLists";
  * @hidden
  */
 const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule
+//const UrbanAirshipModule = NativeModules.UrbanAirshipReactModuleSwift
 
 /**
  * @hidden
@@ -834,7 +835,7 @@ export class UrbanAirship {
    * Gets the count of Unread messages in the inbox.
    */
   static getUnreadMessageCount(): Promise<number> {
-    return UrbanAirshipModule.getUnreadMessagesCount();
+    return UrbanAirshipModule.getUnreadMessageCount();
   }
 
   /**

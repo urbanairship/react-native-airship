@@ -11,7 +11,7 @@ require "json"
   s.license      = package['license']
   s.platform     = :ios, "11.0"
   s.source       = { :git => "https://github.com/urbanairship/react-native-module.git", :tag => "{s.version}" }
-  s.source_files  = "ios/**/*.{h,m}"
+  s.source_files  = "ios/**/*"
   s.dependency "React-Core"
   s.dependency "Airship", "16.9.2"
 end
