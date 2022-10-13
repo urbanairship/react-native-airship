@@ -51,6 +51,7 @@ static BOOL disabled = NO;
         UAirship.push.pushNotificationDelegate = listener;
         UAMessageCenter.shared.displayDelegate = listener;
 
+        
         if (UARCTStorage.isForegroundPresentationOptionsSet) {
             [UAirship push].defaultPresentationOptions = UARCTStorage.foregroundPresentationOptions;
         }

@@ -2,9 +2,7 @@
 
 BASE_MODULE=urbanairship-react-native
 SUBMODULES=(
-  urbanairship-accengage-react-native
   urbanairship-hms-react-native
-  urbanairship-chat-react-native
   urbanairship-preference-center-react-native
 )
 

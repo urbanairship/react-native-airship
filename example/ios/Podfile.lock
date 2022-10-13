@@ -10,8 +10,6 @@ PODS:
   - Airship/Automation (16.9.4):
     - Airship/Core
   - Airship/Basement (16.9.4)
-  - Airship/Chat (16.9.4):
-    - Airship/Core
   - Airship/Core (16.9.4):
     - Airship/Basement
   - Airship/ExtendedActions (16.9.4):
@@ -302,10 +300,6 @@ PODS:
   - urbanairship-accengage-react-native (14.4.4):
     - Airship/Accengage (= 16.9.4)
     - React-Core
-  - urbanairship-chat-react-native (14.4.4):
-    - Airship/Chat (= 16.9.4)
-    - React-Core
-    - urbanairship-react-native
   - urbanairship-preference-center-react-native (14.4.4):
     - Airship/PreferenceCenter (= 16.9.4)
     - React-Core
@@ -351,8 +345,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../node_modules/react-native-screens`)
-  - urbanairship-accengage-react-native (from `../../urbanairship-accengage-react-native`)
-  - urbanairship-chat-react-native (from `../../urbanairship-chat-react-native`)
+  - urbanairship-accengage-react-native (from `../../node_modules/urbanairship-accengage-react-native`)
   - urbanairship-preference-center-react-native (from `../../urbanairship-preference-center-react-native`)
   - urbanairship-react-native (from `../../urbanairship-react-native`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
@@ -429,9 +422,7 @@ EXTERNAL SOURCES:
   RNScreens:
     :path: "../../node_modules/react-native-screens"
   urbanairship-accengage-react-native:
-    :path: "../../urbanairship-accengage-react-native"
-  urbanairship-chat-react-native:
-    :path: "../../urbanairship-chat-react-native"
+    :path: "../../node_modules/urbanairship-accengage-react-native"
   urbanairship-preference-center-react-native:
     :path: "../../urbanairship-preference-center-react-native"
   urbanairship-react-native:
@@ -445,7 +436,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: ee6f9a72ef7a5f7dd05c2d2bdc791799c7eb2cf7
+  FBReactNativeSpec: 58cfc0f9b7f9454a6308e786859e74cdec2d7965
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
@@ -476,9 +467,8 @@ SPEC CHECKSUMS:
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   urbanairship-accengage-react-native: 561f44ad42279cf273ae0f1f13f7bd1993679b58
-  urbanairship-chat-react-native: 8d11537fa7bb757df95668522195c08c32ab77c4
-  urbanairship-preference-center-react-native: 855186cb410e0546aab46f67c8bb0bc8aca760df
-  urbanairship-react-native: 960954c0c8e3f436a6cae01610389b43c63ee0e7
+  urbanairship-preference-center-react-native: d2cf5988bd9fb8f2ab537cdcfbaacb7ceb2aff44
+  urbanairship-react-native: b456f390efe490cc0bfb8cfd250ac3bdaeadeba4
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
 PODFILE CHECKSUM: 0ac33f74cca01098af99ab55a29cc63c7ef373f6
