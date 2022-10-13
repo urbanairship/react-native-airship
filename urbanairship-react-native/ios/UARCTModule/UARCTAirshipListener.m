@@ -92,7 +92,7 @@ NSString *const UAChannelUpdatedEventChannelKey = @"com.urbanairship.channel.ide
 - (void)channelRegistrationSucceeded:(NSNotification *)notification {
     NSMutableDictionary *registrationBody = [NSMutableDictionary dictionary];
 
-    NSString *channelID = notification.userInfo[UAChannelUpdatedEventChannelKey];
+    NSString *channelID = UAirship.channel.identifier;
     NSString *deviceToken = [UAirship push].deviceToken;
 
     [registrationBody setValue:channelID forKey:@"channelId"];

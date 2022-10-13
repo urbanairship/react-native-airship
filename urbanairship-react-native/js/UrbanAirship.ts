@@ -1399,4 +1399,13 @@ export class UrbanAirship {
   static clearNotification(identifier: string) {
     UrbanAirshipModule.clearNotification(identifier)
   }
+
+  /**
+   * Sets the in-app message display interval on the default display coordinator.
+   *
+   * @param seconds The minimum number of seconds between message displays.
+   */
+  static setInAppAutomationDisplayInterval(seconds: number) {
+    UrbanAirshipModule.setInAppAutomationDisplayInterval(seconds)
+  }
 }
