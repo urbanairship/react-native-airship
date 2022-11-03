@@ -39,6 +39,7 @@ import com.urbanairship.reactnative.events.NotificationResponseEvent;
 import com.urbanairship.reactnative.events.PushReceivedEvent;
 import com.urbanairship.reactnative.events.RegistrationEvent;
 import com.urbanairship.reactnative.events.ShowInboxEvent;
+import com.urbanairship.util.UAStringUtil;
 
 import okhttp3.internal.Util;
 
@@ -236,7 +237,9 @@ public class ReactAutopilot extends Autopilot {
     private AirshipConfigOptions loadConfig(@NonNull Context context) {
         Logger.setLogLevel(Log.ASSERT);
         AirshipConfigOptions.Builder builder = AirshipConfigOptions.newBuilder()
-                .applyDefaultProperties(context);
+                .applyDefaultProperties(context)
+                .setRequireInitialRemoteConfigEnabled(true);
+
         Logger.setLogLevel(Log.ERROR);
 
         JsonMap config = ReactAirshipPreferences.shared(context).getAirshipConfig();
@@ -295,8 +298,9 @@ public class ReactAutopilot extends Autopilot {
             builder.setChannelCreationDelayEnabled(config.opt("isChannelCreationDelayEnabled").getBoolean(false));
         }
 
-        if (config.containsKey("requireInitialRemoteConfigEnabled")) {
-            builder.setRequireInitialRemoteConfigEnabled(config.opt("requireInitialRemoteConfigEnabled").getBoolean(false));
+        String initialConfigUrl = config.opt("initialConfigUrl").getString();
+        if (!UAStringUtil.isEmpty(initialConfigUrl)) {
+            builder.setInitialConfigUrl(initialConfigUrl);
         }
 
         String[] urlAllowList = parseArray(config.opt("urlAllowList"));

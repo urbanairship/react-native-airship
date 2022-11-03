@@ -250,8 +250,15 @@ export interface AirshipConfig {
   isChannelCreationDelayEnabled?: boolean,
 
   /**
+   * Initial config URL for custom Airship domains. The URL
+   * should also be added to the urlAllowList.
+   */
+  initialConfigUrl?: String,
+
+  /**
    * Enables/disables requiring initial remote config fetch before
    * creating a channel.
+   * @deprecated This config is enabled by default.
    */
   requireInitialRemoteConfigEnabled?: boolean,
 

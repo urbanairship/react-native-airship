@@ -3,7 +3,6 @@ const path = require('path');
 const extraNodeModules = new Proxy(
   {
     'urbanairship-react-native': path.resolve(__dirname, '../urbanairship-react-native'),
-    'urbanairship-chat-react-native': path.resolve(__dirname, '../urbanairship-chat-react-native'),
     'urbanairship-preference-center-react-native': path.resolve(__dirname, '../urbanairship-preference-center-react-native'),
   },
   {
@@ -18,7 +17,6 @@ const extraNodeModules = new Proxy(
 
 const watchFolders = [
   path.resolve(__dirname, '../urbanairship-react-native'),
-  path.resolve(__dirname, '../urbanairship-chat-react-native'),
   path.resolve(__dirname, '../urbanairship-preference-center-react-native'),
   path.resolve(__dirname, '../node_modules'),
 ];

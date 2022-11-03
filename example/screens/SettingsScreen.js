@@ -23,7 +23,6 @@ import {
 } from 'react-native';
 
 import { UrbanAirship } from 'urbanairship-react-native'
-import { AirshipChat } from 'urbanairship-chat-react-native'
 import { AirshipPreferenceCenter } from 'urbanairship-preference-center-react-native'
 
 import styles from './../Styles';
@@ -55,9 +54,6 @@ export default class SettingsScreen extends Component {
     this.handleUpdateNamedUserText = this.handleUpdateNamedUserText.bind(this);
     this.handleRenderNamedUser = this.handleRenderNamedUser.bind(this);
     this.handleMessageCenterDisplay = this.handleMessageCenterDisplay.bind(this);
-
-    this.handleMessageSet = this.handleMessageSet.bind(this);
-    this.handleUpdateMessage = this.handleUpdateMessage.bind(this);
 
     this.handleUpdateTagsList();
     this.handleUpdateNamedUser();
@@ -98,10 +94,6 @@ export default class SettingsScreen extends Component {
     this.setState({ namedUserText: text })
   }
 
-  handleMessageSet(text) {
-    AirshipChat.sendMessage(text);
-    this.setState({ messageText: "" })
-  }
 
   handleUpdateMessage(text) {
     this.setState({ messageText: text })
@@ -134,9 +126,6 @@ export default class SettingsScreen extends Component {
     UrbanAirship.displayMessageCenter();
   }
 
-  openChat() {
-    AirshipChat.openChat();
-  }
 
   openPreferenceCenter() {
     // I call the setUseCustomPreferenceCenterUi here to use OOTB preference center.
@@ -179,13 +168,6 @@ export default class SettingsScreen extends Component {
         console.log('notificationOptInStatus:', JSON.stringify(event));
       }),
 
-      AirshipChat.addConversationListener( (body) => {
-        console.log("Conversation updated, messages count : " + body);
-      }),
-
-      AirshipChat.addChatOpenListener( (body) => {
-        console.log("Chat opened : " + body);
-      }),
 
       AirshipPreferenceCenter.addPreferenceCenterOpenListener( (body) => {
         //Navigate to custom UI
@@ -231,20 +213,10 @@ export default class SettingsScreen extends Component {
             handleTagRemove={this.handleTagRemove}
             handleUpdateTagText={this.handleUpdateTagText}
           />
-          <MessageInputCell
-            messageText={this.state.messageText}
-            handleMessageSet={this.handleMessageSet}
-            handleUpdateMessage={this.handleUpdateMessage}
-          />
           <Button
             color='#0d6a83'
             onPress={() => this.handleMessageCenterDisplay()}
             title="Message Center"
-          />
-          <Button
-            color='#0d6a83'
-            onPress={() => this.openChat()}
-            title="Open chat"
           />
           <Button
             color='#0d6a83'
@@ -374,30 +346,6 @@ class TagInputCell extends Component {
             color='#0d6a83'
             onPress={() => this.props.handleTagAdd(this.props.tagText || '')}
             title="Add Tag"
-          />
-        </View>
-      </View>
-    );
-  }
-}
-
-class MessageInputCell extends Component {
-  render() {
-    return (
-      <View style={styles.miniCellContainer}>
-        <TextInput
-          style={styles.textInput}
-          autoCorrect={false}
-          autoCapitalize={'none'}
-          onSubmitEditing={(event) => this.props.handleMessageSet(this.props.messageText)}
-          onChangeText={(text) => this.props.handleUpdateMessage(text)}
-          value={this.props.messageText}
-        />
-        <View>
-          <Button
-            color='#0d6a83'
-            onPress={() => this.props.handleMessageSet(this.props.messageText)}
-            title="Send Chat Message"
           />
         </View>
       </View>
