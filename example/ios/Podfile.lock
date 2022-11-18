@@ -1,22 +1,22 @@
 PODS:
-  - Airship (16.10.1):
-    - Airship/Automation (= 16.10.1)
-    - Airship/Basement (= 16.10.1)
-    - Airship/Core (= 16.10.1)
-    - Airship/ExtendedActions (= 16.10.1)
-    - Airship/MessageCenter (= 16.10.1)
-  - Airship/Accengage (16.10.1):
+  - Airship (16.10.3):
+    - Airship/Automation (= 16.10.3)
+    - Airship/Basement (= 16.10.3)
+    - Airship/Core (= 16.10.3)
+    - Airship/ExtendedActions (= 16.10.3)
+    - Airship/MessageCenter (= 16.10.3)
+  - Airship/Accengage (16.10.3):
     - Airship/Core
-  - Airship/Automation (16.10.1):
+  - Airship/Automation (16.10.3):
     - Airship/Core
-  - Airship/Basement (16.10.1)
-  - Airship/Core (16.10.1):
+  - Airship/Basement (16.10.3)
+  - Airship/Core (16.10.3):
     - Airship/Basement
-  - Airship/ExtendedActions (16.10.1):
+  - Airship/ExtendedActions (16.10.3):
     - Airship/Core
-  - Airship/MessageCenter (16.10.1):
+  - Airship/MessageCenter (16.10.3):
     - Airship/Core
-  - Airship/PreferenceCenter (16.10.1):
+  - Airship/PreferenceCenter (16.10.3):
     - Airship/Core
   - AirshipServiceExtension (16.6.0)
   - boost-for-react-native (1.63.0)
@@ -297,15 +297,15 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - urbanairship-accengage-react-native (14.5.0):
-    - Airship/Accengage (= 16.10.1)
+  - urbanairship-accengage-react-native (14.5.1):
+    - Airship/Accengage (= 16.10.3)
     - React-Core
-  - urbanairship-preference-center-react-native (14.5.0):
-    - Airship/PreferenceCenter (= 16.10.1)
+  - urbanairship-preference-center-react-native (14.5.1):
+    - Airship/PreferenceCenter (= 16.10.3)
     - React-Core
     - urbanairship-react-native
-  - urbanairship-react-native (14.5.0):
-    - Airship (= 16.10.1)
+  - urbanairship-react-native (14.5.1):
+    - Airship (= 16.10.3)
     - React-Core
   - Yoga (1.14.0)
 
@@ -431,7 +431,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: d57c70d05bb719003224c83306413b3968da4adf
+  Airship: dfdb00e0447c3773f75c817e3c740716c79bdc50
   AirshipServiceExtension: 36efe25642746cc030844116d59fb366b26da76f
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
@@ -466,9 +466,9 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  urbanairship-accengage-react-native: 0b20687642b9eb62d7eb8a9b0ef1180b546b903c
-  urbanairship-preference-center-react-native: fba2dc7ae99a89a0b9bd9a093152311e9ad6a93d
-  urbanairship-react-native: ae89535d1e2ef050d1af4428fae32f9cd36436d2
+  urbanairship-accengage-react-native: e451e798cefd103f35bc8aa0a954fc88f26ea682
+  urbanairship-preference-center-react-native: 5feb8e0801bb466e3709f3fcf74f536a3f9ccd75
+  urbanairship-react-native: 3e79dec940d55527df9e1d9cd06328a5f9fd6a2d
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
 PODFILE CHECKSUM: 0ac33f74cca01098af99ab55a29cc63c7ef373f6

@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 14.5.1 - November 17, 2022
+Patch release that updates the iOS SDK to 16.10.3.
+
+### Changes
+- Updated iOS SDK to 16.10.3
+
 ## Version 14.5.0 - November 3, 2022
 
 Minor release that adds support for custom Airship URLs and fixes
