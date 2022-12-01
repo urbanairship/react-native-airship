@@ -10,10 +10,6 @@ import {
   UrbanAirship,
 } from 'urbanairship-react-native'
 
-import {
-  AirshipChat,
-} from 'urbanairship-chat-react-native'
-
 import React, {
   Component,
 } from 'react';

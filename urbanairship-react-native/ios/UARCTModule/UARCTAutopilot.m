@@ -71,6 +71,7 @@ static BOOL disabled = NO;
 + (UAConfig *)config {
     NSLog(@"config loaded ma gueule");
     UAConfig *config = [UAConfig defaultConfig];
+    config.requireInitialRemoteConfigEnabled = YES;
 
     NSDictionary *storedConfig = UARCTStorage.airshipConfig;
     if (!storedConfig.count) {
@@ -140,9 +141,12 @@ static BOOL disabled = NO;
         config.isChannelCreationDelayEnabled = [storedConfig[@"isChannelCreationDelayEnabled"] boolValue];
     }
 
-    // Initail remote config
-    if (storedConfig[@"requireInitialRemoteConfigEnabled"]) {
-        config.requireInitialRemoteConfigEnabled = [storedConfig[@"requireInitialRemoteConfigEnabled"] boolValue];
+    // Initail remote config URL
+    NSString *initialConfigURL = [self parseStringForKey:@"initialConfigUrl"
+                                                    from:storedConfig];
+
+    if (initialConfigURL.length) {
+        config.initialConfigURL = initialConfigURL;
     }
 
     // Features

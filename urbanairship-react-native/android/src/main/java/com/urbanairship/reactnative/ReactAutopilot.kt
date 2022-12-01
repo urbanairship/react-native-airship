@@ -168,7 +168,10 @@ class ReactAutopilot : Autopilot() {
     @SuppressLint("RestrictedApi")
     private fun loadConfig(context: Context): AirshipConfigOptions {
         Logger.setLogLevel(Log.ASSERT)
-        val builder = AirshipConfigOptions.newBuilder().applyDefaultProperties(context)
+        val builder = AirshipConfigOptions.newBuilder()
+            .applyDefaultProperties(context)
+            .setRequireInitialRemoteConfigEnabled(true)
+
         Logger.setLogLevel(Log.ERROR)
 
         val config: JsonMap? = ReactAirshipPreferences.shared(context).airshipConfig
@@ -226,10 +229,13 @@ class ReactAutopilot : Autopilot() {
             )
         }
 
-        if (config.containsKey("requireInitialRemoteConfigEnabled")) {
-            builder.setRequireInitialRemoteConfigEnabled(
-                config.opt("requireInitialRemoteConfigEnabled").getBoolean(false)
-            )
+        val initialConfigUrl = config.opt("initialConfigUrl").string
+        initialConfigUrl?.let {
+            try {
+                builder.setInitialConfigUrl(initialConfigUrl)
+            } catch (e: Exception) {
+                PluginLogger.error("Invalid initialConfigUrl $it", e)
+            }
         }
 
         val urlAllowList = parseArray(config.opt("urlAllowList"))

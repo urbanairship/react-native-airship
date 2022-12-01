@@ -3,9 +3,7 @@
   "workspaces": {
     "packages": [
       "urbanairship-react-native",
-      "urbanairship-accengage-react-native",
       "urbanairship-hms-react-native",
-      "urbanairship-chat-react-native",
       "urbanairship-preference-center-react-native",
       "example"
     ]
@@ -13,8 +11,8 @@
   "scripts": {
     "start": "react-native start",
     "test": "jest --verbose",
-    "prepare": "yarn workspace urbanairship-react-native run prepare; yarn workspace urbanairship-accengage-react-native run prepare; yarn workspace urbanairship-hms-react-native run prepare; yarn workspace urbanairship-chat-react-native run prepare; yarn workspace urbanairship-preference-center-react-native run prepare;",
-    "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules urbanairship-hms-react-native/node_modules urbanairship-chat-react-native/node_modules example/node_modules urbanairship-preference-center-react-native/node_modules yarn.lock"
+    "prepare": "yarn workspace urbanairship-react-native run prepare; yarn workspace urbanairship-hms-react-native run prepare; yarn workspace urbanairship-preference-center-react-native run prepare;",
+    "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-hms-react-native/node_modules example/node_modules urbanairship-preference-center-react-native/node_modules yarn.lock"
   },
   "resolutions": {
     "@types/react": "^17"
