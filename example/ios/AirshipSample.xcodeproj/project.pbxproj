@@ -299,7 +299,6 @@
 				"${PODS_ROOT}/Target Support Files/Pods-AirshipSample/Pods-AirshipSample-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Airship/AirshipAccengageResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Airship/AirshipAutomationResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Airship/AirshipChatResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Airship/AirshipCoreResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Airship/AirshipExtendedActionsResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Airship/AirshipMessageCenterResources.bundle",
@@ -310,7 +309,6 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AirshipAccengageResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AirshipAutomationResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AirshipChatResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AirshipCoreResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AirshipExtendedActionsResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AirshipMessageCenterResources.bundle",

@@ -1,9 +1,27 @@
 # React Native Module Changelog
 
+## Version 14.5.1 - November 17, 2022
+Patch release that updates the iOS SDK to 16.10.3.
+
+### Changes
+- Updated iOS SDK to 16.10.3
+
+## Version 14.5.0 - November 3, 2022
+
+Minor release that adds support for custom Airship URLs and fixes
+conflicts with common key chain plugins.
+
+### Changes
+- Updated iOS SDK to 16.10.1
+- Updated Android SDK to 16.8.0
+- Added support for custom domains
+- Deprecated requireInitialRemoteConfigEnabled. This config is now enabled by default
+- Fixed OOTB Message Center deep linking issue on first launch
+
 ## Version 14.4.4 - October 6, 2022
 Patch release that adds support for setting the IAA message display interval.
 
-###
+### Changes
 - Add `UrbanAirship.setInAppAutomationDisplayInterval()` method
 - Updated Airship Android SDK to 16.7.5
 - Updated Airship iOS SDK to 16.9.4

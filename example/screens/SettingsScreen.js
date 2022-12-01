@@ -91,7 +91,6 @@ export default class SettingsScreen extends Component {
     this.setState({ namedUserText: text })
   }
 
-
   handleUpdateTagsList() {
     UrbanAirship.getTags().then((data) => {
       this.setState({
