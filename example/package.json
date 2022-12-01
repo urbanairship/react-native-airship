@@ -14,9 +14,7 @@
     "react-navigation": "^4.4.3",
     "react-navigation-stack": "^2.10.2",
     "react-navigation-tabs": "^2.10.1",
-    "urbanairship-accengage-react-native": "*",
     "urbanairship-react-native": "*",
-    "urbanairship-chat-react-native": "*",
     "urbanairship-preference-center-react-native": "*"
   },
   "devDependencies": {
