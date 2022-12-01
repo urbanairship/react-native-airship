@@ -6,7 +6,7 @@ import UserNotifications
 
 @objc(UrbanAirshipReactModule)
 class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
-    
+
     let UARCTErrorDomain = "com.urbanairship.react"
     let UARCTStatusUnavailable = "UNAVAILABLE"
     let UARCTStatusInvalidFeature = "INVALID_FEATURE"
@@ -19,8 +19,6 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     let UARCTErrorCodeInboxRefreshFailed = 1
     let UARCTErrorCodeInvalidFeature = 2
 
-    var airshipListener: UARCTAirshipListener?
-    
     static func moduleName() -> String! {
         return "UrbanAirshipReactModule"
     }
@@ -32,31 +30,24 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     @objc var bridge: RCTBridge? {
         didSet {
             UARCTEventEmitter.shared().bridge = bridge
-            attemptTakeOff()
+            UARCTAutopilot.takeOff(launchOptions: self.bridge?.launchOptions)
         }
     }
-//
-// Module setup
-//
-  
+
     @objc
     static func requiresMainQueueSetup() -> Bool {
         return true
     }
-    
-    
-    func attemptTakeOff() {
-        UARCTAutopilot.takeOff(launchOptions: self.bridge?.launchOptions)
-    }
 
     // Module methods
-    
     @objc
     func addListener(_ eventName:String) {
+
     }
     
     @objc
     func removeListeners(_ count:Int) {
+
     }
     
     @objc
@@ -65,47 +56,52 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func takeOff(_ config:[AnyHashable : Any], resolver resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func takeOff(
+        _ config: [AnyHashable : Any],
+        resolver resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         UARCTStorage.airshipConfig = config
-        self.attemptTakeOff()
+        UARCTAutopilot.takeOff(launchOptions: self.bridge?.launchOptions)
         resolve(Airship.isFlying)
     }
     
     @objc
-    func isFlying(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func isFlying(
+        _ resolve: RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         resolve(Airship.isFlying)
     }
     
     @objc
-    func takePendingEvents(_ type: String, resolver resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func takePendingEvents(
+        _ type: String,
+        resolver resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         resolve(UARCTEventEmitter.shared().takePendingEvents(withType: type))
     }
 
     @objc
     func setUserNotificationsEnabled(_ enabled: Bool) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+        guard ensureAirshipReady() else { return }
         Airship.push.userPushNotificationsEnabled = enabled
     }
     
     @objc
     func enableChannelCreation() -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         Airship.channel.enableChannelCreation()
     }
     
     @objc
-    func setEnabledFeatures(_ features:[Any], resolver resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func setEnabledFeatures(
+        _ features: [Any],
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        guard ensureAirshipReady(reject) else { return }
         
         if (UARCTUtils.isValidFeatureArray(features)) {
             Airship.shared.privacyManager.enabledFeatures = UARCTUtils.stringArray(toFeatures: features)
@@ -119,21 +115,23 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func getEnabledFeatures(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+    func getEnabledFeatures(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
+
         resolve(UARCTUtils.feature(toStringArray: Airship.shared.privacyManager.enabledFeatures))
     }
     
     @objc
-    func enableFeature(_ features:[Any], resolver resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func enableFeature(
+        _ features:[Any],
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+
+        guard ensureAirshipReady(reject) else { return }
         
         if (UARCTUtils.isValidFeatureArray(features)) {
             Airship.shared.privacyManager.enableFeatures(UARCTUtils.stringArray(toFeatures: features))
@@ -147,11 +145,12 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func disableFeature(_ features:[Any], resolver resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func disableFeature(
+        _ features:[Any],
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        guard ensureAirshipReady(reject) else { return }
         
         if (UARCTUtils.isValidFeatureArray(features)) {
             Airship.shared.privacyManager.disableFeatures(UARCTUtils.stringArray(toFeatures: features))
@@ -165,11 +164,13 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func isFeatureEnabled(_ features:[Any], resolver resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func isFeatureEnabled(
+        _ features:[Any],
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) -> Void {
+
+        guard ensureAirshipReady(reject) else { return }
         
         if (UARCTUtils.isValidFeatureArray(features)) {
             resolve(Airship.shared.privacyManager.isEnabled(UARCTUtils.stringArray(toFeatures: features)))
@@ -182,21 +183,21 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func isUserNotificationsEnabled(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+    func isUserNotificationsEnabled(
+        _ resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
         resolve(Airship.push.userPushNotificationsEnabled)
     }
     
     @objc
-    func isUserNotificationsOptedIn(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func isUserNotificationsOptedIn(
+        _ resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) -> Void {
+
+        guard ensureAirshipReady(reject) else { return }
         
         var optedIn = true
         
@@ -223,23 +224,22 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func isSystemNotificationsEnabledForApp(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func isSystemNotificationsEnabledForApp(
+        _ resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
         
         let optedIn = Airship.push.authorizedNotificationSettings.rawValue != 0
         resolve(optedIn)
     }
     
     @objc
-    func enableUserPushNotifications(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+    func enableUserPushNotifications(
+        _ resolve: @escaping RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
         Airship.push.enableUserPushNotifications({ success in
             resolve(NSNumber(value: success))
         })
@@ -247,10 +247,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func setNamedUser(_ namedUser: String) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         let namedUser = namedUser.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         if (namedUser.count > 0) {
             Airship.contact.identify(namedUser)
@@ -260,22 +257,18 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func getNamedUser(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+    func getNamedUser(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
         resolve(Airship.contact.namedUserID)
     }
     
     @objc
     func addTag(_ tag: String) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+        guard ensureAirshipReady() else { return }
+
         if (!tag.isEmpty) {
             Airship.channel.editTags { editor in
                 editor.add(tag)
@@ -285,10 +278,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func removeTag(_ tag: String) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         if (!tag.isEmpty) {
             Airship.channel.editTags { editor in
@@ -298,21 +288,22 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func getTags(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+    func getTags(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
         resolve(Airship.channel.tags)
     }
     
     @objc
-    func getSubscriptionLists(_ subscriptionTypes:[AnyHashable], resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func getSubscriptionLists(
+        _ subscriptionTypes:[AnyHashable],
+        resolver resolve: @escaping RCTPromiseResolveBlock,
+        rejecter reject: @escaping RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
+
         //let hashableArray = subscriptionTypes as? [AnyHashable]
         let typedSet = Set(subscriptionTypes)
         if (typedSet.count == 0) {
@@ -351,7 +342,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
                     var scopesArray: [AnyHashable] = []
                     if let values = scopes?.values {
                         for scope in values {
-                            scopesArray.append(self.getScopeString(scope: scope))
+                            scopesArray.append(scope.stringValue)
                         }
                     }
                     converted[identifier] = scopesArray
@@ -380,10 +371,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func setAnalyticsEnabled(_ enabled:Bool) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         if (enabled) {
             Airship.shared.privacyManager.enableFeatures(Features.analytics)
         } else {
@@ -393,225 +381,204 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func isAnalyticsEnabled(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         resolve(Airship.shared.privacyManager.isEnabled(Features.analytics))
     }
     
     @objc
     func trackScreen(_ screen:String) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         Airship.analytics.trackScreen(screen)
     }
     
     @objc
-    func getChannelId(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func getChannelId(
+        _ resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
         resolve(Airship.channel.identifier)
     }
     
     @objc
-    func getRegistrationToken(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func getRegistrationToken(
+        _ resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
         resolve(Airship.push.deviceToken)
     }
     
     @objc
     func associateIdentifier(_ key:String, identifier:String) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
-        var identifiers = Airship.analytics.currentAssociatedDeviceIdentifiers()
+        let identifiers = Airship.analytics.currentAssociatedDeviceIdentifiers()
         identifiers.set(identifier: identifier, key: key)
         Airship.analytics.associateDeviceIdentifiers(identifiers)
     }
 
     @objc
-    func runAction(_ name:String, actionValue value:Any, resolver resolve:@escaping RCTPromiseResolveBlock, rejecter reject:@escaping RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        ActionRunner.run(name, value: value, situation: Situation.manualInvocation) { actionResult in
-            
-            var resultString: String?
-            var code: String?
-            var errorMessage: String?
-            var error: NSError?
-            
+    func runAction(
+        _ name: String,
+        actionValue value: Any,
+        resolver resolve: @escaping RCTPromiseResolveBlock,
+        rejecter reject: @escaping RCTPromiseRejectBlock
+    ) -> Void {
+
+        guard ensureAirshipReady(reject) else { return }
+
+        ActionRunner.run(
+            name,
+            value: value,
+            situation: Situation.manualInvocation
+        ) { actionResult in
             switch (actionResult.status) {
-                case ActionStatus.completed:
-                    if (actionResult.value != nil) {
-                        do {
-                            //if the action completed with a result value, serialize into JSON
-                            //accepting fragments so we can write lower level JSON values
-                            try resultString = JSONUtils.string(actionResult.value!, options: JSONSerialization.WritingOptions.fragmentsAllowed)
-                        } catch let thrownError as NSError {
-                            do {
-                                // If there was an error serializing, fall back to a string description.
-                                error = thrownError
-                                AirshipLogger.debug("Unable to serialize result value \(String(describing: actionResult.value)), falling back to string description")
-                                try resultString = JSONUtils.string(actionResult.value.debugDescription, options: JSONSerialization.WritingOptions.fragmentsAllowed)
-                            } catch let thrownError as NSError {
-                                error = thrownError
-                                errorMessage = "Still unable to serialize result value \(String(describing: actionResult.value)), rejecting."
-                                code = "STATUS_EXECUTION_ERROR"
-                            }
-                        }
-                    }
-                    //in the case where there is no result value, pass null
-                resultString = resultString ?? "null"
-                case ActionStatus.actionNotFound:
-                    errorMessage = "No action found with name \(name), skipping action"
-                    code = "STATUS_ACTION_NOT_FOUND"
-                case ActionStatus.error:
-                    errorMessage = actionResult.error?.localizedDescription
-                    code = "STATUS_EXECUTION_ERROR"
-                case ActionStatus.argumentsRejected:
-                    errorMessage = "Action \(name) rejected arguments."
-                    code = "STATUS_REJECTED_ARGUMENTS"
-            }
-            
-            if (actionResult.status == ActionStatus.completed) {
-                var result: [AnyHashable : Any] = [:]
-                result["value"] = actionResult.value
-                resolve(actionResult)
-            }
-            
-            if (errorMessage != nil) {
-                reject(code, errorMessage, nil);
+            case .completed:
+                if let value = actionResult.value {
+                    let resultString = try? JSONUtils.string(
+                        value,
+                        options: .fragmentsAllowed
+                    )
+
+                    resolve(resultString)
+                } else {
+                    resolve(nil)
+                }
+            case .actionNotFound:
+                reject("STATUS_ACTION_NOT_FOUND", "Action \(name) not found.", nil)
+            case .argumentsRejected:
+                reject("STATUS_REJECTED_ARGUMENTS", "Action rejected arguments.", nil)
+            case .error: fallthrough
+            @unknown default:
+                reject("STATUS_EXECUTION_ERROR", nil, actionResult.error)
             }
         }
     }
     
     @objc
-    func editContactTagGroups(_ operations:[Dictionary<String, Any>]) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
-        Airship.contact.editTagGroups { editor in
-            self.applyTagGroupOperations(operations: operations, editor: editor)
+    func editContactTagGroups(_ operations:[[String: Any]]) {
+        guard ensureAirshipReady() else { return }
+
+        do {
+            let data = try JSONUtils.data(operations)
+            let operations = try JSONDecoder().decode(
+                [TagGroupOperation].self,
+                from: data
+            )
+            Airship.contact.editTagGroups { editor in
+                operations.forEach { operation in
+                    operation.apply(editor: editor)
+                }
+            }
+        } catch {
+            AirshipLogger.error("Failed to apply contact tag group operations \(operations): \(error)")
         }
     }
     
     @objc
     func editChannelTagGroups(_ operations:[Dictionary<String, Any>]) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
-        Airship.channel.editTagGroups() { editor in
-            self.applyTagGroupOperations(operations: operations, editor: editor)
-        }
-    }
-    
-    @objc
-    func editContactAttributes(_ operations:[Dictionary<String, Any>]) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
-        Airship.contact.editAttributes() { editor in
-            self.applyAttributeOperations(operations: operations, editor: editor)
-        }
-    }
-    
-    @objc
-    func editChannelAttributes(_ operations:[Dictionary<String, Any>]) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
-        Airship.channel.editAttributes() { editor in
-            self.applyAttributeOperations(operations: operations, editor: editor)
-        }
-    }
-    
-    @objc
-    func editContactSubscriptionLists(_ subscriptionListUpdates:[Dictionary<String, Any>]) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
-        Airship.contact.editSubscriptionLists() { editor in
-            for subscriptionListUpdate in subscriptionListUpdates {
-                let listId = subscriptionListUpdate["listId"] as? String
-                let type = subscriptionListUpdate["type"] as? String
-                let scopeString = subscriptionListUpdate["scope"] as? String
-                var scope: ChannelScope?
-                
-                if (scopeString == "sms") {
-                    scope = ChannelScope.sms
-                } else if (scopeString == "email") {
-                    scope = ChannelScope.email
-                } else if (scopeString == "app") {
-                    scope = ChannelScope.app
-                } else if (scopeString == "web") {
-                    scope = ChannelScope.web
-                } else {
-                    return
-                }
-                
-                if (listId != nil && type != nil && scope != nil) {
-                    if (type == "subscribe") {
-                        editor.subscribe(listId!, scope: scope!)
-                    } else if (type == "unsubscribe") {
-                        editor.unsubscribe(listId!, scope: scope!)
-                    }
+        guard ensureAirshipReady() else { return }
+
+        do {
+            let data = try JSONUtils.data(operations)
+            let operations = try JSONDecoder().decode(
+                [TagGroupOperation].self,
+                from: data
+            )
+            Airship.channel.editTagGroups { editor in
+                operations.forEach { operation in
+                    operation.apply(editor: editor)
                 }
             }
-            editor.apply()
+        } catch {
+            AirshipLogger.error("Failed to apply channel tag group operations \(operations): \(error)")
         }
     }
     
     @objc
-    func editChannelSubscriptionLists(_ subscriptionListUpdates:[Dictionary<String, Any>]) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
-        Airship.channel.editSubscriptionLists() { editor in
-            for subscriptionListUpdate in subscriptionListUpdates {
-                let listId = subscriptionListUpdate["listId"] as? String
-                let type = subscriptionListUpdate["type"] as? String
-                if (listId != nil && type != nil) {
-                    if (type == "subscribe") {
-                        editor.subscribe(listId!)
-                    } else if (type == "unsubscribe") {
-                        editor.unsubscribe(listId!)
-                    }
+    func editContactAttributes(_ operations:[[String: Any]]) {
+        guard ensureAirshipReady() else { return }
+
+        do {
+            let data = try JSONUtils.data(operations)
+            let operations = try JSONDecoder().decode(
+                [AttributeOperation].self,
+                from: data
+            )
+            Airship.contact.editAttributes { editor in
+                operations.forEach { operation in
+                    operation.apply(editor: editor)
                 }
             }
-            editor.apply()
+        } catch {
+            AirshipLogger.error("Failed to apply contact attribue operations \(operations): \(error)")
+        }
+    }
+    
+    @objc
+    func editChannelAttributes(_ operations:[[String: Any]]) {
+        guard ensureAirshipReady() else { return }
+
+        do {
+            let data = try JSONUtils.data(operations)
+            let operations = try JSONDecoder().decode(
+                [AttributeOperation].self,
+                from: data
+            )
+            Airship.channel.editAttributes { editor in
+                operations.forEach { operation in
+                    operation.apply(editor: editor)
+                }
+            }
+        } catch {
+            AirshipLogger.error("Failed to apply channel attribue operations \(operations): \(error)")
+        }
+    }
+    
+    @objc
+    func editContactSubscriptionLists(_ operations:[[String: Any]]) {
+        guard ensureAirshipReady() else { return }
+
+        do {
+            let data = try JSONUtils.data(operations)
+            let operations = try JSONDecoder().decode(
+                [SubscriptionListOperation].self,
+                from: data
+            )
+            Airship.contact.editSubscriptionLists { editor in
+                operations.forEach { operation in
+                    operation.apply(editor: editor)
+                }
+            }
+        } catch {
+            AirshipLogger.error("Failed to apply contact subscription list operations \(operations): \(error)")
+        }
+    }
+    
+    @objc
+    func editChannelSubscriptionLists(_ operations:[[String: Any]]) {
+        guard ensureAirshipReady() else { return }
+
+        do {
+            let data = try JSONUtils.data(operations)
+            let operations = try JSONDecoder().decode(
+                [SubscriptionListOperation].self,
+                from: data
+            )
+            Airship.channel.editSubscriptionLists { editor in
+                operations.forEach { operation in
+                    operation.apply(editor: editor)
+                }
+            }
+        } catch {
+            AirshipLogger.error("Failed to apply channel subscription list operations \(operations): \(error)")
         }
     }
     
     @objc
     func setNotificationOptions(_ options:[Any]) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         let notificationOptions = UARCTUtils.options(fromOptionsArray: options)
         AirshipLogger.debug("Notification options set: \(notificationOptions) from dictionary: \(options)")
@@ -648,10 +615,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func getNotificationStatus(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         let push = Airship.push
         let isSystemEnabled = push.authorizedNotificationSettings != []
@@ -670,70 +634,49 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func setAutobadgeEnabled(_ enabled:Bool) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         Airship.push.autobadgeEnabled = enabled
     }
     
     @objc
     func isAutobadgeEnabled(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         resolve(Airship.push.autobadgeEnabled)
     }
     
     @objc
     func setBadgeNumber(_ badgeNumber:Int) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         Airship.push.badgeNumber = badgeNumber
     }
     
     @objc
     func getBadgeNumber(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         resolve(Airship.push.badgeNumber)
     }
     
     @objc
     func displayMessageCenter() {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         MessageCenter.shared.display()
     }
     
     @objc
     func dismissMessageCenter() {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         MessageCenter.shared.dismiss()
     }
     
     @objc
     func displayMessage(_ messageId:String, resolver resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         MessageCenter.shared.displayMessage(forID: messageId)
         resolve(true)
@@ -741,10 +684,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func dismissMessage(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         MessageCenter.shared.dismiss(true)
         resolve(true)
@@ -752,10 +692,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func getInboxMessages(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         var messages: [[AnyHashable : Any]] = []
         
@@ -782,20 +719,14 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func getUnreadMessageCount(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         resolve(MessageCenter.shared.messageList.unreadCount)
     }
     
     @objc
     func deleteInboxMessage(_ messageId:String, resolver resolve:@escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         let message = MessageCenter.shared.messageList.message(forID: messageId)
         
@@ -811,10 +742,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func markInboxMessageRead(_ messageId:String, resolver resolve:@escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         let message = MessageCenter.shared.messageList.message(forID: messageId)
         
@@ -830,10 +758,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func refreshInbox(_ resolve:@escaping RCTPromiseResolveBlock, rejecter reject:@escaping RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+        guard ensureAirshipReady() else { return }
         
         MessageCenter.shared.messageList.retrieveMessageList {
             resolve(true)
@@ -845,41 +770,31 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func setAutoLaunchDefaultMessageCenter(_ enabled:Bool) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+        guard ensureAirshipReady() else { return }
         UARCTStorage.autoLaunchMessageCenter = enabled
     }
     
     @objc
     func setCurrentLocale(_ localeIdentifier:String) {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
-        Airship.shared.localeManager.currentLocale = Locale(identifier: localeIdentifier)
+        guard ensureAirshipReady() else { return }
+        Airship.shared.localeManager.currentLocale = Locale(
+            identifier: localeIdentifier
+        )
     }
     
     @objc
-    func getCurrentLocale(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
+    func getCurrentLocale(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
+        guard ensureAirshipReady(reject) else { return }
         let airshipLocale = Airship.shared.localeManager.currentLocale
         resolve(airshipLocale.identifier)
     }
     
     @objc
     func clearLocale() {
-        guard ensureAirshipReady()
-        else {
-            return
-        }
-        
+        guard ensureAirshipReady() else { return }
         Airship.shared.localeManager.clearLocale()
     }
     
@@ -889,111 +804,186 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func clearNotification(_ identifier:String) {
-        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
+    func clearNotification(_ identifier: String) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(
+            withIdentifiers: [identifier]
+        )
     }
     
     @objc
-    func getActiveNotifications(_ resolve:@escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func getActiveNotifications(
+        _ resolve:@escaping RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         UNUserNotificationCenter.current().getDeliveredNotifications { notifications in
-            var result: [[AnyHashable : Any]] = []
-            for notification in notifications {
-                
-                result.append(UARCTUtils.eventBody(forNotificationContent: notification.request.content.userInfo, notificationIdentifier: notification.request.identifier))
+            let result = notifications.map { notification in
+                UARCTUtils.eventBody(
+                    forNotificationContent: notification.request.content.userInfo,
+                    notificationIdentifier: notification.request.identifier
+                )
             }
-            
             resolve(result)
         }
     }
-    
-    
-///
-/// Helper methods
-///
-    
-    
-    func ensureAirshipReady() -> Bool {
-        return self.ensureAirshipReady(nil)
+
+    private func ensureAirshipReady() -> Bool {
+        return Airship.isFlying
     }
 
-    @objc
-    func ensureAirshipReady(_ reject:RCTPromiseRejectBlock?) -> Bool {
-        if Airship.isFlying {
-            return true
+    private func ensureAirshipReady(_ reject: RCTPromiseRejectBlock) -> Bool {
+        guard Airship.isFlying else {
+            reject(
+                "TAKE_OFF_NOT_CALLED",
+                "Airship not ready, takeOff not called",
+                nil
+            )
+            return false
         }
-        
-        if reject != nil {
-            reject!("TAKE_OFF_NOT_CALLED", "Airship not ready, takeOff not called", nil)
-        }
-        
-        return false
+        return true
     }
-    
-    @objc
-    func getScopeString(scope:ChannelScope) -> String {
-        switch (scope) {
-            case ChannelScope.sms:
-                return "sms"
-            case ChannelScope.email:
-                return "email"
-            case ChannelScope.app:
-                return "app"
-            case ChannelScope.web:
-                return "web"
-        }
+}
+
+struct AttributeOperation: Decodable {
+    enum Action: String, Decodable {
+        case setAttribute = "set"
+        case removeAttribute = "remove"
     }
-    
-    @objc
-    func applyTagGroupOperations(operations:[Dictionary<String, Any>], editor:TagGroupsEditor) -> Void {
-        for operation in operations {
-            let tags = operation["tags"] as? [String] ?? []
-            let group =  operation["group"] as? String ?? ""
-            let operationType =  operation["operationType"] as? String
-                
-            if (operationType == "add") {
-                editor.add(tags, group: group)
-            } else if (operationType == "remove") {
-                editor.remove(tags, group: group)
-            } else if (operationType == "set") {
-                editor.set(tags, group: group)
-            }
-        }
+
+    enum ValueType: String, Decodable {
+        case string
+        case number
+        case date
     }
-    
-    @objc
-    func applyAttributeOperations(operations:[Dictionary<String, Any>], editor:AttributesEditor) -> Void {
-        for operation in operations {
-            let action = operation["action"] as? String ?? ""
-            let name = operation["key"] as? String ?? ""
-            let value = operation["value"]
-            
-            if (action == "set") {
-                let valueType = operation["type"] as? String
-                if (valueType == "string") {
-                    guard let value = value as? String
-                    else {
-                        return
-                    }
-                    editor.set(string: value, attribute: name)
-                } else if (valueType == "number") {
-                    guard let value = value as? NSNumber
-                    else {
-                        return
-                    }
-                    editor.set(number: value, attribute: name)
-                } else if (valueType == "date") {
-                    guard let value = value as? Double
-                    else {
-                        return
-                    }
-                    editor.set(date: Date(timeIntervalSince1970: TimeInterval(value)), attribute: name)
+
+    let action: Action
+    let attribute: String
+    let value: AirshipJSON?
+    let valueType: ValueType?
+
+    private enum CodingKeys: String, CodingKey {
+        case action = "action"
+        case attribute = "key"
+        case value = "value"
+        case valueType = "type"
+    }
+
+    func apply(editor: AttributesEditor) {
+        guard attribute.isEmpty else {
+            AirshipLogger.error("Invalid attribute operation: \(self)")
+            return
+        }
+
+        switch(action) {
+        case .removeAttribute:
+            editor.remove(attribute)
+        case .setAttribute:
+            switch(valueType) {
+            case .number:
+                if let value = value?.unWrap() as? Double {
+                    editor.set(double: value, attribute: attribute)
                 } else {
-                    AirshipLogger.warn("Unknown channel attribute type: \(valueType)")
+                    AirshipLogger.error("Failed to parse double: \(self)")
                 }
-            } else if (action == "remove") {
-                editor.remove(name)
+            case .string:
+                if let value = value?.unWrap() as? String {
+                    editor.set(string: value, attribute: attribute)
+                } else {
+                    AirshipLogger.error("Failed to parse string: \(self)")
+                }
+            case .date:
+                if let value = value?.unWrap() as? Double {
+                    editor.set(
+                        date: Date(timeIntervalSince1970: value),
+                        attribute: attribute
+                    )
+                } else {
+                    AirshipLogger.error("Failed to parse date: \(self)")
+                }
+            case .none:
+                AirshipLogger.error("Missing attribute value: \(self)")
             }
         }
     }
 }
 
+struct TagGroupOperation: Decodable {
+    enum Action: String, Codable {
+        case setTags = "set"
+        case removeTags = "remove"
+        case addTags = "add"
+    }
+
+    let action: Action
+    let tags: [String]
+    let group: String
+
+    private enum CodingKeys: String, CodingKey {
+        case group = "group"
+        case action = "operationType"
+        case tags = "tags"
+    }
+
+    func apply(editor: TagGroupsEditor) {
+        guard group.isEmpty else {
+            AirshipLogger.error("Invalid tag group operation: \(self)")
+            return
+        }
+
+        switch(action) {
+        case .removeTags:
+            editor.remove(tags, group: group)
+        case .setTags:
+            editor.set(tags, group: group)
+        case .addTags:
+            editor.add(tags, group: group)
+        }
+    }
+}
+
+struct SubscriptionListOperation: Decodable {
+    enum Action: String, Codable {
+        case subscribe
+        case unsubscribe
+    }
+
+    let action: Action
+    let listID: String
+    let scope: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case action = "type"
+        case listID = "listId"
+        case scope = "Scope"
+    }
+
+    func apply(editor: SubscriptionListEditor) {
+        guard listID.isEmpty else {
+            AirshipLogger.error("Invalid subscription list operation: \(self)")
+            return
+        }
+
+        switch(action) {
+        case .subscribe:
+            editor.subscribe(listID)
+        case .unsubscribe:
+            editor.unsubscribe(listID)
+        }
+    }
+
+    func apply(editor: ScopedSubscriptionListEditor) {
+        guard listID.isEmpty,
+              let scopeString = scope,
+              let scope = try? ChannelScope.fromString(scopeString)
+        else {
+            AirshipLogger.error("Invalid subscription list operation: \(self)")
+            return
+        }
+
+        switch(action) {
+        case .subscribe:
+            editor.subscribe(listID, scope: scope)
+        case .unsubscribe:
+            editor.unsubscribe(listID, scope: scope)
+        }
+    }
+}
