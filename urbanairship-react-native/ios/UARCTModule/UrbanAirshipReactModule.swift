@@ -46,17 +46,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     
     func attemptTakeOff() {
-        UARCTAutopilot.takeOff(launchOptions: self.bridge?.launchOptions) {
-            self.airshipListener = UARCTAirshipListener.shared()
-            Airship.shared.deepLinkDelegate = self.airshipListener
-            Airship.push.registrationDelegate = self.airshipListener
-            Airship.push.pushNotificationDelegate = self.airshipListener
-            MessageCenter.shared.displayDelegate = self.airshipListener
-            
-            if (UARCTStorage.isForegroundPresentationOptionsSet) {
-                Airship.push.defaultPresentationOptions = UARCTStorage.foregroundPresentationOptions
-            }
-        }
+        UARCTAutopilot.takeOff(launchOptions: self.bridge?.launchOptions)
     }
 
     // Module methods
