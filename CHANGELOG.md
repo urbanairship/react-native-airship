@@ -1,11 +1,12 @@
 # React Native Module Changelog
 
-## Version 14.5.2 - December 2, 2022
-Patch release that updates the iOS SDK to 16.10.5.
+## Version 14.6.0 - December 5, 2022
+Minor release that updates the iOS SDK to 16.10.5 and add support
+for isChannelCaptureEnabled and suppressAllowListError in the config for takeOff.
 
 ### Changes
 - Updated iOS SDK to 16.10.5
-- Add support for **isChannelCaptureEnabled** and **suppressAllowListError**.
+- Add support for **isChannelCaptureEnabled** and **suppressAllowListError** in the config for takeOff.
 
 
 ## Version 14.5.1 - November 17, 2022
