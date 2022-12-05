@@ -17,6 +17,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React-Core"
-  s.dependency "Airship/PreferenceCenter", "16.10.5"
+  s.dependency "Airship/PreferenceCenter", "16.10.6"
   s.dependency "urbanairship-react-native"
 end
