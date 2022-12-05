@@ -294,6 +294,14 @@ public class ReactAutopilot extends Autopilot {
             builder.setInProduction(config.opt("inProduction").getBoolean(false));
         }
 
+        if (config.containsKey("isChannelCaptureEnabled")) {
+            builder.setChannelCaptureEnabled(config.opt("isChannelCaptureEnabled").getBoolean(true));
+        }
+
+        if (config.containsKey("suppressAllowListError")) {
+            builder.setSuppressAllowListError(config.opt("suppressAllowListError").getBoolean(false));
+        }
+
         if (config.containsKey("isChannelCreationDelayEnabled")) {
             builder.setChannelCreationDelayEnabled(config.opt("isChannelCreationDelayEnabled").getBoolean(false));
         }

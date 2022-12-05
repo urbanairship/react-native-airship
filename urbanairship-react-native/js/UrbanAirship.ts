@@ -245,6 +245,18 @@ export interface AirshipConfig {
   urlAllowListScopeJavaScriptInterface?: string[],
 
   /**
+   * Enables channel capture feature.
+   * This config is enabled by default.
+   */
+  isChannelCaptureEnabled?: boolean
+
+  /**
+  * Whether to suppress console error messages about missing allow list entries during takeOff.
+  * This config is disabled by default.
+  */
+  suppressAllowListError?: boolean
+
+  /**
    * Enables delayed channel creation.
    */
   isChannelCreationDelayEnabled?: boolean,

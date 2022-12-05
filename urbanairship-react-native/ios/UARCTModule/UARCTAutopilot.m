@@ -135,6 +135,16 @@ static BOOL disabled = NO;
         config.URLAllowListScopeJavaScriptInterface = allowListJS;
     }
 
+    // Channel capture
+    if (storedConfig[@"isChannelCaptureEnabled"]) {
+        config.isChannelCaptureEnabled = [storedConfig[@"isChannelCaptureEnabled"] boolValue];
+    }
+
+    // Channel capture
+    if (storedConfig[@"suppressAllowListError"]) {
+        config.suppressAllowListError = [storedConfig[@"suppressAllowListError"] boolValue];
+    }
+
     // Channel creation delay
     if (storedConfig[@"isChannelCreationDelayEnabled"]) {
         config.isChannelCreationDelayEnabled = [storedConfig[@"isChannelCreationDelayEnabled"] boolValue];
