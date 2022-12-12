@@ -3,7 +3,6 @@
 BASE_MODULE=urbanairship-react-native
 SUBMODULES=(
   urbanairship-hms-react-native
-  urbanairship-preference-center-react-native
 )
 
 print_usage() {

@@ -21,14 +21,15 @@ import com.urbanairship.json.JsonList
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonValue
 import com.urbanairship.messagecenter.MessageCenter
+import com.urbanairship.preferencecenter.PreferenceCenter
 import com.urbanairship.push.NotificationActionButtonInfo
 import com.urbanairship.push.NotificationInfo
 import com.urbanairship.push.NotificationListener
-import com.urbanairship.push.PushTokenListener
 import com.urbanairship.reactnative.Utils.getHexColor
 import com.urbanairship.reactnative.Utils.getNamedResource
 import com.urbanairship.reactnative.Utils.parseFeature
 import com.urbanairship.reactnative.events.*
+import com.urbanairship.reactnative.preferenceCenter.events.DisplayPreferenceCenterEvent
 
 /**
  * Module's autopilot to customize Urban Airship.
@@ -115,6 +116,17 @@ class ReactAutopilot : Autopilot() {
                 true
             }
         }
+
+        PreferenceCenter.shared().openListener =
+            PreferenceCenter.OnOpenListener { preferenceCenterId: String ->
+                if (preferences.isAutoLaunchPreferenceCenterEnabled(preferenceCenterId)) {
+                    return@OnOpenListener false
+                } else {
+                    val event: Event = DisplayPreferenceCenterEvent(preferenceCenterId)
+                    EventEmitter.shared().sendEvent(event)
+                    return@OnOpenListener true
+                }
+            }
 
         // Set our custom notification provider
         val notificationProvider = ReactNotificationProvider(context, airship.airshipConfigOptions)

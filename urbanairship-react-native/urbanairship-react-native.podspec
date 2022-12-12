@@ -14,4 +14,6 @@ require "json"
   s.source_files  = "ios/**/*"
   s.dependency "React-Core"
   s.dependency "Airship", "16.10.5"
+  s.dependency "Airship/PreferenceCenter", "16.10.5"
+
 end

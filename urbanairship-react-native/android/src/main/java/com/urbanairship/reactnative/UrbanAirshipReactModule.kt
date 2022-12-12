@@ -32,7 +32,9 @@ import com.urbanairship.channel.AirshipChannelListener
 import com.urbanairship.channel.AttributeEditor
 import com.urbanairship.channel.TagGroupsEditor
 import com.urbanairship.contacts.Scope
+import com.urbanairship.json.JsonValue
 import com.urbanairship.messagecenter.MessageCenter
+import com.urbanairship.preferencecenter.PreferenceCenter
 import com.urbanairship.push.PushMessage
 import com.urbanairship.reactnative.events.NotificationOptInEvent
 import com.urbanairship.reactnative.events.PushReceivedEvent
@@ -1169,6 +1171,34 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
             }
             return result
         }
+    }
+
+    @ReactMethod
+    fun displayPreferenceCenter(preferenceCenterId: String) {
+        if (!Utils.ensureAirshipReady()) {
+            return
+        }
+        PreferenceCenter.shared().open(preferenceCenterId)
+    }
+
+    @ReactMethod
+    fun getPreferenceCenterConfig(preferenceCenterId: String, promise: Promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return
+        }
+
+        PreferenceCenter.shared().getJsonConfig(preferenceCenterId).addResultCallback { result: JsonValue? ->
+            if (result == null) {
+                promise.reject(Exception("Failed to get preference center configuration."))
+                return@addResultCallback
+            }
+            promise.resolve(Utils.convertJsonValue(result))
+        }
+    }
+
+    @ReactMethod
+    fun setUseCustomPreferenceCenterUi(useCustomUI: Boolean, preferenceID: String) {
+        preferences.setAutoLaunchPreferenceCenter(preferenceID, !useCustomUI)
     }
 
 }

@@ -76,7 +76,32 @@ class PluginStore {
         }
     }
 
+    private func preferenceCenterKey(
+        _ preferenceCenterID: String
+    ) -> String {
+        return "com.urbanairship.react.preference_\(preferenceCenterID)_autolaunch"
+    }
 
+
+    func setAutoLaunchPreferenceCenter(
+        _ preferenceCenterID: String,
+        autoLaunch: Bool
+    ) {
+        writeValue(
+            autoLaunch,
+            forKey: preferenceCenterKey(preferenceCenterID)
+        )
+    }
+
+    func shouldAutoLaunchPreferenceCenter(
+        _ preferenceCenterID: String,
+        autoLaunch: Bool
+    ) -> Bool {
+        let autoLaunch: Bool? = readValue(
+            preferenceCenterKey(preferenceCenterID)
+        )
+        return autoLaunch ?? true
+    }
 
     private func readCodable<T: Codable>(_ key: String) -> T? {
         guard let data: Data = readValue(key) else {

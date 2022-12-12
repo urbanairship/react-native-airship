@@ -131,4 +131,11 @@ RCT_EXTERN_METHOD(clearNotification:(NSString *)identifier)
 
 RCT_EXTERN_METHOD(getActiveNotifications:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)
 
+RCT_EXTERN_METHOD(displayPreferenceCenter:(NSString *)preferenceCenterId)
+
+RCT_EXTERN_METHOD(setUseCustomPreferenceCenterUi:(BOOL *)useCustomUi forPreferenceId:(NSString *)preferenceId)
+
+RCT_EXTERN_METHOD(getPreferenceCenterConfig:(NSString *)preferenceCenterId resolver:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock)reject)
+
+
 @end

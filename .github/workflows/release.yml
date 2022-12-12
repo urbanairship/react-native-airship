@@ -86,9 +86,6 @@ jobs:
           cd urbanairship-react-native/
           yarn publish
           cd -
-          cd urbanairship-preference-center-react-native/
-          yarn publish
-          cd -
           cd urbanairship-hms-react-native/
           yarn publish
           cd -

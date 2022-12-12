@@ -68,6 +68,8 @@ dependencies {
     api ("com.urbanairship.android:urbanairship-automation:${project.ext.airshipVersion}") {
         exclude group:'androidx.appcompat', module: 'appcompat'
     }
-
+    implementation("com.urbanairship.android:urbanairship-preference-center:${project.ext.airshipVersion}") {
+        exclude group:'androidx.appcompat', module: 'appcompat'
+    }
     implementation "com.google.firebase:firebase-messaging:${safeExtGet('firebaseMessagingVersion', '22.0.0')}"
 }

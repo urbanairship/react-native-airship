@@ -798,7 +798,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     @objc
     func setAutoLaunchDefaultMessageCenter(_ enabled:Bool) {
         guard ensureAirshipReady() else { return }
-        UARCTStorage.autoLaunchMessageCenter = enabled
+        PluginStore.shared.autoDisplayMessageCenter = enabled
     }
     
     @objc
@@ -850,6 +850,37 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
                 )
             }
             resolve(result)
+        }
+    }
+
+    @objc
+    func displayPreferenceCenter(_ preferenceCenterId: String) {
+        guard ensureAirshipReady() else { return }
+
+        PreferenceCenter.shared.open(preferenceCenterId)
+    }
+
+    @objc
+    func setUseCustomPreferenceCenterUi(
+        _ useCustomUi: Bool,
+        forPreferenceId preferenceId: String
+    ) {
+        PluginStore.shared.setAutoLaunchPreferenceCenter(
+            preferenceId,
+            autoLaunch: !useCustomUi
+        )
+    }
+
+    @objc
+    func getPreferenceCenterConfig(
+        _ preferenceCenterId: String,
+        resolver resolve:@escaping RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        guard ensureAirshipReady(reject) else { return }
+
+        PreferenceCenter.shared.jsonConfig(preferenceCenterID: preferenceCenterId) { config in
+            resolve(config)
         }
     }
 

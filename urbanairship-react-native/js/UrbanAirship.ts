@@ -12,12 +12,12 @@ import { SubscriptionListEditor, SubscriptionListUpdate} from "./SubscriptionLis
 import { ScopedSubscriptionListEditor, ScopedSubscriptionListUpdate} from "./ScopedSubscriptionListEditor";
 import { JsonObject, JsonValue } from "./Json";
 import { SubscriptionLists, SubscriptionListType } from "./SubscriptionLists";
+import { PreferenceCenter } from './PreferenceCenter';
 
 /**
  * @hidden
  */
 const UrbanAirshipModule = NativeModules.UrbanAirshipReactModule
-//const UrbanAirshipModule = NativeModules.UrbanAirshipReactModuleSwift
 
 /**
  * @hidden
@@ -1245,5 +1245,17 @@ export class UrbanAirship {
    */
   static setInAppAutomationDisplayInterval(seconds: number) {
     UrbanAirshipModule.setInAppAutomationDisplayInterval(seconds)
+  }
+
+  static displayPreferenceCenter(preferenceCenterId: String) {
+    UrbanAirshipModule.displayPreferenceCenter(preferenceCenterId);
+  }
+
+  static getPreferenceCenterConfig(preferenceCenterId: String): Promise<PreferenceCenter> {
+    return UrbanAirshipModule.getPreferenceCenterConfig(preferenceCenterId);
+  }
+
+  static setUseCustomPreferenceCenterUi(useCustomUi: boolean, preferenceCenterId: String) {
+    UrbanAirshipModule.setUseCustomPreferenceCenterUi(useCustomUi, preferenceCenterId);
   }
 }
