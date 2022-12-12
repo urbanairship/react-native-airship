@@ -253,32 +253,6 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
     }
 
     /**
-     * Checks if the app's notifications are enabled.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    fun isUserNotificationsOptedIn(promise: Promise) {
-        if (!Utils.ensureAirshipReady(promise)) {
-            return
-        }
-        promise.resolve(UAirship.shared().pushManager.isOptIn)
-    }
-
-    /**
-     * Checks if the app's notifications are enabled at the system level.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    fun isSystemNotificationsEnabledForApp(promise: Promise) {
-        if (!Utils.ensureAirshipReady(promise)) {
-            return
-        }
-        promise.resolve(NotificationManagerCompat.from(reactApplicationContext).areNotificationsEnabled())
-    }
-
-    /**
      * Gets the notification status.
      *
      * @param promise The JS promise.
@@ -593,36 +567,6 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
             editor.addIdentifier(key, value)
         }
         editor.apply()
-    }
-
-    /**
-     * Enables/Disables analytics.
-     *
-     * @param enabled `true` to enable analytics, `false` to disable.
-     */
-    @ReactMethod
-    fun setAnalyticsEnabled(enabled: Boolean) {
-        if (!Utils.ensureAirshipReady()) {
-            return
-        }
-        if (enabled) {
-            UAirship.shared().privacyManager.enable(PrivacyManager.FEATURE_ANALYTICS)
-        } else {
-            UAirship.shared().privacyManager.disable(PrivacyManager.FEATURE_ANALYTICS)
-        }
-    }
-
-    /**
-     * Checks if analytics are enabled.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    fun isAnalyticsEnabled(promise: Promise) {
-        if (!Utils.ensureAirshipReady(promise)) {
-            return
-        }
-        promise.resolve(UAirship.shared().privacyManager.isEnabled(PrivacyManager.FEATURE_ANALYTICS))
     }
 
     /**
@@ -991,7 +935,7 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
 
                 pushMessage = bundle?.let { PushMessage(it) } ?: PushMessage(Bundle())
 
-                notifications.pushMap(PushReceivedEvent(pushMessage, id, tag).body)
+                notifications.pushMap(Utils.pushPayload(pushMessage, id, tag))
             }
             promise.resolve(notifications)
         } else {

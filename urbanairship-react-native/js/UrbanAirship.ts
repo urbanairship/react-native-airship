@@ -29,16 +29,15 @@ const EventEmitter = new UAEventEmitter()
  * @hidden
  */
 enum InternalEventType {
-  Registration = "com.urbanairship.registration",
-  NotificationResponse = "com.urbanairship.notification_response",
-  PushReceived = "com.urbanairship.push_received",
-  DeepLink = "com.urbanairship.deep_link",
-  InboxUpdated = "com.urbanairship.inbox_updated",
-  NotificationOptInStatus = "com.urbanairship.notification_opt_in_status",
-  ShowInbox = "com.urbanairship.show_inbox",
-  ConversationUpdated = "com.urbanairship.conversation_updated",
-  OpenChat = "com.urbanairship.open_chat",
-  OpenPreferenceCenter = "com.urbanairship.open_preference_center"
+  ChannelCreated = "com.airship.channel_created",
+  NotificationResponse = "com.airship.notification_response",
+  PushReceived = "com.airship.push_received",
+  DeepLink = "com.airship.deep_link",
+  MessageCenterUpdated = "com.airship.message_center_updated",
+  NotificationOptInStatus = "com.airship.notification_opt_in_status",
+  DisplayMessageCenter = "com.airship.display_message_center",
+  DisplayPreferenceCenter = "com.airship.display_preference_center",
+  PushTokenReceived = "com.airship.push_token_received"
 }
 
 /**
@@ -49,49 +48,41 @@ export enum EventType {
    * Notification response event. On Android, this event will be dispatched
    * in the background for background notifications actions.
    */
-  NotificationResponse = "notificationResponse",
+  NotificationResponse = "notification_response",
   /**
    * Push received event. On Android, this event will only be dispatched
    * in the background if the app is able to start a service or by sending a
    * high priority FCM message.
    */
-  PushReceived = "pushReceived",
+  PushReceived = "push_received",
   /**
-   * Register event.
+   * Channel created event.
    */
-  Register = "register",
-  /**
-   * Registration event.
-   */
-  Registration = "registration",
+  ChannelCreated = "channel_created",
   /**
    * Deep link event.
    */
-  DeepLink = "deepLink",
+  DeepLink = "deep_link",
   /**
    * Notification opt-in status event.
    */
-  NotificationOptInStatus = "notificationOptInStatus",
+  NotificationOptInStatus = "notification_opt_in_status",
   /**
-   * Inbox updated event.
+   * Message Center updated event.
    */
-  InboxUpdated = "inboxUpdated",
+  MessageCenterUpdated = "message_center_updated",
   /**
-   * Show inbox event.
+   * Display Message Center event.
    */
-  ShowInbox = "showInbox",
+  DisplayMessageCenter = "display_message_center",
   /**
-   * Chat conversation updated.
+   * Display preference center event.
    */
-  ConversationUpdated = "conversationUpdated",
+  DisplayPreferenceCenter = "display_preference_center",
   /**
-   * Open chat event.
+   * Push token received.
    */
-   OpenChat = "openChat",  
-   /**
-   * Open preference center event.
-   */
-  OpenPreferenceCenter = "openPreferenceCenter"
+  PushTokenReceived = "push_token_received",
 }
 
 /**
@@ -132,6 +123,13 @@ export interface InboxMessage {
  * Event fired when a push is received.
  */
 export interface PushReceivedEvent {
+  pushPayload: PushPayload 
+}
+
+/**
+ * The push payload.
+ */
+ export interface PushPayload {
   /**
    * The alert.
    */
@@ -143,7 +141,7 @@ export interface PushReceivedEvent {
   /**
    * The notification ID.
    */
-  notificationId: string
+  notificationId?: string
   /**
    * The notification extras.
    */
@@ -157,11 +155,13 @@ export interface NotificationResponseEvent {
   /**
    * The push notification.
    */
-  notification: PushReceivedEvent
+  pushPayload: PushPayload
+  
   /**
    * The action button ID, if available.
    */
   actionId?: string
+  
   /**
    * Indicates whether the response was a foreground action.
    * This value is always if the user taps the main notification,
@@ -257,24 +257,10 @@ export interface AirshipConfig {
   initialConfigUrl?: String,
 
   /**
-   * Enables/disables requiring initial remote config fetch before
-   * creating a channel.
-   * @deprecated This config is enabled by default.
-   */
-  requireInitialRemoteConfigEnabled?: boolean,
-
-  /**
    * Enabled features. Defaults to all.
    */
   enabledFeatures?: Feature[],
 
-  /**
-   * Chat config. Only needed with the chat module.
-   */
-  chat?:{
-    webSocketUrl: string,
-    url: string
-  }
   /**
    * iOS config.
    */
@@ -340,15 +326,15 @@ export namespace iOS {
     /**
      * Car play.
      */
-    CarPlay = "carPlay",
+    CarPlay = "car_play",
     /**
      * Critical Alert.
      */
-    CriticalAlert = "criticalAlert",
+    CriticalAlert = "critical_alert",
     /**
      * Provides app notification settings.
      */
-    ProvidesAppNotificationSettings = "providesAppNotificationSettings",
+    ProvidesAppNotificationSettings = "provides_app_notification_settings",
     /**
      * Provisional.
      */
@@ -360,17 +346,25 @@ export namespace iOS {
    */
   export enum ForegroundPresentationOption {
     /**
-     * Alerts.
-     */
-    Alert = "alert",
-    /**
-     * Sounds.
+     * Play the sound associated with the notification.
      */
     Sound = "sound",
     /**
-     * Badges.
+     * Apply the notification's badge value to the app’s icon.
      */
-    Badge = "badge"
+    Badge = "badge",
+
+    /**
+     * Show the notification in Notification Center. On iOS 13 an older,
+     * this will also show the notification as a banner.
+     */
+    List = "list",
+    
+     /**
+     * Present the notification as a banner. On iOS 13 an older,
+     * this will also show the notification in the Notification Center.
+     */
+    Banner = "banner"
   }
 
   /**
@@ -392,19 +386,19 @@ export namespace iOS {
     /**
      * CarPlay.
      */
-    CarPlay = "carPlay",
+    CarPlay = "car_play",
     /**
      * Lock screen.
      */
-    LockScreen = "lockScreen",
+    LockScreen = "lock_screen",
     /**
      * Notification center.
      */
-    NotificationCenter = "notificationCenter",
+    NotificationCenter = "notification_center",
     /**
      * Critical alert.
      */
-    CriticalAlert = "criticalAlert",
+    CriticalAlert = "critical_alert",
     /**
      * Announcement.
      */
@@ -412,11 +406,11 @@ export namespace iOS {
     /**
      * Scheduled delivery.
      */
-    ScheduledDelivery = "scheduledDelivery",
+    ScheduledDelivery = "scheduled_delivery",
     /**
     * Time sensitive.
     */
-    TimeSensitive = "timeSensitive"
+    TimeSensitive = "time_sensitive"
   }
 
   /**
@@ -426,7 +420,7 @@ export namespace iOS {
     /**
      * Not determined.
      */
-    NotDetermined = "notDetermined",
+    NotDetermined = "not_determined",
     
     /**
      * Denied.
@@ -484,37 +478,6 @@ export interface NotificationStatus {
 }
 
 /**
- * Enum of notification options. iOS only.
- * @deprecated This enum is poorly named and refers to foreground presentation
- * options instead of notification options. Use iOS.ForegroundPresentationOption instead.
- */
-export type NotificationOptionsIOS = iOS.ForegroundPresentationOption
-
-/**
- * A map of notification options. iOS only.
- * @deprecated Not used.
- */
-export type NotificationOptionsMapIOS = { [option in iOS.ForegroundPresentationOption]: boolean }
-
-/**
- * A map of foreground notification options. iOS only.
- * @deprecated Use iOS.ForegroundPresentationOption[] instead of a map.
- */
-export type ForegroundNotificationOptionsIOS = { [option in iOS.ForegroundPresentationOption]: boolean | null | undefined }
-
-/**
- * Enum of authorized notification settings. iOS only.
- * @deprecated Use iOS.AuthorizedNotificationSetting instead.
- */
-export type AuthorizedNotificationSettingsIOS = iOS.AuthorizedNotificationSetting
-
-/**
- * A map of authorized notification settings.
- * @deprecated Use [iOS.AuthorizedNotificationSetting] instead.
- */
-export type iOSAuthorizedNotificationSettingsMap = { [setting in iOS.AuthorizedNotificationSetting]: boolean }
-
-/**
  * Event fired when the notification opt-in status changes.
  */
 export interface NotificationOptInStatusEvent {
@@ -524,21 +487,15 @@ export interface NotificationOptInStatusEvent {
   optIn: boolean
 
   /**
-   * The authorized notification settings map. iOS only.
-   * @deprecated Use authorizedSettings instead.
-   */
-  authorizedNotificationSettings?: [AuthorizedNotificationSettingsIOS]
-
-  /**
    * The authorized notification settings. iOS only.
    */
   authorizedSettings?: [iOS.AuthorizedNotificationSetting]
 }
 
 /**
- * Event fired when the inbox is updated.
+ * Event fired when the Message Center  is updated.
  */
-export interface InboxUpdatedEvent {
+export interface MessageCenterUpdatedEvent {
   /**
    * The unread message count.
    */
@@ -550,9 +507,9 @@ export interface InboxUpdatedEvent {
 }
 
 /**
- * Event fired when the message center requests the inbox to be displayed.
+ * Event fired when the Message Center is requested to be displayed.
  */
-export interface ShowInboxEvent {
+export interface DisplayMessageCenterEvent {
   /**
    * The message ID, if available.
    */
@@ -570,9 +527,9 @@ export interface DeepLinkEvent {
 }
 
 /**
- * Event fired when a preference center requests to be displayed.
+ * Event fired when a preference center is requested to be displayed.
  */
- export interface OpenPreferenceCenterEvent {
+ export interface DisplayPreferenceCenterEvent {
   /**
    * The preference center Id.
    */
@@ -599,18 +556,18 @@ export class Subscription {
 /**
  * Event fired when a channel registration occurs.
  */
-export interface RegistrationEvent {
+export interface ChannelCreatedEvent {
   /**
    * The channel ID.
    */
   channelId: string
+}
+
+export interface PushTokenReceivedEvent {
   /**
-   * The registration token. The registration token might be undefined
-   * if registration is currently in progress, if the app is not setup properly
-   * for remote notifications, if running on an iOS simulator, or if running on
-   * an Android device that has an outdated or missing version of Google Play Services.
-   */
-  registrationToken?: string
+  * The push token.
+  */
+  pushToken: string
 }
 
 /**
@@ -622,51 +579,23 @@ function convertEventEnum(type: EventType): string {
     return InternalEventType.NotificationResponse
   } else if (type === EventType.PushReceived) {
     return InternalEventType.PushReceived
-  } else if (type === EventType.Register || type === EventType.Registration) {
-    return InternalEventType.Registration
+  } else if (type === EventType.ChannelCreated) {
+    return InternalEventType.ChannelCreated
   } else if (type == EventType.DeepLink) {
     return InternalEventType.DeepLink
   } else if (type == EventType.NotificationOptInStatus) {
     return InternalEventType.NotificationOptInStatus
-  } else if (type == EventType.InboxUpdated) {
-    return InternalEventType.InboxUpdated
-  } else if (type == EventType.ShowInbox) {
-    return InternalEventType.ShowInbox
-  } else if (type == EventType.ConversationUpdated) {
-    return InternalEventType.ConversationUpdated
-  } else if (type == EventType.OpenChat) {
-    return InternalEventType.OpenChat
-  } else if (type == EventType.OpenPreferenceCenter) {
-    return InternalEventType.OpenPreferenceCenter
+  } else if (type == EventType.MessageCenterUpdated) {
+    return InternalEventType.MessageCenterUpdated
+  } else if (type == EventType.DisplayMessageCenter) {
+    return InternalEventType.DisplayMessageCenter
+  } else if (type == EventType.DisplayPreferenceCenter) {
+    return InternalEventType.DisplayPreferenceCenter
+  } else if (type == EventType.PushTokenReceived) {
+    return InternalEventType.PushTokenReceived
   }
 
   throw new Error("Invalid event name: " + type)
-}
-
-function convertFeatureEnum(feature: String): Feature {
-  if (feature == "FEATURE_NONE") {
-    return Feature.FEATURE_NONE
-  } else if (feature == "FEATURE_IN_APP_AUTOMATION") {
-    return Feature.FEATURE_IN_APP_AUTOMATION
-  } else if (feature == "FEATURE_MESSAGE_CENTER") {
-    return Feature.FEATURE_MESSAGE_CENTER
-  } else if (feature == "FEATURE_PUSH") {
-    return Feature.FEATURE_PUSH
-  } else if (feature == "FEATURE_CHAT") {
-    return Feature.FEATURE_CHAT
-  } else if (feature == "FEATURE_ANALYTICS") {
-    return Feature.FEATURE_ANALYTICS
-  } else if (feature == "FEATURE_TAGS_AND_ATTRIBUTES") {
-    return Feature.FEATURE_TAGS_AND_ATTRIBUTES
-  } else if (feature == "FEATURE_CONTACTS") {
-    return Feature.FEATURE_CONTACTS
-  } else if (feature == "FEATURE_LOCATION") {
-    return Feature.FEATURE_LOCATION
-  } else if (feature == "FEATURE_ALL") {
-    return Feature.FEATURE_ALL
-  }
-
-  throw new Error("Invalid feature name: " + feature)
 }
 
 /**
@@ -695,16 +624,16 @@ export interface NotificationConfigAndroid {
  * Enum of authorized Features.
  */
 export enum Feature {
-  FEATURE_NONE = "FEATURE_NONE",
-  FEATURE_IN_APP_AUTOMATION = "FEATURE_IN_APP_AUTOMATION",
-  FEATURE_MESSAGE_CENTER = "FEATURE_MESSAGE_CENTER",
-  FEATURE_PUSH = "FEATURE_PUSH",
-  FEATURE_CHAT = "FEATURE_CHAT",
-  FEATURE_ANALYTICS = "FEATURE_ANALYTICS",
-  FEATURE_TAGS_AND_ATTRIBUTES = "FEATURE_TAGS_AND_ATTRIBUTES",
-  FEATURE_CONTACTS = "FEATURE_CONTACTS",
-  FEATURE_LOCATION = "FEATURE_LOCATION",
-  FEATURE_ALL = "FEATURE_ALL"
+  None = "none",
+  InAppAutomation = "in_app_automation",
+  MessageCenter = "message_center",
+  Push = "push",
+  Chat = "chat",
+  Analytics = "analytics",
+  TagsAndAttributes = "tags_and_attributes",
+  Contacts = "contacts",
+  Location = "location",
+  All = "all"
 }
 
 /**
@@ -778,17 +707,7 @@ export class UrbanAirship {
    * @return A promise that returns the enabled features as a Feature array.
    */
   static getEnabledFeatures(): Promise<Feature[]> {
-    return new Promise((resolve, reject) => {
-      UrbanAirshipModule.getEnabledFeatures().then((features: String[]) => {
-        var convertedFeatures: Feature[] = new Array()        
-        for (const feature of features){
-          convertedFeatures.push(convertFeatureEnum(feature))
-        }
-        resolve(convertedFeatures)
-      }), (error: Error) => {
-        reject(error)
-      }
-    })
+    return UrbanAirshipModule.getEnabledFeatures()
   }
 
   /**
@@ -843,28 +762,6 @@ export class UrbanAirship {
    */
   static getUnreadMessageCount(): Promise<number> {
     return UrbanAirshipModule.getUnreadMessageCount();
-  }
-
-  /**
-   * Checks if app notifications are enabled or not. Its possible to have `userNotificationsEnabled`
-   * but app notifications being disabled if the user opted out of notifications.
-   *
-   * @return A promise with the result.
-   * @deprecated Use getNotificationStatus() instead.
-   */
-  static isUserNotificationsOptedIn(): Promise<boolean> {
-    return UrbanAirshipModule.isUserNotificationsOptedIn()
-  }
-
-  /**
-   * Checks if app notifications are enabled at a system level or not. Its possible to have `userNotificationsEnabled`
-   * but app notifications being disabled if the user opted out of notifications.
-   *
-   * @return A promise with the result.
-   * @deprecated Use getNotificationStatus() instead.
-   */
-  static isSystemNotificationsEnabledForApp(): Promise<boolean> {
-    return UrbanAirshipModule.isSystemNotificationsEnabledForApp()
   }
 
   /**
@@ -945,15 +842,6 @@ export class UrbanAirship {
     return UrbanAirshipModule.getSubscriptionLists(types ?? ['channel']);
   }
 
-  /**
-   * Creates an editor to modify the named user tag groups.
-   *
-   * @return A tag group editor instance.
-   * @deprecated Replaced by {@link editContactTagGroups()}.
-   */
-  static editNamedUserTagGroups(): TagGroupEditor {
-    return this.editContactTagGroups()
-  }
 
   /**
    * Creates an editor to modify the contact tag groups.
@@ -989,16 +877,6 @@ export class UrbanAirship {
   }
 
   /**
-   * Creates an editor to modify the named user attributes.
-   *
-   * @return An attribute editor instance.
-   * @deprecated Replaced by {@link editContactAttributes()}.
-   */
-  static editNamedUserAttributes(): AttributeEditor {
-    return this.editContactAttributes()
-  }
-
-  /**
    * Creates an editor to modify the contact attributes.
    *
    * @return An attribute editor instance.
@@ -1007,16 +885,6 @@ export class UrbanAirship {
     return new AttributeEditor((operations: AttributeOperation[]) => {
       UrbanAirshipModule.editContactAttributes(operations)
     })
-  }
-
-  /**
-   * Edit the subscription List.
-   *
-   * @return A promise with the result.
-   * @deprecated Replaced by {@link editChannelSubscriptionLists()}.
-   */
-  static editSubscriptionLists(): SubscriptionListEditor {
-    return this.editChannelSubscriptionLists()
   }
 
   /**
@@ -1040,30 +908,7 @@ export class UrbanAirship {
         UrbanAirshipModule.editContactSubscriptionLists(subscriptionListUpdates)
     })
   }
-
-  /**
-   * Enables or disables analytics.
-   *
-   * Disabling analytics will delete any locally stored events
-   * and prevent any events from uploading. Features that depend on analytics being
-   * enabled may not work properly if it's disabled (reports, region triggers,
-   * location segmentation, push to local time).
-   *
-   * @param enabled true to enable notifications, false to disable.
-   */
-  static setAnalyticsEnabled(enabled: boolean) {
-    UrbanAirshipModule.setAnalyticsEnabled(enabled)
-  }
-
-  /**
-   * Checks if analytics is enabled or not.
-   *
-   * @return A promise with the result.
-   */
-  static isAnalyticsEnabled(): Promise<boolean> {
-    return UrbanAirshipModule.isAnalyticsEnabled()
-  }
-
+  
   /**
    * Initiates screen tracking for a specific app screen, must be called once per tracked screen.
    *
@@ -1146,23 +991,9 @@ export class UrbanAirship {
    *
    * @param options The array of foreground presentation options.
    */
-  static setForegroundPresentationOptions(options: ForegroundNotificationOptionsIOS | [iOS.ForegroundPresentationOption]) {
+  static setForegroundPresentationOptions(options: [iOS.ForegroundPresentationOption]) {
     if (Platform.OS == 'ios') {
-      if (Array.isArray(options)) {
-        return UrbanAirshipModule.setForegroundPresentationOptions(options)
-      } else {
-        var converted = []
-        if (options.alert) {
-          converted.push(iOS.ForegroundPresentationOption.Alert)
-        } 
-        if (options.badge) {
-          converted.push(iOS.ForegroundPresentationOption.Badge)
-        } 
-        if (options.sound) {
-          converted.push(iOS.ForegroundPresentationOption.Sound)
-        } 
-        return UrbanAirshipModule.setForegroundPresentationOptions(converted)
-      }
+      return UrbanAirshipModule.setForegroundPresentationOptions(options)
     }
   }
 
@@ -1382,7 +1213,7 @@ export class UrbanAirship {
    *
    * @return A promise with the result.
    */
-  static getActiveNotifications(): Promise<PushReceivedEvent[]> {
+  static getActiveNotifications(): Promise<PushPayload[]> {
     return UrbanAirshipModule.getActiveNotifications()
   }
 

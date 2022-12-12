@@ -20,7 +20,7 @@ class DeepLinkEvent(private val deepLink: String) : Event {
     override val isForeground = true
 
     companion object {
-        private const val DEEP_LINK_EVENT = "com.urbanairship.deep_link"
+        private const val DEEP_LINK_EVENT = "com.airship.deep_link"
         private const val DEEP_LINK = "deepLink"
     }
 }

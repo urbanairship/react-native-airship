@@ -22,7 +22,7 @@ class NotificationOptInEvent(private val optInStatus: Boolean) : Event {
     override val isForeground = true
 
     companion object {
-        private const val NOTIFICATION_OPT_IN_STATUS_EVENT = "com.urbanairship.notification_opt_in_status"
+        private const val NOTIFICATION_OPT_IN_STATUS_EVENT = "com.airship.notification_opt_in_status"
         private const val OPT_IN = "optIn"
     }
 }

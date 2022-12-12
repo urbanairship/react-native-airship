@@ -78,9 +78,9 @@ class AirshipPreferenceCenterModule: NSObject, PreferenceCenterOpenDelegate {
             return false
         }
         
-        UARCTEventEmitter.shared()?.sendEvent(withName: UARCTOpenPreferenceCenterEventName, body: [
-            "preferenceCenterId": preferenceCenterID
-        ])
+//        UARCTEventEmitter.shared()?.sendEvent(withName: UARCTOpenPreferenceCenterEventName, body: [
+//            "preferenceCenterId": preferenceCenterID
+//        ])
         
         return true
     }

@@ -81,9 +81,13 @@ RCT_EXTERN_METHOD(editContactSubscriptionLists:(NSArray *)subscriptionListUpdate
 
 RCT_EXTERN_METHOD(editChannelSubscriptionLists:(NSArray *)subscriptionListUpdates)
 
-RCT_EXTERN_METHOD(setNotificationOptions:(NSArray *)options)
+RCT_EXTERN_METHOD(setNotificationOptions:(NSArray *)options
+                  resolver:(RCTPromiseResolveBlock *)resolve
+                  rejecter:(RCTPromiseRejectBlock *)reject)
 
-RCT_EXTERN_METHOD(setForegroundPresentationOptions:(NSArray *)options)
+RCT_EXTERN_METHOD(setForegroundPresentationOptions:(NSArray *)options
+                  resolver:(RCTPromiseResolveBlock *)resolve
+                  rejecter:(RCTPromiseRejectBlock *)reject)
 
 RCT_EXTERN_METHOD(getNotificationStatus:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)
 
@@ -126,4 +130,5 @@ RCT_EXTERN_METHOD(clearNotifications)
 RCT_EXTERN_METHOD(clearNotification:(NSString *)identifier)
 
 RCT_EXTERN_METHOD(getActiveNotifications:(RCTPromiseResolveBlock *)resolve rejecter:(RCTPromiseRejectBlock *)reject)
+
 @end

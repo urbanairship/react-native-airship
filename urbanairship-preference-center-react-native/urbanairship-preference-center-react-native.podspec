@@ -10,13 +10,13 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "11.0" }
+  s.platforms    = { :ios => "13.0" }
   s.source       = { :git => "https://github.com/urbanairship/react-native-module.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*"
   s.requires_arc = true
 
   s.dependency "React-Core"
-  s.dependency "Airship/PreferenceCenter", "16.10.3"
+  s.dependency "Airship/PreferenceCenter", "16.10.5"
   s.dependency "urbanairship-react-native"
 end

@@ -2,7 +2,6 @@
 
 #import <React/RCTBridgeModule.h>
 #import "UARCTStorage.h"
-#import "UARCTEventEmitter.h"
 
 @interface RCT_EXTERN_MODULE(AirshipPreferenceCenterModule, NSObject)
 

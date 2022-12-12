@@ -11,7 +11,7 @@ import com.urbanairship.reactnative.Event
  *
  * @param messageId The optional message ID.
  */
-class ShowInboxEvent(private val messageId: String?) : Event {
+class DisplayMessageCenterEvent(private val messageId: String?) : Event {
 
     override val name = SHOW_INBOX_EVENT
 
@@ -22,7 +22,7 @@ class ShowInboxEvent(private val messageId: String?) : Event {
     override val isForeground = true
 
     companion object {
-        private const val SHOW_INBOX_EVENT = "com.urbanairship.show_inbox"
+        private const val SHOW_INBOX_EVENT = "com.airship.display_message_center"
         private const val MESSAGE_ID = "messageId"
     }
 }

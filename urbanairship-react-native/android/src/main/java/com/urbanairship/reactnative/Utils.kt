@@ -4,6 +4,7 @@ package com.urbanairship.reactnative
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
 import androidx.annotation.ColorInt
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Dynamic
@@ -16,6 +17,8 @@ import com.urbanairship.PrivacyManager
 import com.urbanairship.UAirship
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonValue
+import com.urbanairship.push.NotificationInfo
+import com.urbanairship.push.PushMessage
 import com.urbanairship.reactnative.PluginLogger.error
 import com.urbanairship.util.UAStringUtil
 
@@ -24,7 +27,7 @@ import com.urbanairship.util.UAStringUtil
  */
 object Utils {
 
-    private val featureMap: Map<String, Int> = mapOf(
+    private val legacyFeatureMap: Map<String, Int> = mapOf(
         "FEATURE_NONE" to PrivacyManager.FEATURE_NONE,
         "FEATURE_IN_APP_AUTOMATION" to PrivacyManager.FEATURE_IN_APP_AUTOMATION,
         "FEATURE_MESSAGE_CENTER" to PrivacyManager.FEATURE_MESSAGE_CENTER,
@@ -35,6 +38,19 @@ object Utils {
         "FEATURE_CONTACTS" to PrivacyManager.FEATURE_CONTACTS,
         "FEATURE_LOCATION" to PrivacyManager.FEATURE_LOCATION,
         "FEATURE_ALL" to PrivacyManager.FEATURE_ALL
+    )
+
+    private val featureMap: Map<String, Int> = mapOf(
+        "none" to PrivacyManager.FEATURE_NONE,
+        "in_app_automation" to PrivacyManager.FEATURE_IN_APP_AUTOMATION,
+        "message_center" to PrivacyManager.FEATURE_MESSAGE_CENTER,
+        "push" to PrivacyManager.FEATURE_PUSH,
+        "chat" to PrivacyManager.FEATURE_CHAT,
+        "analytics" to PrivacyManager.FEATURE_ANALYTICS,
+        "tags_and_attributes" to PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES,
+        "contacts" to PrivacyManager.FEATURE_CONTACTS,
+        "location" to PrivacyManager.FEATURE_LOCATION,
+        "all" to PrivacyManager.FEATURE_ALL
     )
 
     /**
@@ -220,10 +236,11 @@ object Utils {
     @PrivacyManager.Feature
     @JvmStatic
     fun parseFeature(feature: String): Int {
-        val value = featureMap[feature]
+        val value = featureMap[feature] ?: legacyFeatureMap[feature]
         value?.let {
             return it
         }
+
         throw IllegalArgumentException("Invalid feature: $feature")
     }
 
@@ -248,5 +265,47 @@ object Utils {
             }
         }
         return result
+    }
+
+    private fun getNotificationId(notificationId: Int, notificationTag: String?): String {
+        var id = notificationId.toString()
+        if (!UAStringUtil.isEmpty(notificationTag)) {
+            id += ":$notificationTag"
+        }
+        return id
+    }
+
+    fun pushPayload(
+        notificationInfo: NotificationInfo,
+    ): ReadableMap {
+        return pushPayload(
+            notificationInfo.message,
+            notificationInfo.notificationId,
+            notificationInfo.notificationTag
+        )
+    }
+
+    fun pushPayload(
+        message: PushMessage,
+        notificationId: Int? = null,
+        notificationTag: String? = null
+    ): ReadableMap {
+        val map = Arguments.createMap()
+
+        message.alert?.let {
+            map.putString("alert", it)
+        }
+
+        message.title?.let {
+            map.putString("title", it)
+        }
+        notificationId?.let {
+            map.putString("notificationId", getNotificationId(it, notificationTag))
+        }
+
+        val bundle = Bundle(message.pushBundle)
+        bundle.remove("android.support.content.wakelockid")
+        map.putMap("extras", Arguments.fromBundle(bundle))
+        return map
     }
 }
