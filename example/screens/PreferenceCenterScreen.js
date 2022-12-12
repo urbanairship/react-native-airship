@@ -24,10 +24,6 @@ import {
   UrbanAirship
 } from 'urbanairship-react-native'
 
-import {
-  AirshipPreferenceCenter,
-} from 'urbanairship-preference-center-react-native'
-
 import styles from './../Styles'
 
 export default class PreferenceScreen extends Component {
@@ -56,7 +52,7 @@ export default class PreferenceScreen extends Component {
   }
 
   refreshPreferenceCenterConfig() {
-    AirshipPreferenceCenter.getConfiguration(this.state.preferenceCenterId).then((config) => {
+    UrbanAirship.getPreferenceCenterConfig(this.state.preferenceCenterId).then((config) => {
         console.log(config);
         var sections = config.sections;
         if (sections) {

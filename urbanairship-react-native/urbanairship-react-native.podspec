@@ -9,9 +9,11 @@ require "json"
   s.author       = package['author']
   s.homepage     = package['homepage']
   s.license      = package['license']
-  s.platform     = :ios, "11.0"
+  s.platform     = :ios, "13.0"
   s.source       = { :git => "https://github.com/urbanairship/react-native-module.git", :tag => "{s.version}" }
   s.source_files  = "ios/**/*"
   s.dependency "React-Core"
-  s.dependency "Airship", "16.10.3"
+  s.dependency "Airship", "16.10.5"
+  s.dependency "Airship/PreferenceCenter", "16.10.5"
+
 end

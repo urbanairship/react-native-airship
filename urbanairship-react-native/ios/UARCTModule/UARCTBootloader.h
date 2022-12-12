@@ -13,13 +13,11 @@
 /**
  * Handles takeOff for the Urban Airship SDK.
  */
-@interface UARCTAutopilot : NSObject
+@interface UARCTBootloader : NSObject
 
 /**
- * Disables autopilot and react integration. Must be called before application:didFinishLaunchingWithOptions:.
+ * Disables automatic takeOff.
  */
 + (void)disable;
-
-+ (void)takeOffWithLaunchOptions:(NSDictionary *)launchOptions;
 
 @end

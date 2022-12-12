@@ -6,7 +6,7 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
 import com.urbanairship.reactnative.Event
 
-class OpenPreferenceCenterEvent(private val preferenceCenterId: String?) : Event {
+class DisplayPreferenceCenterEvent(private val preferenceCenterId: String?) : Event {
 
     override val name = OPEN_PREFERENCE_CENTER_EVENT
 

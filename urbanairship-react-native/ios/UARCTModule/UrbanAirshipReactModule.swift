@@ -6,18 +6,12 @@ import UserNotifications
 
 @objc(UrbanAirshipReactModule)
 class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
-
-    let UARCTErrorDomain = "com.urbanairship.react"
-    let UARCTStatusUnavailable = "UNAVAILABLE"
-    let UARCTStatusInvalidFeature = "INVALID_FEATURE"
-    let UARCTErrorDescriptionInvalidFeature = "Invalid feature, cancelling the action."
-    let UARCTStatusMessageNotFound = "STATUS_MESSAGE_NOT_FOUND"
-    let UARCTStatusInboxRefreshFailed = "STATUS_INBOX_REFRESH_FAILED"
-    let UARCTErrorDescriptionMessageNotFound = "Message not found for provided id."
-    let UARCTErrorDescriptionInboxRefreshFailed = "Failed to refresh inbox."
-    let UARCTErrorCodeMessageNotFound = 0
-    let UARCTErrorCodeInboxRefreshFailed = 1
-    let UARCTErrorCodeInvalidFeature = 2
+    enum ErrorCode: String {
+        case takeOffNotCalled = "TAKE_OFF_NOT_CALLED"
+        case airshipError = "AIRSHIP_ERROR"
+        case messageCenterMessageNotFound = "STATUS_MESSAGE_NOT_FOUND"
+        case messageCenterRefreshFailed = "STATUS_INBOX_REFRESH_FAILED"
+    }
 
     static func moduleName() -> String! {
         return "UrbanAirshipReactModule"
@@ -29,9 +23,29 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc var bridge: RCTBridge? {
         didSet {
-            UARCTEventEmitter.shared().bridge = bridge
-            UARCTAutopilot.takeOff(launchOptions: self.bridge?.launchOptions)
+
+            Task { [weak self] in
+                for await _ in PendingEvents.shared.pendingEventUpdates {
+                    guard let strongSelf = self else {
+                        break
+                    }
+                    strongSelf.notifyPendingEvent()
+                }
+            }
+
+            AirshipAutopilot.attemptTakeOff(
+                launchOptions: self.bridge?.appLaunchOptions
+            )
         }
+    }
+
+    private func notifyPendingEvent() {
+        self.bridge?.enqueueJSCall(
+            "RCTDeviceEventEmitter",
+            method: "emit",
+            args: ["com.urbanairship.onPendingEvent"],
+            completion: {}
+        )
     }
 
     @objc
@@ -52,7 +66,11 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     
     @objc
     func onAirshipListenerAdded(_ eventName: String) {
-        UARCTEventEmitter.shared().onAirshipListenerAdded(forType: eventName)
+        Task {
+            if await PendingEvents.shared.hasEvent(forName:eventName) {
+                notifyPendingEvent()
+            }
+        }
     }
     
     @objc
@@ -61,9 +79,23 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
         resolver resolve:RCTPromiseResolveBlock,
         rejecter reject:RCTPromiseRejectBlock
     ) -> Void {
-        UARCTStorage.airshipConfig = config
-        UARCTAutopilot.takeOff(launchOptions: self.bridge?.launchOptions)
-        resolve(Airship.isFlying)
+
+        do {
+            let pluginConfig = try JSONDecoder().decode(
+                PluginConfig.self,
+                from: try JSONUtils.data(config)
+            )
+            PluginStore.shared.config = pluginConfig
+
+            AirshipAutopilot.attemptTakeOff(
+                launchOptions: self.bridge?.appLaunchOptions
+            )
+
+            resolve(Airship.isFlying)
+        } catch {
+            rejectPromise(reject, error: error)
+        }
+
     }
     
     @objc
@@ -77,10 +109,13 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     @objc
     func takePendingEvents(
         _ type: String,
-        resolver resolve:RCTPromiseResolveBlock,
+        resolver resolve:@escaping RCTPromiseResolveBlock,
         rejecter reject:RCTPromiseRejectBlock
     ) -> Void {
-        resolve(UARCTEventEmitter.shared().takePendingEvents(withType: type))
+        Task {
+            let events = await PendingEvents.shared.takeEvents(forName: type)
+            resolve(events)
+        }
     }
 
     @objc
@@ -102,15 +137,12 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
         rejecter reject: RCTPromiseRejectBlock
     ) {
         guard ensureAirshipReady(reject) else { return }
-        
-        if (UARCTUtils.isValidFeatureArray(features)) {
-            Airship.shared.privacyManager.enabledFeatures = UARCTUtils.stringArray(toFeatures: features)
-            resolve(true)
-        } else {
-            let code = UARCTStatusInvalidFeature
-            let errorMessage = UARCTErrorDescriptionInvalidFeature
-            let error = NSError(domain: UARCTErrorDomain, code: UARCTErrorCodeInvalidFeature, userInfo: [NSLocalizedDescriptionKey : errorMessage])
-            reject(code, errorMessage, error);
+
+        do {
+            let features = try Features.parse(features)
+            Airship.shared.privacyManager.enabledFeatures = features
+        } catch {
+            rejectPromise(reject, error: error)
         }
     }
     
@@ -121,7 +153,9 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     ) -> Void {
         guard ensureAirshipReady(reject) else { return }
 
-        resolve(UARCTUtils.feature(toStringArray: Airship.shared.privacyManager.enabledFeatures))
+        resolve(
+            Airship.shared.privacyManager.enabledFeatures.names
+        )
     }
     
     @objc
@@ -130,17 +164,14 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-
         guard ensureAirshipReady(reject) else { return }
-        
-        if (UARCTUtils.isValidFeatureArray(features)) {
-            Airship.shared.privacyManager.enableFeatures(UARCTUtils.stringArray(toFeatures: features))
-            resolve(true)
-        } else {
-            let code = UARCTStatusInvalidFeature
-            let errorMessage = UARCTErrorDescriptionInvalidFeature
-            let error = NSError(domain: UARCTErrorDomain, code: UARCTErrorCodeInvalidFeature, userInfo: [NSLocalizedDescriptionKey : errorMessage])
-            reject(code, errorMessage, error);
+
+        do {
+            Airship.shared.privacyManager.enableFeatures(
+                try Features.parse(features)
+            )
+        } catch {
+            rejectPromise(reject, error: error)
         }
     }
     
@@ -152,14 +183,12 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     ) {
         guard ensureAirshipReady(reject) else { return }
         
-        if (UARCTUtils.isValidFeatureArray(features)) {
-            Airship.shared.privacyManager.disableFeatures(UARCTUtils.stringArray(toFeatures: features))
-            resolve(true)
-        } else {
-            let code = UARCTStatusInvalidFeature
-            let errorMessage = UARCTErrorDescriptionInvalidFeature
-            let error = NSError(domain: UARCTErrorDomain, code: UARCTErrorCodeInvalidFeature, userInfo: [NSLocalizedDescriptionKey : errorMessage])
-            reject(code, errorMessage, error);
+        do {
+            Airship.shared.privacyManager.disableFeatures(
+                try Features.parse(features)
+            )
+        } catch {
+            rejectPromise(reject, error: error)
         }
     }
     
@@ -172,13 +201,14 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
 
         guard ensureAirshipReady(reject) else { return }
         
-        if (UARCTUtils.isValidFeatureArray(features)) {
-            resolve(Airship.shared.privacyManager.isEnabled(UARCTUtils.stringArray(toFeatures: features)))
-        } else {
-            let code = UARCTStatusInvalidFeature
-            let errorMessage = UARCTErrorDescriptionInvalidFeature
-            let error = NSError(domain: UARCTErrorDomain, code: UARCTErrorCodeInvalidFeature, userInfo: [NSLocalizedDescriptionKey : errorMessage])
-            reject(code, errorMessage, error);
+        do {
+            resolve(
+                Airship.shared.privacyManager.isEnabled(
+                    try Features.parse(features)
+                )
+            )
+        } catch {
+            rejectPromise(reject, error: error)
         }
     }
     
@@ -190,50 +220,7 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
         guard ensureAirshipReady(reject) else { return }
         resolve(Airship.push.userPushNotificationsEnabled)
     }
-    
-    @objc
-    func isUserNotificationsOptedIn(
-        _ resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) -> Void {
 
-        guard ensureAirshipReady(reject) else { return }
-        
-        var optedIn = true
-        
-        if (Airship.push.deviceToken == nil) {
-            AirshipLogger.trace("Opted out: missing device token")
-            optedIn = false
-        }
-
-        if (!Airship.push.userPushNotificationsEnabled) {
-            AirshipLogger.trace("Opted out: user push notifications disabled")
-            optedIn = false
-        }
-
-        if (Airship.push.authorizedNotificationSettings == [] ) {
-            AirshipLogger.trace("Opted out: no authorized notification settings")
-            optedIn = false
-        }
-
-        if (!Airship.shared.privacyManager.isEnabled(Features.push)) {
-            AirshipLogger.trace("Opted out: push is disabled")
-            optedIn = false
-        }
-        resolve(optedIn)
-    }
-    
-    @objc
-    func isSystemNotificationsEnabledForApp(
-        _ resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) -> Void {
-        guard ensureAirshipReady(reject) else { return }
-        
-        let optedIn = Airship.push.authorizedNotificationSettings.rawValue != 0
-        resolve(optedIn)
-    }
-    
     @objc
     func enableUserPushNotifications(
         _ resolve: @escaping RCTPromiseResolveBlock,
@@ -377,12 +364,6 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
         } else {
             Airship.shared.privacyManager.disableFeatures(Features.analytics)
         }
-    }
-    
-    @objc
-    func isAnalyticsEnabled(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-        guard ensureAirshipReady() else { return }
-        resolve(Airship.shared.privacyManager.isEnabled(Features.analytics))
     }
     
     @objc
@@ -577,59 +558,64 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func setNotificationOptions(_ options:[Any]) {
+    func setNotificationOptions(
+        _ options:[Any],
+        resolver resolve:@escaping RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) {
         guard ensureAirshipReady() else { return }
-        
-        let notificationOptions = UARCTUtils.options(fromOptionsArray: options)
-        AirshipLogger.debug("Notification options set: \(notificationOptions) from dictionary: \(options)")
-        Airship.push.notificationOptions = notificationOptions
-        Airship.push.updateRegistration()
+
+        do {
+            let options = try UANotificationOptions.parse(options)
+            Airship.push.notificationOptions = options
+            resolve(true)
+        } catch {
+            rejectPromise(reject, error: error)
+        }
     }
     
     @objc
-    func setForegroundPresentationOptions(_ options:[Any]) {
-        guard let options = options as? [String],
-              ensureAirshipReady()
-        else {
-            return
+    func setForegroundPresentationOptions(
+        _ options:[Any],
+        resolver resolve:@escaping RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) {
+        guard ensureAirshipReady() else { return }
+
+        do {
+            let options = try UNNotificationPresentationOptions.parse(options)
+            Airship.push.defaultPresentationOptions = options
+            PluginStore.shared.foregroundPresentationOptions = options
+            resolve(true)
+        } catch {
+            rejectPromise(reject, error: error)
         }
-        
-        var presentationOptions: UNNotificationPresentationOptions = []
-        
-        if (options.contains("alert")) {
-            AirshipLogger.warn("Alert will be deprecated in iOS 14")
-        }
-        
-        if (options.contains("badge")) {
-            presentationOptions = [presentationOptions, UNNotificationPresentationOptions.badge]
-        }
-        
-        if (options.contains("sound")) {
-            presentationOptions = [presentationOptions, UNNotificationPresentationOptions.sound]
-        }
-        AirshipLogger.debug("Foreground presentation options set: \(presentationOptions.rawValue) from dictionary: \(options)")
-        
-        Airship.push.defaultPresentationOptions = presentationOptions
-        UARCTStorage.foregroundPresentationOptions = presentationOptions
     }
     
     @objc
-    func getNotificationStatus(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func getNotificationStatus(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         guard ensureAirshipReady() else { return }
         
         let push = Airship.push
         let isSystemEnabled = push.authorizedNotificationSettings != []
-        let result = [
-            "airshipOptIn": NSNumber(value: push.isPushNotificationsOptedIn),
-            "airshipEnabled": NSNumber(value: push.userPushNotificationsEnabled),
-            "systemEnabled": NSNumber(value: isSystemEnabled),
-            "ios": [
-            "authorizedSettings": UARCTUtils.authorizedSettingsArray(push.authorizedNotificationSettings),
-            "authorizedStatus": UARCTUtils.authorizedStatusString(push.authorizationStatus)
+
+        do {
+            let result: [String: Any] = [
+                "airshipOptIn": NSNumber(value: push.isPushNotificationsOptedIn),
+                "airshipEnabled": NSNumber(value: push.userPushNotificationsEnabled),
+                "systemEnabled": NSNumber(value: isSystemEnabled),
+                "ios": [
+                    "authorizedSettings": push.authorizedNotificationSettings.names,
+                    "authorizedStatus": try push.authorizationStatus.name
+                ]
             ]
-        ] as [String : Any]
-        
-        resolve(result)
+            resolve(result)
+        } catch {
+            rejectPromise(reject, error: error)
+        }
     }
     
     @objc
@@ -640,7 +626,10 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func isAutobadgeEnabled(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func isAutobadgeEnabled(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         guard ensureAirshipReady() else { return }
         
         resolve(Airship.push.autobadgeEnabled)
@@ -654,7 +643,10 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func getBadgeNumber(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func getBadgeNumber(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         guard ensureAirshipReady() else { return }
         
         resolve(Airship.push.badgeNumber)
@@ -675,7 +667,11 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func displayMessage(_ messageId:String, resolver resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func displayMessage(
+        _ messageId:String,
+        resolver resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         guard ensureAirshipReady() else { return }
         
         MessageCenter.shared.displayMessage(forID: messageId)
@@ -691,7 +687,10 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func getInboxMessages(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func getInboxMessages(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         guard ensureAirshipReady() else { return }
         
         var messages: [[AnyHashable : Any]] = []
@@ -718,41 +717,66 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     }
     
     @objc
-    func getUnreadMessageCount(_ resolve:RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func getUnreadMessageCount(
+        _ resolve:RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         guard ensureAirshipReady() else { return }
         
-        resolve(MessageCenter.shared.messageList.unreadCount)
+        resolve(
+            MessageCenter.shared.messageList.unreadCount
+        )
     }
     
     @objc
-    func deleteInboxMessage(_ messageId:String, resolver resolve:@escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func deleteInboxMessage(
+        _ messageId:String,
+        resolver resolve:@escaping RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock
+    ) -> Void {
         guard ensureAirshipReady() else { return }
         
-        let message = MessageCenter.shared.messageList.message(forID: messageId)
-        
-        if (message == nil) {
-            let error = NSError(domain: UARCTErrorDomain, code: UARCTErrorCodeMessageNotFound, userInfo: [NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound])
-            reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error)
-        } else {
-            MessageCenter.shared.messageList.markMessagesDeleted([message!]) {
-                resolve(true)
-            }
+        guard
+            let message = MessageCenter.shared.messageList.message(
+                forID: messageId
+            )
+        else {
+            rejectPromise(
+                reject,
+                error: AirshipErrors.error("Message \(messageId) not found"),
+                code: .messageCenterMessageNotFound
+            )
+            return
+        }
+
+        MessageCenter.shared.messageList.markMessagesDeleted([message]) {
+            resolve(true)
         }
     }
     
     @objc
-    func markInboxMessageRead(_ messageId:String, resolver resolve:@escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    func markInboxMessageRead(
+        _ messageId:String,
+        resolver resolve:@escaping RCTPromiseResolveBlock,
+        rejecter reject:RCTPromiseRejectBlock)
+    -> Void {
         guard ensureAirshipReady() else { return }
-        
-        let message = MessageCenter.shared.messageList.message(forID: messageId)
-        
-        if (message == nil) {
-            let error = NSError(domain: UARCTErrorDomain, code: UARCTErrorCodeMessageNotFound, userInfo: [NSLocalizedDescriptionKey:UARCTErrorDescriptionMessageNotFound])
-            reject(UARCTStatusMessageNotFound, UARCTErrorDescriptionMessageNotFound, error)
-        } else {
-            MessageCenter.shared.messageList.markMessagesRead([message!]) {
-                resolve(true)
-            }
+
+        guard
+            let message = MessageCenter.shared.messageList.message(
+                forID: messageId
+            )
+        else {
+            rejectPromise(
+                reject,
+                error: AirshipErrors.error("Message \(messageId) not found"),
+                code: .messageCenterMessageNotFound
+            )
+            return
+        }
+
+        MessageCenter.shared.messageList.markMessagesRead([message]) {
+            resolve(true)
         }
     }
     
@@ -763,15 +787,18 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
         MessageCenter.shared.messageList.retrieveMessageList {
             resolve(true)
         } withFailureBlock: {
-            let error = NSError(domain: self.UARCTErrorDomain, code: self.UARCTErrorCodeInboxRefreshFailed, userInfo: [NSLocalizedDescriptionKey:self.UARCTErrorDescriptionInboxRefreshFailed])
-            reject(self.UARCTStatusInboxRefreshFailed, self.UARCTErrorDescriptionInboxRefreshFailed, error)
+            self.rejectPromise(
+                reject,
+                error: AirshipErrors.error("Faild to refresh inbox"),
+                code: .messageCenterRefreshFailed
+            )
         }
     }
     
     @objc
     func setAutoLaunchDefaultMessageCenter(_ enabled:Bool) {
         guard ensureAirshipReady() else { return }
-        UARCTStorage.autoLaunchMessageCenter = enabled
+        PluginStore.shared.autoDisplayMessageCenter = enabled
     }
     
     @objc
@@ -817,12 +844,43 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
     ) -> Void {
         UNUserNotificationCenter.current().getDeliveredNotifications { notifications in
             let result = notifications.map { notification in
-                UARCTUtils.eventBody(
-                    forNotificationContent: notification.request.content.userInfo,
-                    notificationIdentifier: notification.request.identifier
+                PushUtils.contentPayload(
+                    notification.request.content.userInfo,
+                    notificationID: notification.request.identifier
                 )
             }
             resolve(result)
+        }
+    }
+
+    @objc
+    func displayPreferenceCenter(_ preferenceCenterId: String) {
+        guard ensureAirshipReady() else { return }
+
+        PreferenceCenter.shared.open(preferenceCenterId)
+    }
+
+    @objc
+    func setUseCustomPreferenceCenterUi(
+        _ useCustomUi: Bool,
+        forPreferenceId preferenceId: String
+    ) {
+        PluginStore.shared.setAutoLaunchPreferenceCenter(
+            preferenceId,
+            autoLaunch: !useCustomUi
+        )
+    }
+
+    @objc
+    func getPreferenceCenterConfig(
+        _ preferenceCenterId: String,
+        resolver resolve:@escaping RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        guard ensureAirshipReady(reject) else { return }
+
+        PreferenceCenter.shared.jsonConfig(preferenceCenterID: preferenceCenterId) { config in
+            resolve(config)
         }
     }
 
@@ -832,14 +890,24 @@ class UrbanAirshipReactModule: NSObject, RCTBridgeModule {
 
     private func ensureAirshipReady(_ reject: RCTPromiseRejectBlock) -> Bool {
         guard Airship.isFlying else {
-            reject(
-                "TAKE_OFF_NOT_CALLED",
-                "Airship not ready, takeOff not called",
-                nil
+            rejectPromise(
+                reject,
+                error: AirshipErrors.error(
+                    "Airship not ready, takeOff not called"
+                ),
+                code: .takeOffNotCalled
             )
             return false
         }
         return true
+    }
+
+    private func rejectPromise(
+        _ reject: RCTPromiseRejectBlock,
+        error: Error?,
+        code: ErrorCode = .airshipError
+    ) {
+        reject(code.rawValue, error?.localizedDescription, error)
     }
 }
 
@@ -953,7 +1021,7 @@ struct SubscriptionListOperation: Decodable {
     private enum CodingKeys: String, CodingKey {
         case action = "type"
         case listID = "listId"
-        case scope = "Scope"
+        case scope = "scope"
     }
 
     func apply(editor: SubscriptionListEditor) {
@@ -985,5 +1053,11 @@ struct SubscriptionListOperation: Decodable {
         case .unsubscribe:
             editor.unsubscribe(listID, scope: scope)
         }
+    }
+}
+
+fileprivate extension RCTBridge {
+    var appLaunchOptions: [UIApplication.LaunchOptionsKey: Any]? {
+        return self.launchOptions as? [UIApplication.LaunchOptionsKey: Any]
     }
 }

@@ -1,20 +1,20 @@
 PODS:
-  - Airship (16.10.3):
-    - Airship/Automation (= 16.10.3)
-    - Airship/Basement (= 16.10.3)
-    - Airship/Core (= 16.10.3)
-    - Airship/ExtendedActions (= 16.10.3)
-    - Airship/MessageCenter (= 16.10.3)
-  - Airship/Automation (16.10.3):
+  - Airship (16.10.5):
+    - Airship/Automation (= 16.10.5)
+    - Airship/Basement (= 16.10.5)
+    - Airship/Core (= 16.10.5)
+    - Airship/ExtendedActions (= 16.10.5)
+    - Airship/MessageCenter (= 16.10.5)
+  - Airship/Automation (16.10.5):
     - Airship/Core
-  - Airship/Basement (16.10.3)
-  - Airship/Core (16.10.3):
+  - Airship/Basement (16.10.5)
+  - Airship/Core (16.10.5):
     - Airship/Basement
-  - Airship/ExtendedActions (16.10.3):
+  - Airship/ExtendedActions (16.10.5):
     - Airship/Core
-  - Airship/MessageCenter (16.10.3):
+  - Airship/MessageCenter (16.10.5):
     - Airship/Core
-  - Airship/PreferenceCenter (16.10.3):
+  - Airship/PreferenceCenter (16.10.5):
     - Airship/Core
   - AirshipServiceExtension (16.6.0)
   - boost-for-react-native (1.63.0)
@@ -295,12 +295,9 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - urbanairship-preference-center-react-native (14.5.1):
-    - Airship/PreferenceCenter (= 16.10.3)
-    - React-Core
-    - urbanairship-react-native
   - urbanairship-react-native (14.5.1):
-    - Airship (= 16.10.3)
+    - Airship (= 16.10.5)
+    - Airship/PreferenceCenter (= 16.10.5)
     - React-Core
   - Yoga (1.14.0)
 
@@ -340,7 +337,6 @@ DEPENDENCIES:
   - RNGestureHandler (from `../../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../node_modules/react-native-screens`)
-  - urbanairship-preference-center-react-native (from `../../urbanairship-preference-center-react-native`)
   - urbanairship-react-native (from `../../urbanairship-react-native`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
@@ -415,15 +411,13 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../../node_modules/react-native-screens"
-  urbanairship-preference-center-react-native:
-    :path: "../../urbanairship-preference-center-react-native"
   urbanairship-react-native:
     :path: "../../urbanairship-react-native"
   Yoga:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: dfdb00e0447c3773f75c817e3c740716c79bdc50
+  Airship: 81fd1cf443114dfc96fbd6544f297de769d684d6
   AirshipServiceExtension: 36efe25642746cc030844116d59fb366b26da76f
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
@@ -458,10 +452,9 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  urbanairship-preference-center-react-native: 29d278fd6e7bb66c6c5ed864c1ea1f4f79fb212c
-  urbanairship-react-native: db56a50a0f926d9d41f13a9fa7332c53a6cd30c6
+  urbanairship-react-native: 2d8181662cdd4398612257dd46b5b4487035ee9c
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
-PODFILE CHECKSUM: 0ac33f74cca01098af99ab55a29cc63c7ef373f6
+PODFILE CHECKSUM: 4690b19fbc382edff1b096205d82ead1a80d3b49
 
 COCOAPODS: 1.11.3

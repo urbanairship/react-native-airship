@@ -12,7 +12,7 @@ import com.urbanairship.reactnative.Event
  * @param unreadCount The number of unread messages in the message center.
  * @param count The number of total messages in the message center.
  */
-class InboxUpdatedEvent(private val unreadCount: Int, private val count: Int) : Event {
+class MessageCenterUpdatedEvent(private val unreadCount: Int, private val count: Int) : Event {
 
     override  val name = INBOX_UPDATED_EVENT
 
@@ -24,7 +24,7 @@ class InboxUpdatedEvent(private val unreadCount: Int, private val count: Int) : 
     override val isForeground = true
 
     companion object {
-        private const val INBOX_UPDATED_EVENT = "com.urbanairship.inbox_updated"
+        private const val INBOX_UPDATED_EVENT = "com.airship.message_center_updated"
         private const val MESSAGE_UNREAD_COUNT = "messageUnreadCount"
         private const val MESSAGE_COUNT = "messageCount"
     }

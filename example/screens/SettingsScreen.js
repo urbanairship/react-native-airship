@@ -23,7 +23,6 @@ import {
 } from 'react-native';
 
 import { UrbanAirship } from 'urbanairship-react-native'
-import { AirshipPreferenceCenter } from 'urbanairship-preference-center-react-native'
 
 import styles from './../Styles';
 
@@ -39,7 +38,7 @@ export default class SettingsScreen extends Component {
     }
 
     UrbanAirship.setAutoLaunchDefaultMessageCenter(false);
-    AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(true, "neat");
+    UrbanAirship.setUseCustomPreferenceCenterUi(true, "neat");
 
     this.handleNotificationsEnabled = this.handleNotificationsEnabled.bind(this);
 
@@ -121,9 +120,9 @@ export default class SettingsScreen extends Component {
   openPreferenceCenter() {
     // I call the setUseCustomPreferenceCenterUi here to use OOTB preference center.
     // Then I set it again to true to can use the custom preference center
-    AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(false, "neat");
-    AirshipPreferenceCenter.openPreferenceCenter("neat");
-    AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(true, "neat");
+    UrbanAirship.setUseCustomPreferenceCenterUi(false, "neat");
+    UrbanAirship.displayPreferenceCenter("neat");
+    UrbanAirship.setUseCustomPreferenceCenterUi(true, "neat");
   }
 
   componentDidMount() {
@@ -134,36 +133,34 @@ export default class SettingsScreen extends Component {
     })
 
     this.subscriptions = [
-      UrbanAirship.addListener("notificationResponse", (response) => {
+      UrbanAirship.addListener("notification_response", (response) => {
         console.log('notificationResponse:', JSON.stringify(response));
         alert("notificationResponse: " + response.notification.alert);
       }),
 
-      UrbanAirship.addListener("pushReceived", (notification) => {
+      UrbanAirship.addListener("push_received", (notification) => {
         console.log('pushReceived:', JSON.stringify(notification));
         alert("pushReceived: " + notification.alert);
       }),
 
-      UrbanAirship.addListener("deepLink", (event) => {
+      UrbanAirship.addListener("deep_link", (event) => {
         console.log('deepLink:', JSON.stringify(event));
         alert("deepLink: " + event.deepLink);
       }),
 
-      UrbanAirship.addListener("registration", (event) => {
+      UrbanAirship.addListener("channel_created", (event) => {
         console.log('registration:', JSON.stringify(event));
         this.state.channelId = event.channelId;
         this.setState(this.state);
       }),
 
-      UrbanAirship.addListener("notificationOptInStatus", (event) => {
+      UrbanAirship.addListener("notification_opt_in_status", (event) => {
         console.log('notificationOptInStatus:', JSON.stringify(event));
       }),
 
-      AirshipPreferenceCenter.addPreferenceCenterOpenListener( (body) => {
-        //Navigate to custom UI
+      UrbanAirship.addListener("display_preference_center", (event) => {
         this.props.navigation.navigate('PreferenceCenter');
       })
-
     ];
   }
 

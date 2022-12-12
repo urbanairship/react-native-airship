@@ -2,7 +2,8 @@
 
 'use strict';
 
-import { JsonValue, SubscriptionScope } from 'urbanairship-react-native'
+import { SubscriptionScope } from './UrbanAirship'
+import { JsonValue } from "./Json";
 
 // ---
 // See: https://github.com/urbanairship/web-push-sdk/blob/master/src/remote-data/preference-center.ts

@@ -32,7 +32,9 @@ import com.urbanairship.channel.AirshipChannelListener
 import com.urbanairship.channel.AttributeEditor
 import com.urbanairship.channel.TagGroupsEditor
 import com.urbanairship.contacts.Scope
+import com.urbanairship.json.JsonValue
 import com.urbanairship.messagecenter.MessageCenter
+import com.urbanairship.preferencecenter.PreferenceCenter
 import com.urbanairship.push.PushMessage
 import com.urbanairship.reactnative.events.NotificationOptInEvent
 import com.urbanairship.reactnative.events.PushReceivedEvent
@@ -250,32 +252,6 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
         } catch (e: Exception) {
             promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE, e)
         }
-    }
-
-    /**
-     * Checks if the app's notifications are enabled.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    fun isUserNotificationsOptedIn(promise: Promise) {
-        if (!Utils.ensureAirshipReady(promise)) {
-            return
-        }
-        promise.resolve(UAirship.shared().pushManager.isOptIn)
-    }
-
-    /**
-     * Checks if the app's notifications are enabled at the system level.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    fun isSystemNotificationsEnabledForApp(promise: Promise) {
-        if (!Utils.ensureAirshipReady(promise)) {
-            return
-        }
-        promise.resolve(NotificationManagerCompat.from(reactApplicationContext).areNotificationsEnabled())
     }
 
     /**
@@ -593,36 +569,6 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
             editor.addIdentifier(key, value)
         }
         editor.apply()
-    }
-
-    /**
-     * Enables/Disables analytics.
-     *
-     * @param enabled `true` to enable analytics, `false` to disable.
-     */
-    @ReactMethod
-    fun setAnalyticsEnabled(enabled: Boolean) {
-        if (!Utils.ensureAirshipReady()) {
-            return
-        }
-        if (enabled) {
-            UAirship.shared().privacyManager.enable(PrivacyManager.FEATURE_ANALYTICS)
-        } else {
-            UAirship.shared().privacyManager.disable(PrivacyManager.FEATURE_ANALYTICS)
-        }
-    }
-
-    /**
-     * Checks if analytics are enabled.
-     *
-     * @param promise The JS promise.
-     */
-    @ReactMethod
-    fun isAnalyticsEnabled(promise: Promise) {
-        if (!Utils.ensureAirshipReady(promise)) {
-            return
-        }
-        promise.resolve(UAirship.shared().privacyManager.isEnabled(PrivacyManager.FEATURE_ANALYTICS))
     }
 
     /**
@@ -991,7 +937,7 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
 
                 pushMessage = bundle?.let { PushMessage(it) } ?: PushMessage(Bundle())
 
-                notifications.pushMap(PushReceivedEvent(pushMessage, id, tag).body)
+                notifications.pushMap(Utils.pushPayload(pushMessage, id, tag))
             }
             promise.resolve(notifications)
         } else {
@@ -1225,6 +1171,34 @@ class UrbanAirshipReactModule(reactContext: ReactApplicationContext) : ReactCont
             }
             return result
         }
+    }
+
+    @ReactMethod
+    fun displayPreferenceCenter(preferenceCenterId: String) {
+        if (!Utils.ensureAirshipReady()) {
+            return
+        }
+        PreferenceCenter.shared().open(preferenceCenterId)
+    }
+
+    @ReactMethod
+    fun getPreferenceCenterConfig(preferenceCenterId: String, promise: Promise) {
+        if (!Utils.ensureAirshipReady(promise)) {
+            return
+        }
+
+        PreferenceCenter.shared().getJsonConfig(preferenceCenterId).addResultCallback { result: JsonValue? ->
+            if (result == null) {
+                promise.reject(Exception("Failed to get preference center configuration."))
+                return@addResultCallback
+            }
+            promise.resolve(Utils.convertJsonValue(result))
+        }
+    }
+
+    @ReactMethod
+    fun setUseCustomPreferenceCenterUi(useCustomUI: Boolean, preferenceID: String) {
+        preferences.setAutoLaunchPreferenceCenter(preferenceID, !useCustomUI)
     }
 
 }

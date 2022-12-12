@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.urbanairship.push.NotificationActionButtonInfo
 import com.urbanairship.push.NotificationInfo
 import com.urbanairship.reactnative.Event
+import com.urbanairship.reactnative.Utils
 
 /**
  * Notification response event.
@@ -19,24 +20,18 @@ class NotificationResponseEvent(
     private val actionButtonInfo: NotificationActionButtonInfo? = null
 ) : Event {
 
-    override val name = NOTIFICATION_RESPONSE_EVENT
+    override val name = "com.airship.notification_response"
 
     override val body: ReadableMap = Arguments.createMap().apply {
-        putMap(RESPONSE_NOTIFICATION, PushReceivedEvent(notificationInfo).body)
+        putMap("pushPayload", Utils.pushPayload(notificationInfo))
         if (actionButtonInfo != null) {
-            putString(RESPONSE_ACTION_ID, actionButtonInfo.buttonId)
-            putBoolean(RESPONSE_FOREGROUND, actionButtonInfo.isForeground)
+            putString("actionId", actionButtonInfo.buttonId)
+            putBoolean("isForeground", actionButtonInfo.isForeground)
         } else {
-            putBoolean(RESPONSE_FOREGROUND, true)
+            putBoolean("isForeground", true)
         }
     }
 
     override val isForeground = actionButtonInfo?.isForeground ?: true
 
-    companion object {
-        private const val NOTIFICATION_RESPONSE_EVENT = "com.urbanairship.notification_response"
-        private const val RESPONSE_ACTION_ID = "actionId"
-        private const val RESPONSE_FOREGROUND = "isForeground"
-        private const val RESPONSE_NOTIFICATION = "notification"
-    }
 }

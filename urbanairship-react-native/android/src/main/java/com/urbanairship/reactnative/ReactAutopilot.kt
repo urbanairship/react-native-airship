@@ -21,18 +21,15 @@ import com.urbanairship.json.JsonList
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonValue
 import com.urbanairship.messagecenter.MessageCenter
+import com.urbanairship.preferencecenter.PreferenceCenter
 import com.urbanairship.push.NotificationActionButtonInfo
 import com.urbanairship.push.NotificationInfo
 import com.urbanairship.push.NotificationListener
 import com.urbanairship.reactnative.Utils.getHexColor
 import com.urbanairship.reactnative.Utils.getNamedResource
 import com.urbanairship.reactnative.Utils.parseFeature
-import com.urbanairship.reactnative.events.DeepLinkEvent
-import com.urbanairship.reactnative.events.InboxUpdatedEvent
-import com.urbanairship.reactnative.events.NotificationResponseEvent
-import com.urbanairship.reactnative.events.PushReceivedEvent
-import com.urbanairship.reactnative.events.RegistrationEvent
-import com.urbanairship.reactnative.events.ShowInboxEvent
+import com.urbanairship.reactnative.events.*
+import com.urbanairship.reactnative.preferenceCenter.events.DisplayPreferenceCenterEvent
 
 /**
  * Module's autopilot to customize Urban Airship.
@@ -65,15 +62,18 @@ class ReactAutopilot : Autopilot() {
 
         airship.channel.addChannelListener(object : AirshipChannelListener {
             override fun onChannelCreated(channelId: String) {
-                val event: Event = RegistrationEvent(channelId, UAirship.shared().pushManager.pushToken)
+                val event: Event = ChannelCreatedEvent(channelId, UAirship.shared().pushManager.pushToken)
                 EventEmitter.shared().sendEvent(event)
             }
 
             override fun onChannelUpdated(channelId: String) {
-                val event: Event = RegistrationEvent(channelId, UAirship.shared().pushManager.pushToken)
-                EventEmitter.shared().sendEvent(event)
             }
         })
+
+        airship.pushManager.addPushTokenListener { token ->
+            val event = PushTokenReceivedEvent(token)
+            EventEmitter.shared().sendEvent(event)
+        }
 
         airship.pushManager.notificationListener = object : NotificationListener {
             override fun onNotificationPosted(notificationInfo: NotificationInfo) {
@@ -103,7 +103,7 @@ class ReactAutopilot : Autopilot() {
 
         // Register a listener for inbox update event
         MessageCenter.shared().inbox.addListener {
-            val event: Event = InboxUpdatedEvent(MessageCenter.shared().inbox.unreadCount, MessageCenter.shared().inbox.count)
+            val event: Event = MessageCenterUpdatedEvent(MessageCenter.shared().inbox.unreadCount, MessageCenter.shared().inbox.count)
             EventEmitter.shared().sendEvent(event)
         }
 
@@ -116,6 +116,17 @@ class ReactAutopilot : Autopilot() {
                 true
             }
         }
+
+        PreferenceCenter.shared().openListener =
+            PreferenceCenter.OnOpenListener { preferenceCenterId: String ->
+                if (preferences.isAutoLaunchPreferenceCenterEnabled(preferenceCenterId)) {
+                    return@OnOpenListener false
+                } else {
+                    val event: Event = DisplayPreferenceCenterEvent(preferenceCenterId)
+                    EventEmitter.shared().sendEvent(event)
+                    return@OnOpenListener true
+                }
+            }
 
         // Set our custom notification provider
         val notificationProvider = ReactNotificationProvider(context, airship.airshipConfigOptions)
@@ -331,7 +342,7 @@ class ReactAutopilot : Autopilot() {
         const val EXTENDER_MANIFEST_KEY = "com.urbanairship.reactnative.AIRSHIP_EXTENDER"
 
         private fun sendShowInboxEvent(messageId: String?) {
-            val event: Event = ShowInboxEvent(messageId)
+            val event: Event = DisplayMessageCenterEvent(messageId)
             EventEmitter.shared().sendEvent(event)
         }
 
