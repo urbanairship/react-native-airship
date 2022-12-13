@@ -4,7 +4,12 @@
     "packages": [
       "urbanairship-react-native",
       "urbanairship-hms-react-native",
-      "example"
+      "example",
+      "fabricexample"
+    ],
+    "nohoist": [
+      "fabricexample/react-native/**",
+      "fabricexample/@babel/**"
     ]
   },
   "scripts": {
