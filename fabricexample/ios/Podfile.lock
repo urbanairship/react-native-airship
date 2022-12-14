@@ -1,4 +1,21 @@
 PODS:
+  - Airship (16.10.5):
+    - Airship/Automation (= 16.10.5)
+    - Airship/Basement (= 16.10.5)
+    - Airship/Core (= 16.10.5)
+    - Airship/ExtendedActions (= 16.10.5)
+    - Airship/MessageCenter (= 16.10.5)
+  - Airship/Automation (16.10.5):
+    - Airship/Core
+  - Airship/Basement (16.10.5)
+  - Airship/Core (16.10.5):
+    - Airship/Basement
+  - Airship/ExtendedActions (16.10.5):
+    - Airship/Core
+  - Airship/MessageCenter (16.10.5):
+    - Airship/Core
+  - Airship/PreferenceCenter (16.10.5):
+    - Airship/Core
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -698,6 +715,10 @@ PODS:
     - React-logger (= 0.70.6)
     - React-perflogger (= 0.70.6)
   - SocketRocket (0.6.0)
+  - urbanairship-react-native (14.5.1):
+    - Airship (= 16.10.5)
+    - Airship/PreferenceCenter (= 16.10.5)
+    - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -767,10 +788,12 @@ DEPENDENCIES:
   - React-rncore (from `../node_modules/react-native/ReactCommon`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - urbanairship-react-native (from `../../node_modules/urbanairship-react-native`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
+    - Airship
     - CocoaAsyncSocket
     - Flipper
     - Flipper-Boost-iOSX
@@ -862,10 +885,13 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  urbanairship-react-native:
+    :path: "../../node_modules/urbanairship-react-native"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  Airship: 81fd1cf443114dfc96fbd6544f297de769d684d6
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -917,9 +943,10 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  urbanairship-react-native: 2d8181662cdd4398612257dd46b5b4487035ee9c
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 65a369e4adc24df7e041dcb9d484de140dc58039
+PODFILE CHECKSUM: 4345f5378bb33e947d7cb6384433fdba75bcea97
 
 COCOAPODS: 1.11.3
