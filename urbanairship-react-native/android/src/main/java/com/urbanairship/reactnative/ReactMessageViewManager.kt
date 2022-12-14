@@ -5,12 +5,22 @@ package com.urbanairship.reactnative
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
 
-class ReactMessageViewManager : SimpleViewManager<ReactMessageView?>() {
+import com.facebook.react.viewmanagers.UARCTMessageViewManagerDelegate
+import com.facebook.react.viewmanagers.UARCTMessageViewManagerInterface
+
+class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(), UARCTMessageViewManagerInterface<ReactMessageView> {
+
+    private val delegate = UARCTMessageViewManagerDelegate(this)
 
     override fun getName(): String {
         return REACT_CLASS
+    }
+
+    override fun getDelegate(): ViewManagerDelegate<ReactMessageView?> {
+        return delegate
     }
 
     override fun createViewInstance(reactContext: ThemedReactContext): ReactMessageView {
@@ -26,31 +36,41 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView?>() {
     }
 
     @ReactProp(name = "messageId")
-    fun setMessageId(view: ReactMessageView, messageId: String?) {
+    override fun setMessageId(view: ReactMessageView, messageId: String?) {
         messageId?.let {
             view.loadMessage(it)
         }
     }
 
     override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
-        val events = listOf(
-            ReactMessageView.EVENT_CLOSE,
-            ReactMessageView.EVENT_LOAD_ERROR,
-            ReactMessageView.EVENT_LOAD_FINISHED,
-            ReactMessageView.EVENT_LOAD_STARTED
-        )
+        val events = if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+            listOf(
+                ReactMessageView.EVENT_CLOSE_REGISTRATION_NAME to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_ERROR_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_FINISHED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_STARTED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
+            )
+        } else {
+            listOf(
+                ReactMessageView.EVENT_CLOSE_HANDLER_NAME to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
+            )
+        }
 
         val builder = MapBuilder.builder<String, Any>()
 
-        for (event in events) {
+        for ((name, handlerName) in events) {
             builder.put(
-                event,
+                name,
                 MapBuilder.of(
                     "phasedRegistrationNames",
-                    MapBuilder.of("bubbled", event)
+                    MapBuilder.of("bubbled", handlerName)
                 )
             )
         }
+
         return builder.build()
     }
 

@@ -111,30 +111,30 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
         event.putString(MESSAGE_ID_KEY, messageId)
         event.putBoolean(RETRYABLE_KEY, retryable)
         event.putString(ERROR_KEY, error)
-        notify(EVENT_LOAD_ERROR, event)
+        notify(if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) EVENT_LOAD_ERROR else EVENT_LOAD_ERROR_HANDLER_NAME, event)
     }
 
     private fun notifyLoadFinished(messageId: String) {
         val event = Arguments.createMap()
         event.putString(MESSAGE_ID_KEY, messageId)
-        notify(EVENT_LOAD_FINISHED, event)
+        notify(if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) EVENT_LOAD_FINISHED else EVENT_LOAD_FINISHED_HANDLER_NAME, event)
     }
 
     private fun notifyLoadStarted(messageId: String) {
         val event = Arguments.createMap()
         event.putString(MESSAGE_ID_KEY, messageId)
-        notify(EVENT_LOAD_STARTED, event)
+        notify(if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) EVENT_LOAD_STARTED else EVENT_LOAD_STARTED_HANDLER_NAME, event)
     }
 
     private fun notifyClose(messageId: String) {
         val event = Arguments.createMap()
         event.putString(MESSAGE_ID_KEY, messageId)
-        notify(EVENT_CLOSE, event)
+        notify(if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) EVENT_CLOSE else EVENT_CLOSE_HANDLER_NAME, event)
     }
 
     private fun notify(eventName: String, event: WritableMap) {
         val reactContext = context as ReactContext
-        reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, eventName, event)
+        reactContext.dispatchEvent(id, eventName, event)
     }
 
     override fun onHostResume() {
@@ -156,10 +156,20 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
     }
 
     companion object {
-        const val EVENT_LOAD_STARTED = "onLoadStarted"
-        const val EVENT_LOAD_FINISHED = "onLoadFinished"
-        const val EVENT_LOAD_ERROR = "onLoadError"
-        const val EVENT_CLOSE = "onClose"
+        const val EVENT_LOAD_STARTED_REGISTRATION_NAME = "topLoadStarted"
+        const val EVENT_LOAD_FINISHED_REGISTRATION_NAME = "topLoadFinished"
+        const val EVENT_LOAD_ERROR_REGISTRATION_NAME = "topLoadError"
+        const val EVENT_CLOSE_REGISTRATION_NAME = "topClose"
+
+        const val EVENT_LOAD_STARTED_HANDLER_NAME = "onLoadStarted"
+        const val EVENT_LOAD_FINISHED_HANDLER_NAME = "onLoadFinished"
+        const val EVENT_LOAD_ERROR_HANDLER_NAME = "onLoadError"
+        const val EVENT_CLOSE_HANDLER_NAME = "onClose"
+
+        const val EVENT_LOAD_STARTED = "loadStarted"
+        const val EVENT_LOAD_FINISHED = "loadFinished"
+        const val EVENT_LOAD_ERROR = "loadError"
+        const val EVENT_CLOSE = "close"
 
         private const val MESSAGE_ID_KEY = "messageId"
         private const val RETRYABLE_KEY = "retryable"
