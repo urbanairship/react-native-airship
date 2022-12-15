@@ -5,7 +5,7 @@
 // unresolved type in one of the RN headers. Making two files for the view manager,
 // one per architecture, is a quick way to solve the issue.
 
-#if !defined(RN_FABRIC_ENABLED)
+#ifdef RN_FABRIC_ENABLED
 
 #import "UARCTMessageViewManager.h"
 #import "UARCTMessageView.h"
