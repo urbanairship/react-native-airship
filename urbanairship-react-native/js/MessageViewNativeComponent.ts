@@ -28,10 +28,16 @@ type MessageClosedEvent = Readonly<{
 
 interface NativeProps extends ViewProps {
   messageId: string;
-  onLoadStarted: BubblingEventHandler<MessageLoadStartedEvent>;
-  onLoadFinished: BubblingEventHandler<MessageLoadFinishedEvent>;
+  onLoadStarted: BubblingEventHandler<
+    MessageLoadStartedEvent,
+    "topLoadStarted"
+  >;
+  onLoadFinished: BubblingEventHandler<
+    MessageLoadFinishedEvent,
+    "topLoadFinished"
+  >;
   onLoadError: BubblingEventHandler<MessageLoadErrorEvent, "topLoadError">;
-  onClose: BubblingEventHandler<MessageClosedEvent>;
+  onClose: BubblingEventHandler<MessageClosedEvent, "topClose">;
 }
 
 export default codegenNativeComponent<NativeProps>("UARCTMessageView");

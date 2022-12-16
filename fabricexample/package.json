@@ -10,9 +10,17 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.1",
+    "@react-navigation/native": "^6.1.1",
+    "@react-navigation/stack": "^6.3.9",
+    "add": "^2.0.6",
     "react": "18.1.0",
     "react-native": "0.70.6",
-    "urbanairship-react-native": "link:../urbanairship-react-native"
+    "react-native-gesture-handler": "^2.8.0",
+    "react-native-safe-area-context": "^4.4.1",
+    "react-native-screens": "^3.18.2",
+    "urbanairship-react-native": "link:../urbanairship-react-native",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
