@@ -3,6 +3,8 @@
 package com.urbanairship.reactnative
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
@@ -62,17 +64,29 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
     }
 
     fun loadMessage(messageId: String) {
+        var delayLoading = false
+
         if (webView == null) {
             webView = MessageWebView(context)
             webView?.webViewClient = webViewClient
             addView(webView)
+            delayLoading = true
         }
 
         fetchMessageRequest?.let {
             it.cancel()
         }
         message = null
-        startLoading(messageId)
+
+        // Until ReactFeatureFlags.enableFabricPendingEventQueue is enabled by default, we need to avoid
+        // sending events when the view is unmounted because the events are discarded otherwise
+        if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED && delayLoading) {
+            loadHandler.postDelayed({
+                startLoading(messageId)
+            }, 50)
+        } else {
+            startLoading(messageId)
+        }
     }
 
     fun startLoading(messageId: String) {
