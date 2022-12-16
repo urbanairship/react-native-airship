@@ -25,6 +25,7 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
     private var message: Message? = null
     private var fetchMessageRequest: Cancelable? = null
     private var webView: MessageWebView? = null
+    private val loadHandler = Handler(Looper.getMainLooper())
 
     private val webViewClient: WebViewClient = object : MessageWebViewClient() {
 
