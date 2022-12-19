@@ -8,7 +8,7 @@ import androidx.annotation.DrawableRes
 import com.urbanairship.AirshipConfigOptions
 import com.urbanairship.push.notifications.AirshipNotificationProvider
 
-class ReactNotificationProvider(private val context: Context, configOptions: AirshipConfigOptions) : AirshipNotificationProvider(context, configOptions) {
+open class ReactNotificationProvider(private val context: Context, configOptions: AirshipConfigOptions) : AirshipNotificationProvider(context, configOptions) {
 
     private val preferences: ReactAirshipPreferences by lazy {
         ReactAirshipPreferences.shared(context)
