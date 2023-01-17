@@ -2,6 +2,15 @@
 
 #import "UARCTMessageView.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
+#import <react/renderer/components/urbanairshiprn/ComponentDescriptors.h>
+#import <react/renderer/components/urbanairshiprn/Props.h>
+
+using namespace facebook::react;
+#endif
+
 @interface UARCTMessageView()
 @property (nonatomic, strong) UANativeBridge *nativeBridge;
 @property (nonatomic, strong) UAMessageCenterNativeBridgeExtension *nativeBridgeExtension;
@@ -20,8 +29,19 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 
 @implementation UARCTMessageView
 
+#ifdef RN_FABRIC_ENABLED
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        static const auto defaultProps = std::make_shared<const UARCTMessageViewProps>();
+        _props = defaultProps;
+    }
+    return self;
+}
+#endif
+
 - (instancetype) init {
-    self = [super initWithFrame:CGRectZero];
+    self = [self initWithFrame:CGRectZero];
     if (self) {
         self.nativeBridge = [[UANativeBridge alloc] init];
         self.nativeBridge.forwardNavigationDelegate = self;
@@ -38,6 +58,21 @@ NSString *const UARCTMessageViewErrorKey = @"error";
     }
     return self;
 }
+
+#ifdef RN_FABRIC_ENABLED
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<UARCTMessageViewComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const UARCTMessageViewProps>(props);
+    self.messageID = [NSString stringWithUTF8String:newProps.messageId.c_str()];
+    
+    [super updateProps:props oldProps:oldProps];
+}
+#endif
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -56,16 +91,10 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 
 - (void)loadMessage {
     NSString *messageID = self.messageID;
-    if (self.onLoadStarted) {
-        self.onLoadStarted(@{ UARCTMessageViewMessageIDKey: messageID });
-    }
+    [self dispatchOnLoadStartedEvent:messageID];
 
     if (!UAirship.isFlying) {
-        if (self.onLoadError) {
-            self.onLoadError(@{ UARCTMessageViewMessageIDKey: messageID,
-                                UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageNotAvailable,
-                                UARCTMessageViewRetryableKey: @(NO) });
-        }
+        [self dispatchOnLoadErrorEvent:messageID withErrorMessage:UARCTMessageViewErrorMessageNotAvailable retryable:NO];
         return;
     }
 
@@ -85,19 +114,11 @@ NSString *const UARCTMessageViewErrorKey = @"error";
             if (message && !message.isExpired) {
                 [self requestMessageBody:message];
             } else {
-                if (self.onLoadError) {
-                    self.onLoadError(@{ UARCTMessageViewMessageIDKey: messageID,
-                                        UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageNotAvailable,
-                                        UARCTMessageViewRetryableKey: @(NO) });
-                }
+                [self dispatchOnLoadErrorEvent:messageID withErrorMessage:UARCTMessageViewErrorMessageNotAvailable retryable:NO];
             }
         });
     } withFailureBlock:^{
-        if (self.onLoadError) {
-            self.onLoadError(@{ UARCTMessageViewMessageIDKey: messageID,
-                                UARCTMessageViewErrorKey: UARCTMessageViewErrorFailedToFetchMessage,
-                                UARCTMessageViewRetryableKey: @(YES) });
-        }
+        [self dispatchOnLoadErrorEvent:messageID withErrorMessage:UARCTMessageViewErrorFailedToFetchMessage retryable:YES];
     }];
 
 }
@@ -123,23 +144,11 @@ NSString *const UARCTMessageViewErrorKey = @"error";
         if (status >= 400 && status <= 599) {
             decisionHandler(WKNavigationResponsePolicyCancel);
             if (status >= 500) {
-                if (self.onLoadError) {
-                    self.onLoadError(@{ UARCTMessageViewMessageIDKey: self.message.messageID,
-                                        UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageLoadFailed,
-                                        UARCTMessageViewRetryableKey: @(YES) });
-                }
+                [self dispatchOnLoadErrorEvent:self.message.messageID withErrorMessage:UARCTMessageViewErrorMessageLoadFailed retryable:YES];
             } else if (status == 410) {
-                if (self.onLoadError) {
-                    self.onLoadError(@{ UARCTMessageViewMessageIDKey: self.message.messageID,
-                                        UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageNotAvailable,
-                                        UARCTMessageViewRetryableKey: @(NO) });
-                }
+                [self dispatchOnLoadErrorEvent:self.message.messageID withErrorMessage:UARCTMessageViewErrorMessageNotAvailable retryable:NO];
             } else {
-                if (self.onLoadError) {
-                    self.onLoadError(@{ UARCTMessageViewMessageIDKey: self.message.messageID,
-                                        UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageLoadFailed,
-                                        UARCTMessageViewRetryableKey: @(NO) });
-                }
+                [self dispatchOnLoadErrorEvent:self.message.messageID withErrorMessage:UARCTMessageViewErrorMessageLoadFailed retryable:NO];
             }
             return;
         }
@@ -158,9 +167,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
         [self.message markMessageReadWithCompletionHandler:nil];
     }
 
-    if (self.onLoadFinished) {
-        self.onLoadFinished(@{ UARCTMessageViewMessageIDKey: self.message.messageID });
-    }
+    [self dispatchOnLoadFinishedEvent:self.message.messageID];
 }
 
 - (void)webView:(WKWebView *)wv didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
@@ -168,11 +175,7 @@ NSString *const UARCTMessageViewErrorKey = @"error";
         return;
     }
 
-    if (self.onLoadError) {
-        self.onLoadError(@{ UARCTMessageViewMessageIDKey: self.message.messageID,
-                            UARCTMessageViewErrorKey: UARCTMessageViewErrorMessageLoadFailed,
-                            UARCTMessageViewRetryableKey: @(YES) });
-    }
+    [self dispatchOnLoadErrorEvent:self.message.messageID withErrorMessage:UARCTMessageViewErrorMessageLoadFailed retryable:YES];
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
@@ -180,11 +183,77 @@ NSString *const UARCTMessageViewErrorKey = @"error";
 }
 
 - (void)close {
-    if (self.onClose) {
-        self.onClose(@{ UARCTMessageViewMessageIDKey: self.message.messageID });
-    }
+    [self dispatchOnCloseEvent:self.message.messageID];
     self.message = nil;
+}
+
+- (void)dispatchOnLoadStartedEvent: (NSString*)messageID
+{
+#ifdef RN_FABRIC_ENABLED
+    std::dynamic_pointer_cast<const facebook::react::UARCTMessageViewEventEmitter>(_eventEmitter)
+        ->onLoadStarted(facebook::react::UARCTMessageViewEventEmitter::OnLoadStarted{
+            .messageId = std::string([messageID UTF8String])
+        });
+#else
+    if (self.onLoadStarted) {
+        self.onLoadStarted(@{ UARCTMessageViewMessageIDKey: messageID });
+    }
+#endif
+}
+
+- (void)dispatchOnLoadErrorEvent: (NSString*)messageID
+                withErrorMessage: (NSString*)errorMessage
+                       retryable: (BOOL)retryable
+{
+#ifdef RN_FABRIC_ENABLED
+    std::dynamic_pointer_cast<const facebook::react::UARCTMessageViewEventEmitter>(_eventEmitter)
+        ->onLoadError(facebook::react::UARCTMessageViewEventEmitter::OnLoadError{
+            .messageId = std::string([messageID UTF8String]),
+            .error = std::string([errorMessage UTF8String]),
+            .retryable = retryable
+        });
+#else
+    if (self.onLoadError) {
+        self.onLoadError(@{ UARCTMessageViewMessageIDKey: messageID,
+                            UARCTMessageViewErrorKey: errorMessage,
+                            UARCTMessageViewRetryableKey: @(retryable) });
+    }
+#endif
+}
+
+- (void)dispatchOnLoadFinishedEvent: (NSString*)messageID
+{
+#ifdef RN_FABRIC_ENABLED
+    std::dynamic_pointer_cast<const facebook::react::UARCTMessageViewEventEmitter>(_eventEmitter)
+        ->onLoadFinished(facebook::react::UARCTMessageViewEventEmitter::OnLoadFinished{
+            .messageId = std::string([messageID UTF8String])
+        });
+#else
+    if (self.onLoadFinished) {
+        self.onLoadFinished(@{ UARCTMessageViewMessageIDKey: messageID });
+    }
+#endif
+}
+
+- (void)dispatchOnCloseEvent: (NSString*)messageID
+{
+#ifdef RN_FABRIC_ENABLED
+    std::dynamic_pointer_cast<const facebook::react::UARCTMessageViewEventEmitter>(_eventEmitter)
+        ->onClose(facebook::react::UARCTMessageViewEventEmitter::OnClose{
+            .messageId = std::string([messageID UTF8String])
+        });
+#else
+    if (self.onClose) {
+        self.onClose(@{ UARCTMessageViewMessageIDKey: messageID });
+    }
+#endif
 }
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
+Class<RCTComponentViewProtocol> UARCTMessageViewCls(void)
+{
+    return UARCTMessageView.class;
+}
+#endif

@@ -3,6 +3,10 @@
 #import <WebKit/WebKit.h>
 #import <React/RCTView.h>
 
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTViewComponentView.h>
+#endif
+
 #if __has_include("AirshipLib.h")
 #import "UAMessageCenterNativeBridgeExtension.h"
 #import "UAInboxMessage.h"
@@ -15,7 +19,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#ifdef RN_FABRIC_ENABLED
+@interface UARCTMessageView : RCTViewComponentView <UANavigationDelegate, UANativeBridgeDelegate>
+#else
 @interface UARCTMessageView : RCTView <UANavigationDelegate, UANativeBridgeDelegate>
+#endif
 
 @property (nonatomic, copy) RCTDirectEventBlock onLoadStarted;
 @property (nonatomic, copy) RCTDirectEventBlock onLoadFinished;

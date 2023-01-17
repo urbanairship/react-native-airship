@@ -3,10 +3,8 @@
 'use strict';
 
 import React from "react";
-import { requireNativeComponent, NativeSyntheticEvent } from "react-native";
-
-
-const UARCTMessageView = requireNativeComponent<UARCTMessageViewProps>('UARCTMessageView');
+import { NativeSyntheticEvent } from "react-native";
+import UARCTMessageView from "./MessageViewNativeComponent";
 
 interface UARCTMessageViewProps {
   messageId: string;
