@@ -3,13 +3,16 @@
 package com.urbanairship.reactnative;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.push.notifications.AirshipNotificationProvider;
+import com.urbanairship.push.notifications.NotificationArguments;
 
 public class ReactNotificationProvider extends AirshipNotificationProvider {
 
@@ -20,6 +23,15 @@ public class ReactNotificationProvider extends AirshipNotificationProvider {
         super(context, configOptions);
         this.context = context;
         this.preferences = ReactAirshipPreferences.shared(context);
+    }
+
+    @NonNull
+    @Override
+    protected NotificationCompat.Builder onExtendBuilder(@NonNull Context context, @NonNull NotificationCompat.Builder builder, @NonNull NotificationArguments arguments) {
+        Bundle extras = new Bundle();
+        extras.putBundle(UrbanAirshipReactModule.AIRSHIP_PUSH_MESSAGE, arguments.getMessage().getPushBundle());
+        builder.setExtras(extras);
+        return super.onExtendBuilder(context, builder, arguments);
     }
 
     @Override
