@@ -264,6 +264,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
         try {
             UAirship.shared().getPrivacyManager().setEnabledFeatures(parseFeatures(features));
+            promise.resolve(true);
         } catch (Exception e) {
             promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE, e);
         }
@@ -299,6 +300,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
         try {
             UAirship.shared().getPrivacyManager().enable(parseFeatures(features));
+            promise.resolve(true);
         } catch (Exception e) {
             promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE, e);
         }
@@ -318,6 +320,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
         try {
             UAirship.shared().getPrivacyManager().disable(parseFeatures(features));
+            promise.resolve(true);
         } catch (Exception e) {
             promise.reject(INVALID_FEATURE_ERROR_CODE, INVALID_FEATURE_ERROR_MESSAGE, e);
         }
