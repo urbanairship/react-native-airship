@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 14.6.1 - January 20, 2023
+Patch release that updates the iOS SDK to 16.10.7, fixes the result of `getActiveNotifications` and avoiding issue in the Message Center on null message ID.
+
+### Changes
+- Updated iOS SDK to 16.10.7
+- Fix android notifications extras on `getActiveNotifications` method call.
+- Avoid Message Center issue on null message ID.
+
 ## Version 14.6.0 - December 5, 2022
 Minor release that updates the iOS SDK to 16.10.6 and add support
 for isChannelCaptureEnabled and suppressAllowListError in the config for takeOff.
