@@ -79,6 +79,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
+    public static final String AIRSHIP_PUSH_MESSAGE = "airship.push.message";
+
     private static final String TAG_OPERATION_GROUP_NAME = "group";
     private static final String TAG_OPERATION_TYPE = "operationType";
     private static final String TAG_OPERATION_TAGS = "tags";
@@ -1127,7 +1129,7 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
 
                 PushMessage pushMessage;
                 Bundle extras = statusBarNotification.getNotification().extras;
-                Bundle bundle = extras == null ? null : extras.getBundle("push_message");
+                Bundle bundle = extras == null ? null : extras.getBundle(AIRSHIP_PUSH_MESSAGE);
 
                 if (bundle != null) {
                     pushMessage = new PushMessage(bundle);
