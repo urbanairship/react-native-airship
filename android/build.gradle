@@ -1,0 +1,122 @@
+import groovy.json.JsonSlurper
+
+buildscript {
+  // Buildscript is evaluated before everything else so we can't use getExtOrDefault
+  def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["Airship_kotlinVersion"]
+
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:7.2.1"
+    // noinspection DifferentKotlinGradleVersion
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+}
+
+def isHmsEnabled() {
+    return rootProject.hasProperty("airshipHmsEnabled") && rootProject.getProperty("airshipHmsEnabled") == "true"
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: "com.facebook.react"
+}
+
+def getExtOrDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["Airship_" + name]
+}
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["Airship_" + name]).toInteger()
+}
+
+android {
+  compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
+
+  defaultConfig {
+    minSdkVersion getExtOrIntegerDefault("minSdkVersion")
+    targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+    buildConfigField("String", "AIRSHIP_MODULE_VERSION", "\"${getModuleVersion()}\"")
+    buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+    consumerProguardFiles 'proguard-rules.pro'
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+    }
+  }
+
+  lintOptions {
+    disable "GradleCompatible"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  sourceSets {
+    main {
+      if (isNewArchitectureEnabled()) {
+        java.srcDirs += [
+          "src/newarch/java",
+          // This is needed to build Kotlin project with NewArch enabled
+          "${project.buildDir}/generated/source/codegen/java"
+        ]
+      } else {
+        java.srcDirs += ["src/oldarch/java"]
+      }
+    }
+  }
+
+  namespace 'com.urbanairship.reactnative'
+}
+
+repositories {
+  mavenCentral()
+  google()
+}
+
+
+def getModuleVersion() {
+  def jsonFile = file('../package.json')
+  def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+
+  return parsedJson["version"]
+}
+
+def kotlin_version = getExtOrDefault("kotlinVersion")
+def proxy_version = getExtOrDefault("airshipProxyVersion")
+def airship_version = getExtOrDefault("airshipVersion")
+
+dependencies {
+  // For < 0.71, this will be from the local maven repo
+  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+  //noinspection GradleDynamicVersion
+  implementation "com.facebook.react:react-native"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "com.urbanairship.android:urbanairship-fcm:$airship_version"
+  api "com.urbanairship.android:airship-framework-proxy:$proxy_version"
+  
+  if (isHmsEnabled()) {
+    implementation "com.urbanairship.android:urbanairship-hms:$airship_version"
+  }
+}
+
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../src/")
+    libraryName = "Airship"
+    codegenJavaPackageName = "com.urbanairship.reactnative"
+  }
+}
