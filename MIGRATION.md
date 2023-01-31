@@ -29,6 +29,9 @@ The `urbanairship-hms-react-native` has been removed and replaced with a new gra
 
 ## API Changes
 
+
+### Methods
+
 The API is now divided up into functional components that can eb accessed from the `Airship` instance. Use the table
 for replacements.
 
@@ -104,6 +107,22 @@ for replacements.
 | AirshipPreferenceCenter.setUseCustomPreferenceCenterUi(useCustomUi: boolean, preferenceCenterId: String)                      | Airship.preferenceCenter.setAutoLaunchDefaultPreferenceCenterut(useCustomUi: boolean, preferenceCenterId: String)                  |
 | AirshipPreferenceCenter.addPreferenceCenterOpenListener(listener: (...args: any[]) => any): Subscription                      | Removed, use normal addListener                                                                                                    |
 
+
+### Events
+
+| 14.x                              	| 15.x                                                     	| Notes                                                                       	|
+|-----------------------------------	|----------------------------------------------------------	|-----------------------------------------------------------------------------	|
+| EventType.NotificationResponse    	| EventType.NotificationResponse                           	| The `notification` property has been renamed to `pushPayload`               	|
+| EventType.PushReceived            	| EventType.PushReceived                                   	| The push body is now under a sub property `pushPayload`                     	|
+| EventType.Register                	| EventType.ChannelCreated and EventType.PushTokenReceived 	|                                                                             	|
+| EventType.Registration            	| EventType.ChannelCreated and EventType.PushTokenReceived 	|                                                                             	|
+| EventType.DeepLink                	| EventType.DeepLink                                       	|                                                                             	|
+| EventType.NotificationOptInStatus 	| EventType.NotificationOptInStatus                        	| The array of authorized setting names is now under `ios.authorizedSettings` 	|
+| EvenType.InboxUpdated             	| EventType.MessageCenterUpdated                           	|                                                                             	|
+| EvenType.ShowInbox                	| EventType.DisplayMessageCenter                           	|                                                                             	|
+| EventType.ConversationUpdated     	|                                                          	| Removed                                                                     	|
+| EventType.OpenChat                	|                                                          	| Removed                                                                     	|
+| EventType.OpenPreferenceCenter    	| EventType.DisplayPreferenceCenter                        	|                                                                             	|
 
 
 # 11.x to 12.x
