@@ -37,11 +37,12 @@ done
 
 cd $REPO_PATH
 
-yarn install
+yarn
 
 # Android
 if $ANDROID ; then
     cd example/android
+    
 
     # Build
     ./gradlew app:assembleDebug
