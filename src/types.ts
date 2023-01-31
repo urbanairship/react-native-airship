@@ -12,6 +12,20 @@ export type JsonObject = {
 
 export type JsonArray = JsonValue[];
 
+export interface ChannelCreatedEvent {
+  /**
+   * The channel ID.
+   */
+  channelId: string
+}
+
+export interface PushTokenReceivedEvent {
+  /**
+   * The push token.
+   */
+  pushToken: string
+}
+
 /**
  * Event fired when a push is received.
  */
@@ -165,6 +179,19 @@ export enum EventType {
   DisplayPreferenceCenter = 'com.airship.display_preference_center',
   PushTokenReceived = 'com.airship.push_token_received',
 }
+
+export interface EventTypeMap {
+  [EventType.ChannelCreated]: ChannelCreatedEvent,
+  [EventType.NotificationResponse]: NotificationResponseEvent,
+  [EventType.PushReceived]: PushReceivedEvent,
+  [EventType.DeepLink]: DeepLinkEvent,
+  [EventType.MessageCenterUpdated]: MessageCenterUpdatedEvent,
+  [EventType.NotificationOptInStatus]: NotificationOptInStatusEvent,
+  [EventType.DisplayMessageCenter]: DisplayMessageCenterEvent,
+  [EventType.DisplayPreferenceCenter]: DisplayPreferenceCenterEvent,
+  [EventType.PushTokenReceived]: PushTokenReceivedEvent
+}
+
 
 /**
  * iOS options

@@ -70,18 +70,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-// Airship.addListener(EventType.DisplayMessageCenter, event => {
-//   console.log(EventType.DisplayMessageCenter + ':', event);
-//   if (event.messageId != null) {
-//     this.props.navigation.navigate('MessageDetails', {
-//       messageId: event.event,
-//       title: '',
-//     });
-//   } else {
-//     this.props.navigation.navigate('MessageCenter');
-//   }
-// });
-
-// Airship.setAutoLaunchDefaultMessageCenter(false);
-//     Airship.setUseCustomPreferenceCenterUi(true, 'neat');

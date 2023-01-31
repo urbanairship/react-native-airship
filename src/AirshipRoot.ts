@@ -1,3 +1,4 @@
+import Airship from '.';
 import { AirshipActions } from './AirshipActions';
 import { AirshipAnalytics } from './AirshipAnalytics';
 import { AirshipChannel } from './AirshipChannel';
@@ -8,7 +9,7 @@ import { AirshipMessageCenter } from './AirshipMessageCenter';
 import { AirshipPreferenceCenter } from './AirshipPreferenceCenter';
 import { AirshipPrivacyManager } from './AirshipPrivacyManager';
 import { AirshipPush } from './AirshipPush';
-import { AirshipConfig, EventType } from './types';
+import { AirshipConfig, EventTypeMap, EventType } from './types';
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
 
 export class AirshipRoot {
@@ -45,11 +46,13 @@ export class AirshipRoot {
 
   public isFlying(): Promise<boolean> {
     return this.module.isFlying();
-  }
 
-  public addListener(
-    eventType: EventType,
-    listener: (...args: any[]) => any
+  }
+  
+  public addListener<T extends EventType>
+  (
+    eventType: T,
+    listener: (event: EventTypeMap[T]) => any
   ): Subscription {
     this.eventEmitter.addListener(eventType, listener);
     return new Subscription(() => {
@@ -60,14 +63,12 @@ export class AirshipRoot {
   /**
    * Removes a listener for an Urban Airship event.
    *
-   * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
-   * EventType.Register, EventType.Registration, EventType.DeepLink, EventType.NotificationOptInStatus,
-   * EventType.InboxUpdated, or EventType.ShowInbox.
+   * @param eventType The event type.
    * @param listener The event listener. Should be a reference to the function passed into addListener.
    */
-  public removeListener(
+  public removeListener<T extends EventType>(
     eventType: EventType,
-    listener: (...args: any[]) => any
+    listener: (event: EventTypeMap[T]) => any
   ) {
     this.eventEmitter.removeListener(eventType, listener);
   }
@@ -75,9 +76,7 @@ export class AirshipRoot {
   /**
    * Removes all listeners for Urban Airship events.
    *
-   * @param eventType The event type. Either EventType.NotificationResponse, EventType.PushReceived,
-   * EventType.Register, EventType.Registration, EventType.DeepLink, EventType.NotificationOptInStatus,
-   * EventType.InboxUpdated, or EventType.ShowInbox.
+   * @param eventType The event type.
    */
   public removeAllListeners(eventType: EventType) {
     this.eventEmitter.removeAllListeners(eventType);

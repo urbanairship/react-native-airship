@@ -9,7 +9,7 @@
 import React from 'react';
 
 import { View, ActivityIndicator, Alert } from 'react-native';
-import { MessageView } from 'react-native-airship';
+import { MessageView } from '@ua/react-native-airship';
 
 import styles from './../Styles';
 
