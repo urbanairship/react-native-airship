@@ -64,7 +64,7 @@ if $IOS; then
     pod install
 
     # Use Debug configurations and a simulator SDK so the build process doesn't attempt to sign the output
-    xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipExample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipSample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
+    xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipExample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipExample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
 
     cd -
 fi
