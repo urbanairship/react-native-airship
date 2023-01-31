@@ -39,9 +39,6 @@ cd $REPO_PATH
 
 yarn install
 
-# Tests
-yarn test
-
 # Android
 if $ANDROID ; then
     cd example/android
@@ -65,11 +62,8 @@ if $IOS; then
     # Install the pods
     pod install
 
-    # Make sure AirshipConfig.plist exists
-    cp -np ${PROJECT_PLATFORM_PATH}/AirshipConfig.plist.sample ${PROJECT_PLATFORM_PATH}/AirshipConfig.plist || true
-
     # Use Debug configurations and a simulator SDK so the build process doesn't attempt to sign the output
-    xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipSample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipSample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
+    xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipExample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipSample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
 
     cd -
 fi

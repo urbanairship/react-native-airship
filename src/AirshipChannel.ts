@@ -1,7 +1,6 @@
 import { AttributeEditor, AttributeOperation } from './AttributeEditor';
 import {
-  SubscriptionListEditor,
-  SubscriptionListUpdate,
+  SubscriptionListEditor, SubscriptionListOperation,
 } from './SubscriptionListEditor';
 import { TagGroupEditor, TagGroupOperation } from './TagGroupEditor';
 
@@ -42,7 +41,7 @@ export class AirshipChannel {
 
   public editSubscriptionLists(): SubscriptionListEditor {
     return new SubscriptionListEditor(
-      (operations: SubscriptionListUpdate[]) => {
+      (operations: SubscriptionListOperation[]) => {
         return this.module.channelEditSubscriptionLists(operations);
       }
     );

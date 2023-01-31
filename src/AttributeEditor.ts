@@ -16,7 +16,7 @@ export interface AttributeOperation {
    */
   key: string;
   /**
-   * The attribute value, if avaialble.
+   * The attribute value, if available.
    */
   value?: string | number | Date;
   /**

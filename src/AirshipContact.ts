@@ -1,7 +1,7 @@
 import { AttributeEditor, AttributeOperation } from './AttributeEditor';
 import {
   ScopedSubscriptionListEditor,
-  ScopedSubscriptionListUpdate,
+  ScopedSubscriptionListOperation,
 } from './ScopedSubscriptionListEditor';
 import { TagGroupEditor, TagGroupOperation } from './TagGroupEditor';
 import { SubscriptionScope } from './types';
@@ -39,7 +39,7 @@ export class AirshipContact {
 
   public editSubscriptionLists(): ScopedSubscriptionListEditor {
     return new ScopedSubscriptionListEditor(
-      (operations: ScopedSubscriptionListUpdate[]) => {
+      (operations: ScopedSubscriptionListOperation[]) => {
         return this.module.contactEditSubscriptionLists(operations);
       }
     );
