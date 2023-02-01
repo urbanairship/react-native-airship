@@ -225,8 +225,8 @@ RCT_REMAP_METHOD(pushIosSetForegroundPresentationOptions,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared pushSetNotificationOptionsWithNames:options
-                                                             error:&error];
+    [AirshipReactNative.shared pushSetForegroundPresentationOptionsWithNames:options
+                                                                       error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
