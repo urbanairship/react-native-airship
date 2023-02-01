@@ -12,6 +12,21 @@ Major release with several breaking changes. Apps should use the migration guide
 - Merged Preference Center and HMS module into the core module
 - Added new methods to pause/resume In-App experiences
 
+## Version 14.6.1 - January 20, 2023
+Patch release that updates the iOS SDK to 16.10.7, fixes the result of `getActiveNotifications` and avoiding issue in the Message Center on null message ID.
+
+### Changes
+- Updated iOS SDK to 16.10.7
+- Fix android notifications extras on `getActiveNotifications` method call.
+- Avoid Message Center issue on null message ID.
+
+## Version 14.6.0 - December 5, 2022
+Minor release that updates the iOS SDK to 16.10.6 and add support
+for isChannelCaptureEnabled and suppressAllowListError in the config for takeOff.
+
+### Changes
+- Updated iOS SDK to 16.10.6
+- Add support for **isChannelCaptureEnabled** and **suppressAllowListError** in the config for takeOff.
 
 
 ## Version 14.5.1 - November 17, 2022
