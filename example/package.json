@@ -1,33 +1,31 @@
 {
+  "name": "AirshipExample",
+  "version": "0.0.1",
   "private": true,
-  "name": "example",
-  "version": "1.0.0",
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "pods": "pod-install --quiet"
+  },
   "dependencies": {
     "moment": "^2.24.0",
-    "react": "17.0.1",
-    "react-native": "0.64.0",
-    "@react-native-community/masked-view": "git+https://github.com/react-native-masked-view/masked-view.git#611398ecf7b060e937fc073ffbc09cb990ec8ccf",
-    "react-native-gesture-handler": "^1.9.0",
-    "react-native-reanimated": "^1.13.2",
-    "react-native-safe-area-context": "^3.1.8",
-    "react-native-screens": "^2.18.1",
-    "react-navigation": "^4.4.3",
-    "react-navigation-stack": "^2.10.2",
-    "react-navigation-tabs": "^2.10.1",
-    "urbanairship-react-native": "*"
+    "react": "18.2.0",
+    "react-native": "0.71.1",
+    "@react-navigation/bottom-tabs": "^6.5.3",
+    "@react-navigation/native": "^6.1.2",
+    "@react-navigation/stack": "^6.3.11",
+    "add": "^2.0.6",
+    "react-native-gesture-handler": "^2.8.0",
+    "react-native-safe-area-context": "^4.4.1",
+    "react-native-screens": "^3.18.2",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/runtime": "^7.12.5",
-    "@react-native-community/eslint-config": "^2.0.0",
-    "babel-jest": "^26.6.3",
-    "eslint": "7.14.0",
-    "jest": "^26.6.3",
-    "metro-react-native-babel-preset": "^0.64.0",
-    "react-test-renderer": "17.0.1"
-  },
-  "scripts": {
-    "run:android": "react-native run-android",
-    "run:ios": "react-native run-ios"
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "metro-react-native-babel-preset": "0.73.7",
+    "babel-plugin-module-resolver": "^4.1.0"
   }
 }

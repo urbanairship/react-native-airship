@@ -1,5 +1,19 @@
 # React Native Module Changelog
 
+## Version 15.0.0 - February 2, 2023
+Major release with several breaking changes. Apps should use the migration guide to update [Migration Guide](https://github.com/urbanairship/react-native-airship/tree/main/Migration)
+
+### Changes
+- Renamed package from `urbanairship-react-native` to `@ua/react-native-airship`
+- Replaces `UrbanAirship` with `Airship` as the root instance.
+- Grouped functional apis under new components under the Airship instance: Airship.channel, Airship.push, Airship.push.iOS, etc...
+- Added support Turbo modules and Fabric
+- Removed the Chat and Accengage module
+- Merged Preference Center and HMS module into the core module
+- Added new methods to pause/resume In-App experiences
+
+
+
 ## Version 14.5.1 - November 17, 2022
 Patch release that updates the iOS SDK to 16.10.3.
 
