@@ -1,4 +1,4 @@
-package com.airshipexample;
+package com.urbanairship.sample;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

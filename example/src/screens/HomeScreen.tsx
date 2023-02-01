@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text, Image, ScrollView } from 'react-native';
-import Airship from '@ua/react-native-airship';
+import Airship, { EventType } from '@ua/react-native-airship';
 
 import styles from '../Styles';
 
@@ -17,11 +17,21 @@ export default function HomeScreen() {
   const [channelId, setChannelId] = React.useState<string | null>(null);
 
   React.useEffect(() => {
+    Airship.push.getNotificationStatus().then((id) => {
+      console.log(id)
+    });
+
     Airship.channel.getChannelId().then((id) => {
       if (id) {
         setChannelId(id);
       }
     });
+
+    let subscription = Airship.addListener(EventType.ChannelCreated, (event) => {
+      setChannelId(event.channelId)
+    });
+
+    return subscription.remove
   }, []);
 
   let channelcell = null;
