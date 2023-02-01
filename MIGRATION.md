@@ -29,7 +29,6 @@ The `urbanairship-hms-react-native` has been removed and replaced with a new gra
 
 ## API Changes
 
-
 ### Methods
 
 The API is now divided up into functional components that can eb accessed from the `Airship` instance. Use the table
