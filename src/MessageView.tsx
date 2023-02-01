@@ -59,7 +59,7 @@ export interface MessageLoadErrorEvent {
   /**
    * The error
    */
-  error: MessageLoadError;
+  error: string;
 }
 
 /**

@@ -126,7 +126,7 @@ export interface NotificationOptInStatusEvent {
      * The authorized notification settings. 
      */
     authorizedSettings: iOS.AuthorizedNotificationSetting[];
-  }
+  };
 }
 
 /**
@@ -362,7 +362,7 @@ export interface NotificationStatus {
     /**
      * Authorized settings.
      */
-    authorizedSettings: [iOS.AuthorizedNotificationSetting];
+    authorizedSettings: iOS.AuthorizedNotificationSetting[];
 
     /**
      * Authorized status.

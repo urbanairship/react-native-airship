@@ -1,4 +1,3 @@
-import Airship from '.';
 import { AirshipActions } from './AirshipActions';
 import { AirshipAnalytics } from './AirshipAnalytics';
 import { AirshipChannel } from './AirshipChannel';

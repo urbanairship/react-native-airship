@@ -1,6 +1,18 @@
 import { NativeModules } from 'react-native';
 import { AirshipRoot } from './AirshipRoot';
 
+export { AirshipRoot } from './AirshipRoot';
+export { AirshipActions } from './AirshipActions';
+export { AirshipAnalytics } from './AirshipAnalytics';
+export { AirshipChannel } from './AirshipChannel';
+export { AirshipContact } from './AirshipContact';
+export { AirshipInApp } from './AirshipInApp';
+export { AirshipLocale } from './AirshipLocale';
+export { AirshipMessageCenter } from './AirshipMessageCenter';
+export { AirshipPreferenceCenter } from './AirshipPreferenceCenter';
+export { AirshipPrivacyManager } from './AirshipPrivacyManager';
+export { AirshipPush } from './AirshipPush';
+
 export * from './types';
 export * from './MessageView';
 export { Subscription } from './UAEventEmitter';
