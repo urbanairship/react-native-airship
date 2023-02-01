@@ -459,8 +459,8 @@ public extension AirshipReactNative {
 
 
 extension AirshipReactNative: AirshipProxyDelegate {
-    public func migrateData(store: AirshipFrameworkProxy.ProxyStore) {
-        // TODO
+    public func migrateData(store: ProxyStore) {
+        ProxyDataMigrator().migrateData(store: store)
     }
 
     public func loadDefaultConfig() -> Config {

@@ -1,3 +1,5 @@
+/* Copyright Airship and Contributors */
+
 #import "RTNAirship.h"
 #import "react_native_airship-Swift.h"
 
