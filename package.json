@@ -30,7 +30,6 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint --fix \"**/*.{js,ts,tsx}\"",
     "prepack": "bob build",
-    "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn install && yarn example pods",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
@@ -44,7 +43,7 @@
   ],
   "repository": "https://github.com/urbanairship/react-native-module",
   "author": "Airship <support@airship.com> (https://docs.airship.com/)",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/urbanairship/react-native-module/issues"
   },

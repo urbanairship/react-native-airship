@@ -4,7 +4,7 @@ set -x
 
 ROOT_PATH=`dirname "${0}"`/..
 
-VERSION=$(node -p "require('$ROOT_PATH/urbanairship-react-native/package.json').version")
+VERSION=$(node -p "require('$ROOT_PATH/package.json').version")
 echo $VERSION
 if [ $1 = $VERSION ]; then
  exit 0

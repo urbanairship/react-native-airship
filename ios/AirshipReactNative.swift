@@ -14,6 +14,7 @@ public class AirshipReactNative: NSObject {
     }
 
     public static let version: String = "15.0.0"
+
     private let eventNotifier = EventNotifier()
 
     @objc
