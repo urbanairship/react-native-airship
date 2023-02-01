@@ -73,10 +73,7 @@ export class UAEventEmitter {
  * A listener subscription.
  */
 export class Subscription {
-  onRemove: () => void;
-  constructor(onRemove: () => void) {
-    this.onRemove = onRemove;
-  }
+  constructor(private readonly onRemove: () => void) {}
   /**
    * Removes the listener.
    */
