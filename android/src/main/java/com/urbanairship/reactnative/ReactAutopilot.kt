@@ -5,9 +5,6 @@ package com.urbanairship.reactnative
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.graphics.Color
-import com.urbanairship.AirshipConfigOptions
-import com.urbanairship.Logger
 import com.urbanairship.UAirship
 import com.urbanairship.analytics.Analytics
 import com.urbanairship.android.framework.proxy.BaseAutopilot
@@ -18,7 +15,6 @@ import com.urbanairship.android.framework.proxy.ProxyStore
  * Module's autopilot to customize Urban Airship.
  */
 class ReactAutopilot : BaseAutopilot() {
-
 
     override fun onAirshipReady(airship: UAirship) {
         super.onAirshipReady(airship)
@@ -38,7 +34,7 @@ class ReactAutopilot : BaseAutopilot() {
     }
 
     override fun onMigrateData(context: Context, proxyStore: ProxyStore) {
-        // TODO
+        DataMigrator(context).migrateData(proxyStore)
     }
 
     private fun createExtender(context: Context): AirshipExtender? {

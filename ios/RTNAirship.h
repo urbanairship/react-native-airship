@@ -1,3 +1,5 @@
+/* Copyright Airship and Contributors */
+
 #import <Foundation/Foundation.h>
 #import <React/RCTEventEmitter.h>
 

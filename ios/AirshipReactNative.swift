@@ -459,8 +459,8 @@ public extension AirshipReactNative {
 
 
 extension AirshipReactNative: AirshipProxyDelegate {
-    public func migrateData(store: AirshipFrameworkProxy.ProxyStore) {
-        // TODO
+    public func migrateData(store: ProxyStore) {
+        ProxyDataMigrator().migrateData(store: store)
     }
 
     public func loadDefaultConfig() -> Config {
@@ -500,7 +500,7 @@ extension AirshipProxyEventType {
         "com.airship.display_preference_center": .displayPreferenceCenter,
         "com.airship.notification_response": .notificationResponseReceived,
         "com.airship.push_received": .pushReceived,
-        "notification_opt_in_status": .notificationOptInStatusChanged
+        "com.airship.notification_opt_in_status": .notificationOptInStatusChanged
     ]
 
 

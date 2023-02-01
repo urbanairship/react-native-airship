@@ -300,14 +300,14 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun contactEditTagGroups(operations: ReadableArray?, promise: Promise) {
-        promise.resolve {
+        promise.resolveResult {
             proxy.contact.editTagGroups(Utils.convertArray(operations).toJsonValue())
         }
     }
 
     @ReactMethod
     override fun contactEditAttributes(operations: ReadableArray?, promise: Promise) {
-        promise.resolve {
+        promise.resolveResult {
             proxy.contact.editAttributes(Utils.convertArray(operations).toJsonValue())
         }
     }
@@ -317,7 +317,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         operations: ReadableArray?,
         promise: Promise
     ) {
-        promise.resolve {
+        promise.resolveResult {
             proxy.contact.editSubscriptionLists(Utils.convertArray(operations).toJsonValue())
         }
     }
@@ -512,7 +512,11 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     @ReactMethod
     override fun localeSetLocaleOverride(localeIdentifier: String?, promise: Promise) {
         promise.resolveResult {
-//            proxy.locale.setCurrentLocale(localeIdentifier)
+            if (localeIdentifier.isNullOrEmpty()) {
+                proxy.locale.clearLocale()
+            } else {
+                proxy.locale.setCurrentLocale(localeIdentifier)
+            }
         }
     }
 

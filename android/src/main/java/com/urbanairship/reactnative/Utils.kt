@@ -27,33 +27,6 @@ object Utils {
         "com.airship.notification_opt_in_status" to listOf(EventType.NOTIFICATION_OPT_IN_CHANGED)
     )
 
-
-    private val legacyFeatureMap: Map<String, Int> = mapOf(
-        "FEATURE_NONE" to PrivacyManager.FEATURE_NONE,
-        "FEATURE_IN_APP_AUTOMATION" to PrivacyManager.FEATURE_IN_APP_AUTOMATION,
-        "FEATURE_MESSAGE_CENTER" to PrivacyManager.FEATURE_MESSAGE_CENTER,
-        "FEATURE_PUSH" to PrivacyManager.FEATURE_PUSH,
-        "FEATURE_CHAT" to PrivacyManager.FEATURE_CHAT,
-        "FEATURE_ANALYTICS" to PrivacyManager.FEATURE_ANALYTICS,
-        "FEATURE_TAGS_AND_ATTRIBUTES" to PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES,
-        "FEATURE_CONTACTS" to PrivacyManager.FEATURE_CONTACTS,
-        "FEATURE_LOCATION" to PrivacyManager.FEATURE_LOCATION,
-        "FEATURE_ALL" to PrivacyManager.FEATURE_ALL
-    )
-
-    private val featureMap: Map<String, Int> = mapOf(
-        "none" to PrivacyManager.FEATURE_NONE,
-        "in_app_automation" to PrivacyManager.FEATURE_IN_APP_AUTOMATION,
-        "message_center" to PrivacyManager.FEATURE_MESSAGE_CENTER,
-        "push" to PrivacyManager.FEATURE_PUSH,
-        "chat" to PrivacyManager.FEATURE_CHAT,
-        "analytics" to PrivacyManager.FEATURE_ANALYTICS,
-        "tags_and_attributes" to PrivacyManager.FEATURE_TAGS_AND_ATTRIBUTES,
-        "contacts" to PrivacyManager.FEATURE_CONTACTS,
-        "location" to PrivacyManager.FEATURE_LOCATION,
-        "all" to PrivacyManager.FEATURE_ALL
-    )
-
     fun convertArray(array: ReadableArray?): JsonValue {
         return if (array == null) {
             JsonValue.NULL
