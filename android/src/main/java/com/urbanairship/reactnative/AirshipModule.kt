@@ -569,6 +569,9 @@ internal fun <T> Promise.resolveDeferred(function: ((T?, Exception?) -> Unit) ->
                     is JsonSerializable -> {
                         this.resolve(result.toReactType())
                     }
+                    is Number -> {
+                        this.resolve((result as Number).toDouble())
+                    }
                     else -> {
                         this.resolve(result)
                     }
