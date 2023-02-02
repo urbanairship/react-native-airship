@@ -11,6 +11,9 @@ import { AirshipPush } from './AirshipPush';
 import { AirshipConfig, EventTypeMap, EventType } from './types';
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
 
+/**
+ * Airship
+ */
 export class AirshipRoot {
   public readonly actions: AirshipActions;
   public readonly analytics: AirshipAnalytics;
@@ -39,15 +42,31 @@ export class AirshipRoot {
     this.eventEmitter = new UAEventEmitter(module);
   }
 
+  /**
+   * Calls takeOff. If Airship is already configured for
+   * the app session, the new config will be applied on the next
+   * app init.
+   * @param config The config.
+   * @returns A promise with the result. `true` if airship is ready.
+   */
   public takeOff(config: AirshipConfig): Promise<boolean> {
     return this.module.takeOff(config);
   }
 
+  /**
+   * Checks if Airship is ready.
+   * @returns A promise with the result.
+   */
   public isFlying(): Promise<boolean> {
     return this.module.isFlying();
-
   }
   
+  /**
+   * Adds a listener.
+   * @param eventType The listener type. 
+   * @param listener The listener.
+   * @returns A subscription.
+   */
   public addListener<T extends EventType>
   (
     eventType: T,
@@ -60,7 +79,7 @@ export class AirshipRoot {
   }
 
   /**
-   * Removes a listener for an Urban Airship event.
+   * Removes a listener.
    *
    * @param eventType The event type.
    * @param listener The event listener. Should be a reference to the function passed into addListener.
@@ -73,7 +92,7 @@ export class AirshipRoot {
   }
 
   /**
-   * Removes all listeners for Urban Airship events.
+   * Removes all listeners for a given type.
    *
    * @param eventType The event type.
    */

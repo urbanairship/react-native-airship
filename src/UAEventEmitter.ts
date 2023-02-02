@@ -77,7 +77,7 @@ export class Subscription {
   /**
    * Removes the listener.
    */
-  remove(): void {
+  public remove(): void {
     this.onRemove();
   }
 }

@@ -12,6 +12,7 @@ export { AirshipMessageCenter } from './AirshipMessageCenter';
 export { AirshipPreferenceCenter } from './AirshipPreferenceCenter';
 export { AirshipPrivacyManager } from './AirshipPrivacyManager';
 export { AirshipPush } from './AirshipPush';
+export { CustomEvent } from './CustomEvent';
 
 export * from './types';
 export * from './MessageView';
