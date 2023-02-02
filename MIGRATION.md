@@ -24,7 +24,7 @@ The `urbanairship-preference-center-react-native` is now in the main package. Yo
 
 ### HMS package
 
-The `urbanairship-hms-react-native` has been removed and replaced with a new gradle flag `airshipEnableHms` flag. You can set the flag to `true` in the `android/gradle.properties` file. In order to use HMS, the app still needs to include a dependency for `com.huawei.hms:push` and apply the HMS gradle plugin. See [Airship React Native setup guide](https://docs.airship.com/platform/mobile/setup/sdk/react-native/) for more info.
+The `urbanairship-hms-react-native` has been removed and replaced with a new gradle flag `airshipHmsEnabled` flag. You can set the flag to `true` in the `android/gradle.properties` file. In order to use HMS, the app still needs to include a dependency for `com.huawei.hms:push` and apply the HMS gradle plugin. See [Airship React Native setup guide](https://docs.airship.com/platform/mobile/setup/sdk/react-native/) for more info.
 
 
 ## API Changes
