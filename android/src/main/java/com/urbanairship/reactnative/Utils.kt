@@ -32,7 +32,6 @@ object Utils {
             JsonValue.NULL
         } else {
             val jsonValues: MutableList<JsonValue> = ArrayList()
-            val array = array
             var i = 0
             while (i < array.size()) {
                 jsonValues.add(convertDynamic(array.getDynamic(i)))
