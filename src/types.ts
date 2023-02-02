@@ -16,14 +16,14 @@ export interface ChannelCreatedEvent {
   /**
    * The channel ID.
    */
-  channelId: string
+  channelId: string;
 }
 
 export interface PushTokenReceivedEvent {
   /**
    * The push token.
    */
-  pushToken: string
+  pushToken: string;
 }
 
 /**
@@ -123,7 +123,7 @@ export interface NotificationOptInStatusEvent {
    */
   ios?: {
     /**
-     * The authorized notification settings. 
+     * The authorized notification settings.
      */
     authorizedSettings: iOS.AuthorizedNotificationSetting[];
   };
@@ -186,17 +186,16 @@ export enum EventType {
 }
 
 export interface EventTypeMap {
-  [EventType.ChannelCreated]: ChannelCreatedEvent,
-  [EventType.NotificationResponse]: NotificationResponseEvent,
-  [EventType.PushReceived]: PushReceivedEvent,
-  [EventType.DeepLink]: DeepLinkEvent,
-  [EventType.MessageCenterUpdated]: MessageCenterUpdatedEvent,
-  [EventType.NotificationOptInStatus]: NotificationOptInStatusEvent,
-  [EventType.DisplayMessageCenter]: DisplayMessageCenterEvent,
-  [EventType.DisplayPreferenceCenter]: DisplayPreferenceCenterEvent,
-  [EventType.PushTokenReceived]: PushTokenReceivedEvent
+  [EventType.ChannelCreated]: ChannelCreatedEvent;
+  [EventType.NotificationResponse]: NotificationResponseEvent;
+  [EventType.PushReceived]: PushReceivedEvent;
+  [EventType.DeepLink]: DeepLinkEvent;
+  [EventType.MessageCenterUpdated]: MessageCenterUpdatedEvent;
+  [EventType.NotificationOptInStatus]: NotificationOptInStatusEvent;
+  [EventType.DisplayMessageCenter]: DisplayMessageCenterEvent;
+  [EventType.DisplayPreferenceCenter]: DisplayPreferenceCenterEvent;
+  [EventType.PushTokenReceived]: PushTokenReceivedEvent;
 }
-
 
 /**
  * iOS options
@@ -469,6 +468,18 @@ export interface AirshipConfig {
   enabledFeatures?: Feature[];
 
   /**
+   * Enables channel capture feature.
+   * This config is enabled by default.
+   */
+  isChannelCaptureEnabled?: boolean;
+
+  /**
+   * Whether to suppress console error messages about missing allow list entries during takeOff.
+   * This config is disabled by default.
+   */
+  suppressAllowListError?: boolean;
+
+  /**
    * iOS config.
    */
   ios?: {
@@ -527,17 +538,22 @@ export namespace Android {
  * Enum of authorized Features.
  */
 export enum Feature {
-  None = 'none',
   InAppAutomation = 'in_app_automation',
   MessageCenter = 'message_center',
   Push = 'push',
+  // No longer used
   Chat = 'chat',
   Analytics = 'analytics',
   TagsAndAttributes = 'tags_and_attributes',
   Contacts = 'contacts',
+  // No longer used
   Location = 'location',
-  All = 'all',
 }
+
+/**
+ * All available features.
+ */
+export const FEATURES_ALL = Object.values(Feature);
 
 /**
  * Subscription Scope types.

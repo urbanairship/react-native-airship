@@ -124,6 +124,10 @@ for replacements.
 | EventType.OpenPreferenceCenter    	| EventType.DisplayPreferenceCenter                        	|                                                                             	|
 
 
+### Features
+
+The list of available features no longer includes `all` or `none`. A new constant `FEATURES_ALL` is available that is a list of all features that can be used instead of `all`. For `none`, use an empty array instead.
+
 # 11.x to 12.x
 
 Data collection enabled has been replaced with privacy manager.
