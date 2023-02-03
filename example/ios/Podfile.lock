@@ -16,7 +16,7 @@ PODS:
     - Airship/Core
   - Airship/PreferenceCenter (16.10.7):
     - Airship/Core
-  - AirshipFrameworkProxy (1.0.6):
+  - AirshipFrameworkProxy (1.0.7):
     - Airship (= 16.10.7)
     - Airship/MessageCenter (= 16.10.7)
     - Airship/PreferenceCenter (= 16.10.7)
@@ -319,7 +319,7 @@ PODS:
   - React-logger (0.71.1):
     - glog
   - react-native-airship (15.0.0):
-    - AirshipFrameworkProxy (= 1.0.6)
+    - AirshipFrameworkProxy (= 1.0.7)
     - React-Core
   - react-native-safe-area-context (4.5.0):
     - RCT-Folly
@@ -583,7 +583,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Airship: fbff646723323c58e3871cd30488612ca373f597
-  AirshipFrameworkProxy: 5f8f0f5e6eed5ee9383b533ac06d8e21ae00882b
+  AirshipFrameworkProxy: a02ee431796323eb55377a70f094fbb09c0d81f2
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -617,7 +617,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 60cf272aababc5212410e4249d17cea14fc36caa
   React-jsinspector: ff56004b0c974b688a6548c156d5830ad751ae07
   React-logger: 60a0b5f8bed667ecf9e24fecca1f30d125de6d75
-  react-native-airship: 40d027ca778ca6e39cc0aae8cf7f2cf09398a26a
+  react-native-airship: 47a99d1bd2af67658ae50e90d9d65ddc83705e16
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   React-perflogger: ec8eef2a8f03ecfa6361c2c5fb9197ef4a29cc85
   React-RCTActionSheet: a0c023b86cf4c862fa9c4eb0f6f91fbe878fb2de
