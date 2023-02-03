@@ -15,31 +15,7 @@ jobs:
       - name: Check Version
         run: bash ./scripts/check_version.sh ${GITHUB_REF/refs\/tags\//}
 
-  build-android:
-    needs: [check-version]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-      - name: Run CI
-        run: bash ./scripts/run_ci_tasks.sh -a
-
-  build-ios:
-    needs: [check-version]
-    runs-on: macos-latest
-    env:
-      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run CI
-        run: bash ./scripts/run_ci_tasks.sh -i
-
   deploy:
-    needs: [build-android, build-ios]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
