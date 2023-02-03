@@ -49,6 +49,7 @@
   },
   "homepage": "https://github.com/urbanairship/react-native-module#readme",
   "publishConfig": {
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
