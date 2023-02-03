@@ -5,51 +5,49 @@ on:
     tags:
       - "[0-9]+.[0-9]+.[0-9]+*"
 
+
 jobs:
-  build:
+  check-version:
     runs-on: macos-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Check Version
         run: bash ./scripts/check_version.sh ${GITHUB_REF/refs\/tags\//}
-      - name: Slack Notification
-        uses: homoluctus/slatify@master
-        with:
-          type: ${{ job.status }}
-          job_name: "Airship React Native Release Started!"
-          url: ${{ secrets.SLACK_WEBHOOK }}
+
+  build-android:
+    needs: [check-version]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
           java-version: '11'
       - name: Run CI
-        run: |
-          bash ./scripts/run_ci_tasks.sh -a -i
-      - name: Slack Notification
-        uses: homoluctus/slatify@master
-        if: failure()
-        with:
-          type: ${{ job.status }}
-          job_name: "Airship React Native Release Failed :("
-          url: ${{ secrets.SLACK_WEBHOOK }}
+        run: bash ./scripts/run_ci_tasks.sh -a
+
+  build-ios:
+    needs: [check-version]
+    runs-on: macos-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run CI
+        run: bash ./scripts/run_ci_tasks.sh -i
 
   deploy:
-    needs: [build]
+    needs: [build-android, build-ios]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - uses: actions/setup-node@master
         with:
-          node-version: 12
+          node-version: 16
           registry-url: https://registry.npmjs.org/
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: '11'
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
@@ -64,11 +62,10 @@ jobs:
           echo ::set-output name=NOTES::"$NOTES"
       - name: Generate documentation
         run: |
-          yarn
+          yarn install
           yarn docs
-      - uses: google-github-actions/setup-gcloud@daadedc81d5f9d3c06d2c92f49202a3cc2b919ba # v0.2.1
+      - uses: google-github-actions/setup-gcloud@v0
         with:
-          version: '351.0.0'
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - name: Upload docs
@@ -88,17 +85,3 @@ jobs:
           body: ${{ steps.get_release_notes.outputs.NOTES }}
           draft: false
           prerelease: false
-      - name: Slack Notification
-        uses: homoluctus/slatify@master
-        if: success()
-        with:
-          type: ${{ job.status }}
-          job_name: "Airship React native Plugin Released!"
-          url: ${{ secrets.MOBILE_SLACK_WEBHOOK }}
-      - name: Slack Notification
-        uses: homoluctus/slatify@master
-        if: failure()
-        with:
-          type: ${{ job.status }}
-          job_name: "Airship React Native Release Failed :("
-          url: ${{ secrets.SLACK_WEBHOOK }}
