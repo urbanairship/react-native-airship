@@ -10,17 +10,9 @@ fi
 
 ROOT_PATH=$PWD/`dirname "${0}"`/..
 VERSION=$1
-TAR_NAME="$ROOT_PATH/build/Documentation.tar.gz"
-DEST_PATH="$ROOT_PATH/build/Documentation"
+TAR_NAME="$ROOT_PATH/docs/Documentation.tar.gz"
 
-mkdir -p $DEST_PATH
-cd $DEST_PATH
-
-cp -p $ROOT_PATH/documentation/index-for-docs.html index.html
-
-cp -rp $ROOT_PATH/urbanairship-hms-react-native/docs urbanairship-hms-react-native
-cp -rp $ROOT_PATH/urbanairship-react-native/docs urbanairship-react-native
-
+cd "$ROOT_PATH/docs/"
 tar -czf $TAR_NAME *
 cd -
 
