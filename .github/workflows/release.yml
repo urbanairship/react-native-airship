@@ -64,28 +64,8 @@ jobs:
           echo ::set-output name=NOTES::"$NOTES"
       - name: Generate documentation
         run: |
-          yarn install
-          cd urbanairship-react-native/
-          yarn generate-docs
-          cd -
-          cd urbanairship-preference-center-react-native/
-          yarn generate-docs
-          cd -
-          cd urbanairship-chat-react-native/
-          yarn generate-docs
-          cd -
-          cd urbanairship-accengage-react-native/
-          yarn generate-docs
-          cd -
-          cd urbanairship-hms-react-native/
-          yarn generate-docs
-          cd -
-      - name: Setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - name: Export gcloud related env variable
-        run: export CLOUDSDK_PYTHON="/usr/bin/python3"
+          yarn
+          yarn docs
       - uses: google-github-actions/setup-gcloud@daadedc81d5f9d3c06d2c92f49202a3cc2b919ba # v0.2.1
         with:
           version: '351.0.0'
@@ -95,21 +75,7 @@ jobs:
         run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//}
       - name: Publish modules
         run: |
-          cd urbanairship-react-native/
           yarn publish
-          cd -
-          cd urbanairship-preference-center-react-native/
-          yarn publish
-          cd -
-          cd urbanairship-chat-react-native/
-          yarn publish
-          cd -
-          cd urbanairship-accengage-react-native/
-          yarn publish
-          cd -
-          cd urbanairship-hms-react-native/
-          yarn publish
-          cd -
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Github Release

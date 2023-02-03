@@ -1,22 +1,146 @@
 {
-  "private": true,
-  "workspaces": {
-    "packages": [
-      "urbanairship-react-native",
-      "urbanairship-accengage-react-native",
-      "urbanairship-hms-react-native",
-      "urbanairship-chat-react-native",
-      "urbanairship-preference-center-react-native",
-      "example"
-    ]
-  },
+  "name": "@ua/react-native-airship",
+  "version": "15.0.0",
+  "description": "Airship plugin for React Native apps.",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "ios",
+    "cpp",
+    "*.podspec",
+    "!lib/typescript/example",
+    "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
+  ],
   "scripts": {
-    "start": "react-native start",
-    "test": "jest --verbose",
-    "prepare": "yarn workspace urbanairship-react-native run prepare; yarn workspace urbanairship-accengage-react-native run prepare; yarn workspace urbanairship-hms-react-native run prepare; yarn workspace urbanairship-chat-react-native run prepare; yarn workspace urbanairship-preference-center-react-native run prepare;",
-    "clean": "rm -rf node_modules urbanairship-react-native/node_modules urbanairship-accengage-react-native/node_modules urbanairship-hms-react-native/node_modules urbanairship-chat-react-native/node_modules example/node_modules urbanairship-preference-center-react-native/node_modules yarn.lock"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --fix \"**/*.{js,ts,tsx}\"",
+    "prepack": "bob build",
+    "example": "yarn --cwd example",
+    "bootstrap": "yarn example && yarn install && yarn example pods",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
+    "docs": "typedoc --tsconfig ./tsconfig.json --out docs src/index.tsx"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "airship"
+  ],
+  "repository": "https://github.com/urbanairship/react-native-module",
+  "author": "Airship <support@airship.com> (https://docs.airship.com/)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/urbanairship/react-native-module/issues"
+  },
+  "homepage": "https://github.com/urbanairship/react-native-module#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^17.0.2",
+    "@react-native-community/eslint-config": "^3.0.2",
+    "@types/react": "~17.0.21",
+    "@types/react-native": "0.70.0",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.0.5",
+    "react": "18.2.0",
+    "react-native": "0.71.1",
+    "react-native-builder-bob": "^0.20.3",
+    "typescript": "^4.5.2",
+    "pod-install": "^0.1.0",
+    "typedoc": "0.23.24"
   },
   "resolutions": {
-    "@types/react": "^17"
+    "@types/react": "17.0.21"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "engines": {
+    "node": ">= 16.0.0"
+  },
+  "packageManager": "^yarn@1.22.15",
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@react-native-community",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "tabWidth": 2,
+          "trailingComma": "es5",
+          "useTabs": false
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  },
+  "codegenConfig": {
+    "libraries": [
+      {
+        "name": "RTNAirshipSpec",
+        "type": "modules",
+        "jsSrcsDir": "src",
+        "android": {
+          "javaPackageName": "com.urbanairship.reactnative"
+        }
+      },
+      {
+        "name": "RTNAirshipComponents",
+        "type": "components",
+        "jsSrcsDir": "src",
+        "android": {
+          "javaPackageName": "com.urbanairship.reactnative"
+        }
+      }
+    ]
   }
 }

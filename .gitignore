@@ -2,6 +2,7 @@
 #
 .DS_Store
 
+.cxx/*
 # Xcode
 #
 build/
@@ -40,7 +41,6 @@ airshipconfig.properties
 .gradle
 .idea
 google-services.json
-gradle/
 
 # iOS
 AirshipConfig.plist
