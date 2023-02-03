@@ -62,7 +62,7 @@ jobs:
           echo ::set-output name=NOTES::"$NOTES"
       - name: Generate documentation
         run: |
-          yarn install
+          yarn
           yarn docs
       - uses: google-github-actions/setup-gcloud@v0
         with:

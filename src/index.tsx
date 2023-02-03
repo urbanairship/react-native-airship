@@ -11,8 +11,12 @@ export { AirshipLocale } from './AirshipLocale';
 export { AirshipMessageCenter } from './AirshipMessageCenter';
 export { AirshipPreferenceCenter } from './AirshipPreferenceCenter';
 export { AirshipPrivacyManager } from './AirshipPrivacyManager';
-export { AirshipPush } from './AirshipPush';
+export { AirshipPush, AirshipPushAndroid, AirshipPushIOS } from './AirshipPush';
 export { CustomEvent } from './CustomEvent';
+export { SubscriptionListEditor } from './SubscriptionListEditor';
+export { TagGroupEditor } from './TagGroupEditor';
+export { ScopedSubscriptionListEditor } from './ScopedSubscriptionListEditor';
+export { AttributeEditor } from './AttributeEditor';
 
 export * from './types';
 export * from './MessageView';
