@@ -1,7 +1,7 @@
 # React Native Module Changelog
 
 ## Version 15.0.0 - February 3, 2023
-Major release with several breaking changes. Apps should use the migration guide to update [Migration Guide](https://github.com/urbanairship/react-native-airship/tree/main/Migration)
+Major release with several breaking changes. Apps should use the migration guide to update [Migration Guide](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
 
 ### Changes
 - Renamed package from `urbanairship-react-native` to `@ua/react-native-airship`
