@@ -46,6 +46,10 @@ export interface PushPayload {
    */
   title?: string;
   /**
+   * The subtitle.
+   */
+  subtitle?: string;
+  /**
    * The notification ID.
    */
   notificationId?: string;
