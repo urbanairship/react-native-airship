@@ -23,7 +23,7 @@ export class AirshipAnalytics {
    * @returns A promise.
    */
   public trackScreen(screen?: string): Promise<void> {
-    return this.module.trackScreen(screen);
+    return this.module.analyticsTrackScreen(screen);
   }
 
   /**

@@ -13,7 +13,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "15.0.0"
+    public static let version: String = "15.1.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -254,12 +254,12 @@ public extension AirshipReactNative {
 public extension AirshipReactNative {
 
     func analyticsTrackScreen(_ screen: String?) throws {
-        try AirshipProxy.shared.analytics.trackScreen(screen!) // TODO fix
+        try AirshipProxy.shared.analytics.trackScreen(screen)
     }
 
     func analyticsAssociateIdentifier(_ identifier: String?, key: String) throws {
         try AirshipProxy.shared.analytics.associateIdentifier(
-            identifier: identifier!, // TODO fix
+            identifier: identifier,
             key: key
         )
     }

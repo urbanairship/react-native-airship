@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 15.1.0 - February 9, 2023
+
+Minor release that adds `subtitle` to the push payload that maps to the `summary` on Android and `subtitle` on iOS. It also fixes a bug with `trackScreen` that was introduced in 15.0.0.
+
+### Changes
+- Added `subtitle` to `PushPayload` type.
+- Fixed `trackScreen` method error.
+
 ## Version 15.0.0 - February 3, 2023
 Major release with several breaking changes. Apps should use the migration guide to update [Migration Guide](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
 

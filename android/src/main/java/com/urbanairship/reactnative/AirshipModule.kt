@@ -271,7 +271,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     @ReactMethod
     override fun contactIdentify(namedUser: String?, promise: Promise) {
         promise.resolveResult {
-            proxy.contact.identify(namedUser) // TODO
+            proxy.contact.identify(namedUser)
         }
     }
 
