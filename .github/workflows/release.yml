@@ -38,7 +38,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn
         shell: bash
 
       - name: Get the version
@@ -55,7 +55,7 @@ jobs:
           echo ::set-output name=NOTES::"$NOTES"
 
       - name: Generate documentation
-        run: yarn install --frozen-lockfile && yarn docs
+        run: yarn docs
 
       - uses: google-github-actions/setup-gcloud@v0
         with:
