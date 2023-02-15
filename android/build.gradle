@@ -24,6 +24,48 @@ def isHmsEnabled() {
     return rootProject.hasProperty("airshipHmsEnabled") && rootProject.getProperty("airshipHmsEnabled") == "true"
 }
 
+def resolveReactNativeDirectory() {
+  def reactNativeLocation = rootProject.hasProperty("reactNativeDir") ? rootProject.getProperty("reactNativeDir") : null
+
+  if (reactNativeLocation != null) {
+    return file(reactNativeLocation)
+  }
+
+  try {
+    // Resolve React Native location with Node
+    // This will make sure that we get installation location correctly in monorepos
+    def reactNativePackageJsonPathStdout = new ByteArrayOutputStream()
+
+    exec {
+      commandLine("node", "-p", "require.resolve('react-native/package.json')")
+      ignoreExitValue true
+      standardOutput = reactNativePackageJsonPathStdout
+    }
+
+    def reactNativeFromProjectNodeModules = file(reactNativePackageJsonPathStdout.toString().trim()).getParentFile();
+
+    if (reactNativeFromProjectNodeModules.exists()) {
+      return reactNativeFromProjectNodeModules
+    }
+  } catch (e) {
+    // Ignore
+  }
+
+  throw new Exception(
+    "react-native-airship: Failed to resolve 'react-native' in the project. " +
+    "If you have a non-standard project structure, you can specify 'reactNativeDir' with the path to 'react-native' in your 'gradle.properties' file."
+  )
+}
+
+
+def reactNativeRootDir = resolveReactNativeDirectory()
+def reactProperties = new Properties()
+file("$reactNativeRootDir/ReactAndroid/gradle.properties").withInputStream { reactProperties.load(it) }
+
+def reactNativeVersion = reactProperties.getProperty("VERSION_NAME")
+def (reactNativeMajorVersion, reactNativeMinorVersion) = reactNativeVersion.split("\\.").collect { it.isInteger() ? it.toInteger() : it }
+
+
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
@@ -100,10 +142,13 @@ def proxy_version = getExtOrDefault("airshipProxyVersion")
 def airship_version = getExtOrDefault("airshipVersion")
 
 dependencies {
-  // For < 0.71, this will be from the local maven repo
-  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
-  //noinspection GradleDynamicVersion
-  implementation "com.facebook.react:react-native"
+  if (reactNativeMajorVersion == 0 && reactNativeMinorVersion < 71) {
+    //noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+"
+  } else {
+    implementation "com.facebook.react:react-android"
+  }
+
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "com.urbanairship.android:urbanairship-fcm:$airship_version"
   api "com.urbanairship.android:airship-framework-proxy:$proxy_version"

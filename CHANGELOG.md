@@ -1,5 +1,8 @@
 # React Native Module Changelog
 
+## Version 15.1.1 - February 14, 2023
+Patch release that fixes a gradle build issue with older React Native versions.
+
 ## Version 15.1.0 - February 9, 2023
 
 Minor release that adds `subtitle` to the push payload that maps to the `summary` on Android and `subtitle` on iOS. It also fixes a bug with `trackScreen` that was introduced in 15.0.0.
