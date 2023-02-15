@@ -53,13 +53,15 @@ jobs:
           NOTES="${NOTES//$'\n'/'%0A'}"
           NOTES="${NOTES//$'\r'/'%0D'}"
           echo ::set-output name=NOTES::"$NOTES"
+
       - name: Generate documentation
-        run: |
-          yarn docs
+        run: yarn install --frozen-lockfile && yarn docs
+
       - uses: google-github-actions/setup-gcloud@v0
         with:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
+          
       - name: Upload docs
         run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//}
       - name: Publish modules
