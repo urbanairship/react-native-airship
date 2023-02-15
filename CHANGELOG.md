@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 15.1.1 - February 14, 2023
+## Version 15.1.1 - February 15, 2023
 Patch release that fixes a gradle build issue with older React Native versions.
 
 ## Version 15.1.0 - February 9, 2023
