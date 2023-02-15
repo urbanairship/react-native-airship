@@ -7,13 +7,37 @@ import React
 
 @objc
 public class AirshipReactNative: NSObject {
+    
+    @objc
+    public static let pendingEventsEventName = "com.airship.pending_events"
+
+    @objc
+    public static let overridePresentationOptionsEventName = "com.airship.ios.override_presentation_options"
+
+    
+    var lock = Lock()
+    var pendingPresentationRequests: [String: PresentationOptionsOverridesRequest] = [:]
+    
+    @objc
+    public var overridePresentationOptionsEnabled: Bool = false {
+        didSet {
+            if (!overridePresentationOptionsEnabled) {
+                lock.sync {
+                    self.pendingPresentationRequests.values.forEach { request in
+                        request.result(options: nil)
+                    }
+                    self.pendingPresentationRequests.removeAll()
+                }
+            }
+        }
+    }
 
     @objc
     public static var proxy: AirshipProxy {
         AirshipProxy.shared
     }
 
-    public static let version: String = "15.1.1"
+    public static let version: String = "15.2.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -21,14 +45,58 @@ public class AirshipReactNative: NSObject {
     public static let shared: AirshipReactNative = AirshipReactNative()
 
     @objc
-    public func setNotifier(_ notifier: (() -> Void)?) {
+    public func setNotifier(_ notifier: ((String, [String: Any]) -> Void)?) {
         Task {
-            await eventNotifier.setNotifier(notifier)
-            if await AirshipProxyEventEmitter.shared.hasAnyEvents() {
-                await eventNotifier.notifyPendingEvents()
+            if let notifier = notifier {
+                await eventNotifier.setNotifier({
+                    notifier(AirshipReactNative.pendingEventsEventName, [:])
+                })
+                
+                if await AirshipProxyEventEmitter.shared.hasAnyEvents() {
+                    await eventNotifier.notifyPendingEvents()
+                }
+                
+                
+                AirshipProxy.shared.push.presentationOptionOverrides = { request in
+                    guard self.overridePresentationOptionsEnabled else {
+                        request.result(options: nil)
+                        return
+                    }
+                    
+                    let requestID = UUID().uuidString
+                    self.lock.sync {
+                        self.pendingPresentationRequests[requestID] = request
+                    }
+                    notifier(
+                        AirshipReactNative.overridePresentationOptionsEventName,
+                        [
+                            "pushPayload": request.pushPayload,
+                            "requestId": requestID
+                        ]
+                    )
+                }
+            } else {
+                await eventNotifier.setNotifier(nil)
+                AirshipProxy.shared.push.presentationOptionOverrides = nil
+                
+                lock.sync {
+                    self.pendingPresentationRequests.values.forEach { request in
+                        request.result(options: nil)
+                    }
+                    self.pendingPresentationRequests.removeAll()
+                }
             }
         }
     }
+    
+    @objc
+    public func presentationOptionOverridesResult(requestID: String, presentationOptions: [String]?) {
+        lock.sync {
+            pendingPresentationRequests[requestID]?.result(optionNames: presentationOptions)
+            pendingPresentationRequests[requestID] = nil
+        }
+    }
+    
 
     @objc
     public func onLoad(

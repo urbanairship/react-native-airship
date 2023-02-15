@@ -23,6 +23,8 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
+        always-auth: true
+        registry-url: 'https://registry.npmjs.org'
         with:
           node-version-file: .nvmrc
 
