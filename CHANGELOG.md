@@ -1,5 +1,16 @@
 # React Native Module Changelog
 
+## Version 15.2.0 - March 3, 2023
+Minor release that adds support for foreground presentation options per push message on iOS, and if a notification should display or not on Android.
+
+### Changes
+- Update iOS SDK to 16.11.2
+- Update Android SDK to 16.9.0
+- Added method `Airship.push.android.setForegroundDisplayPredicate` to control the display of notifications in the foreground per message on Android
+- Added method `Airship.push.iOS.setForegroundPresentationOptionsCallback` to control the foreground presentation options per message on iOS
+- Fixed return type for `Airship.push.getActiveNotifications`
+- Fixed Android build issues when using Kotlin 1.6
+
 ## Version 15.1.1 - February 15, 2023
 Patch release that fixes a gradle build issue with older React Native versions.
 

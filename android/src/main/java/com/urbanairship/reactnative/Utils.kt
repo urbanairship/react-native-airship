@@ -23,7 +23,10 @@ object Utils {
             EventType.FOREGROUND_NOTIFICATION_RESPONSE_RECEIVED,
             EventType.BACKGROUND_NOTIFICATION_RESPONSE_RECEIVED
         ),
-        "com.airship.push_received" to listOf(EventType.PUSH_RECEIVED),
+        "com.airship.push_received" to listOf(
+                EventType.FOREGROUND_PUSH_RECEIVED,
+                EventType.BACKGROUND_PUSH_RECEIVED
+        ),
         "com.airship.notification_opt_in_status" to listOf(EventType.NOTIFICATION_OPT_IN_CHANGED)
     )
 

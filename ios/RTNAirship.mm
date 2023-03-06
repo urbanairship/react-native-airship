@@ -7,13 +7,14 @@
 RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"com.airship.pending_events"];
+    return @[AirshipReactNative.pendingEventsEventName, AirshipReactNative.overridePresentationOptionsEventName];
 }
 
 -(void)startObserving {
     __weak RTNAirship *weakSelf = self;
-    [AirshipReactNative.shared setNotifier:^{
-        [weakSelf sendEventWithName:@"com.airship.pending_events" body:{}];
+    
+    [AirshipReactNative.shared setNotifier:^(NSString *name, NSDictionary<NSString *,id> *body) {
+        [weakSelf sendEventWithName:name body:body];
     }];
 }
 
@@ -647,6 +648,23 @@ RCT_REMAP_METHOD(privacyManagerSetEnabledFeatures,
     [AirshipReactNative.shared privacyManagerSetEnabledFeaturesWithFeatures:features error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
+
+RCT_EXPORT_METHOD(pushIosIsOverridePresentationOptionsEnabled:(BOOL)enabled) {
+    AirshipReactNative.shared.overridePresentationOptionsEnabled = enabled;
+}
+
+RCT_EXPORT_METHOD(pushIosOverridePresentationOptions:(NSArray *)presentationOptions requestId:(NSString *)requestID) {
+    [AirshipReactNative.shared presentationOptionOverridesResultWithRequestID:requestID presentationOptions:presentationOptions];
+}
+
+RCT_EXPORT_METHOD(pushAndroidIsOverrideForegroundDisplayEnabled:(BOOL)enabled) {
+    // Android only
+}
+
+RCT_EXPORT_METHOD(pushAndroidOverrideForegroundDisplay:(BOOL)display requestId:(NSString *)requestID) {
+    // Android only
 }
 
 

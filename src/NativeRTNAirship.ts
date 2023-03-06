@@ -40,10 +40,14 @@ export interface Spec extends TurboModule {
   pushIosIsAutobadgeEnabled(): Promise<boolean>;
   pushIosSetBadgeNumber(badgeNumber: number): Promise<void>;
   pushIosGetBadgeNumber(): Promise<number>;
+  pushIosIsOverridePresentationOptionsEnabled(enabled: boolean): void;
+  pushIosOverridePresentationOptions(options: string[], requestId: string): void;
 
   // Push.android
   pushAndroidIsNotificationChannelEnabled(channel: string): Promise<boolean>;
   pushAndroidSetNotificationConfig(config: Object): void;
+  pushAndroidIsOverrideForegroundDisplayEnabled(enabled: boolean): void;
+  pushAndroidOverrideForegroundDisplay(shouldDisplay: boolean, requestId: string): void;
 
   // Contact
   contactIdentify(namedUser: string): Promise<void>;

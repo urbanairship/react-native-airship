@@ -150,7 +150,6 @@ dependencies {
   }
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "com.urbanairship.android:urbanairship-fcm:$airship_version"
   api "com.urbanairship.android:airship-framework-proxy:$proxy_version"
   
   if (isHmsEnabled()) {

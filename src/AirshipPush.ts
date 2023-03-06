@@ -1,5 +1,5 @@
-import { PushNotification } from 'react-native';
-import { Android, iOS, NotificationStatus } from './types';
+import { NativeEventEmitter, Platform } from 'react-native';
+import { Android, iOS, NotificationStatus, PushPayload } from './types';
 
 /**
  * Airship Push.
@@ -15,6 +15,7 @@ export class AirshipPush {
    * Android only push methods.
    */
   public readonly android: AirshipPushAndroid;
+  
 
   constructor(private readonly module: any) {
     this.iOS = new AirshipPushIOS(module);
@@ -75,7 +76,7 @@ export class AirshipPush {
    * sent through Airship.
    * @returns A promise with the result.
    */
-  public getActiveNotifications(): Promise<PushNotification[]> {
+  public getActiveNotifications(): Promise<PushPayload[]> {
     return this.module.pushGetActiveNotifications();
   }
 
@@ -103,7 +104,43 @@ export class AirshipPush {
  * iOS Push.
  */
 export class AirshipPushIOS {
-  constructor(private readonly module: any) {}
+  
+  private eventEmitter: NativeEventEmitter;
+  private presentationOverridesCallback?: (pushPayload: PushPayload) => Promise<iOS.ForegroundPresentationOption[] | null>
+
+  constructor(private readonly module: any) {
+    this.eventEmitter = new NativeEventEmitter(module);
+
+    if (Platform.OS === 'ios') {
+      this.eventEmitter.addListener("com.airship.ios.override_presentation_options", (event) => {
+        let payload = event["pushPayload"] as PushPayload
+        let requestId = event["requestId"] as String
+  
+        if (this.presentationOverridesCallback) {
+          this.presentationOverridesCallback(payload).then( (result) => {
+            module.pushIosOverridePresentationOptions(result, requestId);
+          })
+          .catch(() => {
+            module.pushIosOverridePresentationOptions(null, requestId);
+          });
+        }
+      })
+    }
+  }
+
+  /**
+   * Overrides the presentation options per notification. If a `null` is returned, the default
+   * options will be used. The callback should return as quickly as possible to avoid delaying notification delivery.
+   * 
+   * @param callback A callback that can override the foreground presentation options.
+   */
+  public setForegroundPresentationOptionsCallback(callback?: (pushPayload: PushPayload) => Promise<iOS.ForegroundPresentationOption[] | null>) {
+
+    if (Platform.OS === 'ios') {
+      this.presentationOverridesCallback = callback
+      this.module.pushIosIsOverridePresentationOptionsEnabled(callback != null)
+    }
+  }
 
   /**
    * Sets the foreground presentation options.
@@ -166,8 +203,29 @@ export class AirshipPushIOS {
  * Android Push.
  */
 export class AirshipPushAndroid {
-  constructor(private readonly module: any) {}
 
+  private eventEmitter: NativeEventEmitter;
+  private foregroundDisplayPredicate?: (pushPayload: PushPayload) => Promise<Boolean>
+
+  constructor(private readonly module: any) {
+    this.eventEmitter = new NativeEventEmitter(module);
+
+    if (Platform.OS === 'android') {
+      this.eventEmitter.addListener("com.airship.android.override_foreground_display", (event) => {
+        let payload = event["pushPayload"] as PushPayload
+        let requestId = event["requestId"] as String
+  
+        if (this.foregroundDisplayPredicate) {
+          this.foregroundDisplayPredicate(payload).then( (result) => {
+            module.pushAndroidOverrideForegroundDisplay(result, requestId);
+          })
+          .catch(() => {
+            module.pushAndroidOverrideForegroundDisplay(true, requestId);
+          });
+        }
+      })
+    }
+  }
   /**
    * Checks if a notification category/channel is enabled.
    * @param channel The channel name.
@@ -183,5 +241,19 @@ export class AirshipPushAndroid {
    */
   public setNotificationConfig(config: Android.NotificationConfig): void {
     return this.module.pushAndroidSetNotificationConfig(config);
+  }
+
+  /**
+   * Overrides the foreground display per notification.
+   * 
+   * The predicate should return as quickly as possible to avoid delaying notification delivery.
+   * 
+   * @param predicate A foreground display predicate.
+   */
+  public setForegroundDisplayPredicate(predicate?: (pushPayload: PushPayload) => Promise<boolean>) {
+    if (Platform.OS === 'android') {
+      this.foregroundDisplayPredicate = predicate
+      this.module.pushAndroidIsOverrideForegroundDisplayEnabled(predicate != null)
+    }
   }
 }

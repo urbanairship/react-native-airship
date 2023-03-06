@@ -4,19 +4,50 @@ import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
 import com.urbanairship.PendingResult
 import com.urbanairship.actions.ActionResult
+import com.urbanairship.actions.ActionValue
 import com.urbanairship.android.framework.proxy.EventType
 import com.urbanairship.android.framework.proxy.events.EventEmitter
 import com.urbanairship.android.framework.proxy.proxies.AirshipProxy
+import com.urbanairship.android.framework.proxy.proxies.SuspendingPredicate
+import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonSerializable
 import com.urbanairship.json.JsonValue
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.util.UUID
 
-class AirshipModule internal constructor(val context: ReactApplicationContext) :
-    AirshipSpec(context) {
+class AirshipModule internal constructor(val context: ReactApplicationContext) : AirshipSpec(context) {
     override fun getName() = NAME
 
     private val proxy = AirshipProxy.shared(context)
+
+    private var isOverrideForegroundDisplayEnabled: Boolean = false
+    private val foregroundDisplayRequestMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
+
+    private val foregroundDisplayPredicate = object : SuspendingPredicate<Map<String, Any>> {
+        override suspend fun apply(value: Map<String, Any>): Boolean {
+            val deferred = CompletableDeferred<Boolean>()
+            synchronized(foregroundDisplayRequestMap) {
+                if (!isOverrideForegroundDisplayEnabled || !context.hasActiveReactInstance()) {
+                    return true
+                }
+
+                val requestId = UUID.randomUUID().toString()
+                foregroundDisplayRequestMap[requestId] = deferred
+
+                notifyForegroundDisplayRequest(
+                        JsonMap.newBuilder()
+                                .putOpt("pushPayload", value)
+                                .put("requestId", requestId)
+                                .build()
+                )
+            }
+
+            return deferred.await()
+        }
+    }
+
 
     override fun initialize() {
         super.initialize()
@@ -42,6 +73,9 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             override fun onHostPause() {}
             override fun onHostDestroy() {}
         })
+
+        proxy.push.foregroundNotificationDisplayPredicate = this.foregroundDisplayPredicate
+
     }
 
     @ReactMethod
@@ -78,13 +112,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun takePendingEvents(eventName: String?, isHeadlessJS: Boolean, promise: Promise) {
         promise.resolveResult {
             val eventTypes = Utils.parseEventTypes(requireNotNull(eventName))
-                .filter {
-                    if (isHeadlessJS) {
-                        !it.isForeground()
-                    } else {
-                        it.isForeground()
+                    .filter {
+                        if (isHeadlessJS) {
+                            !it.isForeground()
+                        } else {
+                            it.isForeground()
+                        }
                     }
-                }
             JsonValue.wrapOpt(EventEmitter.shared().takePending(eventTypes).map { it.body })
         }
     }
@@ -129,7 +163,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun channelGetSubscriptionLists(promise: Promise) {
-        promise.resolveDeferred { callback ->
+        promise.resolveDeferred<JsonValue> { callback ->
             proxy.channel.getSubscriptionLists().addResultCallback {
                 callback(JsonValue.wrapOpt(it), null)
             }
@@ -213,8 +247,8 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun pushIosSetForegroundPresentationOptions(
-        options: ReadableArray?,
-        promise: Promise
+            options: ReadableArray?,
+            promise: Promise
     ) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
@@ -257,9 +291,45 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun pushIosIsOverridePresentationOptionsEnabled(enabled: Boolean) {
+        // iOS only
+    }
+
+    @ReactMethod
+    override fun pushIosOverridePresentationOptions(options: ReadableArray?, requestId: String?) {
+        // iOS only
+    }
+
+
+    @ReactMethod
     override fun pushAndroidIsNotificationChannelEnabled(channel: String?, promise: Promise) {
         promise.resolveResult {
             proxy.push.isNotificationChannelEnabled(requireNotNull(channel))
+        }
+    }
+
+    @ReactMethod
+    override fun pushAndroidIsOverrideForegroundDisplayEnabled(enabled: Boolean) {
+        synchronized(this.foregroundDisplayRequestMap) {
+            this.isOverrideForegroundDisplayEnabled = enabled
+
+            if (!enabled) {
+                foregroundDisplayRequestMap.values.forEach {
+                    it.complete(true)
+                }
+                foregroundDisplayRequestMap.clear()
+            }
+        }
+    }
+
+    @ReactMethod
+    override fun pushAndroidOverrideForegroundDisplay(shouldDisplay: Boolean, requestId: String?) {
+        if (requestId == null) {
+            return
+        }
+
+        synchronized(this.foregroundDisplayRequestMap) {
+            this.foregroundDisplayRequestMap.remove(requestId)?.complete(shouldDisplay)
         }
     }
 
@@ -291,7 +361,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun contactGetSubscriptionLists(promise: Promise) {
-        promise.resolveDeferred { callback ->
+        promise.resolveDeferred<JsonValue> { callback ->
             proxy.contact.getSubscriptionLists().addResultCallback {
                 callback(JsonValue.wrapOpt(it), null)
             }
@@ -314,8 +384,8 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun contactEditContactSubscriptionLists(
-        operations: ReadableArray?,
-        promise: Promise
+            operations: ReadableArray?,
+            promise: Promise
     ) {
         promise.resolveResult {
             proxy.contact.editSubscriptionLists(Utils.convertArray(operations).toJsonValue())
@@ -331,9 +401,9 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun analyticsAssociateIdentifier(
-        key: String?,
-        identifier: String?,
-        promise: Promise
+            key: String?,
+            identifier: String?,
+            promise: Promise
     ) {
         promise.resolveResult {
             proxy.analytics.associateIdentifier(requireNotNull(key), identifier)
@@ -342,15 +412,15 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun actionRun(name: String?, value: ReadableMap?, promise: Promise) {
-        promise.resolveDeferred { callback ->
+        promise.resolveDeferred<ActionValue> { callback ->
             proxy.actions.runAction(requireNotNull(name), Utils.convertMap(value).toJsonValue())
-                .addResultCallback { actionResult ->
-                    if (actionResult != null && actionResult.status == ActionResult.STATUS_COMPLETED) {
-                        callback(actionResult.value, null)
-                    } else {
-                        callback(null, Exception("Action failed ${actionResult?.status}"))
+                    .addResultCallback { actionResult ->
+                        if (actionResult != null && actionResult.status == ActionResult.STATUS_COMPLETED) {
+                            callback(actionResult.value, null)
+                        } else {
+                            callback(null, Exception("Action failed ${actionResult?.status}"))
+                        }
                     }
-                }
         }
     }
 
@@ -358,7 +428,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun privacyManagerSetEnabledFeatures(features: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.privacyManager.setEnabledFeatures(
-                Utils.convertArray(requireNotNull(features))
+                    Utils.convertArray(requireNotNull(features))
             )
         }
     }
@@ -374,7 +444,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun privacyManagerEnableFeature(features: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.privacyManager.enableFeatures(
-                Utils.convertArray(requireNotNull(features))
+                    Utils.convertArray(requireNotNull(features))
             )
         }
     }
@@ -383,7 +453,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun privacyManagerDisableFeature(features: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.privacyManager.disableFeatures(
-                Utils.convertArray(requireNotNull(features))
+                    Utils.convertArray(requireNotNull(features))
             )
         }
     }
@@ -392,7 +462,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun privacyManagerIsFeatureEnabled(features: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.privacyManager.isFeatureEnabled(
-                Utils.convertArray(requireNotNull(features))
+                    Utils.convertArray(requireNotNull(features))
             )
         }
     }
@@ -469,7 +539,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun messageCenterRefresh(promise: Promise) {
-        promise.resolveDeferred { callback ->
+        promise.resolveDeferred<Void> { callback ->
             proxy.messageCenter.refreshInbox().addResultCallback {
                 if (it == true) {
                     callback(null, null)
@@ -501,8 +571,8 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun preferenceCenterAutoLaunchDefaultPreferenceCenter(
-        preferenceCenterId: String?,
-        autoLaunch: Boolean
+            preferenceCenterId: String?,
+            autoLaunch: Boolean
     ) {
         if (preferenceCenterId != null) {
             proxy.preferenceCenter.setAutoLaunchPreferenceCenter(preferenceCenterId, autoLaunch)
@@ -541,6 +611,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    private fun notifyForegroundDisplayRequest(body: JsonMap) {
+        if (context.hasActiveReactInstance()) {
+            val appEventEmitter = context.getJSModule(RCTNativeAppEventEmitter::class.java)
+            appEventEmitter.emit("com.airship.android.override_foreground_display", body.toReactType())
+        }
+    }
+
     companion object {
         const val NAME = "RTNAirship"
     }
@@ -552,7 +629,7 @@ internal fun JsonSerializable.toReactType(): Any? {
 }
 
 internal fun Promise.resolveResult(function: () -> Any?) {
-    resolveDeferred { callback -> callback(function(), null) }
+    resolveDeferred<Any> { callback -> callback(function(), null) }
 }
 
 internal fun <T> Promise.resolveDeferred(function: ((T?, Exception?) -> Unit) -> Unit) {
@@ -586,7 +663,7 @@ internal fun <T> Promise.resolveDeferred(function: ((T?, Exception?) -> Unit) ->
 }
 
 internal fun <T> Promise.resolvePending(function: () -> PendingResult<T>) {
-    resolveDeferred { callback ->
+    resolveDeferred<T> { callback ->
         function().addResultCallback {
             callback(it, null)
         }
@@ -598,7 +675,8 @@ internal fun EventType.isForeground(): Boolean {
     return when (this) {
         EventType.PUSH_TOKEN_RECEIVED -> false
         EventType.BACKGROUND_NOTIFICATION_RESPONSE_RECEIVED -> false
-        EventType.PUSH_RECEIVED -> false
+        EventType.BACKGROUND_PUSH_RECEIVED -> false
+        EventType.FOREGROUND_PUSH_RECEIVED -> false // Treat all push received as background on React
         else -> true
     }
 }

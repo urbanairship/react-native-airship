@@ -147,6 +147,14 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun pushIosIsOverridePresentationOptionsEnabled(enabled: Boolean)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun pushIosOverridePresentationOptions(options: ReadableArray?, requestId: String?)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
     abstract fun pushAndroidIsNotificationChannelEnabled(
         channel: String?,
         promise: Promise
@@ -155,6 +163,15 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
     abstract fun pushAndroidSetNotificationConfig(config: ReadableMap?)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun  pushAndroidIsOverrideForegroundDisplayEnabled(enabled: Boolean)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun pushAndroidOverrideForegroundDisplay(shouldDisplay: Boolean, requestId: String?)
+
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
