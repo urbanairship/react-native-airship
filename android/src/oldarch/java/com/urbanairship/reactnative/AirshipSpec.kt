@@ -151,7 +151,7 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
-    abstract fun pushIosOverridePresentationOptions(options: ReadableArray?, requestId: String?)
+    abstract fun pushIosOverridePresentationOptions(requestId: String?, options: ReadableArray?)
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
@@ -170,7 +170,7 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
-    abstract fun pushAndroidOverrideForegroundDisplay(shouldDisplay: Boolean, requestId: String?)
+    abstract fun pushAndroidOverrideForegroundDisplay(requestId: String?, shouldDisplay: Boolean)
 
 
     @ReactMethod
@@ -205,7 +205,7 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
-    abstract fun contactEditContactSubscriptionLists(
+    abstract fun contactEditSubscriptionLists(
         operations: ReadableArray?,
         promise: Promise
     )

@@ -361,8 +361,8 @@ RCT_REMAP_METHOD(contactEditAttributes,
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
-RCT_REMAP_METHOD(contactEditContactSubscriptionLists,
-                 contactEditContactSubscriptionLists:(NSArray *)operations
+RCT_REMAP_METHOD(contactEditSubscriptionLists,
+                 contactEditSubscriptionLists:(NSArray *)operations
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
@@ -655,7 +655,7 @@ RCT_EXPORT_METHOD(pushIosIsOverridePresentationOptionsEnabled:(BOOL)enabled) {
     AirshipReactNative.shared.overridePresentationOptionsEnabled = enabled;
 }
 
-RCT_EXPORT_METHOD(pushIosOverridePresentationOptions:(NSArray *)presentationOptions requestId:(NSString *)requestID) {
+RCT_EXPORT_METHOD(pushIosOverridePresentationOptions:(NSString *)requestID options:(NSArray *)presentationOptions) {
     [AirshipReactNative.shared presentationOptionOverridesResultWithRequestID:requestID presentationOptions:presentationOptions];
 }
 
@@ -663,7 +663,7 @@ RCT_EXPORT_METHOD(pushAndroidIsOverrideForegroundDisplayEnabled:(BOOL)enabled) {
     // Android only
 }
 
-RCT_EXPORT_METHOD(pushAndroidOverrideForegroundDisplay:(BOOL)display requestId:(NSString *)requestID) {
+RCT_EXPORT_METHOD(pushAndroidOverrideForegroundDisplay:(NSString *)requestID shouldDisplay:(BOOL)display) {
     // Android only
 }
 

@@ -41,13 +41,13 @@ export interface Spec extends TurboModule {
   pushIosSetBadgeNumber(badgeNumber: number): Promise<void>;
   pushIosGetBadgeNumber(): Promise<number>;
   pushIosIsOverridePresentationOptionsEnabled(enabled: boolean): void;
-  pushIosOverridePresentationOptions(options: string[], requestId: string): void;
+  pushIosOverridePresentationOptions(requestId: string, options?: string[]): void;
 
   // Push.android
   pushAndroidIsNotificationChannelEnabled(channel: string): Promise<boolean>;
   pushAndroidSetNotificationConfig(config: Object): void;
   pushAndroidIsOverrideForegroundDisplayEnabled(enabled: boolean): void;
-  pushAndroidOverrideForegroundDisplay(shouldDisplay: boolean, requestId: string): void;
+  pushAndroidOverrideForegroundDisplay(requestId: string, shouldDisplay: boolean): void;
 
   // Contact
   contactIdentify(namedUser: string): Promise<void>;
@@ -56,17 +56,17 @@ export interface Spec extends TurboModule {
   contactGetSubscriptionLists(): Promise<Object>;
   contactEditTagGroups(operations: Object[]): Promise<void>;
   contactEditAttributes(operations: Object[]): Promise<void>;
-  contactEditContactSubscriptionLists(operations: Object[]): Promise<void>;
+  contactEditSubscriptionLists(operations: Object[]): Promise<void>;
 
   // Analytics
-  analyticsTrackScreen(screen: string): Promise<void>;
+  analyticsTrackScreen(screen?: string): Promise<void>;
   analyticsAssociateIdentifier(key: string, identifier?: string): Promise<void>;
 
   // Action
   actionRun(name: string, value?: Object): Promise<Object | Error>;
 
   // Privacy Manager
-  privacyManagerSetEnabledFeatures(features: string[]): Promise<boolean>;
+  privacyManagerSetEnabledFeatures(features: string[]): Promise<void>;
   privacyManagerGetEnabledFeatures(): Promise<string[]>;
   privacyManagerEnableFeature(features: string[]): Promise<void>;
   privacyManagerDisableFeature(features: string[]): Promise<void>;
@@ -81,10 +81,10 @@ export interface Spec extends TurboModule {
   // Message Center
   messageCenterGetUnreadCount(): Promise<number>;
   messageCenterDismiss(): Promise<void>;
-  messageCenterDisplay(messageId?: string): Promise<boolean>;
+  messageCenterDisplay(messageId?: string): Promise<void>;
   messageCenterGetMessages(): Promise<Object[]>;
-  messageCenterDeleteMessage(messageId: string): Promise<boolean>;
-  messageCenterMarkMessageRead(messageId: string): Promise<boolean>;
+  messageCenterDeleteMessage(messageId: string): Promise<void>;
+  messageCenterMarkMessageRead(messageId: string): Promise<void>;
   messageCenterRefresh(): Promise<void>;
   messageCenterSetAutoLaunchDefaultMessageCenter(enabled: boolean): void;
 
