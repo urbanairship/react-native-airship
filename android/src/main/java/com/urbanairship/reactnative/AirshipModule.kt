@@ -296,7 +296,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
-    override fun pushIosOverridePresentationOptions(options: ReadableArray?, requestId: String?) {
+    override fun pushIosOverridePresentationOptions(requestId: String?, options: ReadableArray?) {
         // iOS only
     }
 
@@ -323,7 +323,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
-    override fun pushAndroidOverrideForegroundDisplay(shouldDisplay: Boolean, requestId: String?) {
+    override fun pushAndroidOverrideForegroundDisplay(requestId: String?, shouldDisplay: Boolean) {
         if (requestId == null) {
             return
         }
@@ -383,7 +383,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
-    override fun contactEditContactSubscriptionLists(
+    override fun contactEditSubscriptionLists(
             operations: ReadableArray?,
             promise: Promise
     ) {

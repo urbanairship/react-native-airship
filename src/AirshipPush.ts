@@ -114,14 +114,14 @@ export class AirshipPushIOS {
     if (Platform.OS === 'ios') {
       this.eventEmitter.addListener("com.airship.ios.override_presentation_options", (event) => {
         let payload = event["pushPayload"] as PushPayload
-        let requestId = event["requestId"] as String
+        let requestId = event["requestId"] as string
   
         if (this.presentationOverridesCallback) {
           this.presentationOverridesCallback(payload).then( (result) => {
-            module.pushIosOverridePresentationOptions(result, requestId);
+            module.pushIosOverridePresentationOptions(requestId, result);
           })
           .catch(() => {
-            module.pushIosOverridePresentationOptions(null, requestId);
+            module.pushIosOverridePresentationOptions(requestId, null);
           });
         }
       })
@@ -205,7 +205,7 @@ export class AirshipPushIOS {
 export class AirshipPushAndroid {
 
   private eventEmitter: NativeEventEmitter;
-  private foregroundDisplayPredicate?: (pushPayload: PushPayload) => Promise<Boolean>
+  private foregroundDisplayPredicate?: (pushPayload: PushPayload) => Promise<boolean>
 
   constructor(private readonly module: any) {
     this.eventEmitter = new NativeEventEmitter(module);
@@ -213,14 +213,14 @@ export class AirshipPushAndroid {
     if (Platform.OS === 'android') {
       this.eventEmitter.addListener("com.airship.android.override_foreground_display", (event) => {
         let payload = event["pushPayload"] as PushPayload
-        let requestId = event["requestId"] as String
+        let requestId = event["requestId"] as string
   
         if (this.foregroundDisplayPredicate) {
           this.foregroundDisplayPredicate(payload).then( (result) => {
-            module.pushAndroidOverrideForegroundDisplay(result, requestId);
+            module.pushAndroidOverrideForegroundDisplay(requestId, result);
           })
           .catch(() => {
-            module.pushAndroidOverrideForegroundDisplay(true, requestId);
+            module.pushAndroidOverrideForegroundDisplay(requestId, true);
           });
         }
       })

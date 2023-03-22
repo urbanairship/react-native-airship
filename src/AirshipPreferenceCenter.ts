@@ -36,7 +36,7 @@ export class AirshipPreferenceCenter {
    */
   public setAutoLaunchDefaultPreferenceCenter(
     preferenceCenterId: string,
-    autoLaunch: Boolean
+    autoLaunch: boolean
   ): void {
     return this.module.preferenceCenterAutoLaunchDefaultPreferenceCenter(
       preferenceCenterId,
