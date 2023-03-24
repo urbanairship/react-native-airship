@@ -1,5 +1,17 @@
 # React Native Module Changelog
 
+## Version 15.2.1 - March 24, 2023
+
+Patch release that fixing Contact update merging order, improves Scene/Survey accessibility and reporting.
+
+### Changes
+- Updated iOS Airship SDK to 16.11.3
+- Updated Android Airship SDK to 16.9.1
+- Fixed Airship.contact.editSubscriptionLists() bindings call
+- Fixed Contact update merge order, resolving a Preference Center bug that could lead to unexpected subscription states in some circumstances.
+- Improved Scene/Survey accessibility and fixed a reporting bug related to form display events.
+- Added support for transparent WebView backgrounds in HTML In-App Automations.
+
 ## Version 15.2.0 - March 3, 2023
 Minor release that adds support for foreground presentation options per push message on iOS, and if a notification should display or not on Android.
 
