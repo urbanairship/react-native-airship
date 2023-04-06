@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 15.2.2 - April 6 2023
+
+Patch release that fixes Android Preference Center subscription list state when switching named users.
+Apps using Preference Center that apply multiple named user IDs during an app session on Android should update.
+
+### Changes
+- Updated Android Airship SDK to 16.9.2
+- Fixed an Android bug that could cause locally cached subscription list states to be in an incorrect state when switching named users.
+
 ## Version 15.2.1 - March 24, 2023
 
 Patch release that fixing Contact update merging order, improves Scene/Survey accessibility and reporting.
