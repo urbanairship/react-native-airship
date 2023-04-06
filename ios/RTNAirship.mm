@@ -1,7 +1,12 @@
 /* Copyright Airship and Contributors */
 
 #import "RTNAirship.h"
+
+#if __has_include(<react_native_airship/react_native_airship-Swift.h>)
+#import <react_native_airship/react_native_airship-Swift.h>
+#else
 #import "react_native_airship-Swift.h"
+#endif
 
 @implementation RTNAirship
 RCT_EXPORT_MODULE()

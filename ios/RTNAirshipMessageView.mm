@@ -1,7 +1,12 @@
 /* Copyright Airship and Contributors */
 
 #import "RTNAirshipMessageView.h"
+
+#if __has_include(<react_native_airship/react_native_airship-Swift.h>)
+#import <react_native_airship/react_native_airship-Swift.h>
+#else
 #import "react_native_airship-Swift.h"
+#endif
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
