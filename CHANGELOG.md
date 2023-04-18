@@ -1,6 +1,13 @@
 # React Native Module Changelog
 
-## Version 15.2.2 - April 6 2023
+## Version 15.2.3 - April 18, 2023
+
+Patch release that fixes a crash on Android when running an Android device older than 7. Apps that target API 23 or older should update.
+
+### Changes
+- Fixed Android crash due to using method `Map#putIfAbsent` on older Android devices.
+
+## Version 15.2.2 - April 6, 2023
 
 Patch release that fixes Android Preference Center subscription list state when switching named users.
 Apps using Preference Center that apply multiple named user IDs during an app session on Android should update.
