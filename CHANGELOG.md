@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 15.2.4 - April 28, 2023
+
+Patch release that fixes a issue with modifying attributes on Android and an issue with
+`NotificationResponseEvent` not being received if a push with a deep link is opened.
+
+### Changes
+- Fixed modifying attributes on Android
+- Fixed issue with iOS not receiving subsequent NotificationResponseEvent
+
 ## Version 15.2.3 - April 18, 2023
 
 Patch release that fixes a crash on Android when running an Android device older than 7. Apps that target API 23 or older should update.
