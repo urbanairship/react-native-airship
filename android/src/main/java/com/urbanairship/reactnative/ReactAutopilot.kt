@@ -10,6 +10,10 @@ import com.urbanairship.analytics.Analytics
 import com.urbanairship.android.framework.proxy.BaseAutopilot
 import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.ProxyStore
+import com.urbanairship.android.framework.proxy.events.EventEmitter
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 
 /**
  * Module's autopilot to customize Urban Airship.
@@ -19,9 +23,17 @@ class ReactAutopilot : BaseAutopilot() {
     override fun onAirshipReady(airship: UAirship) {
         super.onAirshipReady(airship)
 
-        ProxyLogger.debug("Airship React Native version: %s, SDK version: %s", BuildConfig.AIRSHIP_MODULE_VERSION, UAirship.getVersion())
+        ProxyLogger.info("Airship React Native version: %s, SDK version: %s", BuildConfig.AIRSHIP_MODULE_VERSION, UAirship.getVersion())
 
         val context = UAirship.getApplicationContext()
+
+        MainScope().launch {
+            EventEmitter.shared().pendingEventListener
+                    .filter { !it.isForeground() }
+                    .collect {
+                        AirshipHeadlessEventService.startService(context)
+                    }
+        }
 
         // Set our custom notification provider
         val notificationProvider = ReactNotificationProvider(context, airship.airshipConfigOptions)
