@@ -22,7 +22,7 @@ class AirshipHeadlessEventService : HeadlessJsTaskService() {
 
     override fun onHeadlessJsTaskFinish(taskId: Int) {
         super.onHeadlessJsTaskFinish(taskId)
-        ProxyLogger.error("AirshipHeadlessEventService - Finished")
+        ProxyLogger.verbose("AirshipHeadlessEventService - Finished")
     }
 
     companion object {
@@ -38,7 +38,7 @@ class AirshipHeadlessEventService : HeadlessJsTaskService() {
                     return true
                 }
             } catch (e: Exception) {
-                ProxyLogger.info("AirshipHeadlessEventService - Failed to start service", e)
+                ProxyLogger.warn("AirshipHeadlessEventService - Failed to start service", e)
             }
             return false
         }

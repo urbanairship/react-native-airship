@@ -6,6 +6,7 @@ import com.urbanairship.PendingResult
 import com.urbanairship.actions.ActionResult
 import com.urbanairship.actions.ActionValue
 import com.urbanairship.android.framework.proxy.EventType
+import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.events.EventEmitter
 import com.urbanairship.android.framework.proxy.proxies.AirshipProxy
 import com.urbanairship.android.framework.proxy.proxies.SuspendingPredicate
@@ -48,16 +49,15 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
-
     override fun initialize() {
         super.initialize()
 
         MainScope().launch {
+            // Background events will create a headless JS task in ReactAutopilot since
+            // initialized wont be called until we have a JS task.
             EventEmitter.shared().pendingEventListener.collect {
                 if (it.isForeground()) {
                     notifyPending()
-                } else {
-                    AirshipHeadlessEventService.startService(context)
                 }
             }
         }
@@ -75,7 +75,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         })
 
         proxy.push.foregroundNotificationDisplayPredicate = this.foregroundDisplayPredicate
-
+        ProxyLogger.debug("AirshipModule initialized")
     }
 
     @ReactMethod
@@ -119,7 +119,11 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
                             it.isForeground()
                         }
                     }
-            JsonValue.wrapOpt(EventEmitter.shared().takePending(eventTypes).map { it.body })
+
+
+            val result = JsonValue.wrapOpt(EventEmitter.shared().takePending(eventTypes).map { it.body })
+            ProxyLogger.verbose("Taking events: $eventName, isHeadlessJS: $isHeadlessJS, filteredTypes:$eventTypes, result: $result")
+            result
         }
     }
 
