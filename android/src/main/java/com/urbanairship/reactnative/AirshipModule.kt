@@ -15,6 +15,7 @@ import com.urbanairship.json.JsonSerializable
 import com.urbanairship.json.JsonValue
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -55,11 +56,11 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         MainScope().launch {
             // Background events will create a headless JS task in ReactAutopilot since
             // initialized wont be called until we have a JS task.
-            EventEmitter.shared().pendingEventListener.collect {
-                if (it.isForeground()) {
-                    notifyPending()
-                }
-            }
+            EventEmitter.shared().pendingEventListener
+                    .filter { it.isForeground() }
+                    .collect {
+                        notifyPending()
+                    }
         }
 
         context.addLifecycleEventListener(object : LifecycleEventListener {
@@ -119,7 +120,6 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
                             it.isForeground()
                         }
                     }
-
 
             val result = JsonValue.wrapOpt(EventEmitter.shared().takePending(eventTypes).map { it.body })
             ProxyLogger.verbose("Taking events: $eventName, isHeadlessJS: $isHeadlessJS, filteredTypes:$eventTypes, result: $result")

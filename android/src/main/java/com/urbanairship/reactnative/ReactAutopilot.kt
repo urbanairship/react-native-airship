@@ -12,6 +12,7 @@ import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.ProxyStore
 import com.urbanairship.android.framework.proxy.events.EventEmitter
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 /**
@@ -27,12 +28,11 @@ class ReactAutopilot : BaseAutopilot() {
         val context = UAirship.getApplicationContext()
 
         MainScope().launch {
-            EventEmitter.shared().pendingEventListener.collect {
-                ProxyLogger.error("On event $it")
-                if (!it.isForeground()) {
-                    AirshipHeadlessEventService.startService(context)
-                }
-            }
+            EventEmitter.shared().pendingEventListener
+                    .filter { !it.isForeground() }
+                    .collect {
+                        AirshipHeadlessEventService.startService(context)
+                    }
         }
 
         // Set our custom notification provider
