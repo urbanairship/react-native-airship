@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 15.2.6 - May 17, 2023
+
+Patch release that fixes an issue with delivering push received events on Android when the app has not been loaded. This
+regression was introduced in 15.0.0, apps trying to process a push in the background should update.
+
+### Changes
+- Fixed push received events not delivering if the app is not loaded on Android
+
 ## Version 15.2.5 - May 3, 2023
 
 Patch release that fixes an issue with modifying attributes on iOS. Apps that are using
