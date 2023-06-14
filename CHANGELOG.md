@@ -1,5 +1,16 @@
 # React Native Module Changelog
 
+## Version 15.3.0 - June 14, 2023
+
+Minor release that updates the iOS SDK to 16.12.1 and Android SDK to 16.11.1 and adds support for `autoPauseInAppAutomationOnLaunch` config option.
+
+
+### Changes
+- Updated iOS SDK to 16.12.1
+- Updated Android SDK to 16.11.1
+- Added support for **autoPauseInAppAutomationOnLaunch** config option.
+- Fixed `MessageCenterUpdatedEvent#messageUnreadCount` property name on iOS
+
 ## Version 15.2.6 - May 17, 2023
 
 Patch release that fixes an issue with delivering push received events on Android when the app has not been loaded. This

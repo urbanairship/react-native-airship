@@ -1,25 +1,25 @@
 PODS:
-  - Airship (16.11.3):
-    - Airship/Automation (= 16.11.3)
-    - Airship/Basement (= 16.11.3)
-    - Airship/Core (= 16.11.3)
-    - Airship/ExtendedActions (= 16.11.3)
-    - Airship/MessageCenter (= 16.11.3)
-  - Airship/Automation (16.11.3):
+  - Airship (16.12.1):
+    - Airship/Automation (= 16.12.1)
+    - Airship/Basement (= 16.12.1)
+    - Airship/Core (= 16.12.1)
+    - Airship/ExtendedActions (= 16.12.1)
+    - Airship/MessageCenter (= 16.12.1)
+  - Airship/Automation (16.12.1):
     - Airship/Core
-  - Airship/Basement (16.11.3)
-  - Airship/Core (16.11.3):
+  - Airship/Basement (16.12.1)
+  - Airship/Core (16.12.1):
     - Airship/Basement
-  - Airship/ExtendedActions (16.11.3):
+  - Airship/ExtendedActions (16.12.1):
     - Airship/Core
-  - Airship/MessageCenter (16.11.3):
+  - Airship/MessageCenter (16.12.1):
     - Airship/Core
-  - Airship/PreferenceCenter (16.11.3):
+  - Airship/PreferenceCenter (16.12.1):
     - Airship/Core
-  - AirshipFrameworkProxy (2.0.8):
-    - Airship (= 16.11.3)
-    - Airship/MessageCenter (= 16.11.3)
-    - Airship/PreferenceCenter (= 16.11.3)
+  - AirshipFrameworkProxy (2.1.1):
+    - Airship (= 16.12.1)
+    - Airship/MessageCenter (= 16.12.1)
+    - Airship/PreferenceCenter (= 16.12.1)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -318,8 +318,8 @@ PODS:
   - React-jsinspector (0.71.1)
   - React-logger (0.71.1):
     - glog
-  - react-native-airship (15.2.6):
-    - AirshipFrameworkProxy (= 2.0.8)
+  - react-native-airship (15.3.0):
+    - AirshipFrameworkProxy (= 2.1.1)
     - React-Core
   - react-native-safe-area-context (4.5.0):
     - RCT-Folly
@@ -582,8 +582,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: c70eed50e429f97f5adb285423c7291fb7a032ae
-  AirshipFrameworkProxy: 7bc4130c668c6c98e2d4c60fe4c9eb61a999be99
+  Airship: 2f4510b497a8200780752a5e0304a9072bfffb6d
+  AirshipFrameworkProxy: ea1b6c665c798637b93c465b5e505be3011f1d9d
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -617,7 +617,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 60cf272aababc5212410e4249d17cea14fc36caa
   React-jsinspector: ff56004b0c974b688a6548c156d5830ad751ae07
   React-logger: 60a0b5f8bed667ecf9e24fecca1f30d125de6d75
-  react-native-airship: 5d19f4ba303481cf4101ff9dee9249ef6a8a6b64
+  react-native-airship: 0af4e9a799bd127ac05fbb424fbe09b3de6c7004
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   React-perflogger: ec8eef2a8f03ecfa6361c2c5fb9197ef4a29cc85
   React-RCTActionSheet: a0c023b86cf4c862fa9c4eb0f6f91fbe878fb2de
