@@ -484,6 +484,11 @@ export interface AirshipConfig {
   suppressAllowListError?: boolean;
 
   /**
+   * Pauses In-App Automation on launch.
+   */
+  autoPauseInAppAutomationOnLaunch?: boolean;
+
+  /**
    * iOS config.
    */
   ios?: {
