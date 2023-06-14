@@ -1,15 +1,15 @@
 # React Native Module Changelog
 
-## Version 15.3.0 - June 13, 2023
+## Version 15.3.0 - June 14, 2023
 
-Minor release that updates the iOS SDK to 16.12.0 and Android SDK to 16.11.0 and add support
-for autoPauseInAppAutomationOnLaunch in the config for takeOff.
+Minor release that updates the iOS SDK to 16.12.1 and Android SDK to 16.11.1 and adds support for `autoPauseInAppAutomationOnLaunch` config option.
 
 
 ### Changes
-- Updated iOS SDK to 16.12.0
-- Updated Android SDK to 16.11.0
-- Add support for **autoPauseInAppAutomationOnLaunch** in the config for takeOff.
+- Updated iOS SDK to 16.12.1
+- Updated Android SDK to 16.11.1
+- Added support for **autoPauseInAppAutomationOnLaunch** config option.
+- Fixed `MessageCenterUpdatedEvent#messageUnreadCount` property name on iOS
 
 ## Version 15.2.6 - May 17, 2023
 
