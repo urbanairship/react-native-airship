@@ -125,10 +125,10 @@ RCT_EXPORT_METHOD(pushClearNotification:(NSString *)identifier) {
 RCT_REMAP_METHOD(pushGetNotificationStatus,
                  pushGetNotificationStatus:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    NSError *error;
-    id result = [AirshipReactNative.shared pushGetNotificationStatusAndReturnError:&error];
 
-    [self handleResult:result error:error resolve:resolve reject:reject];
+    [AirshipReactNative.shared pushGetNotificationStatusWithCompletionHandler:^(id result, NSError *error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
+    }];
 }
 
 RCT_REMAP_METHOD(pushGetRegistrationToken,
@@ -403,13 +403,13 @@ RCT_REMAP_METHOD(contactGetSubscriptionLists,
 RCT_REMAP_METHOD(contactGetNamedUserId,
                  contactGetNamedUserId:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    NSError *error;
-    NSString *result = [AirshipReactNative.shared contactGetNamedUserIdOrEmtpyAndReturnError:&error];
 
-    [self handleResult:result.length ? result : nil
-                 error:error
-               resolve:resolve
-                reject:reject];
+    [AirshipReactNative.shared contactGetNamedUserIdOrEmtpyWithCompletionHandler:^(NSString *result, NSError *error) {
+        [self handleResult:result.length ? result : nil
+                     error:error
+                   resolve:resolve
+                    reject:reject];
+    }];
 }
 
 RCT_REMAP_METHOD(contactIdentify,
@@ -536,11 +536,10 @@ RCT_REMAP_METHOD(messageCenterDisplay,
 RCT_REMAP_METHOD(messageCenterGetMessages,
                  messageCenterGetMessages:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    NSError *error;
-    id result = [AirshipReactNative.shared messageCenterGetMessagesAndReturnError:&error];
 
-    
-    [self handleResult:result error:error resolve:resolve reject:reject];
+    [AirshipReactNative.shared messageCenterGetMessagesWithCompletionHandler:^(NSArray *result, NSError *error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
+    }];
 }
 
 RCT_REMAP_METHOD(messageCenterGetUnreadCount,
@@ -662,6 +661,22 @@ RCT_EXPORT_METHOD(pushIosIsOverridePresentationOptionsEnabled:(BOOL)enabled) {
 
 RCT_EXPORT_METHOD(pushIosOverridePresentationOptions:(NSString *)requestID options:(NSArray *)presentationOptions) {
     [AirshipReactNative.shared presentationOptionOverridesResultWithRequestID:requestID presentationOptions:presentationOptions];
+}
+
+RCT_REMAP_METHOD(pushIosGetAuthorizedNotificationSettings,
+                 pushIosGetAuthorizedNotificationSettings:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    id result = [AirshipReactNative.shared pushGetAuthorizedNotificationSettingsAndReturnError:&error];
+    [self handleResult:result error:error resolve:resolve reject:reject];
+}
+
+RCT_REMAP_METHOD(pushIosGetAuthorizedNotificationStatus,
+                 pushIosGetAuthorizedNotificationStatus:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    id result = [AirshipReactNative.shared pushGetAuthorizedNotificationStatusAndReturnError:&error];
+    [self handleResult:result error:error resolve:resolve reject:reject];
 }
 
 RCT_EXPORT_METHOD(pushAndroidIsOverrideForegroundDisplayEnabled:(BOOL)enabled) {

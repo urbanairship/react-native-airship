@@ -357,6 +357,14 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
     abstract fun localeClearLocaleOverride(promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun pushIosGetAuthorizedNotificationSettings(promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun pushIosGetAuthorizedNotificationStatus(promise: Promise)
 }
 
 

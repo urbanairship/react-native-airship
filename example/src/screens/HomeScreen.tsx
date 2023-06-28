@@ -20,6 +20,18 @@ export default function HomeScreen() {
     Airship.push.getNotificationStatus().then((id) => {
       console.log(id)
     });
+  
+    Airship.push.iOS.getAuthorizedNotificationSettings().then((id) => {
+      console.log(id)
+    });
+
+    Airship.push.iOS.getAuthorizedNotificationStatus().then((id) => {
+      console.log(id)
+    });
+
+    Airship.push.getNotificationStatus().then((id) => {
+      console.log(id)
+    });
 
     Airship.channel.getChannelId().then((id) => {
       if (id) {

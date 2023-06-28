@@ -81,60 +81,54 @@ export interface NotificationResponseEvent {
   isForeground: boolean;
 }
 
-export interface NotificationStatus {
-  /**
-   * If airship is opted in for push notifications are not.
-   */
-  airshipOptIn: boolean;
-
-  /**
-   * If notifications are enabled on Airship or not.
-   */
-  airshipEnabled: boolean;
-
-  /**
-   * If notifications are enabled in the app settings or not.
-   */
-  systemEnabled: boolean;
-
-  /**
-   * iOS status.
-   */
-  ios?: {
-    /**
-     * Authorized settings.
-     */
-    authorizedSettings: iOS.AuthorizedNotificationSetting[];
-
-    /**
-     * Authorized status.
-     */
-    authorizedStatus: iOS.AuthorizedNotificationStatus;
-  };
-}
-
 /**
- * Event fired when the notification opt-in status changes.
+ * Push notification status.
  */
-export interface NotificationOptInStatusEvent {
+export interface PushNotificationStatus {  
   /**
-   * Whether the user is opted in to notifications.
+   * If user notifications are enabled on [Airship.push].
    */
-  optIn: boolean;
+  isUserNotificationsEnabled: boolean;
 
   /**
-   * iOS only info.
+   * If notifications are allowed at the system level for the application.
    */
-  ios?: {
-    /**
-     * The authorized notification settings.
-     */
-    authorizedSettings: iOS.AuthorizedNotificationSetting[];
-  };
+  areNotificationsAllowed: boolean;
+
+  /**
+   * If the push feature is enabled on [Airship.privacyManager].
+   */
+  isPushPrivacyFeatureEnabled: boolean;
+ 
+ /*
+  * If push registration was able to generate a token.
+  */
+  isPushTokenRegistered: boolean;
+
+  /*
+   * If Airship is able to send and display a push notification.
+   */
+  isOptedIn: boolean;
+
+  /*
+   * Checks for isUserNotificationsEnabled, areNotificationsAllowed, and isPushPrivacyFeatureEnabled. If this flag
+   * is true but `isOptedIn` is false, that means push token was not able to be registered. 
+   */
+  isUserOptedIn: boolean;
 }
 
 /**
- * Event fired when the Message Center  is updated.
+ * Event fired when the notification status changes.
+ */
+export interface PushNotificationStatusChangedEvent {
+  /**
+   * The push notification status.
+   */
+  status: PushNotificationStatus
+}
+
+/**
+ * Event fired when the Message Center is updated.
  */
 export interface MessageCenterUpdatedEvent {
   /**
@@ -183,10 +177,11 @@ export enum EventType {
   PushReceived = 'com.airship.push_received',
   DeepLink = 'com.airship.deep_link',
   MessageCenterUpdated = 'com.airship.message_center_updated',
-  NotificationOptInStatus = 'com.airship.notification_opt_in_status',
+  PushNotificationStatusChangedStatus = 'com.airship.notification_status_changed',
   DisplayMessageCenter = 'com.airship.display_message_center',
   DisplayPreferenceCenter = 'com.airship.display_preference_center',
   PushTokenReceived = 'com.airship.push_token_received',
+  IOSAuthorizedNotificationSettingsChanged = 'com.airship.authorized_notification_settings_changed',
 }
 
 export interface EventTypeMap {
@@ -195,7 +190,8 @@ export interface EventTypeMap {
   [EventType.PushReceived]: PushReceivedEvent;
   [EventType.DeepLink]: DeepLinkEvent;
   [EventType.MessageCenterUpdated]: MessageCenterUpdatedEvent;
-  [EventType.NotificationOptInStatus]: NotificationOptInStatusEvent;
+  [EventType.PushNotificationStatusChangedStatus]: PushNotificationStatusChangedEvent;
+  [EventType.IOSAuthorizedNotificationSettingsChanged]: iOS.AuthorizedNotificationSettingsChangedEvent;
   [EventType.DisplayMessageCenter]: DisplayMessageCenterEvent;
   [EventType.DisplayPreferenceCenter]: DisplayPreferenceCenterEvent;
   [EventType.PushTokenReceived]: PushTokenReceivedEvent;
@@ -266,7 +262,7 @@ export namespace iOS {
   }
 
   /**
-   * Enum of authorized notification settings.
+   * Enum of authorized notification options.
    */
   export enum AuthorizedNotificationSetting {
     /**
@@ -340,38 +336,13 @@ export namespace iOS {
      */
     Ephemeral = 'ephemeral',
   }
-}
 
-export interface NotificationStatus {
-  /**
-   * If airship is opted in for push notifications are not.
-   */
-  airshipOptIn: boolean;
-
-  /**
-   * If notifications are enabled on Airship or not.
-   */
-  airshipEnabled: boolean;
-
-  /**
-   * If notifications are enabled in the app settings or not.
-   */
-  systemEnabled: boolean;
-
-  /**
-   * iOS status.
-   */
-  ios?: {
+  export interface AuthorizedNotificationSettingsChangedEvent {
     /**
      * Authorized settings.
      */
-    authorizedSettings: iOS.AuthorizedNotificationSetting[];
-
-    /**
-     * Authorized status.
-     */
-    authorizedStatus: iOS.AuthorizedNotificationStatus;
-  };
+    authorizedSettings: AuthorizedNotificationSetting[];
+  }
 }
 
 /**

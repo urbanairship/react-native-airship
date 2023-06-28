@@ -1,9 +1,20 @@
 # React Native Module Changelog
 
+## Version 16.0.0 - June 27, 2023
+Major release that updates the iOS & Android Airship SDK to 17.0.2. This release adds support for Stories, In-App experiences downstream of a sequence in Journeys, and improves SDK auth. The Airship SDK now requires iOS 14+ as the minimum deployment version and Xcode 14.3+.
+
+[Migration Guide](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
+
+### Changes
+- Updated iOS SDK to 17.0.2
+- Updated Android SDK to 17.0.2
+- Replaced NotificationOptInStatusEvent with NotificationStatusChangedEvent and iOS.AuthorizedNotificationSettingsChangedEvent
+- Replaced the NotificationStatus with a new NotificationStatus that contains more details on the current state of push notifications
+
+
 ## Version 15.3.0 - June 14, 2023
 
 Minor release that updates the iOS SDK to 16.12.1 and Android SDK to 16.11.1 and adds support for `autoPauseInAppAutomationOnLaunch` config option.
-
 
 ### Changes
 - Updated iOS SDK to 16.12.1

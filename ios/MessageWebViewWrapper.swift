@@ -53,7 +53,7 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
     public weak var delegate: MessageWebViewWrapperDelegate? = nil
 
     private let nativeBridge: NativeBridge  = NativeBridge()
-    private let nativeBridgeExtension = MessageCenterNativeBridgeExtension()
+    private var nativeBridgeExtension: MessageCenterNativeBridgeExtension? = nil
     @objc
     public let webView: WKWebView
     private var messageID: String? = nil
@@ -65,7 +65,6 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
 
         self.nativeBridge.forwardNavigationDelegate = self
         self.nativeBridge.nativeBridgeDelegate = self
-        self.nativeBridge.nativeBridgeExtensionDelegate = self.nativeBridgeExtension
         self.webView.navigationDelegate = self.nativeBridge
         self.webView.configuration.dataDetectorTypes = .all
     }
@@ -93,29 +92,31 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
 
     @MainActor
     private func startLoad(messageID: String) async {
-        var message: InboxMessage? = nil
+        var message: MessageCenterMessage? = nil
         do {
             message = try await getMessage(messageID: messageID)
         } catch {
             self.delegate?.onMessageLoadFailed(messageID: messageID)
         }
 
-        guard let message = message else {
+        guard let message = message, let user = await MessageCenter.shared.inbox.user else {
             if (!Task.isCancelled) {
                 self.delegate?.onMessageGone(messageID: messageID)
             }
             return
         }
 
-        let userData = await MessageCenter.shared.user.data()
+        self.nativeBridgeExtension = MessageCenterNativeBridgeExtension(
+            message: message,
+            user: user
+        )
+        self.nativeBridge.nativeBridgeExtensionDelegate = self.nativeBridgeExtension
+        let auth = await MessageCenter.shared.inbox.user?.basicAuthString
 
-        var request = URLRequest(url: message.messageBodyURL)
+        var request = URLRequest(url: message.bodyURL)
         request.timeoutInterval = 60
         request.setValue(
-            Utils.authHeader(
-                username: userData.username,
-                password: userData.password
-            ),
+            auth,
             forHTTPHeaderField: "Authorization"
         )
 
@@ -124,14 +125,14 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
         }
     }
 
-    private func getMessage(messageID: String) async throws -> InboxMessage? {
-        let message = MessageCenter.shared.messageList.message(forID: messageID)
+    private func getMessage(messageID: String) async throws -> MessageCenterMessage? {
+        let message = await MessageCenter.shared.inbox.message(forID: messageID)
         if let message = message {
             return message
         }
 
         try await AirshipProxy.shared.messageCenter.refresh()
-        return MessageCenter.shared.messageList.message(forID: messageID)
+        return await MessageCenter.shared.inbox.message(forID: messageID)
     }
 
     public func close() {

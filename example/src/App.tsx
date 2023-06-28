@@ -26,9 +26,14 @@ Airship.addListener(EventType.ChannelCreated, (event) => {
   console.log('ChannelCreated:', JSON.stringify(event));
 });
 
-Airship.addListener(EventType.NotificationOptInStatus, (event) => {
-  console.log('NotificationOptInStatus:', JSON.stringify(event));
+Airship.addListener(EventType.NotificationStatusChangedStatus, (event) => {
+  console.log('NotificationStatusChangedStatus:', JSON.stringify(event));
 });
+
+Airship.addListener(EventType.iOSAuthorizedNotificationSettingsChanged, (event) => {
+  console.log('iOSAuthorizedNotificationSettingsChanged:', JSON.stringify(event));
+});
+
 
 function MessageCenterStackScreen() {
   return (
