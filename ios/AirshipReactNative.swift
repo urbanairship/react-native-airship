@@ -15,7 +15,7 @@ public class AirshipReactNative: NSObject {
     public static let overridePresentationOptionsEventName = "com.airship.ios.override_presentation_options"
 
     
-    var lock = Lock()
+    var lock = AirshipLock()
     var pendingPresentationRequests: [String: PresentationOptionsOverridesRequest] = [:]
     
     @objc
@@ -32,7 +32,6 @@ public class AirshipReactNative: NSObject {
         }
     }
 
-    @objc
     public static var proxy: AirshipProxy {
         AirshipProxy.shared
     }
@@ -99,6 +98,7 @@ public class AirshipReactNative: NSObject {
     
 
     @objc
+    @MainActor
     public func onLoad(
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) {
@@ -139,6 +139,7 @@ public class AirshipReactNative: NSObject {
 
 
     @objc
+    @MainActor
     public func attemptTakeOff(
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     )  {
@@ -149,6 +150,7 @@ public class AirshipReactNative: NSObject {
 // Airship
 public extension AirshipReactNative {
     @objc
+    @MainActor
     func takeOff(
         json: Any,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -262,8 +264,8 @@ public extension AirshipReactNative {
     }
 
     @objc
-    func pushGetNotificationStatus() throws -> [String: Any] {
-        return try AirshipProxy.shared.push.getNotificationStatus()
+    func pushGetNotificationStatus() async throws -> [String: Any] {
+        return try await AirshipProxy.shared.push.getNotificationStatus()
     }
 
     @objc
@@ -279,15 +281,27 @@ public extension AirshipReactNative {
     }
 
     @objc
+    @MainActor
     func pushSetBadgeNumber(_ badgeNumber: Double) throws {
         try AirshipProxy.shared.push.setBadgeNumber(Int(badgeNumber))
     }
 
     @objc
+    @MainActor
     func pushGetBadgeNumber() throws -> NSNumber {
         return try NSNumber(
             value: AirshipProxy.shared.push.getBadgeNumber()
         )
+    }
+
+    @objc
+    func pushGetAuthorizedNotificationStatus() throws -> String {
+        return try AirshipProxy.shared.push.getAuthroizedNotificationStatus()
+    }
+
+    @objc
+    func pushGetAuthorizedNotificationSettings() throws -> [String] {
+        return try AirshipProxy.shared.push.getAuthorizedNotificationSettings()
     }
 
     @objc
@@ -312,7 +326,7 @@ public extension AirshipReactNative {
     func actionsRun(actionName: String, actionValue: Any?) async throws-> Any? {
         return try await AirshipProxy.shared.action.runAction(
             actionName,
-            actionValue: actionValue
+            value: try AirshipJSON.wrap(actionValue)
         )
     }
 }
@@ -348,8 +362,8 @@ public extension AirshipReactNative {
     }
 
     @objc
-    func contactGetNamedUserIdOrEmtpy() throws -> String {
-        return try AirshipProxy.shared.contact.getNamedUser() ?? ""
+    func contactGetNamedUserIdOrEmtpy() async throws -> String {
+        return try await AirshipProxy.shared.contact.getNamedUser() ?? ""
     }
 
     @objc
@@ -426,8 +440,8 @@ public extension AirshipReactNative {
     }
 
     @objc
-    func messageCenterGetMessages() throws -> [Any] {
-        return try AirshipProxy.shared.messageCenter.getMessagesJSON()
+    func messageCenterGetMessages() async throws -> [Any] {
+        return try await AirshipProxy.shared.messageCenter.getMessagesJSON()
     }
 
     @objc
@@ -531,8 +545,8 @@ extension AirshipReactNative: AirshipProxyDelegate {
         ProxyDataMigrator().migrateData(store: store)
     }
 
-    public func loadDefaultConfig() -> Config {
-        let config = Config.default()
+    public func loadDefaultConfig() -> AirshipConfig {
+        let config = AirshipConfig.default()
         config.requireInitialRemoteConfigEnabled = true
         return config
     }
@@ -568,9 +582,9 @@ extension AirshipProxyEventType {
         "com.airship.display_preference_center": .displayPreferenceCenter,
         "com.airship.notification_response": .notificationResponseReceived,
         "com.airship.push_received": .pushReceived,
-        "com.airship.notification_opt_in_status": .notificationOptInStatusChanged
+        "com.airship.notification_status_changed": .notificationStatusChanged,
+        "com.airship.authorized_notification_settings_changed": .authorizedNotificationSettingsChanged
     ]
-
 
     public static func fromReactName(_ name: String) throws -> AirshipProxyEventType {
         guard let type = AirshipProxyEventType.nameMap[name] else {

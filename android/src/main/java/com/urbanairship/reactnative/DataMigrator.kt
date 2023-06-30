@@ -36,15 +36,6 @@ internal class DataMigrator(context: Context) {
                 .apply()
         }
 
-        // Opt-in cache
-        if (preferences.contains(NOTIFICATIONS_OPT_IN_KEY)) {
-            proxyStore.optInStatus = preferences.getBoolean(NOTIFICATIONS_OPT_IN_KEY, false)
-
-            preferences.edit()
-                .remove(NOTIFICATIONS_OPT_IN_KEY)
-                .apply()
-        }
-
         // Airship config
         if (preferences.contains(AIRSHIP_CONFIG)) {
             try {
@@ -105,7 +96,6 @@ internal class DataMigrator(context: Context) {
 
     companion object {
         private const val SHARED_PREFERENCES_FILE = "com.urbanairship.reactnative"
-        private const val NOTIFICATIONS_OPT_IN_KEY = "NOTIFICATIONS_OPT_IN_KEY"
         private const val NOTIFICATION_ICON_KEY = "notification_icon"
         private const val NOTIFICATION_LARGE_ICON_KEY = "notification_large_icon"
         private const val NOTIFICATION_ACCENT_COLOR_KEY = "notification_accent_color"

@@ -1,5 +1,122 @@
 # Migration Guide
 
+# 15.x to 16.x
+
+### Min iOS Version
+
+This version of the plugin now requires iOS 14+ as the min deployment target and Xcode 14.3+.
+
+### Notification Status
+
+The notification status object returned by `Airship.push.getNotificationStatus()` has changed:
+
+15.x:
+
+```
+export interface NotificationStatus {
+  /**
+   * If airship is opted in for push notifications are not.
+   */
+  airshipOptIn: boolean;
+
+  /**
+   * If notifications are enabled on Airship or not.
+   */
+  airshipEnabled: boolean;
+
+  /**
+   * If notifications are enabled in the app settings or not.
+   */
+  systemEnabled: boolean;
+
+  /**
+   * iOS status.
+   */
+  ios?: {
+    /**
+     * Authorized settings.
+     */
+    authorizedSettings: iOS.AuthorizedNotificationSetting[];
+
+    /**
+     * Authorized status.
+     */
+    authorizedStatus: iOS.AuthorizedNotificationStatus;
+  };
+}
+```
+
+16.x:
+
+```
+/**
+ * Push notification status.
+ */
+export interface PushNotificationStatus {  
+  /**
+   * If user notifications are enabled on [Airship.push].
+   */
+  isUserNotificationsEnabled: boolean;
+
+  /**
+   * If notifications are allowed at the system level for the application.
+   */
+  areNotificationsAllowed: boolean;
+
+  /**
+   * If the push feature is enabled on [Airship.privacyManager].
+   */
+  isPushPrivacyFeatureEnabled: boolean;
+ 
+ /*
+  * If push registration was able to generate a token.
+  */
+  isPushTokenRegistered: boolean;
+
+  /*
+   * If Airship is able to send and display a push notification .
+   */
+  isOptedIn: boolean;
+
+  /*
+   * If user notifications are enabled on Airship and the notification permission is granted. This check
+   * checks for everything but if isPushTokenRegistered is true.
+   */
+  isUserOptedIn: boolean;
+}
+```
+
+The old flags can be determined using:
+```
+airshipOptIn = isOptedIn
+airshipEnabled = isUserNotificationsEnabled && isPushPrivacyFeatureEnabled
+systemEnabled = areNotificationsAllowed
+```
+
+On iOS, you can get the authorized settings and status using:
+```
+Airship.push.iOS.getAuthorizedSettings()
+Airship.push.iOS.getAuthorizedStatus()
+```
+
+### NotificationOptInStatusEvent replaced
+
+The `NotificationOptInStatusEvent` has been replaced with `PushNotificationStatusChangedEvent` which now returns the new `PushNotificationStatus` object:
+```
+/**
+ * Event fired when the notification status changes.
+ */
+export interface NotificationStatusChangedEvent {
+  /**
+   * The notification status
+   */
+  status: NotificationStatus
+}
+```
+
+On iOS, you can use the new `iOS.AuthorizedNotificationSettingsChangedEvent` event to be notified when authorized settings have changed.
+
+
 # 14.x to 15.x
 
 ## Package Changes

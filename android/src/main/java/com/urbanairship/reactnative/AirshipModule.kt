@@ -100,6 +100,10 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
 
         val eventTypes = Utils.parseEventTypes(eventName)
+        if (eventTypes.isEmpty()) {
+            return
+        }
+
         if (eventTypes.any { it.isForeground() }) {
             notifyPending()
         }
@@ -304,6 +308,15 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         // iOS only
     }
 
+    @ReactMethod
+    override fun pushIosGetAuthorizedNotificationSettings(promise: Promise) {
+        // iOS only
+    }
+
+    @ReactMethod
+    override fun pushIosGetAuthorizedNotificationStatus(promise: Promise) {
+        // iOS only
+    }
 
     @ReactMethod
     override fun pushAndroidIsNotificationChannelEnabled(channel: String?, promise: Promise) {

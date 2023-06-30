@@ -197,6 +197,22 @@ export class AirshipPushIOS {
   public getBadgeNumber(): Promise<number> {
     return this.module.pushIosGetBadgeNumber();
   }
+
+  /**
+   * Gets the list of authorized notification settings.
+   * @returns A promise with the result.
+   */
+  public getAuthorizedNotificationSettings(): Promise<iOS.AuthorizedNotificationSetting[]> {
+    return this.module.pushIosGetAuthorizedNotificationSettings();
+  }
+
+  /**
+   * Gets the authorized notification status.
+   * @returns A promise with the result.
+   */
+  public getAuthorizedNotificationStatus(): Promise<iOS.AuthorizedNotificationSetting[]> {
+    return this.module.pushIosGetAuthorizedNotificationStatus();
+  }
 }
 
 /**
