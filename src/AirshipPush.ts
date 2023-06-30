@@ -1,5 +1,5 @@
 import { NativeEventEmitter, Platform } from 'react-native';
-import { Android, iOS, NotificationStatus, PushPayload } from './types';
+import { Android, iOS, PushNotificationStatus, PushPayload } from './types';
 
 /**
  * Airship Push.
@@ -55,7 +55,7 @@ export class AirshipPush {
    * Gets the notification status.
    * @returns A promise with the result.
    */
-  public getNotificationStatus(): Promise<NotificationStatus> {
+  public getNotificationStatus(): Promise<PushNotificationStatus> {
     return this.module.pushGetNotificationStatus();
   }
 
