@@ -1,4 +1,12 @@
 # React Native Module Changelog
+ 
+## Version 16.0.1 - July 21, 2023
+Patch release that updates the iOS and Android Airship SDK to 17.0.3.
+
+### Changes
+- Updated iOS SDK to 17.0.3
+- Updated Android SDK to 17.0.3
+- Fixed Android HMS module version
 
 ## Version 16.0.0 - June 27, 2023
 Major release that updates the iOS & Android Airship SDK to 17.0.2. This release adds support for Stories, In-App experiences downstream of a sequence in Journeys, and improves SDK auth. The Airship SDK now requires iOS 14+ as the minimum deployment version and Xcode 14.3+.
