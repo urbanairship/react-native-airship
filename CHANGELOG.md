@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 14.7.0 - July 24, 2023
+A minor release that updates to the latest iOS and Android 16.x SDKs.
+
+### Changes
+- Updated iOS SDK to 16.12.2
+- Updated Android SDK to 16.11.1
+- Android compileSdkVersion is now required ot be set to 33 or higher
+
 ## Version 14.6.1 - January 20, 2023
 Patch release that updates the iOS SDK to 16.10.7, fixes the result of `getActiveNotifications` and avoiding issue in the Message Center on null message ID.
 
