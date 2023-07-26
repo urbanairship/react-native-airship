@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 14.7.0 - July 24, 2023
+## Version 14.7.0 - July 26, 2023
 A minor release that updates to the latest iOS and Android 16.x SDKs.
 
 ### Changes
