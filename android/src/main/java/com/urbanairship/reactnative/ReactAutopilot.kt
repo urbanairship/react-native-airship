@@ -29,7 +29,7 @@ class ReactAutopilot : BaseAutopilot() {
 
         MainScope().launch {
             EventEmitter.shared().pendingEventListener
-                    .filter { !it.isForeground() }
+                    .filter { !it.type.isForeground() }
                     .collect {
                         AirshipHeadlessEventService.startService(context)
                     }

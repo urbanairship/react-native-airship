@@ -106,7 +106,7 @@ public class AirshipReactNative: NSObject {
         try? AirshipProxy.shared.attemptTakeOff(launchOptions: launchOptions)
 
         Task {
-            let stream = await AirshipProxyEventEmitter.shared.pendingEventTypeAdded
+            let stream = await AirshipProxyEventEmitter.shared.pendingEventAdded
             for await _ in stream {
                 await self.eventNotifier.notifyPendingEvents()
             }
