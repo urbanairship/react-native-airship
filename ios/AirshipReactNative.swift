@@ -106,7 +106,7 @@ public class AirshipReactNative: NSObject {
         try? AirshipProxy.shared.attemptTakeOff(launchOptions: launchOptions)
 
         Task {
-            let stream = await AirshipProxyEventEmitter.shared.pendingEventTypeAdded
+            let stream = await AirshipProxyEventEmitter.shared.pendingEventAdded
             for await _ in stream {
                 await self.eventNotifier.notifyPendingEvents()
             }
@@ -182,6 +182,11 @@ public extension AirshipReactNative {
     @objc
     func channelRemoveTag(_ tag: String) throws {
         return try AirshipProxy.shared.channel.removeTags([tag])
+    }
+    
+    @objc
+    func channelEditTags(json: Any) throws {
+        try AirshipProxy.shared.channel.editTags(json: json)
     }
 
     @objc

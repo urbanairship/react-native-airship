@@ -24,7 +24,7 @@ yarn install
 
 ## iOS
 
-1) Run `pod install` in `example/ios`
+1) Run `pod install --repo-update` in `example/ios`
 
 2) Open the `example/ios/AirshipSample.xcworkspace` Project
 
