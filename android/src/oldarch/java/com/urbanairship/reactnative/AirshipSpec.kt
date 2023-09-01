@@ -365,6 +365,10 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
     abstract fun pushIosGetAuthorizedNotificationStatus(promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun featureFlagManagerFlag(flagName: String?, promise: Promise)
 }
 
 

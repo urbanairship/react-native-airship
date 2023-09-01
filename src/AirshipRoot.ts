@@ -8,6 +8,8 @@ import { AirshipMessageCenter } from './AirshipMessageCenter';
 import { AirshipPreferenceCenter } from './AirshipPreferenceCenter';
 import { AirshipPrivacyManager } from './AirshipPrivacyManager';
 import { AirshipPush } from './AirshipPush';
+import { AirshipFeatureFlagManager } from './AirshipFeatureFlagManager';
+
 import { AirshipConfig, EventTypeMap, EventType } from './types';
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
 
@@ -25,6 +27,7 @@ export class AirshipRoot {
   public readonly preferenceCenter: AirshipPreferenceCenter;
   public readonly privacyManager: AirshipPrivacyManager;
   public readonly push: AirshipPush;
+  public readonly featureFlagManager: AirshipFeatureFlagManager;
 
   private readonly eventEmitter: UAEventEmitter;
 
@@ -39,6 +42,7 @@ export class AirshipRoot {
     this.preferenceCenter = new AirshipPreferenceCenter(module);
     this.privacyManager = new AirshipPrivacyManager(module);
     this.push = new AirshipPush(module);
+    this.featureFlagManager = new AirshipFeatureFlagManager(module);
     this.eventEmitter = new UAEventEmitter(module);
   }
 

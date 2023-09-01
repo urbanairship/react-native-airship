@@ -687,6 +687,17 @@ RCT_EXPORT_METHOD(pushAndroidOverrideForegroundDisplay:(NSString *)requestID sho
     // Android only
 }
 
+RCT_REMAP_METHOD(featureFlagManagerFlag,
+                 featureFlagManagerFlag:(NSString *)flagName
+                 featureFlagManagerFlag:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared featureFlagManagerFlagWithFlagName:flagName
+                                                completionHandler:^(id result, NSError * _Nullable error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
+    }];
+}
+
 
 -(void)handleResult:(id)result
               error:(NSError *)error

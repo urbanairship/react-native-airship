@@ -11,6 +11,8 @@ export { AirshipLocale } from './AirshipLocale';
 export { AirshipMessageCenter } from './AirshipMessageCenter';
 export { AirshipPreferenceCenter } from './AirshipPreferenceCenter';
 export { AirshipPrivacyManager } from './AirshipPrivacyManager';
+export { AirshipFeatureFlagManager } from './AirshipFeatureFlagManager';
+
 export { AirshipPush, AirshipPushAndroid, AirshipPushIOS } from './AirshipPush';
 export { CustomEvent } from './CustomEvent';
 export { SubscriptionListEditor } from './SubscriptionListEditor';

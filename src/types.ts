@@ -710,3 +710,29 @@ export type Item =
   | AlertItem;
 
 export type Section = CommonSection | LabeledSectionBreak;
+
+
+/**
+ * An interface representing the eligibility status of a flag, and optional
+ * variables associated with the flag.
+ */
+export interface FeatureFlag {
+  /**
+   * A boolean representing flag eligibility; will be `true` if the current
+   * contact is eligible for the flag.
+   */
+  readonly isEligible: boolean
+  /**
+   * A variables associated with the flag, if any. Will be `null` if no data
+   * is associated with the flag, or if the flag does not exist.
+   */
+  readonly variables: unknown | null
+  /**
+   * A boolean representing if the flag exists or not. For ease of use and
+   * deployment, asking for a flag by any name will return a `FeatureFlag`
+   * interface, even if the flag was not found to exist. However this property
+   * may be checked to determine if the flag was actually resolved to a known
+   * flag name.
+   */
+  readonly exists: boolean
+}

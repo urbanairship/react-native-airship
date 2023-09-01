@@ -540,6 +540,17 @@ public extension AirshipReactNative {
 }
 
 
+
+// Feature Flag Manager
+@objc
+public extension AirshipReactNative {
+    @objc
+    func featureFlagManagerFlag(flagName: String) async throws -> Any  {
+        let result = try await AirshipProxy.shared.featureFlagManager.flag(name: flagName)
+        return try AirshipJSON.wrap(result).unWrap() as Any
+    }
+}
+
 extension AirshipReactNative: AirshipProxyDelegate {
     public func migrateData(store: ProxyStore) {
         ProxyDataMigrator().migrateData(store: store)
