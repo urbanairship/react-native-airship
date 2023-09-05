@@ -79,6 +79,11 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         ProxyLogger.debug("AirshipModule initialized")
     }
 
+    override fun invalidate() {
+        super.invalidate()
+        scope.cancel()
+    }
+
     @ReactMethod
     override fun takeOff(config: ReadableMap?, promise: Promise) {
         promise.resolveResult {
