@@ -106,6 +106,17 @@ RCT_REMAP_METHOD(channelRemoveTag,
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
+RCT_REMAP_METHOD(channelEditTags,
+                 channelEditTags:(NSArray *)operations
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    [AirshipReactNative.shared channelEditTagsWithJson:operations
+                                                      error:&error];
+
+    [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
 RCT_REMAP_METHOD(pushGetActiveNotifications,
                  pushGetActiveNotifications:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {

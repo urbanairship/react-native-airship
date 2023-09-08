@@ -13,7 +13,6 @@ import Airship, { EventType } from '@ua/react-native-airship';
 const Tab = createBottomTabNavigator();
 const MessageCenterStack = createStackNavigator();
 
-
 Airship.addListener(EventType.NotificationResponse, (event) => {
   console.log('NotificationResponse:', JSON.stringify(event));
 });
@@ -26,12 +25,12 @@ Airship.addListener(EventType.ChannelCreated, (event) => {
   console.log('ChannelCreated:', JSON.stringify(event));
 });
 
-Airship.addListener(EventType.NotificationStatusChangedStatus, (event) => {
-  console.log('NotificationStatusChangedStatus:', JSON.stringify(event));
+Airship.addListener(EventType.PushNotificationStatusChangedStatus, (event) => {
+  console.log('PushNotificationStatusChangedStatus:', JSON.stringify(event));
 });
 
-Airship.addListener(EventType.iOSAuthorizedNotificationSettingsChanged, (event) => {
-  console.log('iOSAuthorizedNotificationSettingsChanged:', JSON.stringify(event));
+Airship.addListener(EventType.IOSAuthorizedNotificationSettingsChanged, (event) => {
+  console.log('IOSAuthorizedNotificationSettingsChanged:', JSON.stringify(event));
 });
 
 

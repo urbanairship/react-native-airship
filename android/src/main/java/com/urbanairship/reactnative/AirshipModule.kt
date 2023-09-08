@@ -57,7 +57,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             // Background events will create a headless JS task in ReactAutopilot since
             // initialized wont be called until we have a JS task.
             EventEmitter.shared().pendingEventListener
-                    .filter { it.isForeground() }
+                    .filter { it.type.isForeground() }
                     .collect {
                         notifyPending()
                     }
@@ -152,6 +152,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun channelRemoveTag(tag: String?, promise: Promise) {
         promise.resolveResult {
             proxy.channel.removeTag(requireNotNull(tag))
+        }
+    }
+
+    @ReactMethod
+    override fun channelEditTags(operations: ReadableArray, promise: Promise) {
+        promise.resolveResult {
+            proxy.channel.editTags(Utils.convertArray(operations).toJsonValue())
         }
     }
 

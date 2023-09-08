@@ -16,6 +16,7 @@ export interface Spec extends TurboModule {
   // Channel
   channelAddTag(tag: string): Promise<void>;
   channelRemoveTag(tag: string): Promise<void>;
+  channelEditTags(operations: Object[]): Promise<void>;
   channelGetTags(): Promise<string[]>;
   channelGetChannelId(): Promise<string | null | undefined>;
   channelGetSubscriptionLists(): Promise<string[]>;
