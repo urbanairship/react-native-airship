@@ -13,7 +13,6 @@ import Airship, { EventType } from '@ua/react-native-airship';
 const Tab = createBottomTabNavigator();
 const MessageCenterStack = createStackNavigator();
 
-
 Airship.addListener(EventType.NotificationResponse, (event) => {
   console.log('NotificationResponse:', JSON.stringify(event));
 });

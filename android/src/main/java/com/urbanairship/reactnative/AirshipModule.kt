@@ -161,6 +161,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun channelEditTags(operations: ReadableArray, promise: Promise) {
+        promise.resolveResult {
+            proxy.channel.editTags(Utils.convertArray(operations).toJsonValue())
+        }
+    }
+
+    @ReactMethod
     override fun channelGetTags(promise: Promise) {
         promise.resolveResult {
             JsonValue.wrapOpt(proxy.channel.getTags())

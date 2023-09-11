@@ -3,6 +3,7 @@ import {
   SubscriptionListEditor, SubscriptionListOperation,
 } from './SubscriptionListEditor';
 import { TagGroupEditor, TagGroupOperation } from './TagGroupEditor';
+import { TagEditor, TagOperation } from './TagEditor';
 
 /**
  * Airship channel.
@@ -12,6 +13,7 @@ export class AirshipChannel {
 
   /**
    * Adds a device tag.
+   * Deprecated. Use editTags() instead.
    * @param tag The tag.
    * @returns A promise.
    */
@@ -21,11 +23,22 @@ export class AirshipChannel {
 
   /**
    * Removes a device tag.
+   * Deprecated. Use editTags() instead.
    * @param tag The tag.
    * @returns A promise.
    */
   public removeTag(tag: string): Promise<void> {
     return this.module.channelRemoveTag(tag);
+  }
+
+  /**
+   * Edits device tags.
+   * @returns A tag editor.
+   */
+  public editTags(): TagEditor {
+    return new TagEditor((operations: TagOperation[]) => {
+      return this.module.channelEditTags(operations);
+    });
   }
 
   /**
