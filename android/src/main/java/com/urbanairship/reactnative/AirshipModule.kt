@@ -13,10 +13,8 @@ import com.urbanairship.android.framework.proxy.proxies.SuspendingPredicate
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonSerializable
 import com.urbanairship.json.JsonValue
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
 import java.util.UUID
 
 class AirshipModule internal constructor(val context: ReactApplicationContext) : AirshipSpec(context) {
@@ -26,6 +24,8 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     private var isOverrideForegroundDisplayEnabled: Boolean = false
     private val foregroundDisplayRequestMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
+
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main) + SupervisorJob()
 
     private val foregroundDisplayPredicate = object : SuspendingPredicate<Map<String, Any>> {
         override suspend fun apply(value: Map<String, Any>): Boolean {
@@ -53,7 +53,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun initialize() {
         super.initialize()
 
-        MainScope().launch {
+        scope.launch {
             // Background events will create a headless JS task in ReactAutopilot since
             // initialized wont be called until we have a JS task.
             EventEmitter.shared().pendingEventListener
@@ -77,6 +77,11 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
         proxy.push.foregroundNotificationDisplayPredicate = this.foregroundDisplayPredicate
         ProxyLogger.debug("AirshipModule initialized")
+    }
+
+    override fun invalidate() {
+        super.invalidate()
+        scope.cancel()
     }
 
     @ReactMethod
@@ -625,6 +630,20 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun localeClearLocaleOverride(promise: Promise) {
         promise.resolveResult {
             proxy.locale.clearLocale()
+        }
+    }
+
+    override fun featureFlagManagerFlag(flagName: String?, promise: Promise) {
+        promise.resolveDeferred { callback ->
+            scope.launch {
+                try {
+                    requireNotNull(flagName)
+                    val flag = proxy.featureFlagManager.flag(flagName)
+                    callback(flag, null)
+                } catch (e: Exception) {
+                    callback(null, e)
+                }
+            }
         }
     }
 

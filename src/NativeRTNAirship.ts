@@ -103,6 +103,9 @@ export interface Spec extends TurboModule {
   localeSetLocaleOverride(localeIdentifier: string): Promise<void>;
   localeGetLocale(): Promise<string>;
   localeClearLocaleOverride(): Promise<void>;
+
+  // Feature Flag Manager
+  featureFlagManagerFlag(flagName: string):Promise<Object>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RTNAirship');
