@@ -36,6 +36,6 @@ Pod::Spec.new do |s|
   
   
 
-  s.dependency "AirshipFrameworkProxy", "4.1.0"
+  s.dependency "AirshipFrameworkProxy", "4.2.0"
 
 end
