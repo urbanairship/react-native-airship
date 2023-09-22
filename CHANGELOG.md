@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 16.1.1 - September 22, 2023
+Patch release that updates the iOS SDK to 17.3.1 and fixes Channel Tag Editor for React Native old architecture.
+
+### Changes
+- Updated iOS SDK to 17.3.1
+- Fixed `Airship.channel.editTags()` for React Native old architecture
+
 ## Version 16.1.0 - September 11, 2023
 Minor release that updates the iOS SDK to 17.3.0 and Android SDK to 17.2.1. Also adds support for Airship Feature Flag feature and for Channel Tag Editor.
 

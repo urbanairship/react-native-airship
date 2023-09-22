@@ -161,7 +161,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
-    override fun channelEditTags(operations: ReadableArray, promise: Promise) {
+    override fun channelEditTags(operations: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.channel.editTags(Utils.convertArray(operations).toJsonValue())
         }

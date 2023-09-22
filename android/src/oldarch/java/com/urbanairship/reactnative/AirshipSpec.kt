@@ -62,6 +62,13 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun channelEditTags(
+        operations: ReadableArray?,
+        promise: Promise
+    )
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
     abstract fun channelEditAttributes(
         operations: ReadableArray?,
         promise: Promise
