@@ -7,11 +7,28 @@ import HomeScreen from './screens/HomeScreen';
 import MessageCenterScreen from './screens/MessageCenterScreen';
 import MessageScreen from './screens/MessageScreen';
 import PreferenceCenterScreen from './screens/PreferenceCenterScreen';
+import { MyView } from './screens/MyPreferenceCenterScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import Airship, { EventType } from '@ua/react-native-airship';
 
 const Tab = createBottomTabNavigator();
 const MessageCenterStack = createStackNavigator();
+
+Airship.takeOff({
+    default: {
+      appKey: "Hx7SIqHqQDmFj6aruaAFcQ",  
+      appSecret: "3-5cLPw3TS-t9M6lb22kUA",
+      logLevel: "verbose"
+    },
+    site: "us", // use "eu" for EU cloud projects
+    urlAllowList: ["*"],
+    android: {
+        notificationConfig: {
+            icon: "ic_notification",
+            accentColor: "#00ff00"
+        }
+    }
+});
 
 Airship.addListener(EventType.NotificationResponse, (event) => {
   console.log('NotificationResponse:', JSON.stringify(event));
@@ -33,6 +50,7 @@ Airship.addListener(EventType.IOSAuthorizedNotificationSettingsChanged, (event) 
   console.log('IOSAuthorizedNotificationSettingsChanged:', JSON.stringify(event));
 });
 
+Airship.preferenceCenter.setAutoLaunchDefaultPreferenceCenter("neat", false);
 
 function MessageCenterStackScreen() {
   return (
@@ -65,7 +83,7 @@ export default function App() {
         />
         <Tab.Screen
           name="PreferenceCenter"
-          component={PreferenceCenterScreen}
+          component={MyView}
           options={{ title: 'Preference center' }}
         />
         {/* @ts-ignore */}

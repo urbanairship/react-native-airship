@@ -35,6 +35,7 @@ export default function HomeScreen() {
 
     Airship.channel.getChannelId().then((id) => {
       if (id) {
+        console.log(id)
         setChannelId(id);
       }
     });
