@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:name="com.urbanairship.reactnative.PreferenceCenterFragmentWrapper"
+    android:layout_width="match_parent">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/ua_preference_container_view"
+        android:layout_height="match_parent"
+        android:tag="preferences"
+        android:name="com.urbanairship.reactnative.PreferenceCenterFragmentWrapper"
+        android:layout_width="match_parent">
+    </androidx.fragment.app.FragmentContainerView>
+</FrameLayout>
