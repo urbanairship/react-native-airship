@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 16.1.2 - October 23, 2023
+Patch release that fixes an issue with `getActiveNotifications` on Android.
+
+### Changes
+- Fixed `getActiveNotifications` method on Android
+
 ## Version 16.1.1 - September 22, 2023
 Patch release that updates the iOS SDK to 17.3.1 and fixes Channel Tag Editor for React Native old architecture.
 
