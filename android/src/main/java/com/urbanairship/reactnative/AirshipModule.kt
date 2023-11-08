@@ -147,6 +147,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun channelEnableChannelCreation(promise: Promise) {
+        promise.resolveResult {
+            proxy.channel.enableChannelCreation()
+        }
+    }
+
+    @ReactMethod
     override fun channelAddTag(tag: String?, promise: Promise) {
         promise.resolveResult {
             proxy.channel.addTag(requireNotNull(tag))

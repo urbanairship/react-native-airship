@@ -14,6 +14,7 @@ export interface Spec extends TurboModule {
   removeListeners: (count: number) => void;
 
   // Channel
+  channelEnableChannelCreation(): Promise<void>;
   channelAddTag(tag: string): Promise<void>;
   channelRemoveTag(tag: string): Promise<void>;
   channelEditTags(operations: Object[]): Promise<void>;

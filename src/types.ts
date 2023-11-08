@@ -428,6 +428,7 @@ export interface AirshipConfig {
 
   /**
    * Enables delayed channel creation.
+   * Deprecated. Use the Private Manager to disable all features instead.
    */
   isChannelCreationDelayEnabled?: boolean;
 
