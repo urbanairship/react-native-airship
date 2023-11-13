@@ -12,6 +12,16 @@ export class AirshipChannel {
   constructor(private readonly module: any) {}
 
   /**
+   * Enables channel creation if channel creation has been delayed.
+   * It is only necessary to call this when isChannelCreationDelayEnabled
+   * has been set to `true` in the airship config.
+   * Deprecated. Use the Private Manager to disable all features instead.
+   */
+  public enableChannelCreation(): Promise<void> {
+    return this.module.channelEnableChannelCreation();
+  }
+
+  /**
    * Adds a device tag.
    * Deprecated. Use editTags() instead.
    * @param tag The tag.
