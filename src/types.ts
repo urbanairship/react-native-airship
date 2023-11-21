@@ -568,10 +568,6 @@ export interface InboxMessage {
    */
   isRead: boolean;
   /**
-   * The deleted status of the message.
-   */
-  isDeleted: boolean;
-  /**
    * String to String map of any message extras.
    */
   extras: Record<string, string>;
