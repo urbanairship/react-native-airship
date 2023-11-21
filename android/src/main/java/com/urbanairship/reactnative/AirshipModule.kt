@@ -9,6 +9,7 @@ import com.urbanairship.android.framework.proxy.EventType
 import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.events.EventEmitter
 import com.urbanairship.android.framework.proxy.proxies.AirshipProxy
+import com.urbanairship.android.framework.proxy.proxies.FeatureFlagProxy
 import com.urbanairship.android.framework.proxy.proxies.SuspendingPredicate
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonSerializable
@@ -651,6 +652,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
                     callback(null, e)
                 }
             }
+        }
+    }
+
+    override fun featureFlagManagerTrackInteraction(flag: ReadableMap?, promise: Promise) {
+        promise.resolveResult {
+            val parsedFlag = FeatureFlagProxy(Utils.convertMap(requireNotNull(flag)).toJsonValue())
+            proxy.featureFlagManager.trackInteraction(parsedFlag)
         }
     }
 

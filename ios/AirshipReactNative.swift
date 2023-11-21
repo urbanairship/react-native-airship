@@ -555,6 +555,12 @@ public extension AirshipReactNative {
         let result = try await AirshipProxy.shared.featureFlagManager.flag(name: flagName)
         return try AirshipJSON.wrap(result).unWrap() as Any
     }
+
+    @objc
+    func featureFlagManagerTrackInteracted(flag: Any) throws {
+        let flag: FeatureFlagProxy = try AirshipJSON.wrap(flag).decode()
+        try AirshipProxy.shared.featureFlagManager.trackInteraction(flag: flag)
+    }
 }
 
 extension AirshipReactNative: AirshipProxyDelegate {

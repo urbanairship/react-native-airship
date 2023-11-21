@@ -380,6 +380,10 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
     abstract fun featureFlagManagerFlag(flagName: String?, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun featureFlagManagerTrackInteraction(flag: ReadableMap?, promise: Promise)
 }
 
 
