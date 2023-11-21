@@ -37,7 +37,7 @@ jobs:
         run: bash ./scripts/run_ci_tasks.sh -a
 
   ios:
-    runs-on: macos-latest
+    runs-on: macos-13-xlarge
     env:
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
     steps:
