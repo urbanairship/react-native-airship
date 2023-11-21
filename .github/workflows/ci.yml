@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   android:
-    runs-on: ubuntu-latest
+    runs-on: macos-13-xlarge
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
