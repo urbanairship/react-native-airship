@@ -23,6 +23,6 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
-      - run: npm ci
+      - run: npm run boostrap
       - run: bash ./scripts/run_ci_tasks.sh -a
       - run: bash ./scripts/run_ci_tasks.sh -i

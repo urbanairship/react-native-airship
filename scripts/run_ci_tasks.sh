@@ -37,13 +37,10 @@ done
 
 cd $REPO_PATH
 
-yarn
-
 # Android
 if $ANDROID ; then
     cd example/android
     
-
     # Build
     ./gradlew app:assembleDebug
 
@@ -59,9 +56,6 @@ if $IOS; then
     DERIVED_DATA=$(mktemp -d /tmp/ci-derived-data-XXXXX)
     TARGET_SDK='iphonesimulator'
     TEST_DESTINATION='platform=iOS Simulator,OS=17.0.1,name=iPhone 15 Pro Max'
-
-    # Install the pods
-    pod install
 
     # Use Debug configurations and a simulator SDK so the build process doesn't attempt to sign the output
     xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipExample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipExample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
