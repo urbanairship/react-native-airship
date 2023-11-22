@@ -6,62 +6,23 @@ jobs:
   android:
     runs-on: macos-13-xlarge
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '11'
+  
+      - name: Select Xcode version
+        run: sudo xcode-select -s '/Applications/Xcode_15.0.1.app/Contents/Developer'
+
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+          cache: 'npm'
 
-      - name: Cache dependencies
-        id: yarn-cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-        shell: bash
-
-      - name: Run CI
-        run: bash ./scripts/run_ci_tasks.sh -a
-
-  ios:
-    runs-on: macos-13-xlarge
-    env:
-      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-
-      - name: Cache dependencies
-        id: yarn-cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-        shell: bash
-
-      - name: Run CI
-        run: bash ./scripts/run_ci_tasks.sh -i
+      - run: npm ci
+      - run: bash ./scripts/run_ci_tasks.sh -a
+      - run: bash ./scripts/run_ci_tasks.sh -i

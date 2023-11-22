@@ -30,8 +30,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint --fix \"**/*.{js,ts,tsx}\"",
     "prepack": "bob build",
-    "example": "yarn --cwd example",
-    "bootstrap": "yarn example && yarn install && yarn example pods",
+    "example": "npm run --prefix example ${COMMAND}",
+    "bootstrap": "npm ci && npm --prefix example ci && npm run --prefix example pods",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
     "docs": "typedoc --tsconfig ./tsconfig.json --out docs src/index.tsx --exclude example/**"
   },
@@ -79,7 +79,6 @@
   "engines": {
     "node": ">= 16.0.0"
   },
-  "packageManager": "^yarn@1.22.21",
   "eslintConfig": {
     "root": true,
     "extends": [
