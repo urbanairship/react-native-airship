@@ -568,10 +568,6 @@ export interface InboxMessage {
    */
   isRead: boolean;
   /**
-   * The deleted status of the message.
-   */
-  isDeleted: boolean;
-  /**
    * String to String map of any message extras.
    */
   extras: Record<string, string>;
@@ -736,4 +732,11 @@ export interface FeatureFlag {
    * flag name.
    */
   readonly exists: boolean
+
+ /**
+   * Reporting Metadata, the shape of which is private and not to be relied
+   * upon. When not provided, an interaction cannot be tracked on the flag.
+   * @ignore
+   */
+  readonly _internal: unknown
 }

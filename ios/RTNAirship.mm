@@ -707,6 +707,17 @@ RCT_EXPORT_METHOD(pushAndroidOverrideForegroundDisplay:(NSString *)requestID sho
     // Android only
 }
 
+RCT_REMAP_METHOD(featureFlagManagerTrackInteraction,
+                 featureFlagManagerTrackInteraction:(NSDictionary *)flag
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+
+    NSError *error;
+    [AirshipReactNative.shared featureFlagManagerTrackInteractedWithFlag:flag error:&error];
+    [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
 RCT_REMAP_METHOD(featureFlagManagerFlag,
                  featureFlagManagerFlag:(NSString *)flagName
                  featureFlagManagerFlag:(RCTPromiseResolveBlock)resolve
@@ -717,7 +728,6 @@ RCT_REMAP_METHOD(featureFlagManagerFlag,
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
 }
-
 
 -(void)handleResult:(id)result
               error:(NSError *)error

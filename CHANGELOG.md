@@ -1,5 +1,19 @@
 # React Native Module Changelog
 
+## Version 17.0.0 - November 21, 2023
+Major release that adds support for server side feature flag segmentation, interaction events for feature flags, and Impression billing.
+
+### Changes
+- Updated iOS SDK to 17.6.1
+- Updated Android SDK to 17.5.0
+- Added `Airship.featureFlagManager.trackInteraction(flag)` method to track interaction events
+- Added a deprecated method `Airship.channel.enableChannelCreation()` for app that are using delayed channel creation instead of privacy manager
+- Added server side segmentation for feature flags
+- Added support for Impression billing
+- Removed the InboxMessage `isDeleted` property
+- Fixed the InboxMessage `listIconUrl` on iOS
+
+
 ## Version 16.1.2 - October 23, 2023
 Patch release that fixes an issue with `getActiveNotifications` on Android.
 

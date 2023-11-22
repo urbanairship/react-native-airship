@@ -36,7 +36,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "16.1.2"
+    public static let version: String = "17.0.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -445,8 +445,9 @@ public extension AirshipReactNative {
     }
 
     @objc
-    func messageCenterGetMessages() async throws -> [Any] {
-        return try await AirshipProxy.shared.messageCenter.getMessagesJSON()
+    func messageCenterGetMessages() async throws -> Any {
+        let messages = try await AirshipProxy.shared.messageCenter.getMessages()
+        return try AirshipJSON.wrap(messages).unWrap() as Any
     }
 
     @objc
@@ -553,6 +554,12 @@ public extension AirshipReactNative {
     func featureFlagManagerFlag(flagName: String) async throws -> Any  {
         let result = try await AirshipProxy.shared.featureFlagManager.flag(name: flagName)
         return try AirshipJSON.wrap(result).unWrap() as Any
+    }
+
+    @objc
+    func featureFlagManagerTrackInteracted(flag: Any) throws {
+        let flag: FeatureFlagProxy = try AirshipJSON.wrap(flag).decode()
+        try AirshipProxy.shared.featureFlagManager.trackInteraction(flag: flag)
     }
 }
 
