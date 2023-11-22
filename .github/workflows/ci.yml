@@ -3,7 +3,7 @@ name: CI
 on: [pull_request]
 
 jobs:
-  android:
+  test:
     runs-on: macos-13-xlarge
     steps:
       - uses: actions/checkout@v4
@@ -23,6 +23,6 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
-      - run: npm run boostrap
+      - run: npm run bootstrap
       - run: bash ./scripts/run_ci_tasks.sh -a
       - run: bash ./scripts/run_ci_tasks.sh -i
