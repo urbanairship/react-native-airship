@@ -54,7 +54,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
             
 
-      - run: npm ci
+      - run: npm run bootstrap
       - run: npm run docs
       - run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//}
 
