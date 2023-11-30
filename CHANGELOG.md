@@ -1,5 +1,10 @@
 # React Native Module Changelog
 
+## Version 15.3.1 - December 1, 2023
+
+Patch release to fix active notifications on Android.
+
+
 ## Version 15.3.0 - June 14, 2023
 
 Minor release that updates the iOS SDK to 16.12.1 and Android SDK to 16.11.1 and adds support for `autoPauseInAppAutomationOnLaunch` config option.
