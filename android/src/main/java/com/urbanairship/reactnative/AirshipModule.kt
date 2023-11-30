@@ -233,7 +233,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     @ReactMethod
     override fun pushGetActiveNotifications(promise: Promise) {
         promise.resolveResult {
-            proxy.push.getActiveNotifications()
+            JsonValue.wrapOpt(proxy.push.getActiveNotifications())
         }
     }
 
