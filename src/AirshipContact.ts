@@ -30,6 +30,14 @@ export class AirshipContact {
   }
 
   /**
+   * Notifies the contact of a remote login.
+   * @returns A promise.
+   */
+    public notifyRemoteLogin(): Promise<void> {
+      return this.module.notifyRemoteLogin();
+    }
+
+  /**
    * Gets the named user Id.
    * @returns A promise with the result.
    */
