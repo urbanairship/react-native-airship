@@ -452,6 +452,15 @@ RCT_REMAP_METHOD(contactReset,
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
+RCT_REMAP_METHOD(contactNotifyRemoteLogin,
+                 contactNotifyRemoteLogin:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    [AirshipReactNative.shared contactNotifyRemoteLoginAndReturnError:&error];
+
+    [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
 RCT_REMAP_METHOD(inAppGetDisplayInterval,
                  inAppGetDisplayInterval:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {

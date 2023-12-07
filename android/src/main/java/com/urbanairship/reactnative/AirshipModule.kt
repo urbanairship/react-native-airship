@@ -390,6 +390,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun contactNotifyRemoteLogin(promise: Promise) {
+        promise.resolveResult {
+            proxy.contact.notifyRemoteLogin()
+        }
+    }
+
+    @ReactMethod
     override fun contactGetNamedUserId(promise: Promise) {
         promise.resolveResult {
             proxy.contact.getNamedUserId()
