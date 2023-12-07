@@ -210,7 +210,7 @@ export class AirshipPushIOS {
    * Gets the authorized notification status.
    * @returns A promise with the result.
    */
-  public getAuthorizedNotificationStatus(): Promise<iOS.AuthorizedNotificationSetting[]> {
+  public getAuthorizedNotificationStatus(): Promise<iOS.AuthorizedNotificationStatus> {
     return this.module.pushIosGetAuthorizedNotificationStatus();
   }
 }
