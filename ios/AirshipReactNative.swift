@@ -367,6 +367,11 @@ public extension AirshipReactNative {
     }
 
     @objc
+    func notifyRemoteLogin() throws {
+        try AirshipProxy.shared.contact.notifyRemoteLogin()
+    }
+
+    @objc
     func contactGetNamedUserIdOrEmtpy() async throws -> String {
         return try await AirshipProxy.shared.contact.getNamedUser() ?? ""
     }
