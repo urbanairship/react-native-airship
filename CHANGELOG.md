@@ -6,7 +6,7 @@ Minor release that updates the iOS SDK to 17.7.0 and Android SDK to 17.6.0 and a
 ### Changes
 - Updated iOS SDK to 17.7.0
 - Updated Android SDK to 17.6.0
-- Added `Airship.contactManager.notifyRemoteLogin()` method to notify contact of remote login
+- Added `Airship.contact.notifyRemoteLogin()` method to notify contact of remote login
 
 ## Version 17.0.0 - November 21, 2023
 Major release that adds support for server side feature flag segmentation, interaction events for feature flags, and Impression billing.
