@@ -367,7 +367,7 @@ public extension AirshipReactNative {
     }
 
     @objc
-    func notifyRemoteLogin() throws {
+    func contactNotifyRemoteLogin() throws {
         try AirshipProxy.shared.contact.notifyRemoteLogin()
     }
 
