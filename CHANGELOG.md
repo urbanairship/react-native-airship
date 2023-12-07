@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 17.1.0 - December 6, 2023
+Minor release that updates the iOS SDK to 17.7.0 and Android SDK to 17.6.0 and adds support for notifying the contact of a remote login.
+
+### Changes
+- Updated iOS SDK to 17.7.0
+- Updated Android SDK to 17.6.0
+- Added `Airship.contactManager.notifyRemoteLogin()` method to notify contact of remote login
+
 ## Version 17.0.0 - November 21, 2023
 Major release that adds support for server side feature flag segmentation, interaction events for feature flags, and Impression billing.
 
@@ -12,7 +20,6 @@ Major release that adds support for server side feature flag segmentation, inter
 - Added support for Impression billing
 - Removed the InboxMessage `isDeleted` property
 - Fixed the InboxMessage `listIconUrl` on iOS
-
 
 ## Version 16.1.2 - October 23, 2023
 Patch release that fixes an issue with `getActiveNotifications` on Android.
