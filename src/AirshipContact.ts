@@ -34,7 +34,7 @@ export class AirshipContact {
    * @returns A promise.
    */
     public notifyRemoteLogin(): Promise<void> {
-      return this.module.notifyRemoteLogin();
+      return this.module.contactNotifyRemoteLogin();
     }
 
   /**
