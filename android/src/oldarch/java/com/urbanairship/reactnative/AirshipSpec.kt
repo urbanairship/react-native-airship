@@ -194,6 +194,10 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun contactNotifyRemoteLogin(promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
     abstract fun contactGetNamedUserId(promise: Promise)
 
     @ReactMethod
