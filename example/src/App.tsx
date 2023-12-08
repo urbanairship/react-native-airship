@@ -9,6 +9,7 @@ import MessageScreen from './screens/MessageScreen';
 import PreferenceCenterScreen from './screens/PreferenceCenterScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import Airship, { EventType } from '@ua/react-native-airship';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Tab = createBottomTabNavigator();
 const MessageCenterStack = createStackNavigator();
@@ -56,7 +57,26 @@ function MessageCenterStackScreen() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route, focused }) => ({
+          tabBarIcon: ({ size }) => {
+            let iconName;
+            if (route.name === 'Home') {
+              iconName = 'home';
+            } else if (route.name === 'MessageCenter') {
+              iconName = 'message';
+            } else if (route.name === 'PreferenceCenter') {
+              iconName = 'tune';
+            } else if (route.name === 'Settings') {
+              iconName = 'settings';
+            }
+
+            const color = focused ? '#004bff' : 'grey';
+
+            return <MaterialIcons name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen
           name="MessageCenter"
