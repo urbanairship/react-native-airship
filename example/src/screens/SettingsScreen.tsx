@@ -143,7 +143,7 @@ export default class SettingsScreen extends React.Component<
               marginTop: 50,
               alignItems: 'center',
             }}
-            source={require('./../img/urban-airship-sidebyside.png')}
+            source={require('./../img/airship-mark.png')}
           />
           <View style={{ height: 75 }} />
           <EnablePushCell
