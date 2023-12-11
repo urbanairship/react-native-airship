@@ -15,6 +15,7 @@
 		6EC755922A4DE34400851ABB /* AirshipExtender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC755912A4DE34400851ABB /* AirshipExtender.swift */; };
 		7699B88040F8A987B510C191 /* libPods-AirshipExample-AirshipExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AirshipExample-AirshipExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9919EE652B23C58300A46BFE /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 9919EE642B23C58300A46BFE /* Fonts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		6EC755912A4DE34400851ABB /* AirshipExtender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirshipExtender.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AirshipExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-AirshipExample-AirshipExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipExample-AirshipExampleTests.release.xcconfig"; path = "Target Support Files/Pods-AirshipExample-AirshipExampleTests/Pods-AirshipExample-AirshipExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		9919EE642B23C58300A46BFE /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = AirshipExample/Fonts; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -97,6 +99,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				9919EE642B23C58300A46BFE /* Fonts */,
 				6EC755912A4DE34400851ABB /* AirshipExtender.swift */,
 				6EC755902A4DE34400851ABB /* AirshipExample-Bridging-Header.h */,
 			);
@@ -249,6 +252,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9919EE652B23C58300A46BFE /* Fonts in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
