@@ -138,9 +138,8 @@ export default class SettingsScreen extends React.Component<
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <Image
             style={{
-              width: 300,
-              height: 38,
-              marginTop: 50,
+              width: '100%',
+              resizeMode: 'contain',
               alignItems: 'center',
             }}
             source={require('./../img/airship-mark.png')}

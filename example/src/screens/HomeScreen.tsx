@@ -1,36 +1,45 @@
-import * as React from 'react';
-import { View, Text, Image, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, Dimensions, StyleSheet, TouchableOpacity, Clipboard } from 'react-native';
 import Airship, { EventType } from '@ua/react-native-airship';
 
 import styles from '../Styles';
 
-function ChannelCell(props: { channelId: string }) {
+function ChannelCell({ channelId }) {
+  const copyToClipboard = () => {
+    Clipboard.setString(channelId);
+  };
+
   return (
-    <Text style={styles.channel}>
-      Channel ID {'\n'}
-      {props.channelId}
-    </Text>
+    <TouchableOpacity onPress={copyToClipboard}>
+      <Text style={styles.channel}>
+        Channel ID {'\n'}{channelId}
+      </Text>
+    </TouchableOpacity>
   );
 }
 
 export default function HomeScreen() {
-  const [channelId, setChannelId] = React.useState<string | null>(null);
+  const [channelId, setChannelId] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     Airship.push.getNotificationStatus().then((id) => {
-      console.log(id)
+      console.log(id);
+    }).catch((error) => {
+      console.error("Error getting notification status:", error);
     });
-  
+
     Airship.push.iOS.getAuthorizedNotificationSettings().then((id) => {
-      console.log(id)
+      console.log(id);
+    }).catch((error) => {
+      console.error("Error getting notification settings:", error);
     });
 
     Airship.push.iOS.getAuthorizedNotificationStatus().then((id) => {
-      console.log(id)
+      console.log(id);
     });
 
     Airship.push.getNotificationStatus().then((id) => {
-      console.log(id)
+      console.log(id);
     });
 
     Airship.channel.getChannelId().then((id) => {
@@ -40,38 +49,31 @@ export default function HomeScreen() {
     });
 
     let subscription = Airship.addListener(EventType.ChannelCreated, (event) => {
-      setChannelId(event.channelId)
+      setChannelId(event.channelId);
     });
 
-    return subscription.remove
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
-  let channelcell = null;
-  if (channelId) {
-    channelcell = <ChannelCell channelId={channelId} />;
-  }
+  const MyVerticalStack = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <View style={{ height: 50, backgroundColor: 'red' }} />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Image
+        style={[styles.backgroundIcon, { marginBottom: 1000}]}
+        source={require('./../img/airship-mark.png')}
+      />
+      {channelId && <ChannelCell channelId={channelId} />}
+      </View>
+        <View style={{ height: 50, backgroundColor: 'green' }} />
+      </View>
+    );
+  };
 
   return (
-    <View style={styles.backgroundContainer}>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Image
-          style={{
-            width: 300,
-            height: 38,
-            marginTop: 50,
-            alignItems: 'center',
-          }}
-          source={require('./../img/airship-mark.png')}
-        />
-        <View style={{ height: 75 }} />
-        {channelcell}
-      </ScrollView>
-      <View style={styles.bottom}>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    </View>
+    <MyVerticalStack/>
   );
 }
