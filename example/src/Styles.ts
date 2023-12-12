@@ -3,28 +3,33 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+  backgroundIcon: {
+    width: '100%',
+    resizeMode: 'contain',
+    alignItems: 'center',
+  },
   backgroundContainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
   },
   contentContainer: {
     paddingVertical: 20,
     alignItems: 'center',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
   },
   stackRight: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
   },
   cellContainer: {
     flex: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
     marginTop: 15,
     marginRight: 10,
     marginLeft: 10,
@@ -35,7 +40,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
     marginRight: 10,
     marginLeft: 10,
   },
