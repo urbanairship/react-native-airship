@@ -26,7 +26,11 @@ const NamedUserManagerCell: React.FC<NamedUserManagerCellProps> = ({
         namedUserText={namedUserText}
         handleNamedUserSet={handleNamedUserSet}
         handleUpdateNamedUserText={handleUpdateNamedUserText}
-        placeholder={namedUser ? `` : 'Named user'}
+        placeholder={
+          namedUser
+            ? 'Tap here to change named user'
+            : 'Tap here to add named user'
+        }
       />
     </View>
   </View>
