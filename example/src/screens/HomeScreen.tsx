@@ -17,8 +17,8 @@ import {
 import Airship, { EventType } from '@ua/react-native-airship';
 
 import styles from '../Styles';
-import NamedUserInputCell from './Home Elements/NamedUserInputCell';
 import NamedUserManagerCell from './Home Elements/NamedUserManagerCell';
+import TagManagerCell from './Home Elements/TagManagerCell';
 import ChannelCell from './Home Elements/ChannelCell';
 
 const EnablePushCell: React.FC<{
