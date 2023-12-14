@@ -47,6 +47,10 @@ export default function HomeScreen() {
   const [tagText, setTagText] = useState('');
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
+  const refreshTags = useCallback(async () => {
+    const fetchedTags = await Airship.channel.getTags();
+    setTags(fetchedTags);
+  }, []);
 
   const refreshNamedUser = useCallback(async () => {
     const fetchedNamedUser = await Airship.contact.getNamedUserId();
