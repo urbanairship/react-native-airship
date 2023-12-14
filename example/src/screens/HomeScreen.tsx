@@ -197,9 +197,9 @@ export default function HomeScreen() {
             </>
           ) : (
             <View style={styles.warningView}>
-              <Text style={styles.warningTitleText}>Takeoff Unsuccessful</Text>
+              <Text style={styles.warningTitleText}>Channel Unavailble</Text>
               <Text style={styles.warningBodyText}>
-                Have you added takeOff call with the correct App key and secret?
+                Have you added the takeOff call with the correct app key and secret?
               </Text>
             </View>
           )}
