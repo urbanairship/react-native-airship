@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, Clipboard, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableHighlight } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
+
 import styles from '../../Styles';
 
 function ChannelCell({ channelId }) {
@@ -8,7 +10,7 @@ function ChannelCell({ channelId }) {
   };
 
   return (
-    <View style={{ marginLeft: 0, marginRight: 0, marginBottom: 4 }}>
+    <View style={{ marginLeft: 0, marginRight: 0}}>
       <TouchableHighlight onPress={copyToClipboard} style={{ borderRadius: 8 }}>
         <View style={styles.channelCellContents}>
           <Text style={{ fontWeight: 'bold' }}>Channel ID</Text>
