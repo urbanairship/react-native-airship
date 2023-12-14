@@ -5,7 +5,13 @@
  * MessageCenterScreen: Contains the list of messages.
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, FlatList, TouchableHighlight, RefreshControl } from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  TouchableHighlight,
+  RefreshControl,
+} from 'react-native';
 import Moment from 'moment';
 import styles from './../Styles';
 import Airship, { EventType } from '@ua/react-native-airship';
@@ -45,7 +51,7 @@ const MessageCenterScreen = ({ navigation }) => {
   useEffect(() => {
     const updateSubscription = Airship.addListener(
       EventType.MessageCenterUpdated,
-      handleUpdateMessageList,
+      handleUpdateMessageList
     );
 
     handleUpdateMessageList();
@@ -72,10 +78,15 @@ const MessageCenterScreen = ({ navigation }) => {
     <View style={styles.backgroundContainer}>
       <FlatList
         data={messages}
-        renderItem={({ item }) => <Item message={item} navigation={navigation} />}
+        renderItem={({ item }) => (
+          <Item message={item} navigation={navigation} />
+        )}
         keyExtractor={(item) => item.id}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={refreshMessageCenter} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={refreshMessageCenter}
+          />
         }
       />
     </View>
