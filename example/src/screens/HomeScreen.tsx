@@ -43,6 +43,10 @@ export default function HomeScreen() {
   const [channelId, setChannelId] = useState(null);
   const [namedUser, setNamedUser] = useState<string | undefined>(undefined);
   const [namedUserText, setNamedUserText] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagText, setTagText] = useState('');
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
 
   const refreshNamedUser = useCallback(async () => {
     const fetchedNamedUser = await Airship.contact.getNamedUserId();
