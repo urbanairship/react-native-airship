@@ -197,6 +197,7 @@ export default class PreferenceScreen extends Component<
       };
     }
 
+    // eslint-disable-next-line react/no-unstable-nested-components
     const SampleItem = ({ item }: ItemProp) => (
       <View>
         <Text style={styles.cellTitle}>{item.display.name}</Text>
@@ -204,6 +205,7 @@ export default class PreferenceScreen extends Component<
       </View>
     );
 
+    // eslint-disable-next-line react/no-unstable-nested-components
     const AlertItem = ({ item }: ItemProp) => (
       <View style={{ flexDirection: 'row' }}>
         <View style={styles.alertContainer}>
@@ -212,6 +214,7 @@ export default class PreferenceScreen extends Component<
       </View>
     );
 
+    // eslint-disable-next-line react/no-unstable-nested-components
     const ChanneSubscriptionItem = ({ item }: ItemProp) => (
       <View style={styles.pcCellContainer}>
         <View style={{ flexDirection: 'row' }}>
@@ -229,6 +232,7 @@ export default class PreferenceScreen extends Component<
       </View>
     );
 
+    // eslint-disable-next-line react/no-unstable-nested-components
     const ContactSubscriptionItem = ({ item }: ItemProp) => (
       <View style={styles.pcCellContainer}>
         <View style={{ flexDirection: 'row' }}>
@@ -249,6 +253,7 @@ export default class PreferenceScreen extends Component<
       </View>
     );
 
+    // eslint-disable-next-line react/no-unstable-nested-components
     const ContactSubscriptionGroupItem = ({ item }: ItemProp) => (
       <View style={styles.pcCellContainer}>
         <View>
@@ -276,6 +281,7 @@ export default class PreferenceScreen extends Component<
       </View>
     );
 
+    // eslint-disable-next-line react/no-unstable-nested-components
     const ScopeItem = ({
       subscriptionId,
       component,
