@@ -144,7 +144,7 @@ export default function HomeScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 200 : 0}
     >
-      <View style={{ flex: 1, flexShrink: 1, padding: 20 }}>
+      <View style={{ flex: 1, flexShrink: 0, padding: 20 }}>
         <View
           style={{
             flex: 1,
@@ -153,19 +153,51 @@ export default function HomeScreen() {
           }}
         >
           <Image
-            style={[styles.backgroundIcon, { marginBottom: 20 }]}
+            style={[styles.backgroundIcon, { paddingBottom: 0 }]}
             source={require('./../img/airship-mark.png')}
           />
         </View>
-        {channelId && <ChannelCell channelId={channelId} />}
 
-        <NamedUserManagerCell
-          namedUserText={namedUserText}
-          handleNamedUserSet={handleNamedUserSet}
-          handleUpdateNamedUserText={setNamedUserText}
-          namedUser={namedUser}
-        />
-        <View style={{ flexGrow: 1, flexShrink: 1 }} />
+        <View style={{ flexDirection: 'column' }}>
+          {channelId ? (
+            <>
+              <View style={[styles.roundedView, { marginBottom: 8 }]} />
+              <EnablePushCell
+                notificationsEnabled={notificationsEnabled}
+                handleNotificationsEnabled={handleNotificationsEnabled}
+              />
+              <View style={[styles.roundedView, { marginBottom: 8 }]}>
+                <ChannelCell channelId={channelId} />
+              </View>
+              <View style={[styles.roundedView, { marginBottom: 8 }]}>
+                <NamedUserManagerCell
+                  namedUserText={namedUserText}
+                  handleNamedUserSet={handleNamedUserSet}
+                  handleUpdateNamedUserText={setNamedUserText}
+                  namedUser={namedUser}
+                />
+              </View>
+              <View style={styles.roundedView}>
+                <TagManagerCell
+                  tagText={tagText}
+                  tags={tags}
+                  handleTagAdd={handleTagAdd}
+                  handleTagRemove={handleTagRemove}
+                  handleUpdateTagText={setTagText}
+                />
+              </View>
+            </>
+          ) : (
+            <View style={styles.warningView}>
+              <Text style={styles.warningTitleText}>Takeoff Unsuccessful</Text>
+              <Text style={styles.warningBodyText}>
+                Have you added takeOff call with the correct App key and secret?
+              </Text>
+            </View>
+          )}
+        </View>
+
+        <View style={{ flexGrow: 0 }} />
       </View>
     </KeyboardAvoidingView>
   );
