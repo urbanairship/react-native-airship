@@ -4,87 +4,57 @@
  *
  * MessageScreen: Contains the selected message to be displayed.
  */
-'use strict';
-
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, Alert } from 'react-native';
 import { MessageView } from '@ua/react-native-airship';
 
 import styles from './../Styles';
 
-interface MessageScreenProps {
-  navigation: any;
-  route: any;
-}
-export default class MessageScreen extends React.Component<
-  MessageScreenProps,
-  {
-    animating: boolean;
-  }
-> {
-  constructor(props: MessageScreenProps) {
-    super(props);
-    this.state = {
-      animating: true,
-    };
+const MessageScreen = ({ navigation, route }) => {
+  const [animating, setAnimating] = useState(true);
 
-    this.startLoading = this.startLoading.bind(this);
-    this.finishLoading = this.finishLoading.bind(this);
-    this.failedLoading = this.failedLoading.bind(this);
-  }
-
-  startActivityIndicator() {
-    setTimeout(() => {
-      this.setState({
-        animating: false,
-      });
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimating(false);
     }, 500);
-  }
 
-  stopActivityIndicator() {
-    setTimeout(() => {
-      this.setState({
-        animating: false,
-      });
-    }, 500);
-  }
+    // Cleanup the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
 
-  startLoading() {
-    this.startActivityIndicator();
-  }
+  const startLoading = () => {
+    setAnimating(true);
+  };
 
-  finishLoading() {
-    this.stopActivityIndicator();
-  }
+  const finishLoading = () => {
+    setAnimating(false);
+  };
 
-  failedLoading() {
-    this.stopActivityIndicator();
+  const failedLoading = () => {
+    setAnimating(false);
     Alert.alert('Error', 'Unable to load message. Please try again later', [
-      { text: 'OK', onPress: () => this.props.navigation.goBack() },
+      { text: 'OK', onPress: () => navigation.goBack() },
     ]);
-  }
+  };
 
-  render() {
-    const { params } = this.props.route;
-    const messageId = params ? params.messageId : '';
+  const messageId = route.params ? route.params.messageId : '';
 
-    return (
-      <View style={styles.backgroundContainer}>
-        <MessageView
-          messageId={messageId}
-          onLoadStarted={this.startLoading}
-          onLoadFinished={this.finishLoading}
-          onLoadError={this.failedLoading}
-          // @ts-ignore
-          style={{ flex: 1 }}
-        />
-        {this.state.animating && (
-          <View style={styles.loadingIndicator}>
-            <ActivityIndicator size="large" animating={this.state.animating} />
-          </View>
-        )}
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.backgroundContainer}>
+      <MessageView
+        messageId={messageId}
+        onLoadStarted={startLoading}
+        onLoadFinished={finishLoading}
+        onLoadError={failedLoading}
+        style={{ flex: 1 }}
+      />
+      {animating && (
+        <View style={styles.loadingIndicator}>
+          <ActivityIndicator size="large" animating={animating} />
+        </View>
+      )}
+    </View>
+  );
+};
+
+export default MessageScreen;

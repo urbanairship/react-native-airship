@@ -2,7 +2,7 @@
 /**
  * Sample React Native App
  *
- * PreferenceScreen: Contains the preference for a choosen identifier to be displayed.
+ * PreferenceScreen: Contains the preference for a chosen identifier to be displayed.
  */
 'use strict';
 

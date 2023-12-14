@@ -64,7 +64,7 @@ export default function App() {
             if (route.name === 'Home') {
               iconName = 'home';
             } else if (route.name === 'MessageCenter') {
-              iconName = 'message';
+              iconName = 'inbox';
             } else if (route.name === 'PreferenceCenter') {
               iconName = 'tune';
             } else if (route.name === 'Settings') {

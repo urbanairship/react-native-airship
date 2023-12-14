@@ -2,7 +2,16 @@
 
 import { StyleSheet } from 'react-native';
 
+// #004BFF - light airship blue
+// #00017F - dark airship blue
+// #6CA15F - light airship green
+// #F1084F - light airship red
+
 export default StyleSheet.create({
+  channelCellContents: {
+    backgroundColor: '#FFFFFF',
+    padding: 10,
+  },
   backgroundIcon: {
     width: '100%',
     resizeMode: 'contain',
@@ -41,19 +50,22 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    marginRight: 10,
-    marginLeft: 10,
+  },
+  namedUserCellContainer: {
+    flex: 0,
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
   },
   managerCell: {
     flex: 0,
     flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
     padding: 10,
   },
   channel: {
     fontSize: 16,
-    color: '#0d6a83',
+    color: '#000000',
     textAlign: 'center',
-    padding: 10,
   },
   rowLabel: {
     flexDirection: 'row',
