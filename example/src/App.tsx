@@ -7,7 +7,6 @@ import HomeScreen from './screens/HomeScreen';
 import MessageCenterScreen from './screens/MessageCenterScreen';
 import MessageScreen from './screens/MessageScreen';
 import PreferenceCenterScreen from './screens/PreferenceCenterScreen';
-import SettingsScreen from './screens/SettingsScreen';
 import Airship, { EventType } from '@ua/react-native-airship';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -30,10 +29,15 @@ Airship.addListener(EventType.PushNotificationStatusChangedStatus, (event) => {
   console.log('PushNotificationStatusChangedStatus:', JSON.stringify(event));
 });
 
-Airship.addListener(EventType.IOSAuthorizedNotificationSettingsChanged, (event) => {
-  console.log('IOSAuthorizedNotificationSettingsChanged:', JSON.stringify(event));
-});
-
+Airship.addListener(
+  EventType.IOSAuthorizedNotificationSettingsChanged,
+  (event) => {
+    console.log(
+      'IOSAuthorizedNotificationSettingsChanged:',
+      JSON.stringify(event)
+    );
+  }
+);
 
 function MessageCenterStackScreen() {
   return (
@@ -59,6 +63,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route, focused }) => ({
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ size }) => {
             let iconName;
             if (route.name === 'Home') {
@@ -70,7 +75,6 @@ export default function App() {
             } else if (route.name === 'Settings') {
               iconName = 'settings';
             }
-
             const color = focused ? '#004bff' : 'grey';
 
             return <MaterialIcons name={iconName} size={size} color={color} />;
@@ -89,7 +93,6 @@ export default function App() {
           options={{ title: 'Preference center' }}
         />
         {/* @ts-ignore */}
-        <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
