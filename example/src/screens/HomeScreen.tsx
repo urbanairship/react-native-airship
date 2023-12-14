@@ -55,34 +55,76 @@ export default function HomeScreen() {
     setNamedUserText(''); // Clear named user text once set
   }, [namedUserText, refreshNamedUser]);
 
-  useEffect(() => {
-    const showListener = Keyboard.addListener('keyboardDidShow', (e) => {});
+  const handleTagAdd = useCallback(async () => {
+    await Airship.channel.addTag(tagText);
+    await refreshTags();
+    setTagText('');
+  }, [tagText, refreshTags]);
 
-    const hideListener = Keyboard.addListener('keyboardDidHide', () => {});
+  const handleTagRemove = useCallback(
+    async (text: string) => {
+      await Airship.channel.removeTag(text);
+      await refreshTags();
+    },
+    [refreshTags]
+  );
+
+  const handleNotificationsEnabled = useCallback((enabled: boolean) => {
+    Airship.push.setUserNotificationsEnabled(enabled);
+    setNotificationsEnabled(enabled);
+  }, []);
+
+  useEffect(() => {
+
+    // Add takeOff here
 
     Airship.push
       .getNotificationStatus()
-      .then((id) => {})
-      .catch((error) => {});
+      .then((id) => {
+        console.log(id);
+      })
+      .catch((error) => {
+        console.error('Error getting notification status:', error);
+      });
 
     Airship.push.iOS
       .getAuthorizedNotificationSettings()
-      .then((id) => {})
-      .catch((error) => {});
-
-    Airship.push.iOS
-      .getAuthorizedNotificationStatus()
-      .then((id) => {})
-      .catch((error) => {});
-
-    Airship.channel
-      .getChannelId()
       .then((id) => {
-        if (id) {
-          setChannelId(id);
-        }
+        console.log(id);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.error('Error getting notification settings:', error);
+      });
+
+    Airship.push.iOS.getAuthorizedNotificationStatus().then((id) => {
+      console.log(id);
+    });
+
+    Airship.push.getNotificationStatus().then((id) => {
+      console.log(id);
+    });
+
+    Airship.channel.getChannelId().then((id) => {
+      if (id) {
+        setChannelId(id);
+      }
+    });
+
+    Airship.push.isUserNotificationsEnabled().then(setNotificationsEnabled);
+
+    const fetchTags = async () => {
+      const fetchedTags = await Airship.channel.getTags();
+      setTags(fetchedTags);
+    };
+
+    fetchTags();
+
+    const fetchNamedUser = async () => {
+      const fetchedNamedUser = await Airship.contact.getNamedUserId();
+      setNamedUser(fetchedNamedUser);
+    };
+
+    fetchNamedUser();
 
     let subscription = Airship.addListener(
       EventType.ChannelCreated,
@@ -93,8 +135,6 @@ export default function HomeScreen() {
 
     return () => {
       subscription.remove();
-      showListener.remove();
-      hideListener.remove();
     };
   }, []);
 
