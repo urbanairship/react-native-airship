@@ -2,7 +2,7 @@
 /**
  * Sample React Native App
  *
- * HomeScreen: Contains elements for displaying the channel ID, and for setting named user and tags.
+ * HomeScreen: Contains elements for enabling push, displaying the channel ID, and for setting named user and tags.
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -10,13 +10,9 @@ import {
   View,
   Text,
   Image,
-  Clipboard,
-  TouchableHighlight,
-  TextInput,
-  Button,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import Airship, { EventType } from '@ua/react-native-airship';
 
