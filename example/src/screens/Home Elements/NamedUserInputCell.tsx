@@ -25,14 +25,8 @@ function NamedUserInputCell({
         onChangeText={handleUpdateNamedUserText}
         value={namedUserText}
         placeholder={placeholder}
+        placeholderTextColor={'grey'}
       />
-      <View>
-        <Button
-          color="#0d6a83"
-          onPress={handleNamedUserSet}
-          title="Set Named User"
-        />
-      </View>
     </View>
   );
 }
