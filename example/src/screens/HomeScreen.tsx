@@ -21,6 +21,24 @@ import NamedUserInputCell from './Home Elements/NamedUserInputCell';
 import NamedUserManagerCell from './Home Elements/NamedUserManagerCell';
 import ChannelCell from './Home Elements/ChannelCell';
 
+const EnablePushCell: React.FC<{
+  notificationsEnabled: boolean;
+  handleNotificationsEnabled: (value: boolean) => void;
+}> = ({ notificationsEnabled, handleNotificationsEnabled }) => (
+  <TouchableOpacity
+    style={[
+      styles.enablePushButtonContainer,
+      // eslint-disable-next-line react-native/no-inline-styles
+      { backgroundColor: notificationsEnabled ? '#6CA15F' : '#E0E0E0' },
+    ]}
+    onPress={() => handleNotificationsEnabled(!notificationsEnabled)}
+  >
+    <Text style={styles.enablePushRowText}>
+      {notificationsEnabled ? 'Push Enabled' : 'Push Disabled'}
+    </Text>
+  </TouchableOpacity>
+);
+
 export default function HomeScreen() {
   const [channelId, setChannelId] = useState(null);
   const [namedUser, setNamedUser] = useState<string | undefined>(undefined);
