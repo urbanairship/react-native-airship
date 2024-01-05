@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 17.1.1 - December 6, 2023
+Patch release that fixes missing annotations on feature flag methods and updates examples.
+
+### Changes
+- Adds missing annotations to `featureFlagManagerFlag` and `featureFlagManagerTrackInteraction`
+- Updates the android and ios examples
+
 ## Version 17.1.0 - December 6, 2023
 Minor release that updates the iOS SDK to 17.7.0 and Android SDK to 17.6.0 and adds support for notifying the contact of a remote login.
 
