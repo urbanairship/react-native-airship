@@ -21,7 +21,7 @@ def isNewArchitectureEnabled() {
 }
 
 def isHmsEnabled() {
-    return rootProject.hasProperty("airshipHmsEnabled") && rootProject.getProperty("airshipHmsEnabled") == "true"
+    return (rootProject.hasProperty("airshipHmsEnabled") && rootProject.getProperty("airshipHmsEnabled") == "true") || (rootProject.ext.has("airshipHmsEnabled") && rootProject.ext.get("airshipHmsEnabled") == "true")
 }
 
 def resolveReactNativeDirectory() {
