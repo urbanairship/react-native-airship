@@ -648,6 +648,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
     override fun featureFlagManagerFlag(flagName: String?, promise: Promise) {
         promise.resolveDeferred { callback ->
             scope.launch {
@@ -662,6 +663,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
     override fun featureFlagManagerTrackInteraction(flag: ReadableMap?, promise: Promise) {
         promise.resolveResult {
             val parsedFlag = FeatureFlagProxy(Utils.convertMap(requireNotNull(flag)).toJsonValue())
