@@ -7,8 +7,8 @@ import HomeScreen from './screens/HomeScreen';
 import MessageCenterScreen from './screens/MessageCenterScreen';
 import MessageScreen from './screens/MessageScreen';
 import PreferenceCenterScreen from './screens/PreferenceCenterScreen';
-import SettingsScreen from './screens/SettingsScreen';
 import Airship, { EventType } from '@ua/react-native-airship';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Tab = createBottomTabNavigator();
 const MessageCenterStack = createStackNavigator();
@@ -29,10 +29,15 @@ Airship.addListener(EventType.PushNotificationStatusChangedStatus, (event) => {
   console.log('PushNotificationStatusChangedStatus:', JSON.stringify(event));
 });
 
-Airship.addListener(EventType.IOSAuthorizedNotificationSettingsChanged, (event) => {
-  console.log('IOSAuthorizedNotificationSettingsChanged:', JSON.stringify(event));
-});
-
+Airship.addListener(
+  EventType.IOSAuthorizedNotificationSettingsChanged,
+  (event) => {
+    console.log(
+      'IOSAuthorizedNotificationSettingsChanged:',
+      JSON.stringify(event)
+    );
+  }
+);
 
 function MessageCenterStackScreen() {
   return (
@@ -56,7 +61,26 @@ function MessageCenterStackScreen() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route, focused }) => ({
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: ({ size }) => {
+            let iconName;
+            if (route.name === 'Home') {
+              iconName = 'home';
+            } else if (route.name === 'MessageCenter') {
+              iconName = 'inbox';
+            } else if (route.name === 'PreferenceCenter') {
+              iconName = 'tune';
+            } else if (route.name === 'Settings') {
+              iconName = 'settings';
+            }
+            const color = focused ? '#004bff' : 'grey';
+
+            return <MaterialIcons name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen
           name="MessageCenter"
@@ -69,7 +93,6 @@ export default function App() {
           options={{ title: 'Preference center' }}
         />
         {/* @ts-ignore */}
-        <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

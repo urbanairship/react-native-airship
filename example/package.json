@@ -9,6 +9,7 @@
     "pods": "pod-install --quiet"
   },
   "dependencies": {
+    "@react-native-community/clipboard": "^1.5.1",
     "@react-navigation/bottom-tabs": "^6.5.3",
     "@react-navigation/native": "^6.1.2",
     "@react-navigation/stack": "^6.3.11",
@@ -19,7 +20,8 @@
     "react-native": "0.71.1",
     "react-native-gesture-handler": "^2.8.0",
     "react-native-safe-area-context": "^4.4.1",
-    "react-native-screens": "^3.18.2"
+    "react-native-screens": "^3.18.2",
+    "react-native-vector-icons": "^10.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

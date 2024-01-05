@@ -2,29 +2,44 @@
 
 import { StyleSheet } from 'react-native';
 
+// #004BFF - light airship blue
+// #00017F - dark airship blue
+// #6CA15F - light airship green
+// #F1084F - light airship red
+
 export default StyleSheet.create({
+  channelCellContents: {
+    backgroundColor: '#FFFFFF',
+    padding: 10,
+  },
+  backgroundIcon: {
+    width: '90%',
+    resizeMode: 'contain',
+    alignItems: 'center',
+    padding: 20,
+  },
   backgroundContainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
   },
   contentContainer: {
     paddingVertical: 20,
     alignItems: 'center',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
   },
   stackRight: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
   },
   cellContainer: {
     flex: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E0A500',
+    backgroundColor: '#FFFFFF',
     marginTop: 15,
     marginRight: 10,
     marginLeft: 10,
@@ -33,22 +48,25 @@ export default StyleSheet.create({
   miniCellContainer: {
     flex: 0,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#E0A500',
-    marginRight: 10,
-    marginLeft: 10,
+    backgroundColor: '#FFFFFF',
+  },
+  namedUserCellContainer: {
+    flex: 0,
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
   },
   managerCell: {
     flex: 0,
     flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
     padding: 10,
   },
   channel: {
     fontSize: 16,
-    color: '#0d6a83',
+    color: '#000000',
     textAlign: 'center',
-    padding: 10,
   },
   rowLabel: {
     flexDirection: 'row',
@@ -68,31 +86,14 @@ export default StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    color: '#0d6a83',
-    alignSelf: 'flex-start',
-    width: 100,
+    color: '#00017F',
     flexDirection: 'row',
-    height: 35,
     borderColor: 'white',
     borderWidth: 1,
   },
   inputButton: {
     width: 150,
     height: 35,
-  },
-  circle: {
-    width: 20,
-    height: 20,
-    borderRadius: 20 / 2,
-    backgroundColor: '#0d6a83',
-  },
-  dash: {
-    backgroundColor: 'white',
-    height: 2,
-    width: 10,
-    position: 'absolute',
-    left: 5,
-    top: 8.5,
   },
   container: {
     flex: 1,
@@ -180,4 +181,87 @@ export default StyleSheet.create({
     fontSize: 12,
     alignSelf: 'center',
   },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+    margin: 4,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  chipText: {
+    color: '#000000',
+    marginRight: 8,
+  },
+  circle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E0E0E0',
+  },
+  dash: {
+    width: 6,
+    height: 1,
+    backgroundColor: 'white',
+  },
+  roundedView: {
+    borderRadius: 15,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  enablePushButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderRadius: 15,
+    backgroundColor: '#FFFFFF',
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  enablePushRowText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  enablePushButton: {
+    width: 50,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E0E0E0',
+  },
+  warningTitleText: {
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  warningBodyText: {
+    color: '#E0E0E0',
+  },
+  warningView: {
+    padding: 10,
+    borderRadius: 15,
+    backgroundColor: '#F1084F',
+    marginBottom: 8,
+  }
 });
