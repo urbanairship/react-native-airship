@@ -13,7 +13,8 @@ export default StyleSheet.create({
     padding: 10,
   },
   backgroundIcon: {
-    width: '90%',
+    width: '100%',
+    height: '100%',
     resizeMode: 'contain',
     alignItems: 'center',
     padding: 20,

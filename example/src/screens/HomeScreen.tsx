@@ -47,6 +47,8 @@ export default function HomeScreen() {
   const [tagText, setTagText] = useState('');
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
+  const airshipMark = require('./../img/airship-mark.png');
+
   const refreshTags = useCallback(async () => {
     const fetchedTags = await Airship.channel.getTags();
     setTags(fetchedTags);
@@ -161,11 +163,12 @@ export default function HomeScreen() {
           }}
         >
           <Image
-            style={[styles.backgroundIcon, { paddingBottom: 0 }]}
-            source={require('./../img/airship-mark.png')}
+            style={styles.backgroundIcon}
+            source={{
+              uri: 'https://upload.wikimedia.org/wikipedia/en/8/8b/Airship_2019_logo.png',
+            }}
           />
         </View>
-
         <View style={{ flexDirection: 'column' }}>
           {channelId ? (
             <>
