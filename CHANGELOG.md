@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 17.2.0 - February 9, 2024
+Minor release that updates the iOS SDK to 17.7.3 and Android SDK to 17.7.2, modernizes the podspec and updates NPM dependencies flagged during security audit.
+
+### Changes
+- Updated iOS SDK to 17.7.3
+- Updated Android SDK to 17.7.2
+- Adds `install_modules_dependencies` to podspec to support for the latest react-native 0.73.3
+- Updates NPM dependencies to address security audit
+
 ## Version 17.1.1 - December 6, 2023
 Patch release that fixes missing annotations on feature flag methods, makes the `airshipHmsEnabled` flag available and updates examples.
 
