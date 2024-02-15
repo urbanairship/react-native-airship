@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 17.2.0 - February 9, 2024
+## Version 17.2.0 - February 15, 2024
 Minor release that updates the iOS SDK to 17.7.3 and Android SDK to 17.7.2, modernizes the podspec and updates NPM dependencies flagged during security audit.
 
 ### Changes
