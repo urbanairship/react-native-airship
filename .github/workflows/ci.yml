@@ -14,9 +14,11 @@ jobs:
           java-version: '11'
   
       - name: Select Xcode version
-        run: sudo xcode-select -s '/Applications/Xcode_15.0.1.app/Contents/Developer'
+        run: sudo xcode-select -s '/Applications/Xcode_15.2.app/Contents/Developer'
 
-
+      - name: Print CocoaPods Version
+        run: pod --version
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
