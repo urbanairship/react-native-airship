@@ -31,5 +31,5 @@ jobs:
           cache: 'npm'
 
       - run: npm run bootstrap
-      - run: bash ./scripts/run_ci_tasks.sh -a
       - run: bash ./scripts/run_ci_tasks.sh -i
+      - run: bash ./scripts/run_ci_tasks.sh -a
