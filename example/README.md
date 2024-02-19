@@ -33,7 +33,7 @@ Airship.takeOff({
 
 ### iOS
 
-1) Run `pod install --repo-update` in `example/ios`
+1) Run `pod install --repo-update` in `example/ios`. If you receive an error, try deleting the Podfile.lock and re-installing.
 
 2) Start the webserver in the top-level directory by running `npx react-native start`
 

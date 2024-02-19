@@ -50,7 +50,7 @@ fi
 # iOS
 if $IOS; then
     cd example/ios
-
+    pod install
     # build iOS
     PROJECT_PLATFORM_PATH="$(pwd)"
     DERIVED_DATA=$(mktemp -d /tmp/ci-derived-data-XXXXX)
