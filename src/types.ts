@@ -562,7 +562,7 @@ export interface InboxMessage {
   /**
    * Optional - The icon url for the message.
    */
-  listIconUrl: string;
+  listIconUrl?: string;
   /**
    * The unread / read status of the message.
    */
