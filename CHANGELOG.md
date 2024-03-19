@@ -1,7 +1,12 @@
 # React Native Module Changelog
 
 ## Version 17.2.1 - March 19, 2024
-Patch release that updates the HMS Push Provider version to 17.7.2.
+Patch release that updates the HMS Push Provider version to 17.7.3, the iOS SDK to 17.9.0 and the Android SDK to 17.7.3.
+
+### Changes
+- Updated HMS Push Provider version to 17.7.3
+- Updated iOS SDK to 17.9.0
+- Updated Android SDK to 17.7.3
 
 ## Version 17.2.0 - February 15, 2024
 Minor release that updates the iOS SDK to 17.7.3 and Android SDK to 17.7.2, modernizes the podspec and updates NPM dependencies flagged during security audit.
