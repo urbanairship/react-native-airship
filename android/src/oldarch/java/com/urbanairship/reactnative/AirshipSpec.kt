@@ -241,7 +241,7 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
     @com.facebook.proguard.annotations.DoNotStrip
     abstract fun actionRun(
         name: String?,
-        value: ReadableMap?,
+        value: Dynamic?,
         promise: Promise
     )
 

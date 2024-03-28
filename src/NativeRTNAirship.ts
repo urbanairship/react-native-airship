@@ -1,5 +1,6 @@
 import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
+import { JsonValue } from './types';
 
 export interface Spec extends TurboModule {
   // Airship
@@ -68,7 +69,7 @@ export interface Spec extends TurboModule {
   analyticsAssociateIdentifier(key: string, identifier?: string): Promise<void>;
 
   // Action
-  actionRun(name: string, value?: Object): Promise<Object | Error>;
+  actionRun(name: string, value?: JsonValue): Promise<Object | Error>;
 
   // Privacy Manager
   privacyManagerSetEnabledFeatures(features: string[]): Promise<void>;
