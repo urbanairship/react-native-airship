@@ -8,39 +8,10 @@ import MessageCenterScreen from './screens/MessageCenterScreen';
 import MessageScreen from './screens/MessageScreen';
 import PreferenceCenterScreen from './screens/PreferenceCenterScreen';
 import Airship, { EventType } from '@ua/react-native-airship';
-import { CustomEvent } from '@ua/react-native-airship';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Tab = createBottomTabNavigator();
 const MessageCenterStack = createStackNavigator();
-
-Airship.takeOff({
-    default: {
-      appKey: "VWDwdOFjRTKLRxCeXTVP6g",  
-      appSecret: "5Ifi5rYgTm2QHey9JkP0WA",
-      logLevel: "verbose"
-    },
-    site: "us", // use "eu" for EU cloud projects
-    urlAllowList: ["*"],
-    android: {
-        notificationConfig: {
-            icon: "ic_notification",
-            accentColor: "#00ff00"
-        }
-    }
-});
-
-var customEvent = new CustomEvent("event_name", 123.12);
-customEvent.addProperty("my_custom_property", "some custom value");
-customEvent.addProperty("is_neat", true);
-customEvent.addProperty("any_json", {
-  "foo": "bar"
-});
-Airship.analytics.addCustomEvent(customEvent);
-
-
-var url: string = "ulrich://some-deep-link"
-Airship.actions.run("deep_link_action", url);
 
 Airship.addListener(EventType.NotificationResponse, (event) => {
   console.log('NotificationResponse:', JSON.stringify(event));

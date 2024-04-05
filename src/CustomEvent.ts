@@ -48,4 +48,22 @@ export class CustomEvent {
   addProperty(name: string, value: JsonValue) {
     this._properties[name] = value;
   }
+
+  /**
+   * Converts a CustomEvent into a JsonValue.
+   * 
+   * @returns A JsonValue.
+   */
+  toJsonValue(): JsonValue {
+    let jsonObject: JsonObject = {};
+    jsonObject.event_name = this._name;
+    if (this._value) {
+      jsonObject.event_value = this._value;
+    }
+    jsonObject.properties = this._properties;
+    if (this._transactionId) {
+      jsonObject.transaction_id = this._transactionId;
+    }
+    return jsonObject;
+  }
 }

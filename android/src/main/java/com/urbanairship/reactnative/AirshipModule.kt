@@ -455,9 +455,9 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
-    override fun actionRun(name: String?, value: Dynamic?, promise: Promise) {
+    override fun actionRun(action: ReadableMap, promise: Promise) {
         promise.resolveDeferred<ActionValue> { callback ->
-            proxy.actions.runAction(requireNotNull(name), Utils.convertDynamic(value))
+            proxy.actions.runAction(requireNotNull(action.getString("_name")), Utils.convertDynamic(action.getDynamic("_value")))
                     .addResultCallback { actionResult ->
                         if (actionResult != null && actionResult.status == ActionResult.STATUS_COMPLETED) {
                             callback(actionResult.value, null)

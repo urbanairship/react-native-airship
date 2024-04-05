@@ -336,11 +336,10 @@ RCT_REMAP_METHOD(channelGetTags,
 }
 
 RCT_REMAP_METHOD(actionRun,
-                 actionRun:(NSString *)name value:(NSDictionary *)value
+                 actionRun:(NSDictionary *)action
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared actionsRunWithActionName:name
-                                            actionValue:value
+    [AirshipReactNative.shared actionsRunWithAction:action
                                       completionHandler:^(id result , NSError *error) {
 
 

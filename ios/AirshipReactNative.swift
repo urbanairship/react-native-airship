@@ -328,10 +328,10 @@ public extension AirshipReactNative {
 // Actions
 @objc
 public extension AirshipReactNative {
-    func actionsRun(actionName: String, actionValue: Any?) async throws-> Any? {
+    func actionsRun(action: [String: Any]) async throws-> Any? {
         return try await AirshipProxy.shared.action.runAction(
-            actionName,
-            value: try AirshipJSON.wrap(actionValue)
+            action["_name"] as! String,
+            value: action["_value"] is NSNull ? nil : try AirshipJSON.wrap(action["_value"])
         )
     }
 }
