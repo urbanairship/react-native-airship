@@ -15,8 +15,8 @@ export class AirshipActions {
    * successfully runs, or the Error if the action was unable to be run.
    */
   public run(
-    actionName: String,
-    actionValue: JsonValue
+    actionName: string,
+    actionValue?: JsonValue
   ): Promise<JsonValue | null | undefined> {
     return this.module.actionRun({name: actionName, value: actionValue});
   }
