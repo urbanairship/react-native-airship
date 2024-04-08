@@ -239,9 +239,15 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun addCustomEvent(
+        event: ReadableMap?,
+        promise: Promise
+    )
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
     abstract fun actionRun(
-        name: String?,
-        value: ReadableMap?,
+        action: ReadableMap,
         promise: Promise
     )
 

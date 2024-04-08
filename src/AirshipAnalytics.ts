@@ -32,20 +32,7 @@ export class AirshipAnalytics {
    * @return A promise that returns null if resolved, or an Error if the
    * custom event is rejected.
    */
-  public addCustomEvent(event: CustomEvent): Promise<null | Error> {
-    const actionArg = {
-      event_name: event._name,
-      event_value: event._value,
-      transaction_id: event._transactionId,
-      properties: event._properties
-    }
-
-    return new Promise((resolve, reject) => {
-      this.module.actionRun("add_custom_event_action", actionArg).then(() => {
-        resolve(null)
-      }, (error: Error) => {
-        reject(error)
-      })
-    })
+  public addCustomEvent(event: CustomEvent): Promise<void> {
+    return this.module.addCustomEvent(event.toJsonValue());
   }
 }

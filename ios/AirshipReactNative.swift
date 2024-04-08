@@ -328,10 +328,14 @@ public extension AirshipReactNative {
 // Actions
 @objc
 public extension AirshipReactNative {
-    func actionsRun(actionName: String, actionValue: Any?) async throws-> Any? {
+    func actionsRun(action: [String: Any]) async throws-> Any? {
+        guard let name = action["name"] as? String else {
+            throw AirshipErrors.error("missing name")
+        }
+
         return try await AirshipProxy.shared.action.runAction(
-            actionName,
-            value: try AirshipJSON.wrap(actionValue)
+            name,
+            value: action["value"] is NSNull ? nil : try AirshipJSON.wrap(action["value"])
         )
     }
 }
@@ -349,6 +353,10 @@ public extension AirshipReactNative {
             identifier: identifier,
             key: key
         )
+    }
+
+    func addCustomEvent(_ json: Any) throws {
+        try AirshipProxy.shared.analytics.addEvent(json)
     }
 }
 

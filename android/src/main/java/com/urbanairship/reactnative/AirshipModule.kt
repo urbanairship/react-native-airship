@@ -455,9 +455,16 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
-    override fun actionRun(name: String?, value: ReadableMap?, promise: Promise) {
+    override fun addCustomEvent(event: ReadableMap?, promise: Promise) {
+        promise.resolveResult {
+            proxy.analytics.addEvent(Utils.convertMap(event).toJsonValue())
+        }
+    }
+
+    @ReactMethod
+    override fun actionRun(action: ReadableMap, promise: Promise) {
         promise.resolveDeferred<ActionValue> { callback ->
-            proxy.actions.runAction(requireNotNull(name), Utils.convertMap(value).toJsonValue())
+            proxy.actions.runAction(requireNotNull(action.getString("name")), Utils.convertDynamic(action.getDynamic("value")))
                     .addResultCallback { actionResult ->
                         if (actionResult != null && actionResult.status == ActionResult.STATUS_COMPLETED) {
                             callback(actionResult.value, null)
