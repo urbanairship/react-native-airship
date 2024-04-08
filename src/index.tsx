@@ -19,7 +19,6 @@ export { SubscriptionListEditor } from './SubscriptionListEditor';
 export { TagGroupEditor } from './TagGroupEditor';
 export { ScopedSubscriptionListEditor } from './ScopedSubscriptionListEditor';
 export { AttributeEditor } from './AttributeEditor';
-export { Action } from './Action';
 
 export * from './types';
 export * from './MessageView';

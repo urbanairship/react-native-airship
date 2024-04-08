@@ -374,6 +374,17 @@ RCT_REMAP_METHOD(analyticsTrackScreen,
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
+RCT_REMAP_METHOD(addCustomEvent,
+                 addCustomEvent:(NSDictionary *)event
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    [AirshipReactNative.shared addCustomEvent:event
+                                        error:&error];
+
+    [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
 RCT_REMAP_METHOD(contactEditAttributes,
                  contactEditAttributes:(NSArray *)operations
                  resolve:(RCTPromiseResolveBlock)resolve

@@ -1,4 +1,3 @@
-import { Action } from "./Action";
 import { CustomEvent } from "./CustomEvent";
 
 /**
@@ -33,15 +32,7 @@ export class AirshipAnalytics {
    * @return A promise that returns null if resolved, or an Error if the
    * custom event is rejected.
    */
-  public addCustomEvent(event: CustomEvent): Promise<null | Error> {
-    let action = new Action("add_custom_event_action", event.toJsonValue())
-
-    return new Promise((resolve, reject) => {
-      this.module.actionRun(action).then(() => {
-        resolve(null)
-      }, (error: Error) => {
-        reject(error)
-      })
-    })
+  public addCustomEvent(event: CustomEvent): Promise<void> {
+    return this.module.addCustomEvent(event.toJsonValue());
   }
 }

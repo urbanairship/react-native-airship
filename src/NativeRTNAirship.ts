@@ -66,6 +66,7 @@ export interface Spec extends TurboModule {
   // Analytics
   analyticsTrackScreen(screen?: string): Promise<void>;
   analyticsAssociateIdentifier(key: string, identifier?: string): Promise<void>;
+  addCustomEvent(event: Object): Promise<void>;
 
   // Action
   actionRun(action: Object): Promise<Object | Error>;

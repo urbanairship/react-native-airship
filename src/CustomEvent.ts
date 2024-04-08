@@ -12,6 +12,8 @@ export class CustomEvent {
   _value?: number;
   _properties: JsonObject;
   _transactionId?: string;
+  _interactionId?: string;
+  _interactionType?: string;
 
   /**
    * Custom event constructor.
@@ -40,6 +42,34 @@ export class CustomEvent {
   }
 
   /**
+   * Gets the event's interaction ID.
+   */
+  get interactionId(): string | undefined {
+    return this._interactionId;
+  }
+
+  /**
+   * Sets the event's interaction ID.
+   */
+  set interactionId(value: string | undefined) {
+    this._interactionId = value;
+  }
+
+  /**
+   * Gets the event's interaction Type.
+   */
+  get interactionType(): string | undefined {
+    return this._interactionType;
+  }
+
+  /**
+   * Sets the event's interaction Type.
+   */
+  set interactionType(value: string | undefined) {
+    this._interactionType = value;
+  }
+
+  /**
    * Adds a property to the custom event.
    *
    * @param name The property name.
@@ -56,13 +86,19 @@ export class CustomEvent {
    */
   toJsonValue(): JsonValue {
     let jsonObject: JsonObject = {};
-    jsonObject.event_name = this._name;
+    jsonObject.eventName = this._name;
     if (this._value) {
-      jsonObject.event_value = this._value;
+      jsonObject.eventValue = this._value;
     }
     jsonObject.properties = this._properties;
     if (this._transactionId) {
-      jsonObject.transaction_id = this._transactionId;
+      jsonObject.transactionId = this._transactionId;
+    }
+    if (this._interactionId) {
+      jsonObject.interactionId = this._interactionId;
+    }
+    if (this._interactionType) {
+      jsonObject.interactionType = this._interactionType;
     }
     return jsonObject;
   }
