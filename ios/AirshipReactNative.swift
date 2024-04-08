@@ -328,7 +328,7 @@ public extension AirshipReactNative {
 // Actions
 @objc
 public extension AirshipReactNative {
-    func actionsRun(action: [String: Any]) async throws-> Any? {
+    func actionsRun(action: [String: Any?]) async throws-> Any? {
         return try await AirshipProxy.shared.action.runAction(
             action["name"] as! String,
             value: action["value"] is NSNull ? nil : try AirshipJSON.wrap(action["value"])
