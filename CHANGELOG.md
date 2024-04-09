@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 17.3.0 - April 9, 2024
+Minor release that fixes running Airship actions, exposes more custom event fields, and updates the iOS SDK to 17.9.1 and the Android SDK to 17.7.4.
+
+### Changes
+- Fixed running Airship actions with a single primitive typed action value
+- Exposed `interactionId` and `interactionType` fields in `CustomEvent`
+- Updated iOS SDK to 17.9.1
+- Updated Android SDK to 17.7.4
+
 ## Version 17.2.1 - March 19, 2024
 Patch release that updates the HMS Push Provider version to 17.7.3, the iOS SDK to 17.9.0 and the Android SDK to 17.7.3.
 

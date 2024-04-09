@@ -1,24 +1,24 @@
 PODS:
-  - Airship (17.7.3):
-    - Airship/Automation (= 17.7.3)
-    - Airship/Basement (= 17.7.3)
-    - Airship/Core (= 17.7.3)
-    - Airship/FeatureFlags (= 17.7.3)
-    - Airship/MessageCenter (= 17.7.3)
-    - Airship/PreferenceCenter (= 17.7.3)
-  - Airship/Automation (17.7.3):
+  - Airship (17.9.1):
+    - Airship/Automation (= 17.9.1)
+    - Airship/Basement (= 17.9.1)
+    - Airship/Core (= 17.9.1)
+    - Airship/FeatureFlags (= 17.9.1)
+    - Airship/MessageCenter (= 17.9.1)
+    - Airship/PreferenceCenter (= 17.9.1)
+  - Airship/Automation (17.9.1):
     - Airship/Core
-  - Airship/Basement (17.7.3)
-  - Airship/Core (17.7.3):
+  - Airship/Basement (17.9.1)
+  - Airship/Core (17.9.1):
     - Airship/Basement
-  - Airship/FeatureFlags (17.7.3):
+  - Airship/FeatureFlags (17.9.1):
     - Airship/Core
-  - Airship/MessageCenter (17.7.3):
+  - Airship/MessageCenter (17.9.1):
     - Airship/Core
-  - Airship/PreferenceCenter (17.7.3):
+  - Airship/PreferenceCenter (17.9.1):
     - Airship/Core
-  - AirshipFrameworkProxy (5.1.1):
-    - Airship (= 17.7.3)
+  - AirshipFrameworkProxy (5.4.2):
+    - Airship (= 17.9.1)
   - boost (1.83.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -964,8 +964,8 @@ PODS:
   - React-Mapbuffer (0.73.4):
     - glog
     - React-debug
-  - react-native-airship (17.2.1):
-    - AirshipFrameworkProxy (= 5.1.1)
+  - react-native-airship (17.3.0):
+    - AirshipFrameworkProxy (= 5.4.2)
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1366,8 +1366,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 5a6d3f8a982398940b0d48423bb9b8736717c123
-  AirshipFrameworkProxy: 7255f4ed9836dc2920f2f1ea5657ced4cee8a35c
+  Airship: 930309dbea14bafe98a8fac8e3ab5bd90ab95501
+  AirshipFrameworkProxy: 9affee5911eeae2a780ecc7c3d854a5b38b0bfd3
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
@@ -1407,7 +1407,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 9ac353eccf6ab54d1e0a33862ba91221d1e88460
   React-logger: 0a57b68dd2aec7ff738195f081f0520724b35dab
   React-Mapbuffer: 63913773ed7f96b814a2521e13e6d010282096ad
-  react-native-airship: 876b0976076f1f85a8dc3722669db2702accfe68
+  react-native-airship: 9db31c6a6dac4e6bd75a725cf41670fee944df5c
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   React-nativeconfig: d7af5bae6da70fa15ce44f045621cf99ed24087c
   React-NativeModulesApple: 0123905d5699853ac68519607555a9a4f5c7b3ac

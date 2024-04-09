@@ -36,7 +36,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "17.2.1"
+    public static let version: String = "17.3.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -477,12 +477,12 @@ public extension AirshipReactNative {
         )
     }
 
-    @objc
+    @MainActor @objc
     func messageCenterDismiss() throws  {
         return try AirshipProxy.shared.messageCenter.dismiss()
     }
 
-    @objc
+    @MainActor @objc
     func messageCenterDisplay(messageId: String?) throws  {
         try AirshipProxy.shared.messageCenter.display(messageID: messageId)
     }
