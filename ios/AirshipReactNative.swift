@@ -477,12 +477,12 @@ public extension AirshipReactNative {
         )
     }
 
-    @objc
+    @MainActor @objc
     func messageCenterDismiss() throws  {
         return try AirshipProxy.shared.messageCenter.dismiss()
     }
 
-    @objc
+    @MainActor @objc
     func messageCenterDisplay(messageId: String?) throws  {
         try AirshipProxy.shared.messageCenter.display(messageID: messageId)
     }
