@@ -14,7 +14,7 @@ public class AirshipExtender: NSObject {
     if (Airship.isFlying) {
       self.shared.airshipReady()
     } else {
-      NotificationCenter.default.addObserver(forName: Airship.airshipReadyNotification, object: nil, queue: nil) { _ in
+      NotificationCenter.default.addObserver(forName: AirshipNotifications.AirshipReady.name, object: nil, queue: nil) { _ in
         Task { @MainActor in
           self.shared.airshipReady()
         }

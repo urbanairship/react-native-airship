@@ -468,6 +468,12 @@ export interface AirshipConfig {
      * itunesId for rate app and app store deep links.
      */
     itunesId?: string;
+
+
+    /**
+     * If set to `true`, the SDK will use the preferred locale. Otherwise it will use the app's locale.
+     */
+    useUserPreferredLocale?: boolean;
   };
 
   /**
@@ -545,6 +551,38 @@ export enum SubscriptionScope {
   Sms = 'sms',
   Email = 'email',
 }
+
+
+/**
+ * Custom event
+ */
+export interface CustomEvent {
+  /**
+   * Event name
+   */
+  eventName: string;
+  /**
+   * Event value
+   */
+  eventValue?: number;
+  /**
+   * Event properties
+   */
+  properties: JsonObject;
+  /**
+   * Transaction ID
+   */
+  transactionId?: string;
+  /**
+   * Interaction ID
+   */
+  interactionId?: string;
+  /**
+   * Interaction type
+   */
+  interactionType?: string;
+}
+
 
 export interface InboxMessage {
   /**

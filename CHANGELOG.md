@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 18.0.0 - April 18, 2024
+Major release that updates the iOS SDK to 18.1.0 and updates CustomEvents to be an interface instead of a class.
+
+### Changes
+- Replaced CustomEvent with an interface
+- Update iOS SDK to 18.1.0
+- Updated Android SDK to 17.8.0
+
 ## Version 17.3.0 - April 9, 2024
 Minor release that fixes running Airship actions, exposes more custom event fields, and updates the iOS SDK to 17.9.1 and the Android SDK to 17.7.4.
 

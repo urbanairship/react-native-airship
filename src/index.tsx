@@ -14,7 +14,6 @@ export { AirshipPrivacyManager } from './AirshipPrivacyManager';
 export { AirshipFeatureFlagManager } from './AirshipFeatureFlagManager';
 
 export { AirshipPush, AirshipPushAndroid, AirshipPushIOS } from './AirshipPush';
-export { CustomEvent } from './CustomEvent';
 export { SubscriptionListEditor } from './SubscriptionListEditor';
 export { TagGroupEditor } from './TagGroupEditor';
 export { ScopedSubscriptionListEditor } from './ScopedSubscriptionListEditor';

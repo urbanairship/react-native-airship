@@ -36,7 +36,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "17.3.0"
+    public static let version: String = "18.0.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -287,8 +287,8 @@ public extension AirshipReactNative {
 
     @objc
     @MainActor
-    func pushSetBadgeNumber(_ badgeNumber: Double) throws {
-        try AirshipProxy.shared.push.setBadgeNumber(Int(badgeNumber))
+    func pushSetBadgeNumber(_ badgeNumber: Double) async throws {
+        try await AirshipProxy.shared.push.setBadgeNumber(Int(badgeNumber))
     }
 
     @objc
@@ -344,6 +344,7 @@ public extension AirshipReactNative {
 @objc
 public extension AirshipReactNative {
 
+    @MainActor
     func analyticsTrackScreen(_ screen: String?) throws {
         try AirshipProxy.shared.analytics.trackScreen(screen)
     }
@@ -409,20 +410,24 @@ public extension AirshipReactNative {
 @objc
 public extension AirshipReactNative {
 
+    @MainActor
     func inAppIsPaused() throws -> NSNumber {
         return try NSNumber(
             value: AirshipProxy.shared.inApp.isPaused()
         )
     }
 
+    @MainActor
     func inAppSetPaused(_ paused: Bool) throws {
         try AirshipProxy.shared.inApp.setPaused(paused)
     }
 
+    @MainActor
     func inAppSetDisplayInterval(milliseconds: Double) throws {
         try AirshipProxy.shared.inApp.setDisplayInterval(Int(milliseconds))
     }
 
+    @MainActor
     func inAppGetDisplayInterval() throws -> NSNumber {
         return try NSNumber(
             value: AirshipProxy.shared.inApp.getDisplayInterval()
