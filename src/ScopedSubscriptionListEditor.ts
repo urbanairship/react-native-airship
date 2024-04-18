@@ -57,8 +57,9 @@ export class ScopedSubscriptionListEditor {
    *
    * @param subscriptionListId The subscription list identifier.
    * @param scope The subscription scope to subscribe.
+   * @return The editor instance.
    */
-  subscribe(subscriptionListId: string, scope: SubscriptionScope) {
+  subscribe(subscriptionListId: string, scope: SubscriptionScope): ScopedSubscriptionListEditor {
     const operation = {
       listId: subscriptionListId,
       action: ScopedSubscriptionListOperationAction.subscribe,
@@ -73,8 +74,9 @@ export class ScopedSubscriptionListEditor {
    *
    * @param subscriptionListId The subscription list identifier.
    * @param scope The subscription scope to unsubscribe.
+   * @return The editor instance.
    */
-  unsubscribe(subscriptionListId: string, scope: SubscriptionScope) {
+  unsubscribe(subscriptionListId: string, scope: SubscriptionScope): ScopedSubscriptionListEditor {
     const operation = {
       listId: subscriptionListId,
       action: ScopedSubscriptionListOperationAction.unsubscribe,

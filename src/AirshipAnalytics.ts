@@ -1,4 +1,4 @@
-import { CustomEvent } from "./CustomEvent";
+import { CustomEvent } from "./types";
 
 /**
  * Airship analytics.
@@ -33,6 +33,6 @@ export class AirshipAnalytics {
    * custom event is rejected.
    */
   public addCustomEvent(event: CustomEvent): Promise<void> {
-    return this.module.addCustomEvent(event.toJsonValue());
+    return this.module.addCustomEvent(event);
   }
 }

@@ -240,10 +240,13 @@ RCT_REMAP_METHOD(pushIosSetBadgeNumber,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared pushSetBadgeNumber:badgeNumber
-                                            error:&error];
 
-    [self handleResult:nil error:error resolve:resolve reject:reject];
+    [AirshipReactNative.shared pushSetBadgeNumber:badgeNumber completionHandler:^(NSError *error) {
+        [self handleResult:nil
+                     error:error
+                   resolve:resolve
+                    reject:reject];
+    }];
 }
 
 RCT_REMAP_METHOD(pushIosSetForegroundPresentationOptions,

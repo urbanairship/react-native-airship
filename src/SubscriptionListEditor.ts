@@ -42,8 +42,9 @@ export class SubscriptionListEditor {
    * Subscribes to a list.
    *
    * @param subscriptionListId The subscription list identifier.
+   * @return The editor instance.
    */
-  subscribe(subscriptionListId: string) {
+  subscribe(subscriptionListId: string): SubscriptionListEditor {
     const operation = {
       listId: subscriptionListId,
       action: SubscriptionListOperationAction.subscribe,
@@ -56,8 +57,9 @@ export class SubscriptionListEditor {
    * Unsubscribe from a list.
    *
    * @param subscriptionListId The subscription list identifier.
+   * @return The editor instance.
    */
-  unsubscribe(subscriptionListId: string) {
+  unsubscribe(subscriptionListId: string): SubscriptionListEditor {
     const operation = {
       listId: subscriptionListId,
       action: SubscriptionListOperationAction.unsubscribe,
