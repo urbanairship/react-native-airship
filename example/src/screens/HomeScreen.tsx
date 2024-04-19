@@ -12,9 +12,9 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
-import Airship, { EventType } from '@ua/react-native-airship';
+import Airship, { EventType, AirshipEmbeddedView } from '@ua/react-native-airship';
 
 import styles from '../Styles';
 import NamedUserManagerCell from './Home Elements/NamedUserManagerCell';
@@ -153,18 +153,16 @@ export default function HomeScreen() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 200 : 0}
     >
       <View style={{ flex: 1, flexShrink: 0, padding: 20 }}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Image
-            style={[styles.backgroundIcon, { paddingBottom: 0 }]}
-            source={require('./../img/airship-mark.png')}
-          />
+      <View style={{ flex: 1, flexShrink: 0, padding: 40 }}>
+
+      <AirshipEmbeddedView
+          embeddedId="test"
+          style={{ flex: 1, padding: 20 }}
+        />
         </View>
+        
+
+
 
         <View style={{ flexDirection: 'column' }}>
           {channelId ? (
