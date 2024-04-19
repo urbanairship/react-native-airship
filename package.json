@@ -33,7 +33,7 @@
     "example": "npm run --prefix example ${COMMAND}",
     "bootstrap": "npm ci && npm --prefix example ci && npm run --prefix example pods",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
-    "docs": "typedoc --tsconfig ./tsconfig.json --out docs src/index.tsx --exclude example/**"
+    "docs": "typedoc --tsconfig ./tsconfig.build.json --out docs src/index.tsx"
   },
   "keywords": [
     "react-native",
