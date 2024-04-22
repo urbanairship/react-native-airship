@@ -33,7 +33,7 @@
     "example": "npm run --prefix example ${COMMAND}",
     "bootstrap": "npm ci && npm --prefix example ci && npm run --prefix example pods",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
-    "docs": "typedoc --tsconfig ./tsconfig.json --out docs src/index.tsx --exclude example/**"
+    "docs": "typedoc --tsconfig ./tsconfig.build.json --out docs src/index.tsx"
   },
   "keywords": [
     "react-native",
@@ -67,7 +67,7 @@
     "react-native-builder-bob": "^0.20.3",
     "typescript": "^4.5.2",
     "pod-install": "^0.2.0",
-    "typedoc": "0.23.24"
+    "typedoc": "0.25.13"
   },
   "resolutions": {
     "@types/react": "17.0.21"
