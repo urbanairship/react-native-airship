@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 18.0.1 - April 29, 2024
+Patch release that updates the iOS SDK to 18.1.2.
+
+### Changes
+- Update iOS SDK to 18.1.2
+
 ## Version 18.0.0 - April 18, 2024
 Major release that updates the iOS SDK to 18.1.0 and updates CustomEvents to be an interface instead of a class.
 
