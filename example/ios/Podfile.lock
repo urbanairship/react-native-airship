@@ -19,6 +19,7 @@ PODS:
     - Airship/Core
   - AirshipFrameworkProxy (6.1.2):
     - Airship (= 18.1.2)
+  - AirshipServiceExtension (18.2.0)
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.73.4)
@@ -1098,6 +1099,7 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - AirshipServiceExtension
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -1160,6 +1162,7 @@ SPEC REPOS:
   trunk:
     - Airship
     - AirshipFrameworkProxy
+    - AirshipServiceExtension
     - fmt
     - libevent
     - SocketRocket
@@ -1278,6 +1281,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Airship: 6c83fb9f9d04483dcce87175577967e059427cbd
   AirshipFrameworkProxy: b3ff9dcac51aefb675204cbbf705b172cd29efe8
+  AirshipServiceExtension: db0e8b08ddc83f19613a4f37f1925f65859a7111
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: 84f6edbe225f38aebd9deaf1540a4160b1f087d7
@@ -1336,6 +1340,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 1b901a6d6eeba4e8a2e8f308f708691cdb5db312
 
-PODFILE CHECKSUM: 31466f116c7ce40ec6211abc2ef24b9aa7aaebab
+PODFILE CHECKSUM: dbd88b0cf2e018eeff600431486ded3ce68933fb
 
 COCOAPODS: 1.15.2

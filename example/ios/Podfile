@@ -55,3 +55,9 @@ target 'AirshipExample' do
     )
   end
 end
+
+target 'AirshipExampleNotificationServiceExtension' do
+  pod 'AirshipServiceExtension'
+end
+
+
