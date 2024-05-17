@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 18.0.3 - May 16, 2024
+## Version 18.0.3 - May 17, 2024
 Patch release that updates to latest iOS SDK.
 
 ### Changes
