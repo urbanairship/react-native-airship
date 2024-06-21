@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 18.0.4 - Jun 20, 2024
+Patch release that updates iOS SDK to 18.4.0 and updates the airship mobile framework proxy to 6.3.0 which includes a fix for event management. 
+
+### Changes
+- Updated iOS SDK to 18.4.0
+- Updated airship-mobile-framework-proxy to 6.3.0
+- Fixed Event Emitter bug
+
 ## Version 18.0.3 - May 17, 2024
 Patch release that updates to latest iOS SDK.
 
