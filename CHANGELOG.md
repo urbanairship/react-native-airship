@@ -1,6 +1,13 @@
 # React Native Module Changelog
 
 ## Version 18.0.4 - Jun 20, 2024
+Patch release to fix a regression on iOS with In-App Automations, Scenes, and Surveys ignoring screen, version, and custom event triggers. Apps using those triggers that are on 18.0.4 should update.
+
+### Changes
+- Updated iOS SDK to 18.4.1
+- Fixed regression with triggers
+
+## Version 18.0.4 - Jun 20, 2024
 Patch release that updates iOS SDK to 18.4.0 and updates the airship mobile framework proxy to 6.3.0 which includes a fix for event management. 
 
 ### Changes
