@@ -153,7 +153,7 @@ dependencies {
   api "com.urbanairship.android:airship-framework-proxy:$proxy_version"
   
   if (isHmsEnabled()) {
-    implementation "com.urbanairship.android:urbanairship-hms:$airship_version"
+    implementation "com.urbanairship.android:airship-framework-proxy-hms:$proxy_version"
   }
 }
 

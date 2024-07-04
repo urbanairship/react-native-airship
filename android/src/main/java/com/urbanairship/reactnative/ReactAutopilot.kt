@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.urbanairship.UAirship
-import com.urbanairship.analytics.Analytics
+import com.urbanairship.analytics.Extension
 import com.urbanairship.android.framework.proxy.BaseAutopilot
 import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.ProxyStore
@@ -39,7 +39,7 @@ class ReactAutopilot : BaseAutopilot() {
         val notificationProvider = ReactNotificationProvider(context, airship.airshipConfigOptions)
         airship.pushManager.notificationProvider = notificationProvider
 
-        airship.analytics.registerSDKExtension(Analytics.EXTENSION_REACT_NATIVE, BuildConfig.AIRSHIP_MODULE_VERSION)
+        airship.analytics.registerSDKExtension(Extension.REACT_NATIVE, BuildConfig.AIRSHIP_MODULE_VERSION)
 
         val extender = createExtender(context)
         extender?.onAirshipReady(context, airship)
