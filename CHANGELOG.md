@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 19.0.0 - July 5, 2024
+Major release that updates the Android Airship SDK to 18.
+
+### Changes
+- Updated iOS SDK to 18.5.0
+- Updated Android SDK to 18.1.1
+- Added iOS logPrivacyLevel that can be set in the environments when calling takeOff
+
 ## Version 18.0.4 - Jun 20, 2024
 Patch release to fix a regression on iOS with In-App Automations, Scenes, and Surveys ignoring screen, version, and custom event triggers. Apps using those triggers that are on 18.0.4 should update.
 
