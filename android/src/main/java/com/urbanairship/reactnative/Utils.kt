@@ -45,6 +45,31 @@ object Utils {
     }
 
     /**
+     * Converts features array into a JsonValue.
+     * This is filtering Chat and Location features until we remove them.
+     * To be removed in the version 20.0.0.
+     */
+    fun convertFeaturesArray(array: ReadableArray?): JsonValue {
+        return if (array == null) {
+            JsonValue.NULL
+        } else {
+            val jsonValues: MutableList<JsonValue> = ArrayList()
+            var i = 0
+            while (i < array.size()) {
+                val value = convertDynamic(array.getDynamic(i))
+                // Filter the unused features.
+                if (value == "chat" || value == "location") {
+                    i++
+                    continue
+                }
+                jsonValues.add(value)
+                i++
+            }
+            JsonValue.wrapOpt(jsonValues)
+        }
+    }
+
+    /**
      * Converts a dynamic object into a [JsonValue].
      *
      * @param `object` The dynamic object.

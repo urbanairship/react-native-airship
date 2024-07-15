@@ -479,7 +479,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun privacyManagerSetEnabledFeatures(features: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.privacyManager.setEnabledFeatures(
-                    Utils.convertArray(requireNotNull(features))
+                    Utils.convertFeaturesArray(requireNotNull(features))
             )
         }
     }
@@ -495,7 +495,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun privacyManagerEnableFeature(features: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.privacyManager.enableFeatures(
-                    Utils.convertArray(requireNotNull(features))
+                    Utils.convertFeaturesArray(requireNotNull(features))
             )
         }
     }
@@ -504,7 +504,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun privacyManagerDisableFeature(features: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.privacyManager.disableFeatures(
-                    Utils.convertArray(requireNotNull(features))
+                    Utils.convertFeaturesArray(requireNotNull(features))
             )
         }
     }
@@ -513,7 +513,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun privacyManagerIsFeatureEnabled(features: ReadableArray?, promise: Promise) {
         promise.resolveResult {
             proxy.privacyManager.isFeatureEnabled(
-                    Utils.convertArray(requireNotNull(features))
+                    Utils.convertFeaturesArray(requireNotNull(features))
             )
         }
     }
