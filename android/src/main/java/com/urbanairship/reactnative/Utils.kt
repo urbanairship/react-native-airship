@@ -58,7 +58,7 @@ object Utils {
             while (i < array.size()) {
                 val value = convertDynamic(array.getDynamic(i))
                 // Filter the unused features.
-                if (value == "chat" || value == "location") {
+                if (value.getString() == "chat" || value.getString() == "location") {
                     i++
                     continue
                 }
