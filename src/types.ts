@@ -540,13 +540,10 @@ export enum Feature {
   InAppAutomation = 'in_app_automation',
   MessageCenter = 'message_center',
   Push = 'push',
-  // No longer used
-  Chat = 'chat',
+  FeatureFlags = 'feature_flags',
   Analytics = 'analytics',
   TagsAndAttributes = 'tags_and_attributes',
-  Contacts = 'contacts',
-  // No longer used
-  Location = 'location',
+  Contacts = 'contacts'
 }
 
 /**
