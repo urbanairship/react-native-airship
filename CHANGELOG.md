@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 19.0.1 - July 15, 2024
+## Version 19.0.1 - July 17, 2024
 Patch release that fixes enabling or disabling all Airship features using `FEATURES_ALL`.
 
 ### Changes
