@@ -5,7 +5,7 @@ Minor release that fixes enabling or disabling all Airship features using `FEATU
 
 ### Changes
 - Fixed enabling or disabling features using `FEATURE_ALL`.
-- Added possibility to enable and disable `Feature.FeatureFlags`
+- Added possibility to enable and disable `Feature.FeatureFlags` using the privacy manager.
 
 ## Version 19.0.0 - July 9, 2024
 Major release that updates the Android Airship SDK to 18.
