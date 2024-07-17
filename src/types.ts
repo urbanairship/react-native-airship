@@ -551,7 +551,9 @@ export enum Feature {
 /**
  * All available features.
  */
-export const FEATURES_ALL = Object.values(Feature);
+export const FEATURES_ALL = Object.values(Feature).filter(feature =>
+  feature !== Feature.Location && feature !== Feature.Chat
+);
 
 /**
  * Subscription Scope types.

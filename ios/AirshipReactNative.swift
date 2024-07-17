@@ -552,10 +552,7 @@ public extension AirshipReactNative {
 
     @objc
     func privacyManagerDisableFeature(features: [String]) throws  {
-        let filteredFeatures = features.filter { feature in
-            return feature != "chat" && feature != "location"
-        }
-        try AirshipProxy.shared.privacyManager.disable(featureNames: filteredFeatures)
+        try AirshipProxy.shared.privacyManager.disable(featureNames: features)
     }
 
     @objc
