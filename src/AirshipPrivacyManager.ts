@@ -12,7 +12,11 @@ export class AirshipPrivacyManager {
    * @returns A promise.
    */
   public setEnabledFeatures(features: Feature[]): Promise<void> {
-    return this.module.privacyManagerSetEnabledFeatures(features);
+    return this.module.privacyManagerSetEnabledFeatures(
+      features.filter(feature =>
+        feature !== Feature.Location && feature !== Feature.Chat
+      )
+    );
   }
   /**
    * Gets the current enabled features.
@@ -28,7 +32,11 @@ export class AirshipPrivacyManager {
    * @returns A promise.
    */
   public enableFeatures(features: Feature[]): Promise<void> {
-    return this.module.privacyManagerEnableFeature(features);
+    return this.module.privacyManagerEnableFeature(
+      features.filter(feature =>
+        feature !== Feature.Location && feature !== Feature.Chat
+      )
+    );
   }
 
   /**
@@ -37,7 +45,11 @@ export class AirshipPrivacyManager {
    * @returns A promise.
    */
   public disableFeatures(features: Feature[]): Promise<void> {
-    return this.module.privacyManagerDisableFeature(features);
+    return this.module.privacyManagerDisableFeature(
+      features.filter(feature =>
+        feature !== Feature.Location && feature !== Feature.Chat
+      )
+    );
   }
 
   /**
@@ -46,6 +58,10 @@ export class AirshipPrivacyManager {
    * @returns A promise with the result.
    */
   public isFeaturesEnabled(features: Feature[]): Promise<void> {
-    return this.module.privacyManagerIsFeatureEnabled(features);
+    return this.module.privacyManagerIsFeatureEnabled(
+      features.filter(feature =>
+        feature !== Feature.Location && feature !== Feature.Chat
+      )
+    );
   }
 }

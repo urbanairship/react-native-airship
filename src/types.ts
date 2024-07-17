@@ -540,19 +540,20 @@ export enum Feature {
   InAppAutomation = 'in_app_automation',
   MessageCenter = 'message_center',
   Push = 'push',
-  // No longer used
-  Chat = 'chat',
   Analytics = 'analytics',
   TagsAndAttributes = 'tags_and_attributes',
   Contacts = 'contacts',
-  // No longer used
-  Location = 'location',
+  FeatureFlags = 'feature_flags',
+  Location = 'location', // No longer used. To be removed in version 20.0.0.
+  Chat = 'chat', // No longer used. To be removed in version 20.0.0.
 }
 
 /**
  * All available features.
  */
-export const FEATURES_ALL = Object.values(Feature);
+export const FEATURES_ALL = Object.values(Feature).filter(feature =>
+  feature !== Feature.Location && feature !== Feature.Chat
+);
 
 /**
  * Subscription Scope types.
