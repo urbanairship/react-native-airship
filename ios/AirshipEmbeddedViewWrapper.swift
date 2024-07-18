@@ -34,6 +34,7 @@ public final class AirshipEmbeddedViewWrapper: UIView {
         self.viewModel.size = frame.size
         NSLayoutConstraint.activate(
             [
+                self.viewController.view.centerXAnchor.constraint(equalTo: self.centerXAnchor),
                 self.topAnchor.constraint(equalTo: self.viewController.view.topAnchor),
                 self.bottomAnchor.constraint(equalTo: self.viewController.view.bottomAnchor),
                 self.leadingAnchor.constraint(equalTo: self.viewController.view.leadingAnchor),
@@ -49,7 +50,11 @@ public final class AirshipEmbeddedViewWrapper: UIView {
         if  !isAdded {
             isAdded = true
             self.parentViewController().addChild(self.viewController)
+            self.viewController.didMove(toParent: self.parentViewController())
+
         }
+        self.viewController.view.center = self.center
+
 
     }
 }
