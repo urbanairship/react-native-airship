@@ -26,23 +26,14 @@ public final class AirshipEmbeddedViewWrapper: UIView {
         self.viewController = UIHostingController(
             rootView: ReactAirshipEmbeddedView(viewModel: self.viewModel)
         )
-
+        
         super.init(frame: frame)
-        self.addSubview(self.viewController.view)
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.viewController.view)
+        self.viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         self.viewModel.size = frame.size
-        NSLayoutConstraint.activate(
-            [
-                self.viewController.view.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-                self.topAnchor.constraint(equalTo: self.viewController.view.topAnchor),
-                self.bottomAnchor.constraint(equalTo: self.viewController.view.bottomAnchor),
-                self.leadingAnchor.constraint(equalTo: self.viewController.view.leadingAnchor),
-                self.trailingAnchor.constraint(equalTo: self.viewController.view.trailingAnchor),
-            ]
-        )
     }
-
 
     public override func layoutSubviews() {
         super.layoutSubviews()
@@ -53,9 +44,7 @@ public final class AirshipEmbeddedViewWrapper: UIView {
             self.viewController.didMove(toParent: self.parentViewController())
 
         }
-        self.viewController.view.center = self.center
-
-
+        self.viewModel.size = self.bounds.size
     }
 }
 
