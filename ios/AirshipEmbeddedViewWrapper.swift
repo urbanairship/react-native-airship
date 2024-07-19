@@ -27,35 +27,38 @@ public final class AirshipEmbeddedViewWrapper: UIView {
             rootView: ReactAirshipEmbeddedView(viewModel: self.viewModel)
         )
 
+
         super.init(frame: frame)
         self.addSubview(self.viewController.view)
-        self.translatesAutoresizingMaskIntoConstraints = false
+        
+//        self.translatesAutoresizingMaskIntoConstraints = false
 
-        self.viewModel.size = frame.size
-        NSLayoutConstraint.activate(
-            [
-                self.viewController.view.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-                self.topAnchor.constraint(equalTo: self.viewController.view.topAnchor),
-                self.bottomAnchor.constraint(equalTo: self.viewController.view.bottomAnchor),
-                self.leadingAnchor.constraint(equalTo: self.viewController.view.leadingAnchor),
-                self.trailingAnchor.constraint(equalTo: self.viewController.view.trailingAnchor),
-            ]
-        )
+        self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        NSLayoutConstraint.activate(
+//            [
+//                self.viewController.view.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+//                self.topAnchor.constraint(equalTo: self.viewController.view.topAnchor),
+//                self.bottomAnchor.constraint(equalTo: self.viewController.view.bottomAnchor),
+//                self.leadingAnchor.constraint(equalTo: self.viewController.view.leadingAnchor),
+//                self.trailingAnchor.constraint(equalTo: self.viewController.view.trailingAnchor),
+//            ]
+//        )
     }
 
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard !self.isAdded else { return }
+        self.viewController.willMove(toParent: self.parentViewController())
+        self.parentViewController().addChild(self.viewController)
+        self.viewController.didMove(toParent: self.parentViewController())
+        self.viewController.view.isUserInteractionEnabled = true
+        isAdded = true
+    }
 
     public override func layoutSubviews() {
         super.layoutSubviews()
-
-        if  !isAdded {
-            isAdded = true
-            self.parentViewController().addChild(self.viewController)
-            self.viewController.didMove(toParent: self.parentViewController())
-
-        }
+        self.viewModel.size = bounds.size
         self.viewController.view.center = self.center
-
-
     }
 }
 
