@@ -35,16 +35,21 @@ public final class AirshipEmbeddedViewWrapper: UIView {
         self.viewModel.size = frame.size
     }
 
+public override func didMoveToWindow() {
+super.didMoveToWindow()
+guard !self.isAdded else { return }
+self.viewController.willMove(toParent: self.parentViewController())
+self.parentViewController().addChild(self.viewController)
+self.viewController.didMove(toParent: self.parentViewController())
+self.viewController.view.isUserInteractionEnabled = true
+isAdded = true
+}
+
+
     public override func layoutSubviews() {
         super.layoutSubviews()
-
-        if  !isAdded {
-            isAdded = true
-            self.parentViewController().addChild(self.viewController)
-            self.viewController.didMove(toParent: self.parentViewController())
-
-        }
-        self.viewModel.size = self.bounds.size
+        self.viewModel.size = bounds.size
+        self.viewController.view.center = self.center
     }
 }
 
