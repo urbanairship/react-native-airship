@@ -67,6 +67,9 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
         self.nativeBridge.nativeBridgeDelegate = self
         self.webView.navigationDelegate = self.nativeBridge
         self.webView.configuration.dataDetectorTypes = .all
+        if #available(iOS 16.4, *) {
+            webView.isInspectable = Airship.isFlying && Airship.config.isWebViewInspectionEnabled
+        }
     }
 
     @MainActor
