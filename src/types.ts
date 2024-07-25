@@ -481,11 +481,15 @@ export interface AirshipConfig {
      */
     itunesId?: string;
 
-
     /**
      * If set to `true`, the SDK will use the preferred locale. Otherwise it will use the app's locale.
      */
     useUserPreferredLocale?: boolean;
+
+    /**
+     * Allows the WebViews to be inspected in Safari.
+     */
+    isWebViewInspectionEnabled?: boolean;
   };
 
   /**
