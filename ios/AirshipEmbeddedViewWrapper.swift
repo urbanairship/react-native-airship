@@ -26,7 +26,9 @@ public final class AirshipEmbeddedViewWrapper: UIView {
         self.viewController = UIHostingController(
             rootView: ReactAirshipEmbeddedView(viewModel: self.viewModel)
         )
-        
+
+        self.viewController.view.backgroundColor = UIColor.clear
+
         super.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.viewController.view)
@@ -78,13 +80,8 @@ struct ReactAirshipEmbeddedView: View {
                     parentWidth: viewModel.width,
                     parentHeight: viewModel.height
                 )
-            ) {
-                Text("place holder \(embeddedID) \(viewModel.size ?? CGSize())")
-            }
-        } else {
-            Text("No id")
+            )
         }
-        Text("Size \(viewModel.width)x\(viewModel.height)")
     }
 
     @MainActor
