@@ -10,39 +10,21 @@ import androidx.core.view.doOnAttach
 import com.facebook.react.bridge.LifecycleEventListener
 import com.urbanairship.embedded.AirshipEmbeddedView
 
-class ReactEmbeddedView(context: Context) : FrameLayout(context), LifecycleEventListener {
+class ReactEmbeddedView(context: Context) : FrameLayout(context) {
 
-    var isLoaded = false
+    private var embeddedId: String? = null
 
     fun load(embeddedId: String) {
-        if (isLoaded) {
+        if (this.embeddedId == embeddedId) {
             return
         }
-        isLoaded = true
-        val view = AirshipEmbeddedView(context, embeddedId)
-        view.setBackgroundColor(Color.RED)
-        addView(view)
-        requestLayout()
-    }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        requestLayout()
-    }
-
-    override fun onHostResume() {
-        requestLayout()
-    }
-
-    override fun onHostPause() {
-
-    }
-
-    override fun onHostDestroy() {
+        removeAllViews()
+        this.embeddedId = embeddedId
+        addView(AirshipEmbeddedView(context, embeddedId))
     }
 
     override fun requestLayout() {
-
         super.requestLayout()
 
         // This view relies on a measure + layout pass happening after it calls requestLayout().

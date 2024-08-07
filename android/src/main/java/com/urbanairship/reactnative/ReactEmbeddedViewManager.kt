@@ -24,14 +24,7 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
     }
 
     override fun createViewInstance(reactContext: ThemedReactContext): ReactEmbeddedView {
-        val messageView = ReactEmbeddedView(reactContext)
-        reactContext.addLifecycleEventListener(messageView)
-        return messageView
-    }
-
-    override fun onDropViewInstance(messageView: ReactEmbeddedView) {
-        super.onDropViewInstance(messageView)
-        (messageView.context as ThemedReactContext).removeLifecycleEventListener(messageView)
+        return ReactEmbeddedView(reactContext)
     }
 
     @ReactProp(name = "embeddedId")
