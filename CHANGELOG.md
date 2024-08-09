@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 19.2.0 - August 07, 2024
+Minor release that updates Android SDK to 18.1.5 and iOS SDK to 18.7.1 and fixes test devices audience check and holdout group experiments displays.
+
+### Changes
+- Updated Android SDK to 18.1.5.
+- Updated iOS SDK to 18.7.1.
+- Fixed test devices audience check.
+- Fixed holdout group experiments displays.
+
 ## Version 19.1.0 - July 17, 2024
 Minor release that fixes enabling or disabling all Airship features using `FEATURES_ALL` and adds possibility to enable and disable `Feature.FeatureFlags`.
 
