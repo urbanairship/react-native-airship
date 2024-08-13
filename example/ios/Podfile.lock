@@ -1,25 +1,25 @@
 PODS:
-  - Airship (18.7.1):
-    - Airship/Automation (= 18.7.1)
-    - Airship/Basement (= 18.7.1)
-    - Airship/Core (= 18.7.1)
-    - Airship/FeatureFlags (= 18.7.1)
-    - Airship/MessageCenter (= 18.7.1)
-    - Airship/PreferenceCenter (= 18.7.1)
-  - Airship/Automation (18.7.1):
+  - Airship (18.7.2):
+    - Airship/Automation (= 18.7.2)
+    - Airship/Basement (= 18.7.2)
+    - Airship/Core (= 18.7.2)
+    - Airship/FeatureFlags (= 18.7.2)
+    - Airship/MessageCenter (= 18.7.2)
+    - Airship/PreferenceCenter (= 18.7.2)
+  - Airship/Automation (18.7.2):
     - Airship/Core
-  - Airship/Basement (18.7.1)
-  - Airship/Core (18.7.1):
+  - Airship/Basement (18.7.2)
+  - Airship/Core (18.7.2):
     - Airship/Basement
-  - Airship/FeatureFlags (18.7.1):
+  - Airship/FeatureFlags (18.7.2):
     - Airship/Core
-  - Airship/MessageCenter (18.7.1):
+  - Airship/MessageCenter (18.7.2):
     - Airship/Core
-  - Airship/PreferenceCenter (18.7.1):
+  - Airship/PreferenceCenter (18.7.2):
     - Airship/Core
-  - AirshipFrameworkProxy (7.1.1):
-    - Airship (= 18.7.1)
-  - AirshipServiceExtension (18.7.1)
+  - AirshipFrameworkProxy (7.1.2):
+    - Airship (= 18.7.2)
+  - AirshipServiceExtension (18.7.2)
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.73.4)
@@ -908,7 +908,7 @@ PODS:
     - glog
     - React-debug
   - react-native-airship (19.2.0):
-    - AirshipFrameworkProxy (= 7.1.1)
+    - AirshipFrameworkProxy (= 7.1.2)
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1279,9 +1279,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 40f160f8367d9efed4c54fab30f7d55a3a51db37
-  AirshipFrameworkProxy: 857120d8712b6df6d40360867749b2fc1a33f56b
-  AirshipServiceExtension: eff8e38dfe4e3aa92c4f42f328036f26e18fe885
+  Airship: bb32ff2c5a811352da074480357d9f02dbb8f327
+  AirshipFrameworkProxy: dbd862dc6fb21b13e8b196458d626123e2a43a50
+  AirshipServiceExtension: 9c73369f426396d9fb9ff222d86d842fac76ba46
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: 84f6edbe225f38aebd9deaf1540a4160b1f087d7
@@ -1311,7 +1311,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 9ac353eccf6ab54d1e0a33862ba91221d1e88460
   React-logger: 0a57b68dd2aec7ff738195f081f0520724b35dab
   React-Mapbuffer: 63913773ed7f96b814a2521e13e6d010282096ad
-  react-native-airship: e1d0cd2a5743d12f46dd746584074008d1c903b0
+  react-native-airship: 54a39240587b06b2f683769a2ab838b7ee25b2e6
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   React-nativeconfig: d7af5bae6da70fa15ce44f045621cf99ed24087c
   React-NativeModulesApple: 0123905d5699853ac68519607555a9a4f5c7b3ac
