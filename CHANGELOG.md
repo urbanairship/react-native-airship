@@ -1,5 +1,15 @@
 # React Native Module Changelog
 
+## Version 19.2.0 - August 13, 2024
+Minor release that fixes test devices audience check, holdout group experiments displays and in-app experience displays when resuming from a paused state. Apps that use in-app experiences are encouraged to update.
+
+### Changes
+- Updated Android SDK to 18.1.6.
+- Updated iOS SDK to 18.7.2.
+- Fixed test devices audience check.
+- Fixed holdout group experiments displays.
+- Fixed in-app experience displays when resuming from a paused state.
+
 ## Version 19.1.0 - July 17, 2024
 Minor release that fixes enabling or disabling all Airship features using `FEATURES_ALL` and adds possibility to enable and disable `Feature.FeatureFlags`.
 
