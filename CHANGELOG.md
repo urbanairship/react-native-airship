@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 19.2.1 - August 23, 2024
+Patch release that fixes an issue with extras parsing on notifications
+
+### Changes
+- Allow JsonObject accept undefined values
+- Adds support for dynamic frameworks on iOS
+
 ## Version 19.2.0 - August 13, 2024
 Minor release that fixes test devices audience check, holdout group experiments displays and in-app experience displays when resuming from a paused state. Apps that use in-app experiences are encouraged to update.
 
