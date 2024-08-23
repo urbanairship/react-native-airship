@@ -7,7 +7,7 @@ export type JsonValue =
   | JsonArray;
 
 export type JsonObject = {
-  [key: string]: JsonValue;
+  [key: string]: JsonValue | undefined;
 };
 
 export type JsonArray = JsonValue[];
