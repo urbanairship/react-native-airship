@@ -83,6 +83,7 @@ export interface Spec extends TurboModule {
   inAppGetDisplayInterval(): Promise<number>;
   inAppSetPaused(paused: boolean): Promise<void>;
   inAppIsPaused(): Promise<boolean>;
+  inAppResendPendingEmbeddedEvent(): void;
 
   // Message Center
   messageCenterGetUnreadCount(): Promise<number>;

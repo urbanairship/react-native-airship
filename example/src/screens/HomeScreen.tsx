@@ -12,9 +12,9 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
-import Airship, { EventType } from '@ua/react-native-airship';
+import Airship, { EventType, AirshipEmbeddedView} from '@ua/react-native-airship';
 
 import styles from '../Styles';
 import NamedUserManagerCell from './Home Elements/NamedUserManagerCell';
@@ -46,6 +46,7 @@ export default function HomeScreen() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagText, setTagText] = useState('');
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [isEmbeddedReady, setEmbeddedReady] = useState(false)
 
   const refreshTags = useCallback(async () => {
     const fetchedTags = await Airship.channel.getTags();
@@ -95,6 +96,8 @@ export default function HomeScreen() {
         console.error('Error getting notification status:', error);
       });
 
+    setEmbeddedReady(Airship.inApp.isEmbeddedReady("test"))
+
     Airship.push.iOS
       .getAuthorizedNotificationSettings()
       .then((id) => {
@@ -141,6 +144,11 @@ export default function HomeScreen() {
       }
     );
 
+    Airship.inApp.addEmbeddedReadyListener("test", (isReady) => {
+      console.log("Test " + isReady)
+      setEmbeddedReady(isReady)
+    });
+
     return () => {
       subscription.remove();
     };
@@ -153,6 +161,18 @@ export default function HomeScreen() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 200 : 0}
     >
       <View style={{ flex: 1, flexShrink: 0, padding: 20 }}>
+
+      
+      {isEmbeddedReady ?
+      (
+        <View style={{ flex: 1 }}>
+        <AirshipEmbeddedView
+            embeddedId="test"
+            style={{ flex: 1 }}
+          />
+        </View>
+      )
+      : (
         <View
           style={{
             flex: 1,
@@ -160,11 +180,13 @@ export default function HomeScreen() {
             alignItems: 'center',
           }}
         >
-          <Image
-            style={[styles.backgroundIcon, { paddingBottom: 0 }]}
-            source={require('./../img/airship-mark.png')}
-          />
-        </View>
+        <Image
+        style={[styles.backgroundIcon, { paddingBottom: 0 }]}
+        source={require('./../img/airship-mark.png')}
+      /> 
+    </View>)}
+    
+
 
         <View style={{ flexDirection: 'column' }}>
           {channelId ? (

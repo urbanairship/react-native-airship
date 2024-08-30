@@ -27,7 +27,8 @@ object Utils {
                 EventType.FOREGROUND_PUSH_RECEIVED,
                 EventType.BACKGROUND_PUSH_RECEIVED
         ),
-        "com.airship.notification_status_changed" to listOf(EventType.NOTIFICATION_STATUS_CHANGED)
+        "com.airship.notification_status_changed" to listOf(EventType.NOTIFICATION_STATUS_CHANGED),
+        "com.airship.pending_embedded_updated" to listOf(EventType.PENDING_EMBEDDED_UPDATED)
     )
 
     fun convertArray(array: ReadableArray?): JsonValue {
