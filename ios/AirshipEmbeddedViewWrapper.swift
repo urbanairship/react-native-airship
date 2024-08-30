@@ -91,14 +91,14 @@ struct ReactAirshipEmbeddedView: View {
 
         var height: CGFloat {
             guard let height = self.size?.height, height > 0 else {
-                return try! AirshipUtils.mainWindow()?.screen.bounds.height ?? 500
+                return (try? AirshipUtils.mainWindow()?.screen.bounds.height) ?? 500
             }
             return height
         }
 
         var width: CGFloat {
             guard let width = self.size?.width, width > 0 else {
-                return try! AirshipUtils.mainWindow()?.screen.bounds.width ?? 500
+                return (try? AirshipUtils.mainWindow()?.screen.bounds.width) ?? 500
             }
             return width
         }
