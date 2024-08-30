@@ -16,7 +16,7 @@ export interface AirshipEmbeddedViewProp {
 }
 
 /**
- * Inbox message view component.
+ * Airship Embedded view.
  */
 export class AirshipEmbeddedView extends React.Component<AirshipEmbeddedViewProp> {
   render() {
