@@ -40,7 +40,7 @@ export class AirshipAnalytics {
    * Gets the Airship session ID. The session ID is a UUID that updates on foreground and background.
    * @returns A promise.
    */
-    public getSessionId(): Promise<string> {
-      return this.module.analyticsGetSessionId();
-    }
+  public getSessionId(): Promise<string> {
+    return this.module.analyticsGetSessionId();
+  }
 }

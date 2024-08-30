@@ -396,7 +396,7 @@ RCT_REMAP_METHOD(analyticsGetSessionId,
     NSError *error;
     NSString *result = [AirshipReactNative.shared analyticsGetSessionIdAndReturnError:&error];
 
-    [self handleResult:result.length ? result : nil
+    [self handleResult:result
                  error:error
                resolve:resolve
                 reject:reject];
