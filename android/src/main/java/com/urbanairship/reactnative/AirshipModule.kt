@@ -462,6 +462,15 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun analyticsGetSessionId(
+        promise: Promise
+    ) {
+        promise.resolveResult {
+            proxy.analytics.getSessionId()
+        }
+    }
+
+    @ReactMethod
     override fun actionRun(action: ReadableMap, promise: Promise) {
         promise.resolveDeferred<ActionValue> { callback ->
             proxy.actions.runAction(requireNotNull(action.getString("name")), Utils.convertDynamic(action.getDynamic("value")))
