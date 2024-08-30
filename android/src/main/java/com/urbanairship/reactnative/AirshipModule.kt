@@ -547,6 +547,11 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun inAppResendPendingEmbeddedEvent() {
+        proxy.inApp.resendLastEmbeddedEvent()
+    }
+
+    @ReactMethod
     override fun messageCenterGetUnreadCount(promise: Promise) {
         promise.resolveResult {
             proxy.messageCenter.getUnreadMessagesCount()

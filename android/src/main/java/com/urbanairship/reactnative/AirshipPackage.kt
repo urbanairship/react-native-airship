@@ -36,6 +36,6 @@ class AirshipPackage : TurboReactPackage() {
 
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf<ViewManager<*, *>>(ReactMessageViewManager())
+    return listOf<ViewManager<*, *>>(ReactMessageViewManager(), ReactEmbeddedViewManager())
   }
 }

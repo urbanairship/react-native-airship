@@ -304,6 +304,10 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun inAppResendPendingEmbeddedEvent()
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
     abstract fun messageCenterGetUnreadCount(promise: Promise)
 
     @ReactMethod

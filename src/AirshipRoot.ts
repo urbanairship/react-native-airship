@@ -32,18 +32,19 @@ export class AirshipRoot {
   private readonly eventEmitter: UAEventEmitter;
 
   constructor(private readonly module: any) {
+    this.eventEmitter = new UAEventEmitter(module);
+
     this.actions = new AirshipActions(module);
     this.analytics = new AirshipAnalytics(module);
     this.channel = new AirshipChannel(module);
     this.contact = new AirshipContact(module);
-    this.inApp = new AirshipInApp(module);
+    this.inApp = new AirshipInApp(module, this.eventEmitter);
     this.locale = new AirshipLocale(module);
     this.messageCenter = new AirshipMessageCenter(module);
     this.preferenceCenter = new AirshipPreferenceCenter(module);
     this.privacyManager = new AirshipPrivacyManager(module);
     this.push = new AirshipPush(module);
     this.featureFlagManager = new AirshipFeatureFlagManager(module);
-    this.eventEmitter = new UAEventEmitter(module);
   }
 
   /**

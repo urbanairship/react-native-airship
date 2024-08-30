@@ -14,7 +14,9 @@ public class AirshipReactNative: NSObject {
     @objc
     public static let overridePresentationOptionsEventName = "com.airship.ios.override_presentation_options"
 
-    
+    @objc
+    public static let pendingEmbeddedUpdated = "com.airship.iax.pending_embedded_updated"
+
     var lock = AirshipLock()
     var pendingPresentationRequests: [String: PresentationOptionsOverridesRequest] = [:]
     
@@ -56,6 +58,7 @@ public class AirshipReactNative: NSObject {
                 }
                 
                 
+
                 AirshipProxy.shared.push.presentationOptionOverrides = { request in
                     guard self.overridePresentationOptionsEnabled else {
                         request.result(options: nil)
@@ -409,7 +412,7 @@ public extension AirshipReactNative {
 // InApp
 @objc
 public extension AirshipReactNative {
-
+    @objc
     @MainActor
     func inAppIsPaused() throws -> NSNumber {
         return try NSNumber(
@@ -417,21 +420,29 @@ public extension AirshipReactNative {
         )
     }
 
+    @objc
     @MainActor
     func inAppSetPaused(_ paused: Bool) throws {
         try AirshipProxy.shared.inApp.setPaused(paused)
     }
 
+    @objc
     @MainActor
     func inAppSetDisplayInterval(milliseconds: Double) throws {
         try AirshipProxy.shared.inApp.setDisplayInterval(Int(milliseconds))
     }
 
+    @objc
     @MainActor
     func inAppGetDisplayInterval() throws -> NSNumber {
         return try NSNumber(
             value: AirshipProxy.shared.inApp.getDisplayInterval()
         )
+    }
+
+    @objc
+    func inAppResendPendingEmbeddedEvent() {
+        AirshipProxy.shared.inApp.resendLastEmbeddedEvent()
     }
 }
 
@@ -624,7 +635,8 @@ extension AirshipProxyEventType {
         "com.airship.notification_response": .notificationResponseReceived,
         "com.airship.push_received": .pushReceived,
         "com.airship.notification_status_changed": .notificationStatusChanged,
-        "com.airship.authorized_notification_settings_changed": .authorizedNotificationSettingsChanged
+        "com.airship.authorized_notification_settings_changed": .authorizedNotificationSettingsChanged,
+        "com.airship.pending_embedded_updated": .pendingEmbeddedUpdated
     ]
 
     public static func fromReactName(_ name: String) throws -> AirshipProxyEventType {

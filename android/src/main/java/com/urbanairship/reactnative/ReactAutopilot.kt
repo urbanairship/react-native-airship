@@ -8,9 +8,15 @@ import android.content.pm.PackageManager
 import com.urbanairship.UAirship
 import com.urbanairship.analytics.Extension
 import com.urbanairship.android.framework.proxy.BaseAutopilot
+import com.urbanairship.android.framework.proxy.Event
+import com.urbanairship.android.framework.proxy.EventType
 import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.ProxyStore
 import com.urbanairship.android.framework.proxy.events.EventEmitter
+import com.urbanairship.embedded.AirshipEmbeddedInfo
+import com.urbanairship.embedded.AirshipEmbeddedObserver
+import com.urbanairship.json.JsonMap
+import com.urbanairship.json.jsonMapOf
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -35,7 +41,13 @@ class ReactAutopilot : BaseAutopilot() {
                     }
         }
 
-        // Set our custom notification provider
+        MainScope().launch {
+            AirshipEmbeddedObserver(filter = { true }).embeddedViewInfoFlow.collect {
+                EventEmitter.shared().addEvent(PendingEmbeddedUpdated(it))
+            }
+        }
+
+        // Set our custom notification providerr
         val notificationProvider = ReactNotificationProvider(context, airship.airshipConfigOptions)
         airship.pushManager.notificationProvider = notificationProvider
 
@@ -75,4 +87,12 @@ class ReactAutopilot : BaseAutopilot() {
     companion object {
         const val EXTENDER_MANIFEST_KEY = "com.urbanairship.reactnative.AIRSHIP_EXTENDER"
     }
+}
+
+internal class PendingEmbeddedUpdated(pending: List<AirshipEmbeddedInfo>) : Event {
+    override val type = EventType.PENDING_EMBEDDED_UPDATED
+
+    override val body: JsonMap = jsonMapOf(
+        "pending" to pending.map { jsonMapOf( "embeddedId" to it.embeddedId ) }
+    )
 }

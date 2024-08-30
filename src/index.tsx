@@ -21,6 +21,8 @@ export { AttributeEditor } from './AttributeEditor';
 
 export * from './types';
 export * from './MessageView';
+export * from './AirshipEmbeddedView';
+
 export { Subscription } from './UAEventEmitter';
 
 // @ts-expect-error

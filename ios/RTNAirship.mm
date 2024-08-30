@@ -12,7 +12,11 @@
 RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[AirshipReactNative.pendingEventsEventName, AirshipReactNative.overridePresentationOptionsEventName];
+    return @[
+        AirshipReactNative.pendingEventsEventName,
+        AirshipReactNative.overridePresentationOptionsEventName,
+        AirshipReactNative.pendingEmbeddedUpdated
+    ];
 }
 
 -(void)startObserving {
@@ -239,8 +243,6 @@ RCT_REMAP_METHOD(pushIosSetBadgeNumber,
                  pushIosSetBadgeNumber:(double)badgeNumber
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    NSError *error;
-
     [AirshipReactNative.shared pushSetBadgeNumber:badgeNumber completionHandler:^(NSError *error) {
         [self handleResult:nil
                      error:error
@@ -512,6 +514,10 @@ RCT_REMAP_METHOD(inAppSetPaused,
                                         error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
+RCT_EXPORT_METHOD(inAppResendPendingEmbeddedEvent) {
+    [AirshipReactNative.shared inAppResendPendingEmbeddedEvent];
 }
 
 RCT_REMAP_METHOD(localeClearLocaleOverride,
