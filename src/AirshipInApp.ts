@@ -47,12 +47,9 @@ export class AirshipInApp {
     listener(currentValue);
 
     let wrappedListener = (pending: PendingEmbedded[]) => {
-      console.log("wrappedListener", embeddedId, pending)
-
       var nextValue = pending.length > 0;
       if (currentValue != nextValue) {
         listener(nextValue);
-        console.log("embeddedReadyListener", embeddedId, nextValue)
       }
       currentValue = nextValue;
     }
@@ -74,7 +71,6 @@ export class AirshipInApp {
    * @returns `true` if one is ready, otherwise `false`.
    */
   public isEmbeddedReady(embeddedId: string): boolean {
-    console.log("isEmbeddedReady", this.pendingEmbedded.get(embeddedId) ?? [])
     return (this.pendingEmbedded.get(embeddedId)?.length ?? 0) > 0;
   }
 
