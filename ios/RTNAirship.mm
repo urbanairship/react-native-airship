@@ -390,6 +390,19 @@ RCT_REMAP_METHOD(addCustomEvent,
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
+RCT_REMAP_METHOD(analyticsGetSessionId,
+                 analyticsGetSessionId:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    NSString *result = [AirshipReactNative.shared analyticsGetSessionIdAndReturnError:&error];
+
+    [self handleResult:result.length ? result : nil
+                 error:error
+               resolve:resolve
+                reject:reject];
+}
+
+
 RCT_REMAP_METHOD(contactEditAttributes,
                  contactEditAttributes:(NSArray *)operations
                  resolve:(RCTPromiseResolveBlock)resolve

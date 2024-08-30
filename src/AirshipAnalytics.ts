@@ -35,4 +35,12 @@ export class AirshipAnalytics {
   public addCustomEvent(event: CustomEvent): Promise<void> {
     return this.module.addCustomEvent(event);
   }
+
+  /**
+   * Gets the Airship session ID. The session ID is a UUID that updates on foreground and background.
+   * @returns A promise.
+   */
+    public getSessionId(): Promise<string> {
+      return this.module.analyticsGetSessionId();
+    }
 }

@@ -38,7 +38,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "19.2.1"
+    public static let version: String = "19.3.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -361,6 +361,12 @@ public extension AirshipReactNative {
 
     func addCustomEvent(_ json: Any) throws {
         try AirshipProxy.shared.analytics.addEvent(json)
+    }
+
+    @objc
+    @MainActor
+    func analyticsGetSessionId() throws -> String {
+        try AirshipProxy.shared.analytics.getSessionID().lowercased()
     }
 }
 

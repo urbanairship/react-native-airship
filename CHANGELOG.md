@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 19.3.0 - August 30, 2024
+Minor release that adds early access support for Embedded Content. 
+
+### Changes
+- Adds AirshipEmbeddedView and listener methods to Airship.inApp for Embedded Content.
+- Exposes the Airship session ID on Airship.analytics.
+
+
 ## Version 19.2.1 - August 23, 2024
 Patch release that fixes an issue with extras parsing on notifications
 
