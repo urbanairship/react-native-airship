@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 19.3.1 - September 5, 2024
+Patch release to fix compile issue with 19.3.0 when using the old architecture on Android. 
+
+### Changes
+- Fix compile issue when using old architecture on Android
+
 ## Version 19.3.0 - August 30, 2024
 Minor release that adds early access support for Embedded Content. 
 
