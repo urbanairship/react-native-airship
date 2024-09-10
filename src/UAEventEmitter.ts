@@ -1,6 +1,11 @@
 /* Copyright Airship and Contributors */
 
-import { NativeEventEmitter, Platform, AppRegistry } from 'react-native';
+import {
+  NativeEventEmitter,
+  Platform,
+  AppRegistry,
+  InteractionManager,
+} from 'react-native';
 
 /**
  * SDK event emitter.
@@ -22,9 +27,13 @@ export class UAEventEmitter {
         }
       );
     }
-
-    this.eventEmitter.addListener('com.airship.pending_events', async () => {
-      return this.dispatchEvents(false);
+    
+    this.nativeModule.addListener('com.airship.ready', () => {
+      return new Promise((resolve, reject) => {
+        InteractionManager.runAfterInteractions(() => {
+          this.dispatchEvents(false).then(resolve).catch(reject);
+        });
+      });
     });
   }
 
