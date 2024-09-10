@@ -27,7 +27,7 @@ export class UAEventEmitter {
         }
       );
     }
-    this.eventEmitter.addListener('com.airship.ready', () => {
+    this.eventEmitter.addListener('com.airship.pending_events', () => {
       return new Promise((resolve, reject) => {
         InteractionManager.runAfterInteractions(() => {
           this.dispatchEvents(false).then(resolve).catch(reject);
