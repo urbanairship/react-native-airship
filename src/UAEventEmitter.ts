@@ -27,13 +27,12 @@ export class UAEventEmitter {
         }
       );
     }
-    this.eventEmitter.addListener('com.airship.pending_events', () => {
-      return new Promise((resolve, reject) => {
-        InteractionManager.runAfterInteractions(() => {
-          this.dispatchEvents(false).then(resolve).catch(reject);
-        });
+    
+    InteractionManager.runAfterInteractions(() => {
+      this.eventEmitter.addListener('com.airship.pending_events', async () => {
+        return this.dispatchEvents(false);
       });
-    });
+    })
   }
 
   removeListener(eventType: string, listener: (...args: any[]) => any): void {
