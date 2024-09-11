@@ -4,7 +4,7 @@ import {
   NativeEventEmitter,
   Platform,
   AppRegistry,
-  InteractionManager,
+  AppState,
 } from 'react-native';
 
 /**
@@ -15,6 +15,7 @@ import {
 export class UAEventEmitter {
   private eventEmitter: NativeEventEmitter;
   private listeners: Map<string, Array<(...args: any[]) => any>> = new Map();
+  private iosListenerInitialized: boolean = false;
 
   constructor(private readonly nativeModule: any) {
     this.eventEmitter = new NativeEventEmitter(nativeModule);
@@ -27,12 +28,24 @@ export class UAEventEmitter {
         }
       );
     }
-    
-    InteractionManager.runAfterInteractions(() => {
+
+    if (Platform.OS === 'ios' && AppState.currentState !== 'active') {
+      AppState.addEventListener('change', (nextAppState) => {
+        if (nextAppState === 'active' && !this.iosListenerInitialized) {
+          this.eventEmitter.addListener(
+            'com.airship.pending_events',
+            async () => {
+              return this.dispatchEvents(false);
+            }
+          );
+          this.iosListenerInitialized = true;
+        }
+      });
+    } else {
       this.eventEmitter.addListener('com.airship.pending_events', async () => {
         return this.dispatchEvents(false);
       });
-    })
+    }
   }
 
   removeListener(eventType: string, listener: (...args: any[]) => any): void {
