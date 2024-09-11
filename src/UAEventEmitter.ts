@@ -29,9 +29,15 @@ export class UAEventEmitter {
       );
     }
 
-    if (Platform.OS === 'ios' && AppState.currentState !== 'active') {
+    if (
+      Platform.OS === 'ios' &&
+      !['active', 'background'].includes(AppState.currentState)
+    ) {
       AppState.addEventListener('change', (nextAppState) => {
-        if (nextAppState === 'active' && !this.iosListenerInitialized) {
+        if (
+          ['active', 'background'].includes(nextAppState) &&
+          !this.iosListenerInitialized
+        ) {
           this.eventEmitter.addListener(
             'com.airship.pending_events',
             async () => {
