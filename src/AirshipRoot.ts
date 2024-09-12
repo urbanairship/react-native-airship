@@ -17,34 +17,22 @@ import { Subscription, UAEventEmitter } from './UAEventEmitter';
  * Airship
  */
 export class AirshipRoot {
-  public readonly actions: AirshipActions;
-  public readonly analytics: AirshipAnalytics;
-  public readonly channel: AirshipChannel;
-  public readonly contact: AirshipContact;
-  public readonly inApp: AirshipInApp;
-  public readonly locale: AirshipLocale;
-  public readonly messageCenter: AirshipMessageCenter;
-  public readonly preferenceCenter: AirshipPreferenceCenter;
-  public readonly privacyManager: AirshipPrivacyManager;
-  public readonly push: AirshipPush;
-  public readonly featureFlagManager: AirshipFeatureFlagManager;
+  public actions?: AirshipActions;
+  public analytics?: AirshipAnalytics;
+  public channel?: AirshipChannel;
+  public contact?: AirshipContact;
+  public inApp?: AirshipInApp;
+  public locale?: AirshipLocale;
+  public messageCenter?: AirshipMessageCenter;
+  public preferenceCenter?: AirshipPreferenceCenter;
+  public privacyManager?: AirshipPrivacyManager;
+  public push?: AirshipPush;
+  public featureFlagManager?: AirshipFeatureFlagManager;
 
-  private readonly eventEmitter: UAEventEmitter;
+  private eventEmitter?: UAEventEmitter;
 
   constructor(private readonly module: any) {
-    this.eventEmitter = new UAEventEmitter(module);
-
-    this.actions = new AirshipActions(module);
-    this.analytics = new AirshipAnalytics(module);
-    this.channel = new AirshipChannel(module);
-    this.contact = new AirshipContact(module);
-    this.inApp = new AirshipInApp(module, this.eventEmitter);
-    this.locale = new AirshipLocale(module);
-    this.messageCenter = new AirshipMessageCenter(module);
-    this.preferenceCenter = new AirshipPreferenceCenter(module);
-    this.privacyManager = new AirshipPrivacyManager(module);
-    this.push = new AirshipPush(module);
-    this.featureFlagManager = new AirshipFeatureFlagManager(module);
+    this.module = module;
   }
 
   /**
@@ -55,6 +43,18 @@ export class AirshipRoot {
    * @returns A promise with the result. `true` if airship is ready.
    */
   public takeOff(config: AirshipConfig): Promise<boolean> {
+    this.actions = new AirshipActions(this.module);
+    this.analytics = new AirshipAnalytics(this.module);
+    this.channel = new AirshipChannel(this.module);
+    this.contact = new AirshipContact(this.module);
+    this.inApp = new AirshipInApp(this.module, this.eventEmitter!);
+    this.locale = new AirshipLocale(this.module);
+    this.messageCenter = new AirshipMessageCenter(this.module);
+    this.preferenceCenter = new AirshipPreferenceCenter(this.module);
+    this.privacyManager = new AirshipPrivacyManager(this.module);
+    this.push = new AirshipPush(this.module);
+    this.featureFlagManager = new AirshipFeatureFlagManager(this.module);
+    this.eventEmitter = new UAEventEmitter(this.module);
     return this.module.takeOff(config);
   }
 
@@ -65,19 +65,18 @@ export class AirshipRoot {
   public isFlying(): Promise<boolean> {
     return this.module.isFlying();
   }
-  
+
   /**
    * Adds a listener.
-   * @param eventType The listener type. 
+   * @param eventType The listener type.
    * @param listener The listener.
    * @returns A subscription.
    */
-  public addListener<T extends EventType>
-  (
+  public addListener<T extends EventType>(
     eventType: T,
     listener: (event: EventTypeMap[T]) => any
   ): Subscription {
-    this.eventEmitter.addListener(eventType, listener);
+    this.eventEmitter!.addListener(eventType, listener);
     return new Subscription(() => {
       this.removeListener(eventType, listener);
     });
@@ -93,7 +92,7 @@ export class AirshipRoot {
     eventType: EventType,
     listener: (event: EventTypeMap[T]) => any
   ) {
-    this.eventEmitter.removeListener(eventType, listener);
+    this.eventEmitter!.removeListener(eventType, listener);
   }
 
   /**
@@ -102,6 +101,6 @@ export class AirshipRoot {
    * @param eventType The event type.
    */
   public removeAllListeners(eventType: EventType) {
-    this.eventEmitter.removeAllListeners(eventType);
+    this.eventEmitter!.removeAllListeners(eventType);
   }
 }

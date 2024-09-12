@@ -1,11 +1,6 @@
 /* Copyright Airship and Contributors */
 
-import {
-  NativeEventEmitter,
-  Platform,
-  AppRegistry,
-  AppState,
-} from 'react-native';
+import { NativeEventEmitter, Platform, AppRegistry } from 'react-native';
 
 /**
  * SDK event emitter.
@@ -15,7 +10,6 @@ import {
 export class UAEventEmitter {
   private eventEmitter: NativeEventEmitter;
   private listeners: Map<string, Array<(...args: any[]) => any>> = new Map();
-  private iosListenerInitialized: boolean = false;
 
   constructor(private readonly nativeModule: any) {
     this.eventEmitter = new NativeEventEmitter(nativeModule);
@@ -29,29 +23,9 @@ export class UAEventEmitter {
       );
     }
 
-    if (
-      Platform.OS === 'ios' &&
-      !['active', 'background'].includes(AppState.currentState)
-    ) {
-      AppState.addEventListener('change', (nextAppState) => {
-        if (
-          ['active', 'background'].includes(nextAppState) &&
-          !this.iosListenerInitialized
-        ) {
-          this.eventEmitter.addListener(
-            'com.airship.pending_events',
-            async () => {
-              return this.dispatchEvents(false);
-            }
-          );
-          this.iosListenerInitialized = true;
-        }
-      });
-    } else {
-      this.eventEmitter.addListener('com.airship.pending_events', async () => {
-        return this.dispatchEvents(false);
-      });
-    }
+    this.eventEmitter.addListener('com.airship.pending_events', async () => {
+      return this.dispatchEvents(false);
+    });
   }
 
   removeListener(eventType: string, listener: (...args: any[]) => any): void {
