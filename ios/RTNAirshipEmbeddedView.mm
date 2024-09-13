@@ -54,7 +54,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RTNAirshipEmbeddedViewProps>(props);
-    self.embeddedID = [NSString stringWithUTF8String:newProps.embeddedID.c_str()];
+    self.embeddedID = [NSString stringWithUTF8String:newProps.embeddedId.c_str()];
 
     [super updateProps:props oldProps:oldProps];
 }

@@ -17,6 +17,7 @@ public class AirshipReactNative: NSObject {
     @objc
     public static let pendingEmbeddedUpdated = "com.airship.iax.pending_embedded_updated"
 
+    private let serialQueue = AirshipAsyncSerialQueue()
     var lock = AirshipLock()
     var pendingPresentationRequests: [String: PresentationOptionsOverridesRequest] = [:]
     
@@ -47,24 +48,22 @@ public class AirshipReactNative: NSObject {
 
     @objc
     public func setNotifier(_ notifier: ((String, [String: Any]) -> Void)?) {
-        Task {
+        self.serialQueue.enqueue {
             if let notifier = notifier {
-                await eventNotifier.setNotifier({
+                await self.eventNotifier.setNotifier {
                     notifier(AirshipReactNative.pendingEventsEventName, [:])
-                })
-                
-                if await AirshipProxyEventEmitter.shared.hasAnyEvents() {
-                    await eventNotifier.notifyPendingEvents()
                 }
-                
-                
+
+                if await AirshipProxyEventEmitter.shared.hasAnyEvents() {
+                    await self.eventNotifier.notifyPendingEvents()
+                }
 
                 AirshipProxy.shared.push.presentationOptionOverrides = { request in
                     guard self.overridePresentationOptionsEnabled else {
                         request.result(options: nil)
                         return
                     }
-                    
+
                     let requestID = UUID().uuidString
                     self.lock.sync {
                         self.pendingPresentationRequests[requestID] = request
@@ -78,10 +77,10 @@ public class AirshipReactNative: NSObject {
                     )
                 }
             } else {
-                await eventNotifier.setNotifier(nil)
+                await self.eventNotifier.setNotifier(nil)
                 AirshipProxy.shared.push.presentationOptionOverrides = nil
-                
-                lock.sync {
+
+                self.lock.sync {
                     self.pendingPresentationRequests.values.forEach { request in
                         request.result(options: nil)
                     }
