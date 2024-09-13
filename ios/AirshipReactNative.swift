@@ -38,7 +38,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "19.3.1"
+    public static let version: String = "19.3.2"
 
     private let eventNotifier = EventNotifier()
 

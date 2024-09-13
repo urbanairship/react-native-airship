@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 19.3.2 - September 13, 2024
+Patch release to fix a compile issue with the new Architecture on iOS and to fix a potential race condition on the event listeners when refreshing the JS bridge.
+
+### Changes
+- Fixed compile issue when using new architecture on iOS
+- Fixed potential race condition on events listeners when the JS bridge refreshes
+
 ## Version 19.3.1 - September 5, 2024
 Patch release to fix compile issue with 19.3.0 when using the old architecture on Android. 
 
