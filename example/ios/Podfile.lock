@@ -19,6 +19,12 @@ PODS:
     - Airship/Core
   - AirshipFrameworkProxy (8.1.0):
     - Airship (= 18.9.2)
+    - AirshipFrameworkProxy/Loader (= 8.1.0)
+    - AirshipFrameworkProxy/Proxy (= 8.1.0)
+  - AirshipFrameworkProxy/Loader (8.1.0):
+    - Airship (= 18.9.2)
+  - AirshipFrameworkProxy/Proxy (8.1.0):
+    - Airship (= 18.9.2)
   - AirshipServiceExtension (18.9.2)
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
@@ -1282,7 +1288,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Airship: 7f891aa9bb142d02f35aaef5ebdb09c2b5730a6d
-  AirshipFrameworkProxy: c4366c8d20210a298f196688cf365265a35b9c69
+  AirshipFrameworkProxy: edd1b2a2a56393278af5b9fb014807ee401d517d
   AirshipServiceExtension: 0ed795b521a76f8391e13896fbe1dee6ce9196ca
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953

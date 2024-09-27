@@ -185,7 +185,7 @@ export default function HomeScreen() {
 
         <Button
           onPress={async () => {
-            Airship.liveActivityManager.create({
+            Airship.iOS.liveActivityManager.create({
               typeReferenceId: 'Example',
               content: {
                 state: {
@@ -209,7 +209,7 @@ export default function HomeScreen() {
             });
             activities.forEach((element) => {
               Airship.iOS.liveActivityManager.end({
-                activityID: element.id,
+                activityId: element.id,
                 typeReferenceId: 'Example',
               });
             });
@@ -220,12 +220,12 @@ export default function HomeScreen() {
 
         <Button
           onPress={async () => {
-            const activities = await Airship.liveActivityManager.list({
+            const activities = await Airship.iOS.liveActivityManager.list({
               typeReferenceId: 'Example',
             });
             activities.forEach((element) => {
               Airship.iOS.liveActivityManager.update({
-                activityID: element.id,
+                activityId: element.id,
                 typeReferenceId: 'Example',
                 content: {
                   state: {

@@ -830,12 +830,12 @@ export interface LiveActivityCreateRequest extends LiveActivityRequest {
 }
 
 export interface LiveActivityUpdateRequest extends LiveActivityRequest {
-  activityID: string
+  activityId: string
   content: LiveActivityContent
 }
 
 export interface LiveActivityEndRequest extends LiveActivityRequest {
-  activityID: string
+  activityId: string
   content?: LiveActivityContent
   dismissalPolicy?: LiveActivityDismissalPolicy
 }

@@ -3,17 +3,12 @@ import AirshipKit
 import AirshipFrameworkProxy
 import ActivityKit
 
-@objc
-public class AirshipExtender: NSObject {
+@objc(AirshipPluginExtender)
+public class AirshipPluginExtender: NSObject, AirshipPluginExtenderProtocol {
+  public static func onAirshipReady() {
 
-  fileprivate static let shared: AirshipExtender = AirshipExtender()
-
-
-  @objc
-  @MainActor
-  public class func setup() {
     if #available(iOS 16.1, *) {
-      // Can only call this once. It only throws on second call
+      // Will throw if called more than once
       try? LiveActivityManager.shared.setup { configurator in
 
         // Call per widget
@@ -21,7 +16,6 @@ public class AirshipExtender: NSObject {
           // Track this property as the Airship name for updates
           attributes.name
         }
-
       }
     }
   }

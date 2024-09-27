@@ -98,10 +98,8 @@ public class AirshipReactNative: NSObject {
         }
     }
     
-
-    @objc
     @MainActor
-    public func onLoad(
+    func onLoad(
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) {
         AirshipProxy.shared.delegate = self
