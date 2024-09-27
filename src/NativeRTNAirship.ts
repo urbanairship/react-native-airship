@@ -113,6 +113,12 @@ export interface Spec extends TurboModule {
   // Feature Flag Manager
   featureFlagManagerFlag(flagName: string):Promise<Object>;
   featureFlagManagerTrackInteraction(flag: Object): Promise<void>;
+
+  // Live Activity
+  liveActivityList(request: Object): Promise<Object>;
+  liveActivityCreate(request: Object): Promise<Object>;
+  liveActivityUpdate(request: Object): Promise<Object>;
+  liveActivityEnd(request: Object): Promise<Object>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RTNAirship');

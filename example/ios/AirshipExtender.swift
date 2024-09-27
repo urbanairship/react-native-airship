@@ -1,6 +1,7 @@
 import Foundation
 import AirshipKit
-
+import AirshipFrameworkProxy
+import ActivityKit
 
 @objc
 public class AirshipExtender: NSObject {
@@ -11,19 +12,17 @@ public class AirshipExtender: NSObject {
   @objc
   @MainActor
   public class func setup() {
-    if (Airship.isFlying) {
-      self.shared.airshipReady()
-    } else {
-      NotificationCenter.default.addObserver(forName: AirshipNotifications.AirshipReady.name, object: nil, queue: nil) { _ in
-        Task { @MainActor in
-          self.shared.airshipReady()
+    if #available(iOS 16.1, *) {
+      // Can only call this once. It only throws on second call
+      try? LiveActivityManager.shared.setup { configurator in
+
+        // Call per widget
+        await configurator.register(forType: Activity<ExampleWidgetsAttributes>.self, typeReferenceID: "Example") { attributes in
+          // Track this property as the Airship name for updates
+          attributes.name
         }
+
       }
     }
-  }
-
-  @MainActor
-  private func airshipReady() {
-    // Make restore call here
   }
 }

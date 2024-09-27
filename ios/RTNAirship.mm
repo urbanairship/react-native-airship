@@ -770,6 +770,55 @@ RCT_REMAP_METHOD(featureFlagManagerFlag,
     }];
 }
 
+RCT_REMAP_METHOD(liveActivityList,
+                 liveActivityListRequest:(NSDictionary *)request
+                 liveActivityList:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared liveActivityListWithOptions:request
+                                                completionHandler:^(id result, NSError * _Nullable error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
+    }];
+}
+
+RCT_REMAP_METHOD(liveActivityCreate,
+                 liveActivityCreateRequest:(NSDictionary *)request
+                 liveActivityCreate:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared liveActivityCreateWithOptions:request
+                                           completionHandler:^(id result, NSError * _Nullable error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
+    }];
+}
+
+RCT_REMAP_METHOD(liveActivityUpdate,
+                 liveActivityUpdateRequest:(NSDictionary *)request
+                 liveActivityUpdate:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared liveActivityUpdateWithOptions:request
+                                           completionHandler:^(NSError * _Nullable error) {
+        [self handleResult:nil error:error resolve:resolve reject:reject];
+    }];
+}
+
+RCT_REMAP_METHOD(liveActivityEnd,
+                 liveActivityEndRequest:(NSDictionary *)request
+                 liveActivityEnd:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared liveActivityEndWithOptions:request
+                                        completionHandler:^(NSError * _Nullable error) {
+        [self handleResult:nil error:error resolve:resolve reject:reject];
+    }];
+}
+
+
+
+
+
+
 -(void)handleResult:(id)result
               error:(NSError *)error
             resolve:(RCTPromiseResolveBlock)resolve

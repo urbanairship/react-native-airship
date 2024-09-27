@@ -33,6 +33,24 @@ export interface PushReceivedEvent {
   pushPayload: PushPayload;
 }
 
+
+export interface LiveActivitiesUpdatedEvent {
+  activities: LiveActivity[]
+}
+
+export interface LiveActivity {
+  id: string,
+  typeReferenceId: string
+  content: LiveActivityContent,
+  attributes: JsonObject
+}
+
+export interface LiveActivityContent {
+  state: JsonObject
+  staleDate?: string
+  relevanceScore: number
+}
+
 /**
  * The push payload.
  */
@@ -182,6 +200,7 @@ export enum EventType {
   DisplayPreferenceCenter = 'com.airship.display_preference_center',
   PushTokenReceived = 'com.airship.push_token_received',
   IOSAuthorizedNotificationSettingsChanged = 'com.airship.authorized_notification_settings_changed',
+  IOSLiveActivitiesUpdated = 'com.airship.live_activities_updated',
 }
 
 export interface EventTypeMap {
@@ -195,6 +214,8 @@ export interface EventTypeMap {
   [EventType.DisplayMessageCenter]: DisplayMessageCenterEvent;
   [EventType.DisplayPreferenceCenter]: DisplayPreferenceCenterEvent;
   [EventType.PushTokenReceived]: PushTokenReceivedEvent;
+  [EventType.IOSLiveActivitiesUpdated]: LiveActivitiesUpdatedEvent;
+
 }
 
 /**
@@ -794,4 +815,42 @@ export interface FeatureFlag {
    * @ignore
    */
   readonly _internal: unknown
+}
+
+export interface LiveActivityRequest {
+  typeReferenceId: string
+}
+
+export interface LiveActivityListRequest extends LiveActivityRequest {
+}
+
+export interface LiveActivityCreateRequest extends LiveActivityRequest {
+  content: LiveActivityContent
+  attributes: JsonObject
+}
+
+export interface LiveActivityUpdateRequest extends LiveActivityRequest {
+  activityID: string
+  content: LiveActivityContent
+}
+
+export interface LiveActivityEndRequest extends LiveActivityRequest {
+  activityID: string
+  content?: LiveActivityContent
+  dismissalPolicy?: LiveActivityDismissalPolicy
+}
+
+export type LiveActivityDismissalPolicy  = LiveActivityDismissalPolicyImmediate|LiveActivityDismissalPolicyDefault|LiveActivityDismissalPolicyAfterDate
+
+export interface LiveActivityDismissalPolicyImmediate {
+  type: "immediate"
+}
+
+export interface LiveActivityDismissalPolicyDefault {
+  type: "default"
+}
+
+export interface LiveActivityDismissalPolicyAfterDate {
+  type: "after"
+  date: string
 }

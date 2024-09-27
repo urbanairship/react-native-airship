@@ -597,6 +597,61 @@ public extension AirshipReactNative {
     }
 }
 
+
+// Live Activity
+@objc
+public extension AirshipReactNative {
+    @objc
+    func liveActivityList(options: Any) async throws -> Any  {
+        if #available(iOS 16.1, *) {
+            let result = try await LiveActivityManager.shared.list(try AirshipJSON.wrap(options).decode())
+            return try AirshipJSON.wrap(result).unWrap() as Any
+        } else {
+            throw AirshipErrors.error("Not available before 16.1")
+        }
+    }
+
+    @objc
+    func liveActivityCreate(options: Any) async throws -> Any  {
+        do {
+            if #available(iOS 16.1, *) {
+                let result = try await LiveActivityManager.shared.create(try AirshipJSON.wrap(options).decode())
+                return try AirshipJSON.wrap(result).unWrap() as Any
+            } else {
+                throw AirshipErrors.error("Not available before 16.1")
+            }
+        } catch {
+            throw error
+        }
+    }
+
+    @objc
+    func liveActivityUpdate(options: Any) async throws -> Void  {
+        do {
+            if #available(iOS 16.1, *) {
+                try await LiveActivityManager.shared.update(try AirshipJSON.wrap(options).decode())
+            } else {
+                throw AirshipErrors.error("Not available before 16.1")
+            }
+        } catch {
+            throw error
+        }
+    }
+
+    @objc
+    func liveActivityEnd(options: Any) async throws -> Void  {
+        do {
+            if #available(iOS 16.1, *) {
+                try await LiveActivityManager.shared.end(try AirshipJSON.wrap(options).decode())
+            } else {
+                throw AirshipErrors.error("Not available before 16.1")
+            }
+        } catch {
+            throw error
+        }
+    }
+}
+
 extension AirshipReactNative: AirshipProxyDelegate {
     public func migrateData(store: ProxyStore) {
         ProxyDataMigrator().migrateData(store: store)
@@ -641,7 +696,8 @@ extension AirshipProxyEventType {
         "com.airship.push_received": .pushReceived,
         "com.airship.notification_status_changed": .notificationStatusChanged,
         "com.airship.authorized_notification_settings_changed": .authorizedNotificationSettingsChanged,
-        "com.airship.pending_embedded_updated": .pendingEmbeddedUpdated
+        "com.airship.pending_embedded_updated": .pendingEmbeddedUpdated,
+        "com.airship.live_activities_updated": .liveActivitiesUpdated
     ]
 
     public static func fromReactName(_ name: String) throws -> AirshipProxyEventType {
