@@ -186,7 +186,7 @@ export default function HomeScreen() {
         <Button
           onPress={async () => {
             Airship.iOS.liveActivityManager.create({
-              typeReferenceId: 'Example',
+              attributesType: 'ExampleWidgetsAttributes',
               content: {
                 state: {
                   emoji: '🙌',
@@ -205,12 +205,12 @@ export default function HomeScreen() {
         <Button
           onPress={async () => {
             const activities = await Airship.iOS.liveActivityManager.list({
-              typeReferenceId: 'Example',
+              attributesType: 'Example',
             });
             activities.forEach((element) => {
               Airship.iOS.liveActivityManager.end({
                 activityId: element.id,
-                typeReferenceId: 'Example',
+                attributesType: 'ExampleWidgetsAttributes',
               });
             });
           }}
@@ -221,12 +221,12 @@ export default function HomeScreen() {
         <Button
           onPress={async () => {
             const activities = await Airship.iOS.liveActivityManager.list({
-              typeReferenceId: 'Example',
+              attributesType: 'ExampleWidgetsAttributes',
             });
             activities.forEach((element) => {
               Airship.iOS.liveActivityManager.update({
                 activityId: element.id,
-                typeReferenceId: 'Example',
+                attributesType: 'ExampleWidgetsAttributes',
                 content: {
                   state: {
                     emoji: element.content.state.emoji + '🙌',

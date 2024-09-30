@@ -12,7 +12,7 @@ public class AirshipPluginExtender: NSObject, AirshipPluginExtenderProtocol {
       try? LiveActivityManager.shared.setup { configurator in
 
         // Call per widget
-        await configurator.register(forType: Activity<ExampleWidgetsAttributes>.self, typeReferenceID: "Example") { attributes in
+        await configurator.register(forType: Activity<ExampleWidgetsAttributes>.self) { attributes in
           // Track this property as the Airship name for updates
           attributes.name
         }

@@ -818,7 +818,7 @@ export interface FeatureFlag {
 }
 
 export interface LiveActivityRequest {
-  typeReferenceId: string
+  attributesType: string
 }
 
 export interface LiveActivityListRequest extends LiveActivityRequest {
