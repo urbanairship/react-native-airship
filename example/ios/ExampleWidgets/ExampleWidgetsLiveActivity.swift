@@ -2,13 +2,10 @@
 //  ExampleWidgetsLiveActivity.swift
 //  ExampleWidgets
 //
-//  Created by Ryan Lepinski on 9/26/24.
-//
 
 import ActivityKit
 import WidgetKit
 import SwiftUI
-
 
 
 struct ExampleWidgetsLiveActivity: Widget {

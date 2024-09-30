@@ -34,7 +34,13 @@ export interface PushReceivedEvent {
 }
 
 
+/**
+ * Event fired whenever any of the Live Activities update, create, or end.
+ */
 export interface LiveActivitiesUpdatedEvent {
+  /**
+   * The Live Activities.
+   */
   activities: LiveActivity[]
 }
 
@@ -817,40 +823,87 @@ export interface FeatureFlag {
   readonly _internal: unknown
 }
 
+/**
+ * Base Live Activity request.
+ */
 export interface LiveActivityRequest {
+  /**
+   * Attributes types. This should match the Activity type of your Live Activity.
+   */
   attributesType: string
 }
 
+/**
+ * Live Activity list request.
+ */
 export interface LiveActivityListRequest extends LiveActivityRequest {
 }
 
+/**
+ * Live activity create request.
+ */
 export interface LiveActivityCreateRequest extends LiveActivityRequest {
+  /**
+   * Dynamic content.
+   */
   content: LiveActivityContent
+  /**
+   * Fixed attributes.
+   */
   attributes: JsonObject
 }
 
+/**
+ * Live activity update request.
+ */
 export interface LiveActivityUpdateRequest extends LiveActivityRequest {
+  /**
+   * The live activity ID to update.
+   */
   activityId: string
+   /**
+   * Dynamic content.
+   */
   content: LiveActivityContent
 }
 
 export interface LiveActivityEndRequest extends LiveActivityRequest {
+  /**
+   * The live activity ID to update.
+   */
   activityId: string
+  /**
+   * Dynamic content.
+   */
   content?: LiveActivityContent
+
+  /**
+   * Dismissal policy. Defaults to `LiveActivityDismissalPolicyDefault`.
+   */
   dismissalPolicy?: LiveActivityDismissalPolicy
 }
 
 export type LiveActivityDismissalPolicy  = LiveActivityDismissalPolicyImmediate|LiveActivityDismissalPolicyDefault|LiveActivityDismissalPolicyAfterDate
 
+/**
+ * Dismissal policy to immediately dismiss the Live Activity on end.
+ */
 export interface LiveActivityDismissalPolicyImmediate {
   type: "immediate"
 }
 
+/**
+ * Dismissal policy to dismiss the Live Activity after the expiration.
+ */
 export interface LiveActivityDismissalPolicyDefault {
   type: "default"
 }
 
+/**
+ * Dismissal policy to dismiss the Live Activity after a given date.
+ */
 export interface LiveActivityDismissalPolicyAfterDate {
   type: "after"
+  // ISO 8601 date string
   date: string
 }

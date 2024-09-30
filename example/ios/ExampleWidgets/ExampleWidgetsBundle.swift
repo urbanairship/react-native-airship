@@ -2,8 +2,6 @@
 //  ExampleWidgetsBundle.swift
 //  ExampleWidgets
 //
-//  Created by Ryan Lepinski on 9/26/24.
-//
 
 import WidgetKit
 import SwiftUI

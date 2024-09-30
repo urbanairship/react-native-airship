@@ -2,10 +2,8 @@
 //  ExampleWidgetsAttributes.swift
 //  AirshipExample
 //
-//  Created by Ryan Lepinski on 9/26/24.
-//
-import ActivityKit
 
+import ActivityKit
 
 struct ExampleWidgetsAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
