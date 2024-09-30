@@ -1099,7 +1099,6 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - AirshipFrameworkProxy (from `../../../airship-mobile-framework-proxy/`)
   - AirshipServiceExtension
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -1162,14 +1161,13 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Airship
+    - AirshipFrameworkProxy
     - AirshipServiceExtension
     - fmt
     - libevent
     - SocketRocket
 
 EXTERNAL SOURCES:
-  AirshipFrameworkProxy:
-    :path: "../../../airship-mobile-framework-proxy/"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
@@ -1342,6 +1340,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 1b901a6d6eeba4e8a2e8f308f708691cdb5db312
 
-PODFILE CHECKSUM: f93ba8075d3710aba56d1b32d8b6a5c745a13186
+PODFILE CHECKSUM: 71939b1c0f451ff75f31df2f5e51d1c63f04150d
 
 COCOAPODS: 1.15.2
