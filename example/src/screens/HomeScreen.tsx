@@ -183,62 +183,68 @@ export default function HomeScreen() {
           </View>
         )}
 
-        <Button
-          onPress={async () => {
-            Airship.iOS.liveActivityManager.create({
-              attributesType: 'ExampleWidgetsAttributes',
-              content: {
-                state: {
-                  emoji: '🙌',
-                },
-                relevanceScore: 0.0,
-              },
-              attributes: {
-                name: 'some-unique-name',
-              },
-            });
-          }}
-          title="Start LA"
-          color="#841584"
-        />
-
-        <Button
-          onPress={async () => {
-            const activities = await Airship.iOS.liveActivityManager.list({
-              attributesType: 'Example',
-            });
-            activities.forEach((element) => {
-              Airship.iOS.liveActivityManager.end({
-                activityId: element.id,
-                attributesType: 'ExampleWidgetsAttributes',
-              });
-            });
-          }}
-          title="End All LA"
-          color="#841584"
-        />
-
-        <Button
-          onPress={async () => {
-            const activities = await Airship.iOS.liveActivityManager.list({
-              attributesType: 'ExampleWidgetsAttributes',
-            });
-            activities.forEach((element) => {
-              Airship.iOS.liveActivityManager.update({
-                activityId: element.id,
-                attributesType: 'ExampleWidgetsAttributes',
-                content: {
-                  state: {
-                    emoji: element.content.state.emoji + '🙌',
+        {Platform.OS === 'ios' ? (
+          <View>
+            <Button
+              onPress={async () => {
+                Airship.iOS.liveActivityManager.create({
+                  attributesType: 'ExampleWidgetsAttributes',
+                  content: {
+                    state: {
+                      emoji: '🙌',
+                    },
+                    relevanceScore: 0.0,
                   },
-                  relevanceScore: 0.0,
-                },
-              });
-            });
-          }}
-          title="Update All LA"
-          color="#841584"
-        />
+                  attributes: {
+                    name: 'some-unique-name',
+                  },
+                });
+              }}
+              title="Start LA"
+              color="#841584"
+            />
+
+            <Button
+              onPress={async () => {
+                const activities = await Airship.iOS.liveActivityManager.list({
+                  attributesType: 'Example',
+                });
+                activities.forEach((element) => {
+                  Airship.iOS.liveActivityManager.end({
+                    activityId: element.id,
+                    attributesType: 'ExampleWidgetsAttributes',
+                  });
+                });
+              }}
+              title="End All LA"
+              color="#841584"
+            />
+
+            <Button
+              onPress={async () => {
+                const activities = await Airship.iOS.liveActivityManager.list({
+                  attributesType: 'ExampleWidgetsAttributes',
+                });
+                activities.forEach((element) => {
+                  Airship.iOS.liveActivityManager.update({
+                    activityId: element.id,
+                    attributesType: 'ExampleWidgetsAttributes',
+                    content: {
+                      state: {
+                        emoji: element.content.state.emoji + '🙌',
+                      },
+                      relevanceScore: 0.0,
+                    },
+                  });
+                });
+              }}
+              title="Update All LA"
+              color="#841584"
+            />
+          </View>
+        ) : (
+          <View />
+        )}
 
         <View style={{ flexDirection: 'column' }}>
           {channelId ? (
