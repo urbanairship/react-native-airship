@@ -12,9 +12,13 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Button,
 } from 'react-native';
-import Airship, { EventType, AirshipEmbeddedView} from '@ua/react-native-airship';
+import Airship, {
+  EventType,
+  AirshipEmbeddedView,
+} from '@ua/react-native-airship';
 
 import styles from '../Styles';
 import NamedUserManagerCell from './Home Elements/NamedUserManagerCell';
@@ -46,7 +50,7 @@ export default function HomeScreen() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagText, setTagText] = useState('');
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [isEmbeddedReady, setEmbeddedReady] = useState(false)
+  const [isEmbeddedReady, setEmbeddedReady] = useState(false);
 
   const refreshTags = useCallback(async () => {
     const fetchedTags = await Airship.channel.getTags();
@@ -84,7 +88,6 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-
     // Add takeOff here
 
     Airship.push
@@ -96,7 +99,7 @@ export default function HomeScreen() {
         console.error('Error getting notification status:', error);
       });
 
-    setEmbeddedReady(Airship.inApp.isEmbeddedReady("test"))
+    setEmbeddedReady(Airship.inApp.isEmbeddedReady('test'));
 
     Airship.push.iOS
       .getAuthorizedNotificationSettings()
@@ -144,9 +147,9 @@ export default function HomeScreen() {
       }
     );
 
-    Airship.inApp.addEmbeddedReadyListener("test", (isReady) => {
-      console.log("Test " + isReady)
-      setEmbeddedReady(isReady)
+    Airship.inApp.addEmbeddedReadyListener('test', (isReady) => {
+      console.log('Test ' + isReady);
+      setEmbeddedReady(isReady);
     });
 
     return () => {
@@ -161,32 +164,87 @@ export default function HomeScreen() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 200 : 0}
     >
       <View style={{ flex: 1, flexShrink: 0, padding: 20 }}>
+        {isEmbeddedReady ? (
+          <View style={{ flex: 1 }}>
+            <AirshipEmbeddedView embeddedId="test" style={{ flex: 1 }} />
+          </View>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              style={[styles.backgroundIcon, { paddingBottom: 0 }]}
+              source={require('./../img/airship-mark.png')}
+            />
+          </View>
+        )}
 
-      
-      {isEmbeddedReady ?
-      (
-        <View style={{ flex: 1 }}>
-        <AirshipEmbeddedView
-            embeddedId="test"
-            style={{ flex: 1 }}
-          />
-        </View>
-      )
-      : (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-        <Image
-        style={[styles.backgroundIcon, { paddingBottom: 0 }]}
-        source={require('./../img/airship-mark.png')}
-      /> 
-    </View>)}
-    
+        {Platform.OS === 'ios' ? (
+          <View>
+            <Button
+              onPress={async () => {
+                Airship.iOS.liveActivityManager.create({
+                  attributesType: 'ExampleWidgetsAttributes',
+                  content: {
+                    state: {
+                      emoji: '🙌',
+                    },
+                    relevanceScore: 0.0,
+                  },
+                  attributes: {
+                    name: 'some-unique-name',
+                  },
+                });
+              }}
+              title="Start LA"
+              color="#841584"
+            />
 
+            <Button
+              onPress={async () => {
+                const activities = await Airship.iOS.liveActivityManager.list({
+                  attributesType: 'Example',
+                });
+                activities.forEach((element) => {
+                  Airship.iOS.liveActivityManager.end({
+                    activityId: element.id,
+                    attributesType: 'ExampleWidgetsAttributes',
+                  });
+                });
+              }}
+              title="End All LA"
+              color="#841584"
+            />
+
+            <Button
+              onPress={async () => {
+                const activities = await Airship.iOS.liveActivityManager.list({
+                  attributesType: 'ExampleWidgetsAttributes',
+                });
+                activities.forEach((element) => {
+                  Airship.iOS.liveActivityManager.update({
+                    activityId: element.id,
+                    attributesType: 'ExampleWidgetsAttributes',
+                    content: {
+                      state: {
+                        emoji: element.content.state.emoji + '🙌',
+                      },
+                      relevanceScore: 0.0,
+                    },
+                  });
+                });
+              }}
+              title="Update All LA"
+              color="#841584"
+            />
+          </View>
+        ) : (
+          <View />
+        )}
 
         <View style={{ flexDirection: 'column' }}>
           {channelId ? (
@@ -221,7 +279,8 @@ export default function HomeScreen() {
             <View style={styles.warningView}>
               <Text style={styles.warningTitleText}>Channel Unavailble</Text>
               <Text style={styles.warningBodyText}>
-                Have you added the takeOff call with the correct app key and secret?
+                Have you added the takeOff call with the correct app key and
+                secret?
               </Text>
             </View>
           )}

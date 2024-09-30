@@ -15,7 +15,15 @@
 		30F67F752E2CC8EC2DD20B65 /* libPods-AirshipExampleNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D225AAD537A45E26F8E01F4 /* libPods-AirshipExampleNotificationServiceExtension.a */; };
 		6E1F6ECD2BED7F6400CFC7A7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1F6ECC2BED7F6400CFC7A7 /* NotificationService.swift */; };
 		6E1F6ED12BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E1F6ECA2BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		6EC755922A4DE34400851ABB /* AirshipExtender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC755912A4DE34400851ABB /* AirshipExtender.swift */; };
+		6E3A029F2CA62A7100B0C5CF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3A029E2CA62A7100B0C5CF /* WidgetKit.framework */; };
+		6E3A02A12CA62A7100B0C5CF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3A02A02CA62A7100B0C5CF /* SwiftUI.framework */; };
+		6E3A02B22CA62A7400B0C5CF /* ExampleWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E3A029D2CA62A7100B0C5CF /* ExampleWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6EC755922A4DE34400851ABB /* AirshipPluginExtender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC755912A4DE34400851ABB /* AirshipPluginExtender.swift */; };
+		6ED117C52CA7661200C41C56 /* ExampleWidgetsAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED117C02CA7661100C41C56 /* ExampleWidgetsAttributes.swift */; };
+		6ED117C62CA7661200C41C56 /* ExampleWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED117C12CA7661100C41C56 /* ExampleWidgetsBundle.swift */; };
+		6ED117C72CA7661200C41C56 /* ExampleWidgetsLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED117C22CA7661100C41C56 /* ExampleWidgetsLiveActivity.swift */; };
+		6ED117C92CA7661200C41C56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6ED117BF2CA7661100C41C56 /* Assets.xcassets */; };
+		6ED117CA2CA7663100C41C56 /* ExampleWidgetsAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED117C02CA7661100C41C56 /* ExampleWidgetsAttributes.swift */; };
 		7F2F1DABF8580D87B80F17E2 /* libPods-AirshipExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 863F8087D5417FA132545EAF /* libPods-AirshipExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9919EE652B23C58300A46BFE /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 9919EE642B23C58300A46BFE /* Fonts */; };
@@ -36,6 +44,13 @@
 			remoteGlobalIDString = 6E1F6EC92BED7F6400CFC7A7;
 			remoteInfo = AirshipExampleNotificationServiceExtension;
 		};
+		6E3A02B02CA62A7400B0C5CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6E3A029C2CA62A7100B0C5CF;
+			remoteInfo = ExampleWidgetsExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,6 +61,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				6E1F6ED12BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension.appex in Embed Foundation Extensions */,
+				6E3A02B22CA62A7400B0C5CF /* ExampleWidgetsExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,10 +85,18 @@
 		6E1F6ECA2BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AirshipExampleNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E1F6ECC2BED7F6400CFC7A7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		6E1F6ECE2BED7F6400CFC7A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E3A029D2CA62A7100B0C5CF /* ExampleWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ExampleWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E3A029E2CA62A7100B0C5CF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		6E3A02A02CA62A7100B0C5CF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		6E4CFD1B29899AB400D131A8 /* AirshipExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AirshipExample.entitlements; path = AirshipExample/AirshipExample.entitlements; sourceTree = "<group>"; };
 		6E69FDBD50BFBDB4EF69D730 /* Pods-AirshipExampleNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipExampleNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-AirshipExampleNotificationServiceExtension/Pods-AirshipExampleNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		6EC755902A4DE34400851ABB /* AirshipExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AirshipExample-Bridging-Header.h"; sourceTree = "<group>"; };
-		6EC755912A4DE34400851ABB /* AirshipExtender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirshipExtender.swift; sourceTree = "<group>"; };
+		6EC755912A4DE34400851ABB /* AirshipPluginExtender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirshipPluginExtender.swift; sourceTree = "<group>"; };
+		6ED117BF2CA7661100C41C56 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6ED117C02CA7661100C41C56 /* ExampleWidgetsAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleWidgetsAttributes.swift; sourceTree = "<group>"; };
+		6ED117C12CA7661100C41C56 /* ExampleWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleWidgetsBundle.swift; sourceTree = "<group>"; };
+		6ED117C22CA7661100C41C56 /* ExampleWidgetsLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleWidgetsLiveActivity.swift; sourceTree = "<group>"; };
+		6ED117C32CA7661100C41C56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D225AAD537A45E26F8E01F4 /* libPods-AirshipExampleNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirshipExampleNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AirshipExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		863F8087D5417FA132545EAF /* libPods-AirshipExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirshipExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +133,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6E3A029A2CA62A7100B0C5CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E3A02A12CA62A7100B0C5CF /* SwiftUI.framework in Frameworks */,
+				6E3A029F2CA62A7100B0C5CF /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -140,7 +173,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				9919EE642B23C58300A46BFE /* Fonts */,
-				6EC755912A4DE34400851ABB /* AirshipExtender.swift */,
+				6EC755912A4DE34400851ABB /* AirshipPluginExtender.swift */,
 				6EC755902A4DE34400851ABB /* AirshipExample-Bridging-Header.h */,
 			);
 			name = AirshipExample;
@@ -153,6 +186,8 @@
 				863F8087D5417FA132545EAF /* libPods-AirshipExample.a */,
 				172EB030F35BD75FC2FBDF81 /* libPods-AirshipExample-AirshipExampleTests.a */,
 				7D225AAD537A45E26F8E01F4 /* libPods-AirshipExampleNotificationServiceExtension.a */,
+				6E3A029E2CA62A7100B0C5CF /* WidgetKit.framework */,
+				6E3A02A02CA62A7100B0C5CF /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -164,6 +199,18 @@
 				6E1F6ECE2BED7F6400CFC7A7 /* Info.plist */,
 			);
 			path = AirshipExampleNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
+		6E3A02A22CA62A7100B0C5CF /* ExampleWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				6ED117BF2CA7661100C41C56 /* Assets.xcassets */,
+				6ED117C02CA7661100C41C56 /* ExampleWidgetsAttributes.swift */,
+				6ED117C12CA7661100C41C56 /* ExampleWidgetsBundle.swift */,
+				6ED117C22CA7661100C41C56 /* ExampleWidgetsLiveActivity.swift */,
+				6ED117C32CA7661100C41C56 /* Info.plist */,
+			);
+			path = ExampleWidgets;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -180,6 +227,7 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* AirshipExampleTests */,
 				6E1F6ECB2BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension */,
+				6E3A02A22CA62A7100B0C5CF /* ExampleWidgets */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -195,6 +243,7 @@
 				13B07F961A680F5B00A75B9A /* AirshipExample.app */,
 				00E356EE1AD99517003FC87E /* AirshipExampleTests.xctest */,
 				6E1F6ECA2BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension.appex */,
+				6E3A029D2CA62A7100B0C5CF /* ExampleWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -255,6 +304,7 @@
 			);
 			dependencies = (
 				6E1F6ED02BED7F6400CFC7A7 /* PBXTargetDependency */,
+				6E3A02B12CA62A7400B0C5CF /* PBXTargetDependency */,
 			);
 			name = AirshipExample;
 			productName = AirshipExample;
@@ -279,13 +329,30 @@
 			productReference = 6E1F6ECA2BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		6E3A029C2CA62A7100B0C5CF /* ExampleWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E3A02B62CA62A7400B0C5CF /* Build configuration list for PBXNativeTarget "ExampleWidgetsExtension" */;
+			buildPhases = (
+				6E3A02992CA62A7100B0C5CF /* Sources */,
+				6E3A029A2CA62A7100B0C5CF /* Frameworks */,
+				6E3A029B2CA62A7100B0C5CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ExampleWidgetsExtension;
+			productName = ExampleWidgetsExtension;
+			productReference = 6E3A029D2CA62A7100B0C5CF /* ExampleWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1530;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -297,6 +364,10 @@
 					};
 					6E1F6EC92BED7F6400CFC7A7 = {
 						CreatedOnToolsVersion = 15.3;
+					};
+					6E3A029C2CA62A7100B0C5CF = {
+						CreatedOnToolsVersion = 16.0;
+						LastSwiftMigration = 1600;
 					};
 				};
 			};
@@ -316,6 +387,7 @@
 				13B07F861A680F5B00A75B9A /* AirshipExample */,
 				00E356ED1AD99517003FC87E /* AirshipExampleTests */,
 				6E1F6EC92BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension */,
+				6E3A029C2CA62A7100B0C5CF /* ExampleWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -342,6 +414,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E3A029B2CA62A7100B0C5CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ED117C92CA7661200C41C56 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,8 +594,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				6EC755922A4DE34400851ABB /* AirshipExtender.swift in Sources */,
+				6EC755922A4DE34400851ABB /* AirshipPluginExtender.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				6ED117CA2CA7663100C41C56 /* ExampleWidgetsAttributes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,6 +605,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E1F6ECD2BED7F6400CFC7A7 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E3A02992CA62A7100B0C5CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ED117C52CA7661200C41C56 /* ExampleWidgetsAttributes.swift in Sources */,
+				6ED117C62CA7661200C41C56 /* ExampleWidgetsBundle.swift in Sources */,
+				6ED117C72CA7661200C41C56 /* ExampleWidgetsLiveActivity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +630,11 @@
 			isa = PBXTargetDependency;
 			target = 6E1F6EC92BED7F6400CFC7A7 /* AirshipExampleNotificationServiceExtension */;
 			targetProxy = 6E1F6ECF2BED7F6400CFC7A7 /* PBXContainerItemProxy */;
+		};
+		6E3A02B12CA62A7400B0C5CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6E3A029C2CA62A7100B0C5CF /* ExampleWidgetsExtension */;
+			targetProxy = 6E3A02B02CA62A7400B0C5CF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -741,6 +837,93 @@
 			};
 			name = Release;
 		};
+		6E3A02B32CA62A7400B0C5CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = PGJV57GD94;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExampleWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ExampleWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.ExampleWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6E3A02B42CA62A7400B0C5CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = PGJV57GD94;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExampleWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ExampleWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.ExampleWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -918,6 +1101,15 @@
 			buildConfigurations = (
 				6E1F6ED32BED7F6500CFC7A7 /* Debug */,
 				6E1F6ED42BED7F6500CFC7A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6E3A02B62CA62A7400B0C5CF /* Build configuration list for PBXNativeTarget "ExampleWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E3A02B32CA62A7400B0C5CF /* Debug */,
+				6E3A02B42CA62A7400B0C5CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

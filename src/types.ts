@@ -33,6 +33,30 @@ export interface PushReceivedEvent {
   pushPayload: PushPayload;
 }
 
+
+/**
+ * Event fired whenever any of the Live Activities update, create, or end.
+ */
+export interface LiveActivitiesUpdatedEvent {
+  /**
+   * The Live Activities.
+   */
+  activities: LiveActivity[]
+}
+
+export interface LiveActivity {
+  id: string,
+  typeReferenceId: string
+  content: LiveActivityContent,
+  attributes: JsonObject
+}
+
+export interface LiveActivityContent {
+  state: JsonObject
+  staleDate?: string
+  relevanceScore: number
+}
+
 /**
  * The push payload.
  */
@@ -182,6 +206,7 @@ export enum EventType {
   DisplayPreferenceCenter = 'com.airship.display_preference_center',
   PushTokenReceived = 'com.airship.push_token_received',
   IOSAuthorizedNotificationSettingsChanged = 'com.airship.authorized_notification_settings_changed',
+  IOSLiveActivitiesUpdated = 'com.airship.live_activities_updated',
 }
 
 export interface EventTypeMap {
@@ -195,6 +220,8 @@ export interface EventTypeMap {
   [EventType.DisplayMessageCenter]: DisplayMessageCenterEvent;
   [EventType.DisplayPreferenceCenter]: DisplayPreferenceCenterEvent;
   [EventType.PushTokenReceived]: PushTokenReceivedEvent;
+  [EventType.IOSLiveActivitiesUpdated]: LiveActivitiesUpdatedEvent;
+
 }
 
 /**
@@ -794,4 +821,89 @@ export interface FeatureFlag {
    * @ignore
    */
   readonly _internal: unknown
+}
+
+/**
+ * Base Live Activity request.
+ */
+export interface LiveActivityRequest {
+  /**
+   * Attributes types. This should match the Activity type of your Live Activity.
+   */
+  attributesType: string
+}
+
+/**
+ * Live Activity list request.
+ */
+export interface LiveActivityListRequest extends LiveActivityRequest {
+}
+
+/**
+ * Live activity create request.
+ */
+export interface LiveActivityCreateRequest extends LiveActivityRequest {
+  /**
+   * Dynamic content.
+   */
+  content: LiveActivityContent
+  /**
+   * Fixed attributes.
+   */
+  attributes: JsonObject
+}
+
+/**
+ * Live activity update request.
+ */
+export interface LiveActivityUpdateRequest extends LiveActivityRequest {
+  /**
+   * The live activity ID to update.
+   */
+  activityId: string
+   /**
+   * Dynamic content.
+   */
+  content: LiveActivityContent
+}
+
+export interface LiveActivityEndRequest extends LiveActivityRequest {
+  /**
+   * The live activity ID to update.
+   */
+  activityId: string
+  /**
+   * Dynamic content.
+   */
+  content?: LiveActivityContent
+
+  /**
+   * Dismissal policy. Defaults to `LiveActivityDismissalPolicyDefault`.
+   */
+  dismissalPolicy?: LiveActivityDismissalPolicy
+}
+
+export type LiveActivityDismissalPolicy  = LiveActivityDismissalPolicyImmediate|LiveActivityDismissalPolicyDefault|LiveActivityDismissalPolicyAfterDate
+
+/**
+ * Dismissal policy to immediately dismiss the Live Activity on end.
+ */
+export interface LiveActivityDismissalPolicyImmediate {
+  type: "immediate"
+}
+
+/**
+ * Dismissal policy to dismiss the Live Activity after the expiration.
+ */
+export interface LiveActivityDismissalPolicyDefault {
+  type: "default"
+}
+
+/**
+ * Dismissal policy to dismiss the Live Activity after a given date.
+ */
+export interface LiveActivityDismissalPolicyAfterDate {
+  type: "after"
+  // ISO 8601 date string
+  date: string
 }

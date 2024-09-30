@@ -12,6 +12,7 @@ import { AirshipFeatureFlagManager } from './AirshipFeatureFlagManager';
 
 import { AirshipConfig, EventTypeMap, EventType } from './types';
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
+import { AirshipLiveActivityManager } from './AirshipLiveActivityManager';
 
 /**
  * Airship
@@ -29,6 +30,11 @@ export class AirshipRoot {
   public readonly push: AirshipPush;
   public readonly featureFlagManager: AirshipFeatureFlagManager;
 
+  /**
+   * iOS only accessors
+   */
+  public readonly iOS: AirshipRootIOS;
+
   private readonly eventEmitter: UAEventEmitter;
 
   constructor(private readonly module: any) {
@@ -45,6 +51,7 @@ export class AirshipRoot {
     this.privacyManager = new AirshipPrivacyManager(module);
     this.push = new AirshipPush(module);
     this.featureFlagManager = new AirshipFeatureFlagManager(module);
+    this.iOS = new AirshipRootIOS(module);
   }
 
   /**
@@ -65,15 +72,14 @@ export class AirshipRoot {
   public isFlying(): Promise<boolean> {
     return this.module.isFlying();
   }
-  
+
   /**
    * Adds a listener.
-   * @param eventType The listener type. 
+   * @param eventType The listener type.
    * @param listener The listener.
    * @returns A subscription.
    */
-  public addListener<T extends EventType>
-  (
+  public addListener<T extends EventType>(
     eventType: T,
     listener: (event: EventTypeMap[T]) => any
   ): Subscription {
@@ -103,5 +109,13 @@ export class AirshipRoot {
    */
   public removeAllListeners(eventType: EventType) {
     this.eventEmitter.removeAllListeners(eventType);
+  }
+}
+
+export class AirshipRootIOS {
+  public readonly liveActivityManager: AirshipLiveActivityManager;
+  
+  constructor(module: any) {
+    this.liveActivityManager = new AirshipLiveActivityManager(module);
   }
 }

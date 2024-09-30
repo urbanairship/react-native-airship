@@ -1,5 +1,7 @@
 package com.urbanairship.reactnative
 
+import android.annotation.SuppressLint
+import android.os.Build
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
 import com.urbanairship.PendingResult
@@ -51,6 +53,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @SuppressLint("RestrictedApi")
     override fun initialize() {
         super.initialize()
 
@@ -119,6 +122,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @SuppressLint("RestrictedApi")
     @ReactMethod
     override fun takePendingEvents(eventName: String?, isHeadlessJS: Boolean, promise: Promise) {
         promise.resolveResult {
@@ -235,14 +239,14 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun pushEnableUserNotifications(promise: Promise) {
-        promise.resolvePending {
+        promise.resolveSuspending(scope) {
             proxy.push.enableUserPushNotifications()
         }
     }
 
     @ReactMethod
     override fun pushGetNotificationStatus(promise: Promise) {
-        promise.resolveResult {
+        promise.resolveSuspending(scope) {
             proxy.push.getNotificationStatus()
         }
     }
@@ -340,8 +344,12 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun pushAndroidIsNotificationChannelEnabled(channel: String?, promise: Promise) {
-        promise.resolveResult {
-            proxy.push.isNotificationChannelEnabled(requireNotNull(channel))
+        promise.resolveSuspending(scope) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                proxy.push.isNotificationChannelEnabled(requireNotNull(channel))
+            } else {
+                true
+            }
         }
     }
 
@@ -671,16 +679,9 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun featureFlagManagerFlag(flagName: String?, promise: Promise) {
-        promise.resolveDeferred { callback ->
-            scope.launch {
-                try {
-                    requireNotNull(flagName)
-                    val flag = proxy.featureFlagManager.flag(flagName)
-                    callback(flag, null)
-                } catch (e: Exception) {
-                    callback(null, e)
-                }
-            }
+        promise.resolveSuspending(scope) {
+            requireNotNull(flagName)
+            proxy.featureFlagManager.flag(flagName)
         }
     }
 
@@ -689,6 +690,30 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         promise.resolveResult {
             val parsedFlag = FeatureFlagProxy(Utils.convertMap(requireNotNull(flag)).toJsonValue())
             proxy.featureFlagManager.trackInteraction(parsedFlag)
+        }
+    }
+
+    override fun liveActivityList(request: ReadableMap?, promise: Promise) {
+        promise.resolveResult {
+            throw IllegalStateException("Not supported on Android")
+        }
+    }
+
+    override fun liveActivityCreate(request: ReadableMap?, promise: Promise) {
+        promise.resolveResult {
+            throw IllegalStateException("Not supported on Android")
+        }
+    }
+
+    override fun liveActivityUpdate(request: ReadableMap?, promise: Promise) {
+        promise.resolveResult {
+            throw IllegalStateException("Not supported on Android")
+        }
+    }
+
+    override fun liveActivityEnd(request: ReadableMap?, promise: Promise) {
+        promise.resolveResult {
+            throw IllegalStateException("Not supported on Android")
         }
     }
 
@@ -718,6 +743,30 @@ internal fun JsonSerializable.toReactType(): Any? {
 
 internal fun Promise.resolveResult(function: () -> Any?) {
     resolveDeferred<Any> { callback -> callback(function(), null) }
+}
+
+internal fun Promise.resolveSuspending(scope: CoroutineScope, function: suspend () -> Any?) {
+    scope.launch {
+        try {
+            when (val result = function()) {
+                is Unit -> {
+                    this@resolveSuspending.resolve(null)
+                }
+                is JsonSerializable -> {
+                    this@resolveSuspending.resolve(result.toReactType())
+                }
+                is Number -> {
+                    this@resolveSuspending.resolve(result.toDouble())
+                }
+                else -> {
+                    this@resolveSuspending.resolve(result)
+                }
+            }
+        } catch (e: Exception) {
+            this@resolveSuspending.reject("AIRSHIP_ERROR", e)
+        }
+    }
+
 }
 
 internal fun <T> Promise.resolveDeferred(function: ((T?, Exception?) -> Unit) -> Unit) {

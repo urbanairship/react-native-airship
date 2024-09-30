@@ -17,6 +17,10 @@ Airship.addListener(EventType.NotificationResponse, (event) => {
   console.log('NotificationResponse:', JSON.stringify(event));
 });
 
+Airship.addListener(EventType.IOSLiveActivitiesUpdated, (event) => {
+  console.log('IOSLiveActivitiesUpdated:', JSON.stringify(event));
+});
+
 Airship.addListener(EventType.PushReceived, (event) => {
   console.log('PushReceived:', JSON.stringify(event));
 });

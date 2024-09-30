@@ -30,6 +30,7 @@ end
 target 'AirshipExample' do
   config = use_native_modules!
 
+
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.
@@ -45,7 +46,7 @@ target 'AirshipExample' do
     inherit! :complete
     # Pods for testing
   end
-
+   
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
