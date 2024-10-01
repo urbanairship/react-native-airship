@@ -17,7 +17,9 @@ import com.urbanairship.embedded.AirshipEmbeddedInfo
 import com.urbanairship.embedded.AirshipEmbeddedObserver
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.jsonMapOf
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
@@ -26,14 +28,12 @@ import kotlinx.coroutines.launch
  */
 class ReactAutopilot : BaseAutopilot() {
 
-    override fun onAirshipReady(airship: UAirship) {
-        super.onAirshipReady(airship)
+    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
+    override fun onReady(context: Context, airship: UAirship) {
         ProxyLogger.info("Airship React Native version: %s, SDK version: %s", BuildConfig.AIRSHIP_MODULE_VERSION, UAirship.getVersion())
 
-        val context = UAirship.getApplicationContext()
-
-        MainScope().launch {
+        scope.launch {
             EventEmitter.shared().pendingEventListener
                     .filter { !it.type.isForeground() }
                     .collect {
@@ -41,18 +41,19 @@ class ReactAutopilot : BaseAutopilot() {
                     }
         }
 
-        MainScope().launch {
+        scope.launch {
             AirshipEmbeddedObserver(filter = { true }).embeddedViewInfoFlow.collect {
                 EventEmitter.shared().addEvent(PendingEmbeddedUpdated(it))
             }
         }
 
-        // Set our custom notification providerr
+        // Set our custom notification provider
         val notificationProvider = ReactNotificationProvider(context, airship.airshipConfigOptions)
         airship.pushManager.notificationProvider = notificationProvider
 
         airship.analytics.registerSDKExtension(Extension.REACT_NATIVE, BuildConfig.AIRSHIP_MODULE_VERSION)
 
+        // Legacy extender
         val extender = createExtender(context)
         extender?.onAirshipReady(context, airship)
     }
@@ -61,6 +62,7 @@ class ReactAutopilot : BaseAutopilot() {
         DataMigrator(context).migrateData(proxyStore)
     }
 
+    @Suppress("deprecation")
     private fun createExtender(context: Context): AirshipExtender? {
         val ai: ApplicationInfo
         try {
@@ -77,7 +79,7 @@ class ReactAutopilot : BaseAutopilot() {
 
         try {
             val extenderClass = Class.forName(classname)
-            return extenderClass.newInstance() as AirshipExtender
+            return extenderClass.getDeclaredConstructor().newInstance() as AirshipExtender
         } catch (e: Exception) {
             ProxyLogger.error(e, "Unable to create extender: $classname")
         }

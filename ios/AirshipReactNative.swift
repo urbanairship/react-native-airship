@@ -98,6 +98,7 @@ public class AirshipReactNative: NSObject {
         }
     }
     
+
     @MainActor
     func onLoad(
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -243,8 +244,13 @@ public extension AirshipReactNative {
     }
 
     @objc
-    func pushEnableUserNotifications() async throws -> Bool {
-        return try await AirshipProxy.shared.push.enableUserPushNotifications()
+    func pushEnableUserNotifications(options: Any?) async throws -> Bool {
+        let args: EnableUserPushNotificationsArgs? = if let options {
+            try AirshipJSON.wrap(options).decode()
+        } else {
+            nil
+        }
+        return try await AirshipProxy.shared.push.enableUserPushNotifications(args: args)
     }
 
     @objc
@@ -599,10 +605,21 @@ public extension AirshipReactNative {
 // Live Activity
 @objc
 public extension AirshipReactNative {
+
     @objc
     func liveActivityList(options: Any) async throws -> Any  {
         if #available(iOS 16.1, *) {
             let result = try await LiveActivityManager.shared.list(try AirshipJSON.wrap(options).decode())
+            return try AirshipJSON.wrap(result).unWrap() as Any
+        } else {
+            throw AirshipErrors.error("Not available before 16.1")
+        }
+    }
+
+    @objc
+    func liveActivityListAll() async throws -> Any  {
+        if #available(iOS 16.1, *) {
+            let result = try await LiveActivityManager.shared.listAll()
             return try AirshipJSON.wrap(result).unWrap() as Any
         } else {
             throw AirshipErrors.error("Not available before 16.1")

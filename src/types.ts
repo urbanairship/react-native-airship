@@ -33,7 +33,6 @@ export interface PushReceivedEvent {
   pushPayload: PushPayload;
 }
 
-
 /**
  * Event fired whenever any of the Live Activities update, create, or end.
  */
@@ -41,20 +40,7 @@ export interface LiveActivitiesUpdatedEvent {
   /**
    * The Live Activities.
    */
-  activities: LiveActivity[]
-}
-
-export interface LiveActivity {
-  id: string,
-  typeReferenceId: string
-  content: LiveActivityContent,
-  attributes: JsonObject
-}
-
-export interface LiveActivityContent {
-  state: JsonObject
-  staleDate?: string
-  relevanceScore: number
+  activities: LiveActivity[];
 }
 
 /**
@@ -108,7 +94,7 @@ export interface NotificationResponseEvent {
 /**
  * Push notification status.
  */
-export interface PushNotificationStatus {  
+export interface PushNotificationStatus {
   /**
    * If user notifications are enabled on [Airship.push].
    */
@@ -123,10 +109,10 @@ export interface PushNotificationStatus {
    * If the push feature is enabled on [Airship.privacyManager].
    */
   isPushPrivacyFeatureEnabled: boolean;
- 
- /*
-  * If push registration was able to generate a token.
-  */
+
+  /*
+   * If push registration was able to generate a token.
+   */
   isPushTokenRegistered: boolean;
 
   /*
@@ -136,9 +122,45 @@ export interface PushNotificationStatus {
 
   /*
    * Checks for isUserNotificationsEnabled, areNotificationsAllowed, and isPushPrivacyFeatureEnabled. If this flag
-   * is true but `isOptedIn` is false, that means push token was not able to be registered. 
+   * is true but `isOptedIn` is false, that means push token was not able to be registered.
    */
   isUserOptedIn: boolean;
+
+  /**
+   * The notification permission status.
+   */
+  notificationPermissionStatus: PermissionStatus;
+}
+
+/**
+ * Enum of permission status.
+ */
+export enum PermissionStatus {
+  /**
+   * Permission is granted.
+   */
+  Granted = 'granted',
+
+  /**
+   * Permission is denied.
+   */
+  Denied = 'denied',
+
+  /**
+   * Permission has not yet been requested.
+   */
+  NotDetermined = 'not_determined',
+}
+
+/**
+ * Fallback when prompting for permission and the permission is
+ * already denied on iOS or is denied silently on Android.
+ */
+export enum PromptPermissionFallback {
+  /**
+   * Take the user to the system settings to enable the permission.
+   */
+  SystemSettings = 'systemSettings',
 }
 
 /**
@@ -148,7 +170,7 @@ export interface PushNotificationStatusChangedEvent {
   /**
    * The push notification status.
    */
-  status: PushNotificationStatus
+  status: PushNotificationStatus;
 }
 
 /**
@@ -221,7 +243,6 @@ export interface EventTypeMap {
   [EventType.DisplayPreferenceCenter]: DisplayPreferenceCenterEvent;
   [EventType.PushTokenReceived]: PushTokenReceivedEvent;
   [EventType.IOSLiveActivitiesUpdated]: LiveActivitiesUpdatedEvent;
-
 }
 
 /**
@@ -392,16 +413,16 @@ export interface ConfigEnvironment {
   logLevel?: LogLevel;
 
   /**
-    * Optional iOS config
-    */
+   * Optional iOS config
+   */
   ios?: {
     /**
      * Log privacy level. By default it logs at `private`, not logging anything lower than info to the console
      * and redacting logs with string interpolation. `public` will log all configured log levels to the console
      * without redacting any of the log lines.
      */
-    logPrivacyLevel?: "private" | "public";
-  }
+    logPrivacyLevel?: 'private' | 'public';
+  };
 }
 
 /**
@@ -582,8 +603,8 @@ export enum Feature {
 /**
  * All available features.
  */
-export const FEATURES_ALL = Object.values(Feature).filter(feature =>
-  feature !== Feature.Location && feature !== Feature.Chat
+export const FEATURES_ALL = Object.values(Feature).filter(
+  (feature) => feature !== Feature.Location && feature !== Feature.Chat
 );
 
 /**
@@ -595,7 +616,6 @@ export enum SubscriptionScope {
   Sms = 'sms',
   Email = 'email',
 }
-
 
 /**
  * Custom event
@@ -627,7 +647,6 @@ export interface CustomEvent {
   interactionType?: string;
 }
 
-
 export interface InboxMessage {
   /**
    * The message ID. Needed to display, mark as read, or delete the message.
@@ -641,6 +660,10 @@ export interface InboxMessage {
    * The message sent date in milliseconds.
    */
   sentDate: number;
+  /**
+   * Optional - The message expiration date in milliseconds.
+   */
+  expirationDate?: number;
   /**
    * Optional - The icon url for the message.
    */
@@ -790,7 +813,6 @@ export type Item =
 
 export type Section = CommonSection | LabeledSectionBreak;
 
-
 /**
  * An interface representing the eligibility status of a flag, and optional
  * variables associated with the flag.
@@ -800,12 +822,12 @@ export interface FeatureFlag {
    * A boolean representing flag eligibility; will be `true` if the current
    * contact is eligible for the flag.
    */
-  readonly isEligible: boolean
+  readonly isEligible: boolean;
   /**
    * A variables associated with the flag, if any. Will be `null` if no data
    * is associated with the flag, or if the flag does not exist.
    */
-  readonly variables: unknown | null
+  readonly variables: unknown | null;
   /**
    * A boolean representing if the flag exists or not. For ease of use and
    * deployment, asking for a flag by any name will return a `FeatureFlag`
@@ -813,14 +835,55 @@ export interface FeatureFlag {
    * may be checked to determine if the flag was actually resolved to a known
    * flag name.
    */
-  readonly exists: boolean
+  readonly exists: boolean;
 
- /**
+  /**
    * Reporting Metadata, the shape of which is private and not to be relied
    * upon. When not provided, an interaction cannot be tracked on the flag.
    * @ignore
    */
-  readonly _internal: unknown
+  readonly _internal: unknown;
+}
+
+
+/**
+ * Live Activity info.
+ */
+export interface LiveActivity {
+  /**
+   * The activity ID.
+   */
+  id: string;
+  /**
+   * The attribute types.
+   */
+  attributeTypes: string;
+  /**
+   * The content.
+   */
+  content: LiveActivityContent;
+  /**
+   * The attributes.
+   */
+  attributes: JsonObject;
+}
+
+/**
+ * Live Activity content.
+ */
+export interface LiveActivityContent {
+  /**
+   * The content state.
+   */
+  state: JsonObject;
+  /**
+   * Optional ISO 8601 date string that defines when the Live Activity will be stale.
+   */
+  staleDate?: string;
+  /**
+   * The relevance score.
+   */
+  relevanceScore: number;
 }
 
 /**
@@ -830,80 +893,258 @@ export interface LiveActivityRequest {
   /**
    * Attributes types. This should match the Activity type of your Live Activity.
    */
-  attributesType: string
+  attributesType: string;
 }
 
 /**
  * Live Activity list request.
  */
-export interface LiveActivityListRequest extends LiveActivityRequest {
-}
+export interface LiveActivityListRequest extends LiveActivityRequest {}
 
 /**
- * Live activity create request.
+ * Live Activity create request.
  */
 export interface LiveActivityCreateRequest extends LiveActivityRequest {
   /**
    * Dynamic content.
    */
-  content: LiveActivityContent
+  content: LiveActivityContent;
   /**
    * Fixed attributes.
    */
-  attributes: JsonObject
+  attributes: JsonObject;
 }
 
 /**
- * Live activity update request.
+ * Live Activity update request.
  */
 export interface LiveActivityUpdateRequest extends LiveActivityRequest {
   /**
-   * The live activity ID to update.
+   * The Live Activity ID to update.
    */
-  activityId: string
-   /**
+  activityId: string;
+  /**
    * Dynamic content.
    */
-  content: LiveActivityContent
+  content: LiveActivityContent;
 }
 
+/**
+ * Live Activity end request.
+ */
 export interface LiveActivityEndRequest extends LiveActivityRequest {
   /**
-   * The live activity ID to update.
+   * The Live Activity ID to update.
    */
-  activityId: string
+  activityId: string;
   /**
    * Dynamic content.
    */
-  content?: LiveActivityContent
+  content?: LiveActivityContent;
 
   /**
    * Dismissal policy. Defaults to `LiveActivityDismissalPolicyDefault`.
    */
-  dismissalPolicy?: LiveActivityDismissalPolicy
+  dismissalPolicy?: LiveActivityDismissalPolicy;
 }
 
-export type LiveActivityDismissalPolicy  = LiveActivityDismissalPolicyImmediate|LiveActivityDismissalPolicyDefault|LiveActivityDismissalPolicyAfterDate
+export type LiveActivityDismissalPolicy =
+  | LiveActivityDismissalPolicyImmediate
+  | LiveActivityDismissalPolicyDefault
+  | LiveActivityDismissalPolicyAfterDate;
 
 /**
  * Dismissal policy to immediately dismiss the Live Activity on end.
  */
 export interface LiveActivityDismissalPolicyImmediate {
-  type: "immediate"
+  type: 'immediate';
 }
 
 /**
  * Dismissal policy to dismiss the Live Activity after the expiration.
  */
 export interface LiveActivityDismissalPolicyDefault {
-  type: "default"
+  type: 'default';
 }
 
 /**
  * Dismissal policy to dismiss the Live Activity after a given date.
  */
 export interface LiveActivityDismissalPolicyAfterDate {
-  type: "after"
-  // ISO 8601 date string
-  date: string
+  type: 'after';
+  // ISO 8601 date string.
+  date: string;
+}
+
+/**
+ * Live Update info.
+ */
+export interface LiveUpdate {
+  /**
+   * The Live Update name.
+   */
+  name: string;
+
+  /**
+   * The Live Update type.
+   */
+  type: string;
+
+  /**
+   * Dynamic content.
+   */
+  content: JsonObject;
+
+  /**
+   *  ISO 8601 date string of the last content update.
+   */
+  lastContentUpdateTimestamp: string;
+
+  /**
+   * ISO 8601 date string of the last state update.
+   */
+  lastStateChangeTimestamp: string;
+
+  /**
+   * Optional ISO 8601 date string that defines when to end this Live Update.
+   */
+  dismissTimestamp?: string;
+}
+
+
+/**
+ * Live Update list request.
+ */
+export interface LiveUpdateListRequest {
+  type: string;
+}
+
+/**
+ * Live Update update request.
+ */
+export interface LiveUpdateUpdateRequest {
+  /**
+   * The Live Update name.
+   */
+  name: string;
+  /**
+   * Dynamic content.
+   */
+  content: JsonObject;
+
+  /**
+   * Optional ISO 8601 date string, used to filter out of order updates/
+   */
+  timestamp?: string;
+
+  /**
+   * Optional ISO 8601 date string that defines when to end this Live Update.
+   */
+  dismissTimestamp?: string;
+}
+
+/**
+ * Live Update end request.
+ */
+export interface LiveUpdateEndRequest {
+  /**
+   * The Live Update name.
+   */
+  name: string;
+
+  /**
+   * Dynamic content.
+   */
+  content?: JsonObject;
+
+  /**
+   * Optional ISO 8601 date string, used to filter out of order updates/
+   */
+  timestamp?: string;
+
+  /**
+   * Optional ISO 8601 date string that defines when to end this Live Update.
+   */
+  dismissTimestamp?: string;
+}
+
+/**
+ * Live Update create request.
+ */
+export interface LiveUpdateCreateRequest {
+  /**
+   * The Live Update name.
+   */
+  name: string;
+
+  /**
+   * The Live Update type.
+   */
+  type: string;
+
+  /**
+   * Dynamic content.
+   */
+  content: JsonObject;
+
+  /**
+   * Optional ISO 8601 date string, used to filter out of order updates/
+   */
+  timestamp?: string;
+
+  /**
+   * Optional ISO 8601 date string that defines when to end this Live Update.
+   */
+  dismissTimestamp?: string;
+}
+
+/**
+ * Live Update manager.
+ */
+export class AirshipLiveUpdateManager {
+  constructor(private readonly module: any) {}
+
+  /**
+   * Lists any Live Updates for the request.
+   * @param request The request options.
+   * @returns A promise with the result.
+   */
+  public list(request: LiveUpdateListRequest): Promise<LiveUpdate[]> {
+    return this.module.liveUpdateList(request);
+  }
+
+  /**
+   * Lists all Live Updates.
+   * @returns A promise with the result.
+   */
+  public listAll(): Promise<LiveUpdate[]> {
+    return this.module.liveUpdateListAll();
+  }
+
+  /**
+   * Creates a Live Update.
+   * @param request The request options.
+   * @returns A promise with the result.
+   */
+  public create(request: LiveUpdateCreateRequest): Promise<void> {
+    return this.module.liveUpdateCreate(request);
+  }
+
+  /**
+   * Updates a Live Update.
+   * @param request The request options.
+   * @returns A promise with the result.
+   */
+  public update(request: LiveUpdateUpdateRequest): Promise<void> {
+    return this.module.liveUpdateUpdate(request);
+  }
+
+  /**
+   * Ends a Live Update.
+   * @param request The request options.
+   * @returns A promise with the result.
+   */
+  public end(request: LiveUpdateEndRequest): Promise<void> {
+    return this.module.liveUpdateEnd(request);
+  }
 }

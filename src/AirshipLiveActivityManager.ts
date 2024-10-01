@@ -22,11 +22,20 @@ export class AirshipLiveActivityManager {
   }
 
   /**
+   * Lists all Live Activities.
+   * @param request The request options.
+   * @returns A promise with the result.
+   */
+  public listAll(): Promise<LiveActivity[]> {
+    return this.module.liveActivityListAll();
+  }
+
+  /**
    * Creates a Live Activity.
    * @param request The request options.
    * @returns A promise with the result.
    */
-  public create(request: LiveActivityCreateRequest): Promise<LiveActivity[]> {
+  public create(request: LiveActivityCreateRequest): Promise<LiveActivity> {
     return this.module.liveActivityCreate(request);
   }
 
@@ -35,7 +44,7 @@ export class AirshipLiveActivityManager {
    * @param request The request options.
    * @returns A promise with the result.
    */
-  public update(request: LiveActivityUpdateRequest): Promise<LiveActivity[]> {
+  public update(request: LiveActivityUpdateRequest): Promise<void> {
     return this.module.liveActivityUpdate(request);
   }
 
@@ -44,7 +53,7 @@ export class AirshipLiveActivityManager {
    * @param request The request options.
    * @returns A promise with the result.
    */
-  public end(request: LiveActivityEndRequest): Promise<LiveActivity[]> {
+  public end(request: LiveActivityEndRequest): Promise<void> {
     return this.module.liveActivityEnd(request);
   }
 }

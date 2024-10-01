@@ -1,5 +1,5 @@
 import { NativeEventEmitter, Platform } from 'react-native';
-import { Android, iOS, PushNotificationStatus, PushPayload } from './types';
+import { Android, iOS, PushNotificationStatus, PushPayload, PromptPermissionFallback } from './types';
 
 /**
  * Airship Push.
@@ -45,10 +45,13 @@ export class AirshipPush {
 
   /**
    * Enables user notifications.
+   * @param options Optional options.
    * @returns A promise with the permission result.
    */
-  public enableUserNotifications(): Promise<boolean> {
-    return this.module.pushEnableUserNotifications();
+  public enableUserNotifications(options?: {
+    fallback?: PromptPermissionFallback
+  }): Promise<boolean> {
+    return this.module.pushEnableUserNotifications(options);
   }
 
   /**

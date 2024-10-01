@@ -98,7 +98,7 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
-    abstract fun pushEnableUserNotifications(promise: Promise)
+    abstract fun pushEnableUserNotifications(options: ReadableMap?, promise: Promise)
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
@@ -407,6 +407,10 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun liveActivityListAll(promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
     abstract fun liveActivityList(request: ReadableMap?, promise: Promise)
 
     @ReactMethod
@@ -420,6 +424,24 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
     abstract fun liveActivityEnd(request: ReadableMap?, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun liveUpdateListAll(promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun liveUpdateList(request: ReadableMap?, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun liveUpdateCreate(request: ReadableMap?, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun liveUpdateUpdate(request: ReadableMap?, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun liveUpdateEnd(request: ReadableMap?, promise: Promise)
 }
-
-

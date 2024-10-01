@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import uuid from 'react-native-uuid';
 import {
   View,
   Text,
@@ -82,41 +83,18 @@ export default function HomeScreen() {
     [refreshTags]
   );
 
-  const handleNotificationsEnabled = useCallback((enabled: boolean) => {
-    Airship.push.setUserNotificationsEnabled(enabled);
-    setNotificationsEnabled(enabled);
+  const handleNotificationsEnabled = useCallback(async (enabled: boolean) => {
+    if (enabled) {
+      await Airship.push.enableUserNotifications({
+        fallback: 'systemSettings',
+      });
+    } else {
+      Airship.push.setUserNotificationsEnabled(false);
+    }
   }, []);
 
   useEffect(() => {
-    // Add takeOff here
-
-    Airship.push
-      .getNotificationStatus()
-      .then((id) => {
-        console.log(id);
-      })
-      .catch((error) => {
-        console.error('Error getting notification status:', error);
-      });
-
     setEmbeddedReady(Airship.inApp.isEmbeddedReady('test'));
-
-    Airship.push.iOS
-      .getAuthorizedNotificationSettings()
-      .then((id) => {
-        console.log(id);
-      })
-      .catch((error) => {
-        console.error('Error getting notification settings:', error);
-      });
-
-    Airship.push.iOS.getAuthorizedNotificationStatus().then((id) => {
-      console.log(id);
-    });
-
-    Airship.push.getNotificationStatus().then((id) => {
-      console.log(id);
-    });
 
     Airship.channel.getChannelId().then((id) => {
       if (id) {
@@ -124,7 +102,9 @@ export default function HomeScreen() {
       }
     });
 
-    Airship.push.isUserNotificationsEnabled().then(setNotificationsEnabled);
+    Airship.push
+      .getNotificationStatus()
+      .then((status) => setNotificationsEnabled(status.isUserOptedIn));
 
     const fetchTags = async () => {
       const fetchedTags = await Airship.channel.getTags();
@@ -140,20 +120,32 @@ export default function HomeScreen() {
 
     fetchNamedUser();
 
-    let subscription = Airship.addListener(
+    let channelListener = Airship.addListener(
       EventType.ChannelCreated,
       (event) => {
         setChannelId(event.channelId);
       }
     );
 
-    Airship.inApp.addEmbeddedReadyListener('test', (isReady) => {
-      console.log('Test ' + isReady);
-      setEmbeddedReady(isReady);
-    });
+    let embeddedListener = Airship.inApp.addEmbeddedReadyListener(
+      'test',
+      (isReady) => {
+        setEmbeddedReady(isReady);
+      }
+    );
+
+    let optInListener = Airship.addListener(
+      EventType.PushNotificationStatusChangedStatus,
+      (event) => {
+        console.log('Event', event);
+        setNotificationsEnabled(event.status.isUserOptedIn);
+      }
+    );
 
     return () => {
-      subscription.remove();
+      channelListener.remove();
+      embeddedListener.remove();
+      optInListener.remove();
     };
   }, []);
 
@@ -183,10 +175,20 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {Platform.OS === 'ios' ? (
-          <View>
-            <Button
-              onPress={async () => {
+        <View style={[styles.roundedView, { marginVertical: 8 }]}>
+          {Platform.OS === 'ios' ? (
+            <Text style={{ fontWeight: 'bold', marginStart: 8 }}>
+              Live Activities
+            </Text>
+          ) : (
+            <Text style={{ fontWeight: 'bold', marginStart: 8 }}>
+              Live Updates
+            </Text>
+          )}
+
+          <Button
+            onPress={async () => {
+              if (Platform.OS === 'ios') {
                 Airship.iOS.liveActivityManager.create({
                   attributesType: 'ExampleWidgetsAttributes',
                   content: {
@@ -196,39 +198,55 @@ export default function HomeScreen() {
                     relevanceScore: 0.0,
                   },
                   attributes: {
-                    name: 'some-unique-name',
+                    name: uuid.v4(),
                   },
                 });
-              }}
-              title="Start LA"
-              color="#841584"
-            />
-
-            <Button
-              onPress={async () => {
-                const activities = await Airship.iOS.liveActivityManager.list({
-                  attributesType: 'Example',
+              } else {
+                Airship.android.liveUpdateManager.create({
+                  type: 'Example',
+                  name: uuid.v4(),
+                  content: {
+                    emoji: '🙌',
+                  },
                 });
+              }
+            }}
+            title="Start New"
+            color="#841584"
+          />
+
+          <Button
+            onPress={async () => {
+              if (Platform.OS === 'ios') {
+                const activities =
+                  await Airship.iOS.liveActivityManager.listAll();
                 activities.forEach((element) => {
                   Airship.iOS.liveActivityManager.end({
                     activityId: element.id,
-                    attributesType: 'ExampleWidgetsAttributes',
                   });
                 });
-              }}
-              title="End All LA"
-              color="#841584"
-            />
-
-            <Button
-              onPress={async () => {
-                const activities = await Airship.iOS.liveActivityManager.list({
-                  attributesType: 'ExampleWidgetsAttributes',
+              } else {
+                const activities =
+                  await Airship.android.liveUpdateManager.listAll();
+                activities.forEach((element) => {
+                  Airship.android.liveUpdateManager.end({
+                    name: element.name,
+                  });
                 });
+              }
+            }}
+            title="End All"
+            color="#841584"
+          />
+
+          <Button
+            onPress={async () => {
+              if (Platform.OS === 'ios') {
+                const activities =
+                  await Airship.iOS.liveActivityManager.listAll();
                 activities.forEach((element) => {
                   Airship.iOS.liveActivityManager.update({
                     activityId: element.id,
-                    attributesType: 'ExampleWidgetsAttributes',
                     content: {
                       state: {
                         emoji: element.content.state.emoji + '🙌',
@@ -237,14 +255,23 @@ export default function HomeScreen() {
                     },
                   });
                 });
-              }}
-              title="Update All LA"
-              color="#841584"
-            />
-          </View>
-        ) : (
-          <View />
-        )}
+              } else {
+                const activities =
+                  await Airship.android.liveUpdateManager.listAll();
+                activities.forEach((element) => {
+                  Airship.android.liveUpdateManager.update({
+                    name: element.name,
+                    content: {
+                      emoji: element.content.emoji + '🙌',
+                    },
+                  });
+                });
+              }
+            }}
+            title="Update Alll"
+            color="#841584"
+          />
+        </View>
 
         <View style={{ flexDirection: 'column' }}>
           {channelId ? (
