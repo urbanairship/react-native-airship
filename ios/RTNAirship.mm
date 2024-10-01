@@ -594,6 +594,28 @@ RCT_REMAP_METHOD(messageCenterDisplay,
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
+RCT_REMAP_METHOD(messageCenterShowMessageCenter,
+                 messageCenterShowMessageCenter:(NSString *)messageId
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    [AirshipReactNative.shared messageCenterShowMessageCenterWithMessageId:messageId
+                                                           error:&error];
+
+    [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
+RCT_REMAP_METHOD(messageCenterShowMessageView,
+                 messageCenterShowMessageView:(NSString *)messageId
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    [AirshipReactNative.shared messageCenterShowMessageViewWithMessageId:messageId
+                                                           error:&error];
+
+    [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
 RCT_REMAP_METHOD(messageCenterGetMessages,
                  messageCenterGetMessages:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {

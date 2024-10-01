@@ -634,6 +634,18 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         proxy.messageCenter.setAutoLaunchDefaultMessageCenter(enabled)
     }
 
+    override fun messageCenterShowMessageCenter(messageId: String?, promise: Promise) {
+        promise.resolveResult {
+            proxy.messageCenter.showMessageCenter(messageId)
+        }
+    }
+
+    override fun messageCenterShowMessageView(messageId: String?, promise: Promise) {
+        promise.resolveResult {
+            proxy.messageCenter.showMessageView(requireNotNull(messageId))
+        }
+    }
+
     @ReactMethod
     override fun preferenceCenterDisplay(preferenceCenterId: String?, promise: Promise) {
         promise.resolveResult {

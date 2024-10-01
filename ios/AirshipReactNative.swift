@@ -512,6 +512,16 @@ public extension AirshipReactNative {
         try AirshipProxy.shared.messageCenter.display(messageID: messageId)
     }
 
+    @MainActor @objc
+    func messageCenterShowMessageView(messageId: String) throws  {
+        try AirshipProxy.shared.messageCenter.showMessageView(messageID: messageId)
+    }
+
+    @MainActor @objc
+    func messageCenterShowMessageCenter(messageId: String?) throws  {
+        try AirshipProxy.shared.messageCenter.showMessageCenter(messageID: messageId)
+    }
+
     @objc
     func messageCenterRefresh() async throws  {
         try await AirshipProxy.shared.messageCenter.refresh()
