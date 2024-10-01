@@ -56,7 +56,7 @@ public final class ExampleLiveUpdateHandler: SuspendLiveUpdateNotificationHandle
             context, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notification = NotificationCompat.Builder(context, "sports")
+        val notification = NotificationCompat.Builder(context, "emoji-example")
             .setSmallIcon(R.drawable.ic_notification)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_EVENT)
