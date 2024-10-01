@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
 
         <meta-data
-            android:name="com.urbanairship.plugin.AIRSHIP_EXTENDER"
+            android:name="com.urbanairship.plugin.extender"
             android:value="com.urbanairship.sample.AirshipExtender" />
 
         <activity
