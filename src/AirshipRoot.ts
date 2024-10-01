@@ -13,6 +13,7 @@ import { AirshipFeatureFlagManager } from './AirshipFeatureFlagManager';
 import { AirshipConfig, EventTypeMap, EventType } from './types';
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
 import { AirshipLiveActivityManager } from './AirshipLiveActivityManager';
+import { AirshipLiveUpdateManager } from './AirshipLiveUpdateManager';
 
 /**
  * Airship
@@ -35,6 +36,11 @@ export class AirshipRoot {
    */
   public readonly iOS: AirshipRootIOS;
 
+  /**
+   * iOS only accessors
+   */
+  public readonly android: AirshipRootAndroid;
+
   private readonly eventEmitter: UAEventEmitter;
 
   constructor(private readonly module: any) {
@@ -52,6 +58,7 @@ export class AirshipRoot {
     this.push = new AirshipPush(module);
     this.featureFlagManager = new AirshipFeatureFlagManager(module);
     this.iOS = new AirshipRootIOS(module);
+    this.android = new AirshipRootAndroid(module);
   }
 
   /**
@@ -117,5 +124,13 @@ export class AirshipRootIOS {
   
   constructor(module: any) {
     this.liveActivityManager = new AirshipLiveActivityManager(module);
+  }
+}
+
+export class AirshipRootAndroid {
+  public readonly liveUpdateManager: AirshipLiveUpdateManager;
+  
+  constructor(module: any) {
+    this.liveUpdateManager = new AirshipLiveUpdateManager(module);
   }
 }

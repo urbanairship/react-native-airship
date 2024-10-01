@@ -188,10 +188,10 @@ RCT_REMAP_METHOD(pushSetUserNotificationsEnabled,
 }
 
 RCT_REMAP_METHOD(pushEnableUserNotifications,
-                 pushEnableUserNotifications:(RCTPromiseResolveBlock)resolve
+                 pushEnableUserNotifications:(NSDictionary *)options
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared pushEnableUserNotificationsWithCompletionHandler:^(BOOL result, NSError *error) {
-
+    [AirshipReactNative.shared pushEnableUserNotificationsWithOptions:options completionHandler:^(BOOL result, NSError *error) {
         [self handleResult:@(result)
                      error:error
                    resolve:resolve
@@ -770,6 +770,15 @@ RCT_REMAP_METHOD(featureFlagManagerFlag,
     }];
 }
 
+RCT_REMAP_METHOD(liveActivityListAll,
+                 liveActivityListAll:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared liveActivityListAllWithCompletionHandler:^(id result, NSError * _Nullable error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
+    }];
+}
+
 RCT_REMAP_METHOD(liveActivityList,
                  liveActivityListRequest:(NSDictionary *)request
                  liveActivityList:(RCTPromiseResolveBlock)resolve
@@ -814,9 +823,44 @@ RCT_REMAP_METHOD(liveActivityEnd,
     }];
 }
 
+RCT_REMAP_METHOD(liveUpdateListAll,
+                 liveUpdateListAll:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
+}
 
 
+RCT_REMAP_METHOD(liveUpdateList,
+                 liveUpdateListRequest:(NSDictionary *)request
+                 liveUpdateList:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
 
+    reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
+}
+
+RCT_REMAP_METHOD(liveUpdateCreate,
+                 liveUpdateCreateRequest:(NSDictionary *)request
+                 liveUpdateCreate:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
+}
+
+RCT_REMAP_METHOD(liveUpdateUpdate,
+                 liveUpdateUpdateRequest:(NSDictionary *)request
+                 liveUpdateUpdate:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
+}
+
+RCT_REMAP_METHOD(liveUpdateEnd,
+                 liveUpdateEndRequest:(NSDictionary *)request
+                 liveUpdateEnd:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
+}
 
 
 -(void)handleResult:(id)result

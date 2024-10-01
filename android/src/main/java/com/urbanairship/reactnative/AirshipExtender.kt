@@ -10,6 +10,7 @@ import com.urbanairship.UAirship
  * Register the extender fully qualified class name in the manifest under the key
  * `com.urbanairship.reactnative.AIRSHIP_EXTENDER`.
  */
-interface AirshipExtender {
+@Deprecated("Use com.urbanairship.android.framework.proxy.AirshipPluginExtender instead and register it under the manifest key `com.urbanairship.plugin.extender`")
+interface AirshipExtender  {
     fun onAirshipReady(context: Context, airship: UAirship)
 }

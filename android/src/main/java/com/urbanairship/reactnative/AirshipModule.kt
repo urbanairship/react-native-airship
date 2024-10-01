@@ -8,10 +8,13 @@ import com.urbanairship.PendingResult
 import com.urbanairship.actions.ActionResult
 import com.urbanairship.actions.ActionValue
 import com.urbanairship.android.framework.proxy.EventType
+import com.urbanairship.android.framework.proxy.NotificationConfig
 import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.events.EventEmitter
 import com.urbanairship.android.framework.proxy.proxies.AirshipProxy
+import com.urbanairship.android.framework.proxy.proxies.EnableUserNotificationsArgs
 import com.urbanairship.android.framework.proxy.proxies.FeatureFlagProxy
+import com.urbanairship.android.framework.proxy.proxies.LiveUpdateRequest
 import com.urbanairship.android.framework.proxy.proxies.SuspendingPredicate
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonSerializable
@@ -238,9 +241,12 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
-    override fun pushEnableUserNotifications(promise: Promise) {
+    override fun pushEnableUserNotifications(options: ReadableMap?, promise: Promise) {
         promise.resolveSuspending(scope) {
-            proxy.push.enableUserPushNotifications()
+            val args = options?.let {
+                EnableUserNotificationsArgs.fromJson(Utils.convertMap(it).toJsonValue())
+            }
+            proxy.push.enableUserPushNotifications(args = args)
         }
     }
 
@@ -693,6 +699,12 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    override fun liveActivityListAll(promise: Promise) {
+        promise.resolveResult {
+            throw IllegalStateException("Not supported on Android")
+        }
+    }
+
     override fun liveActivityList(request: ReadableMap?, promise: Promise) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
@@ -714,6 +726,48 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun liveActivityEnd(request: ReadableMap?, promise: Promise) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
+        }
+    }
+
+    override fun liveUpdateListAll(promise: Promise) {
+        promise.resolveSuspending(scope) {
+            proxy.liveUpdateManager.listAll().let {
+                JsonValue.wrapOpt(it)
+            }
+        }
+    }
+
+    override fun liveUpdateList(request: ReadableMap?, promise: Promise) {
+        promise.resolveSuspending(scope) {
+            proxy.liveUpdateManager.list(
+                LiveUpdateRequest.List.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
+            ).let {
+                JsonValue.wrapOpt(it)
+            }
+        }
+    }
+
+    override fun liveUpdateCreate(request: ReadableMap?, promise: Promise) {
+        promise.resolveSuspending(scope) {
+            proxy.liveUpdateManager.create(
+                LiveUpdateRequest.Create.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
+            )
+        }
+    }
+
+    override fun liveUpdateUpdate(request: ReadableMap?, promise: Promise) {
+        promise.resolveSuspending(scope) {
+            proxy.liveUpdateManager.update(
+                LiveUpdateRequest.Update.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
+            )
+        }
+    }
+
+    override fun liveUpdateEnd(request: ReadableMap?, promise: Promise) {
+        promise.resolveSuspending(scope) {
+            proxy.liveUpdateManager.end(
+                LiveUpdateRequest.End.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
+            )
         }
     }
 

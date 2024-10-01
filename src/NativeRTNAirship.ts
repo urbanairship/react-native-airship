@@ -28,7 +28,7 @@ export interface Spec extends TurboModule {
   // Push
   pushSetUserNotificationsEnabled(enabled: boolean): Promise<void>;
   pushIsUserNotificationsEnabled(): Promise<boolean>;
-  pushEnableUserNotifications(): Promise<boolean>;
+  pushEnableUserNotifications(options?: Object): Promise<boolean>;
   pushGetNotificationStatus(): Promise<Object>;
   pushGetRegistrationToken(): Promise<string | null | undefined>;
   pushGetActiveNotifications(): Promise<Object[]>;
@@ -115,10 +115,18 @@ export interface Spec extends TurboModule {
   featureFlagManagerTrackInteraction(flag: Object): Promise<void>;
 
   // Live Activity
+  liveActivityListAll(): Promise<Object>;
   liveActivityList(request: Object): Promise<Object>;
   liveActivityCreate(request: Object): Promise<Object>;
-  liveActivityUpdate(request: Object): Promise<Object>;
-  liveActivityEnd(request: Object): Promise<Object>;
+  liveActivityUpdate(request: Object): Promise<void>;
+  liveActivityEnd(request: Object): Promise<void>;
+
+  // Live Update
+  liveUpdateListAll(): Promise<Object>;
+  liveUpdateList(request: Object): Promise<Object>;
+  liveUpdateCreate(request: Object): Promise<void>;
+  liveUpdateUpdate(request: Object): Promise<void>;
+  liveUpdateEnd(request: Object): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RTNAirship');
