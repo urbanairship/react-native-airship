@@ -96,6 +96,8 @@ export interface Spec extends TurboModule {
   messageCenterMarkMessageRead(messageId: string): Promise<void>;
   messageCenterRefresh(): Promise<void>;
   messageCenterSetAutoLaunchDefaultMessageCenter(enabled: boolean): void;
+  messageCenterShowMessageCenter(messageId?: string): Promise<void>;
+  messageCenterShowMessageView(messageId: string): Promise<void>;
 
   // Preference Center
   preferenceCenterDisplay(preferenceCenterId: string): Promise<void>;

@@ -25,7 +25,7 @@ export class AirshipMessageCenter {
   /**
    * Marks a message as read.
    * @param messageId The message Id.
-   * @returns A promise. Will reject if the message is not 
+   * @returns A promise. Will reject if the message is not
    * found or if takeOff is not called.
    */
   public markMessageRead(messageId: string): Promise<void> {
@@ -35,7 +35,7 @@ export class AirshipMessageCenter {
   /**
    * Deletes a message.
    * @param messageId The message Id.
-   * @returns A promise. Will reject if the message is not 
+   * @returns A promise. Will reject if the message is not
    * found or if takeOff is not called.
    */
   public deleteMessage(messageId: string): Promise<void> {
@@ -52,9 +52,9 @@ export class AirshipMessageCenter {
 
   /**
    * Requests to display the Message Center.
-   * 
-   * Will either emit an event to display the 
-   * Message Center if auto launch message center 
+   *
+   * Will either emit an event to display the
+   * Message Center if auto launch message center
    * is disabled, or display the OOTB message center.
    * @param messageId Optional message Id.
    * @returns A promise.
@@ -64,8 +64,28 @@ export class AirshipMessageCenter {
   }
 
   /**
+   * Overlays the Message Center regardless if auto launch Message Center is enabled or not.
+   *
+   * @param messageId Optional message Id.
+   * @returns A promise.
+   */
+  public showMessageCenter(messageId?: string): Promise<void> {
+    return this.module.messageCenterShowMessageCenter(messageId);
+  }
+
+  /**
+   * Overlays the message view regardless if auto launch Message Center is enabled or not.
+   *
+   * @param messageId The message Id.
+   * @returns A promise.
+   */
+  public showMessageView(messageId: string): Promise<void> {
+    return this.module.messageCenterShowMessageView(messageId);
+  }
+
+  /**
    * Refreshes the messages.
-   * @returns A promise. Will reject if the list fails to refresh or if 
+   * @returns A promise. Will reject if the list fails to refresh or if
    * takeOff is not called yet.
    */
   public refreshMessages(): Promise<void> {

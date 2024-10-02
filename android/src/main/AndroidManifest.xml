@@ -14,8 +14,16 @@
         <activity
             android:name="com.urbanairship.android.framework.proxy.CustomMessageCenterActivity"
             android:label="@string/ua_message_center_title"
+            android:theme="@style/Theme.AppCompat.DayNight"
             android:launchMode="singleTask"
             android:exported="false">
+
+            <intent-filter>
+                <action android:name="com.urbanairship.VIEW_RICH_PUSH_INBOX" />
+                <data android:scheme="message" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="com.urbanairship.VIEW_RICH_PUSH_INBOX" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -24,6 +32,7 @@
 
         <activity
             android:name="com.urbanairship.android.framework.proxy.CustomMessageActivity"
+            android:theme="@style/Theme.AppCompat.DayNight"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.urbanairship.VIEW_RICH_PUSH_MESSAGE" />
