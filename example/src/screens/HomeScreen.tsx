@@ -166,16 +166,60 @@ export default function HomeScreen() {
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
+
             }}
           >
             <Image
-              style={[styles.backgroundIcon, { paddingBottom: 0 }]}
+              style={styles.backgroundIcon}
               source={require('./../img/airship-mark.png')}
             />
           </View>
         )}
 
-        <View style={[styles.roundedView, { marginVertical: 8 }]}>
+
+
+        <View style={{ flexDirection: 'column' }}>
+          {channelId ? (
+            <>
+              <View style={[styles.roundedView, { marginBottom: 8 }]} />
+              <EnablePushCell
+                notificationsEnabled={notificationsEnabled}
+                handleNotificationsEnabled={handleNotificationsEnabled}
+              />
+              <View style={[styles.roundedView, { marginBottom: 8 }]}>
+                <ChannelCell channelId={channelId} />
+              </View>
+              <View style={[styles.roundedView, { marginBottom: 8 }]}>
+                <NamedUserManagerCell
+                  namedUserText={namedUserText}
+                  handleNamedUserSet={handleNamedUserSet}
+                  handleUpdateNamedUserText={setNamedUserText}
+                  namedUser={namedUser}
+                />
+              </View>
+              <View style={styles.roundedView}>
+                <TagManagerCell
+                  tagText={tagText}
+                  tags={tags}
+                  handleTagAdd={handleTagAdd}
+                  handleTagRemove={handleTagRemove}
+                  handleUpdateTagText={setTagText}
+                />
+              </View>
+            </>
+          ) : (
+            <View style={styles.warningView}>
+              <Text style={styles.warningTitleText}>Channel Unavailble</Text>
+              <Text style={styles.warningBodyText}>
+                Have you added the takeOff call with the correct app key and
+                secret?
+              </Text>
+            </View>
+          )}
+        </View>
+
+
+        <View style={[styles.roundedView, { marginVertical: 8, padding: 8}]}>
           {Platform.OS === 'ios' ? (
             <Text style={{ fontWeight: 'bold', marginStart: 8 }}>
               Live Activities
@@ -189,7 +233,7 @@ export default function HomeScreen() {
           <Button
             onPress={async () => {
               if (Platform.OS === 'ios') {
-                Airship.iOS.liveActivityManager.create({
+                Airship.iOS.liveActivityManager.start({
                   attributesType: 'ExampleWidgetsAttributes',
                   content: {
                     state: {
@@ -202,7 +246,7 @@ export default function HomeScreen() {
                   },
                 });
               } else {
-                Airship.android.liveUpdateManager.create({
+                Airship.android.liveUpdateManager.start({
                   type: 'Example',
                   name: uuid.v4(),
                   content: {
@@ -223,6 +267,9 @@ export default function HomeScreen() {
                 activities.forEach((element) => {
                   Airship.iOS.liveActivityManager.end({
                     activityId: element.id,
+                    dismissalPolicy: {
+                      type: "immediate"
+                    }
                   });
                 });
               } else {
@@ -268,49 +315,9 @@ export default function HomeScreen() {
                 });
               }
             }}
-            title="Update Alll"
+            title="Update All"
             color="#841584"
           />
-        </View>
-
-        <View style={{ flexDirection: 'column' }}>
-          {channelId ? (
-            <>
-              <View style={[styles.roundedView, { marginBottom: 8 }]} />
-              <EnablePushCell
-                notificationsEnabled={notificationsEnabled}
-                handleNotificationsEnabled={handleNotificationsEnabled}
-              />
-              <View style={[styles.roundedView, { marginBottom: 8 }]}>
-                <ChannelCell channelId={channelId} />
-              </View>
-              <View style={[styles.roundedView, { marginBottom: 8 }]}>
-                <NamedUserManagerCell
-                  namedUserText={namedUserText}
-                  handleNamedUserSet={handleNamedUserSet}
-                  handleUpdateNamedUserText={setNamedUserText}
-                  namedUser={namedUser}
-                />
-              </View>
-              <View style={styles.roundedView}>
-                <TagManagerCell
-                  tagText={tagText}
-                  tags={tags}
-                  handleTagAdd={handleTagAdd}
-                  handleTagRemove={handleTagRemove}
-                  handleUpdateTagText={setTagText}
-                />
-              </View>
-            </>
-          ) : (
-            <View style={styles.warningView}>
-              <Text style={styles.warningTitleText}>Channel Unavailble</Text>
-              <Text style={styles.warningBodyText}>
-                Have you added the takeOff call with the correct app key and
-                secret?
-              </Text>
-            </View>
-          )}
         </View>
 
         <View style={{ flexGrow: 0 }} />

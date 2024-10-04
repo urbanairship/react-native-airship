@@ -1,7 +1,7 @@
 import {
   LiveActivity,
   LiveActivityListRequest,
-  LiveActivityCreateRequest,
+  LiveActivityStartRequest,
   LiveActivityUpdateRequest,
   LiveActivityEndRequest,
 } from './types';
@@ -31,12 +31,12 @@ export class AirshipLiveActivityManager {
   }
 
   /**
-   * Creates a Live Activity.
+   * Starts a Live Activity.
    * @param request The request options.
    * @returns A promise with the result.
    */
-  public create(request: LiveActivityCreateRequest): Promise<LiveActivity> {
-    return this.module.liveActivityCreate(request);
+  public start(request: LiveActivityStartRequest): Promise<LiveActivity> {
+    return this.module.liveActivityStart(request);
   }
 
   /**
@@ -57,3 +57,4 @@ export class AirshipLiveActivityManager {
     return this.module.liveActivityEnd(request);
   }
 }
+

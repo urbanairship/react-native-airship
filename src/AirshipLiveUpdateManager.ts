@@ -1,7 +1,7 @@
 import {
   LiveUpdate,
   LiveUpdateListRequest,
-  LiveUpdateCreateRequest,
+  LiveUpdateStartRequest,
   LiveUpdateUpdateRequest,
   LiveUpdateEndRequest,
 } from './types';
@@ -30,12 +30,12 @@ export class AirshipLiveUpdateManager {
   }
 
   /**
-   * Creates a Live Update.
+   * Starts a Live Update.
    * @param request The request options.
    * @returns A promise with the result.
    */
-  public create(request: LiveUpdateCreateRequest): Promise<void> {
-    return this.module.liveUpdateCreate(request);
+  public start(request: LiveUpdateStartRequest): Promise<void> {
+    return this.module.liveUpdateStart(request);
   }
 
   /**
@@ -54,6 +54,14 @@ export class AirshipLiveUpdateManager {
    */
   public end(request: LiveUpdateEndRequest): Promise<void> {
     return this.module.liveUpdateEnd(request);
+  }
+
+  /**
+   * Clears all Live Updates.
+   * @returns A promise with the result.
+   */
+  public clearAll(): Promise<void> {
+    return this.module.liveUpdateClearAll();
   }
 }
 

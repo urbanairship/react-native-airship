@@ -1,5 +1,19 @@
 # React Native Module Changelog
 
+## Version 19.4.0 - October 4, 2024
+
+### Changes
+- Updated Airship Android SDK to [18.3.2](https://github.com/urbanairship/android-library/releases/tag/18.3.2)
+- Updated Airship iOS SDK to [18.10.0](https://github.com/urbanairship/ios-library/releases/tag/18.10.0)
+- Added `notificationPermissionStatus` to `PushNotificationStatus`
+- Added options to `enableUserNotifications` to specify the `PromptPermissionFallback` when enabling user notifications
+- Added new `showMessageCenter(messageId?: string)` and `showMessageView(messageId: string)` to `MessageCenter` to display the OOTB UI even if `autoLaunchDefaultMessageCenter` is disabled
+- Added new APIs to manage [iOS Live Activities](https://docs.airship.com/platform/mobile/ios-live-activities/)
+- Added new APIs to manage [Android Live Updates](https://docs.airship.com/platform/mobile/android-live-updates/)
+- Added a new [iOS plugin extender]() to modify the native Airship SDK after takeOff
+- Added new [Android plugin extender]() to modify the native Airship SDK after takeOff
+- Deprecated `com.urbanairship.reactnative.AirshipExtender` for the common `com.urbanairship.android.framework.proxy.AirshipPluginExtender`. The manifest name also changed from `com.urbanairship.reactnative.AIRSHIP_EXTENDER` to `com.urbanairship.plugin.extender`
+
 ## Version 19.3.2 - September 13, 2024
 Patch release to fix a compile issue with the new Architecture on iOS and to fix a potential race condition on the event listeners when refreshing the JS bridge.
 

@@ -723,7 +723,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
-    override fun liveActivityCreate(request: ReadableMap?, promise: Promise) {
+    override fun liveActivityStart(request: ReadableMap?, promise: Promise) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
         }
@@ -759,10 +759,10 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
-    override fun liveUpdateCreate(request: ReadableMap?, promise: Promise) {
+    override fun liveUpdateStart(request: ReadableMap?, promise: Promise) {
         promise.resolveSuspending(scope) {
-            proxy.liveUpdateManager.create(
-                LiveUpdateRequest.Create.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
+            proxy.liveUpdateManager.start(
+                LiveUpdateRequest.Start.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
             )
         }
     }
@@ -780,6 +780,12 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             proxy.liveUpdateManager.end(
                 LiveUpdateRequest.End.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
             )
+        }
+    }
+
+    override fun liveUpdateClearAll(promise: Promise) {
+        promise.resolveSuspending(scope) {
+            proxy.liveUpdateManager.clearAll()
         }
     }
 

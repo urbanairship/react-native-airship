@@ -13,10 +13,11 @@ export default StyleSheet.create({
     padding: 10,
   },
   backgroundIcon: {
-    width: '90%',
+    width: '50%',
+    height: undefined,
+    aspectRatio: 1,
     resizeMode: 'contain',
     alignItems: 'center',
-    padding: 20,
   },
   backgroundContainer: {
     flex: 1,
