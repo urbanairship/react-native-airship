@@ -902,9 +902,9 @@ export interface LiveActivityRequest {
 export interface LiveActivityListRequest extends LiveActivityRequest {}
 
 /**
- * Live Activity create request.
+ * Live Activity start request.
  */
-export interface LiveActivityCreateRequest extends LiveActivityRequest {
+export interface LiveActivityStartRequest extends LiveActivityRequest {
   /**
    * Dynamic content.
    */
@@ -1069,9 +1069,9 @@ export interface LiveUpdateEndRequest {
 }
 
 /**
- * Live Update create request.
+ * Live Update start request.
  */
-export interface LiveUpdateCreateRequest {
+export interface LiveUpdateStartRequest {
   /**
    * The Live Update name.
    */

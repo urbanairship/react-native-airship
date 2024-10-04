@@ -39,7 +39,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "19.3.2"
+    public static let version: String = "19.4.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -637,42 +637,30 @@ public extension AirshipReactNative {
     }
 
     @objc
-    func liveActivityCreate(options: Any) async throws -> Any  {
-        do {
-            if #available(iOS 16.1, *) {
-                let result = try await LiveActivityManager.shared.create(try AirshipJSON.wrap(options).decode())
-                return try AirshipJSON.wrap(result).unWrap() as Any
-            } else {
-                throw AirshipErrors.error("Not available before 16.1")
-            }
-        } catch {
-            throw error
+    func liveActivityStart(options: Any) async throws -> Any  {
+        if #available(iOS 16.1, *) {
+            let result = try await LiveActivityManager.shared.start(try AirshipJSON.wrap(options).decode())
+            return try AirshipJSON.wrap(result).unWrap() as Any
+        } else {
+            throw AirshipErrors.error("Not available before 16.1")
         }
     }
 
     @objc
     func liveActivityUpdate(options: Any) async throws -> Void  {
-        do {
-            if #available(iOS 16.1, *) {
-                try await LiveActivityManager.shared.update(try AirshipJSON.wrap(options).decode())
-            } else {
-                throw AirshipErrors.error("Not available before 16.1")
-            }
-        } catch {
-            throw error
+        if #available(iOS 16.1, *) {
+            try await LiveActivityManager.shared.update(try AirshipJSON.wrap(options).decode())
+        } else {
+            throw AirshipErrors.error("Not available before 16.1")
         }
     }
 
     @objc
     func liveActivityEnd(options: Any) async throws -> Void  {
-        do {
-            if #available(iOS 16.1, *) {
-                try await LiveActivityManager.shared.end(try AirshipJSON.wrap(options).decode())
-            } else {
-                throw AirshipErrors.error("Not available before 16.1")
-            }
-        } catch {
-            throw error
+        if #available(iOS 16.1, *) {
+            try await LiveActivityManager.shared.end(try AirshipJSON.wrap(options).decode())
+        } else {
+            throw AirshipErrors.error("Not available before 16.1")
         }
     }
 }

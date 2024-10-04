@@ -119,16 +119,17 @@ export interface Spec extends TurboModule {
   // Live Activity
   liveActivityListAll(): Promise<Object>;
   liveActivityList(request: Object): Promise<Object>;
-  liveActivityCreate(request: Object): Promise<Object>;
+  liveActivityStart(request: Object): Promise<Object>;
   liveActivityUpdate(request: Object): Promise<void>;
   liveActivityEnd(request: Object): Promise<void>;
 
   // Live Update
   liveUpdateListAll(): Promise<Object>;
   liveUpdateList(request: Object): Promise<Object>;
-  liveUpdateCreate(request: Object): Promise<void>;
+  liveUpdateStart(request: Object): Promise<void>;
   liveUpdateUpdate(request: Object): Promise<void>;
   liveUpdateEnd(request: Object): Promise<void>;
+  liveUpdateClearAll(): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RTNAirship');
