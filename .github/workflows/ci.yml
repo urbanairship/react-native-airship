@@ -61,9 +61,8 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
       
-      - run: |
-          sed -i '' 's/newArchEnabled=true/newArchEnabled=false/' example/android/gradle.properties
-          npm run bootstrap
-          run: bash ./scripts/run_ci_tasks.sh -a
+      - run: sed -i '' 's/newArchEnabled=true/newArchEnabled=false/' example/android/gradle.properties
+      - run: npm run bootstrap
+      - run: bash ./scripts/run_ci_tasks.sh -a
 
 
