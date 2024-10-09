@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   test:
-    runs-on: macos-14-xlarge
+    runs-on: macos-13-xlarge
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -35,7 +35,7 @@ jobs:
       - run: bash ./scripts/run_ci_tasks.sh -a
 
   test-android-old-arch:
-    runs-on: macos-14-xlarge
+    runs-on: macos-13-xlarge
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
