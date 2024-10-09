@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 19.4.1 - October 9, 2024
+Patch release to fix a compile issue with the old Architecture on Android.
+
+### Changes
+- Fixed compile issue when using old architecture on Android.
+
 ## Version 19.4.0 - October 4, 2024
 
 ### Changes

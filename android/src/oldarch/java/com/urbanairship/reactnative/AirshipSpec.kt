@@ -355,6 +355,14 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun messageCenterShowMessageCenter(messageId: String?, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun messageCenterShowMessageView(messageId: String?, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
     abstract fun preferenceCenterDisplay(
         preferenceCenterId: String?,
         promise: Promise
