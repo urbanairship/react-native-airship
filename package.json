@@ -1,6 +1,6 @@
 {
   "name": "@ua/react-native-airship",
-  "version": "19.4.0",
+  "version": "19.4.1",
   "description": "Airship plugin for React Native apps.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
