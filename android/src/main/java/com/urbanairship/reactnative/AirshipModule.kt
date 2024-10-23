@@ -713,36 +713,42 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
     override fun liveActivityListAll(promise: Promise) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
+    @ReactMethod
     override fun liveActivityList(request: ReadableMap?, promise: Promise) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
+    @ReactMethod
     override fun liveActivityStart(request: ReadableMap?, promise: Promise) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
+    @ReactMethod
     override fun liveActivityUpdate(request: ReadableMap?, promise: Promise) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
+    @ReactMethod
     override fun liveActivityEnd(request: ReadableMap?, promise: Promise) {
         promise.resolveResult {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
+    @ReactMethod
     override fun liveUpdateListAll(promise: Promise) {
         promise.resolveSuspending(scope) {
             proxy.liveUpdateManager.listAll().let {
@@ -751,6 +757,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
     override fun liveUpdateList(request: ReadableMap?, promise: Promise) {
         promise.resolveSuspending(scope) {
             proxy.liveUpdateManager.list(
@@ -761,6 +768,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
     override fun liveUpdateStart(request: ReadableMap?, promise: Promise) {
         promise.resolveSuspending(scope) {
             proxy.liveUpdateManager.start(
@@ -769,6 +777,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
     override fun liveUpdateUpdate(request: ReadableMap?, promise: Promise) {
         promise.resolveSuspending(scope) {
             proxy.liveUpdateManager.update(
@@ -777,6 +786,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
     override fun liveUpdateEnd(request: ReadableMap?, promise: Promise) {
         promise.resolveSuspending(scope) {
             proxy.liveUpdateManager.end(
@@ -785,6 +795,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
     override fun liveUpdateClearAll(promise: Promise) {
         promise.resolveSuspending(scope) {
             proxy.liveUpdateManager.clearAll()

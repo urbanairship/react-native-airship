@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 19.4.2 - October 22, 2024
+Patch release to fix live activities and live updates on react old architecture and update Android and iOS SDK.
+
+### Changes
+- Fixed live activities and live updates on react old architecture.
+- Updated Airship Android SDK to [18.3.3](https://github.com/urbanairship/android-library/releases/tag/18.3.3)
+- Updated Airship iOS SDK to [18.11.1](https://github.com/urbanairship/ios-library/releases/tag/18.11.1)
+
 ## Version 19.4.1 - October 9, 2024
 Patch release to fix a compile issue with the old Architecture on Android.
 
