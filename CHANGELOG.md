@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 20.0.0 - October 25, 2024
+Major version that makes it easier to include Airship in a hybrid app. The only breaking change is when extending the `AirshipPluginExtender` protocol on Java there is a new `extendConfig(Context, AirshipConfigOptions.Builder)` method to implement. Applications that are not using `AirshipPluginExtender` or using Kotlin are not affected by the breaking change.
+
+### Changes
+- Fixed tracking live activities started from a push notification
+- Added methods to plugin extenders to extend the Airship Config options
+- Exposed forward listeners on Android with `AirshipPluginForwardListeners` and delegates on iOS with `AirshipPluginForwardDelegates`. These listeners and delegates are useful for hybrid apps that need to listen for events both natively and in React Native context
+
 ## Version 19.4.2 - October 22, 2024
 Patch release to fix live activities and live updates on react old architecture and update Android and iOS SDK.
 
