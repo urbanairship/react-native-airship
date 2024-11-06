@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 20.0.1 - November 6, 2024
+Patch release that fixes a crash when using both Airship and `@react-native-firebase/messaging`.
+
+### Changes
+- Updated Airship iOS SDK to [18.12.1](https://github.com/urbanairship/ios-library/releases/tag/18.12.1)
+- Updated Airship Android SDK to [18.4.0](https://github.com/urbanairship/android-library/releases/tag/18.4.0)
+
 ## Version 20.0.0 - October 25, 2024
 Major version that makes it easier to include Airship in a hybrid app. The only breaking change is when extending the `AirshipPluginExtender` protocol on Java there is a new `extendConfig(Context, AirshipConfigOptions.Builder)` method to implement. Applications that are not using `AirshipPluginExtender` or using Kotlin are not affected by the breaking change.
 
