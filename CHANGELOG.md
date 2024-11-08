@@ -1,10 +1,17 @@
 # React Native Module Changelog
 
+## Version 20.0.2 - November 8, 2024
+Patch release that resolves an issue with Firebase integrations and fixes an issue with opt-in checks when requestAuthorizationToUseNotifications is set to false on iOS.
+
+### Changes
+- Updated Airship iOS SDK to [18.12.1](https://github.com/urbanairship/ios-library/releases/tag/18.12.1)
+- Fixed issues caused by swizzling conflicts with some Firebase framework integrations.
+- Fixed opt-in check permissions querying when requestAuthorizationToUseNotifications is set to false on iOS.
+
 ## Version 20.0.1 - November 6, 2024
 Patch release that fixes a crash when using both Airship and `@react-native-firebase/messaging`.
 
 ### Changes
-- Updated Airship iOS SDK to [18.12.1](https://github.com/urbanairship/ios-library/releases/tag/18.12.1)
 - Updated Airship Android SDK to [18.4.0](https://github.com/urbanairship/android-library/releases/tag/18.4.0)
 
 ## Version 20.0.0 - October 25, 2024
