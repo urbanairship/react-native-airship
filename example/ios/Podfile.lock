@@ -17,7 +17,7 @@ PODS:
     - Airship/Core
   - Airship/PreferenceCenter (18.11.1):
     - Airship/Core
-  - AirshipFrameworkProxy (11.0.2):
+  - AirshipFrameworkProxy (11.0.4):
     - Airship (= 18.11.1)
   - AirshipServiceExtension (18.12.1)
   - boost (1.83.0)
@@ -908,7 +908,7 @@ PODS:
     - glog
     - React-debug
   - react-native-airship (20.0.1):
-    - AirshipFrameworkProxy (= 11.0.2)
+    - AirshipFrameworkProxy (= 11.0.4)
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
