@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 20.0.3 - November 21, 2024
+Patch release that updates the Android build to no longer require the react-native path and updates the Airship Android SDK to 18.4.1.
+
+### Changes
+- Updated Airship Android SDK to [18.4.1](https://github.com/urbanairship/android-library/releases/tag/18.4.1)
+- Updated Android build.gradle file to no longer look up the React Native version
+
+
 ## Version 20.0.2 - November 8, 2024
 Patch release that resolves an issue with Firebase integrations and fixes an issue with opt-in checks when requestAuthorizationToUseNotifications is set to false on iOS.
 
