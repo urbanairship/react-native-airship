@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 20.0.4 - November 26, 2024
+Patch release that updates the iOS SDK to 18.12.2 and Android SDK to 18.4.2
+
+### Changes
+- Updated Android SDK to 18.4.2.
+- Updated iOS SDK to 18.12.2.
+
 ## Version 20.0.3 - November 21, 2024
 Patch release that updates the Android build to no longer require the react-native path and updates the Airship Android SDK to 18.4.1.
 
