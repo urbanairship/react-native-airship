@@ -19,6 +19,7 @@ import com.urbanairship.android.framework.proxy.proxies.SuspendingPredicate
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonSerializable
 import com.urbanairship.json.JsonValue
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filter
 import java.util.UUID
@@ -698,18 +699,39 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
-    override fun featureFlagManagerFlag(flagName: String?, promise: Promise) {
+    override fun featureFlagManagerFlag(flagName: String, useResultCache: Boolean, promise: Promise) {
         promise.resolveSuspending(scope) {
-            requireNotNull(flagName)
-            proxy.featureFlagManager.flag(flagName)
+            proxy.featureFlagManager.flag(flagName, useResultCache)
         }
     }
 
     @ReactMethod
-    override fun featureFlagManagerTrackInteraction(flag: ReadableMap?, promise: Promise) {
+    override fun featureFlagManagerTrackInteraction(flag: ReadableMap, promise: Promise) {
         promise.resolveResult {
-            val parsedFlag = FeatureFlagProxy(Utils.convertMap(requireNotNull(flag)).toJsonValue())
+            val parsedFlag = FeatureFlagProxy(Utils.convertMap(flag).toJsonValue())
             proxy.featureFlagManager.trackInteraction(parsedFlag)
+        }
+    }
+
+    @ReactMethod
+    override fun featureFlagManagerResultCacheGetFlag(flagName: String, promise: Promise) {
+        promise.resolveSuspending(scope) {
+            proxy.featureFlagManager.resultCache.flag(flagName)
+        }
+    }
+
+    @ReactMethod
+    override fun featureFlagManagerResultCacheSetFlag(flag: ReadableMap, ttl: Double, promise: Promise) {
+        promise.resolveSuspending(scope) {
+            val parsedFlag = FeatureFlagProxy(Utils.convertMap(flag).toJsonValue())
+            proxy.featureFlagManager.resultCache.cache(parsedFlag, ttl.milliseconds)
+        }
+    }
+
+    @ReactMethod
+    override fun featureFlagManagerResultCacheRemoveFlag(flagName: String, promise: Promise) {
+        promise.resolveSuspending(scope) {
+            proxy.featureFlagManager.resultCache.removeCachedFlag(flagName)
         }
     }
 

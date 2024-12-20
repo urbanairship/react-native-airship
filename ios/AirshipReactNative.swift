@@ -39,7 +39,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "20.1.0"
+    public static let version: String = "20.2.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -599,8 +599,8 @@ public extension AirshipReactNative {
 @objc
 public extension AirshipReactNative {
     @objc
-    func featureFlagManagerFlag(flagName: String) async throws -> Any  {
-        let result = try await AirshipProxy.shared.featureFlagManager.flag(name: flagName)
+    func featureFlagManagerFlag(flagName: String, useResultCache: Bool) async throws -> Any  {
+        let result = try await AirshipProxy.shared.featureFlagManager.flag(name: flagName, useResultCache: useResultCache)
         return try AirshipJSON.wrap(result).unWrap() as Any
     }
 
@@ -608,6 +608,26 @@ public extension AirshipReactNative {
     func featureFlagManagerTrackInteracted(flag: Any) throws {
         let flag: FeatureFlagProxy = try AirshipJSON.wrap(flag).decode()
         try AirshipProxy.shared.featureFlagManager.trackInteraction(flag: flag)
+    }
+
+    @objc
+    func featureFlagManagerResultCacheGetFlag(name: String) async throws -> Any {
+        let result = try await AirshipProxy.shared.featureFlagManager.resultCache.flag(name: name)
+        return try AirshipJSON.wrap(result).unWrap() as Any
+    }
+
+    @objc
+    func featureFlagManagerResultCacheSetFlag(flag: Any, ttl: NSNumber) async throws {
+        let flag: FeatureFlagProxy = try AirshipJSON.wrap(flag).decode()
+        try await AirshipProxy.shared.featureFlagManager.resultCache.cache(
+            flag: flag,
+            ttl: TimeInterval(ttl.uint64Value/1000)
+        )
+    }
+
+    @objc
+    func featureFlagManagerResultCacheRemoveFlag(name: String) async throws {
+        try await AirshipProxy.shared.featureFlagManager.resultCache.removeCachedFlag(name: name)
     }
 }
 

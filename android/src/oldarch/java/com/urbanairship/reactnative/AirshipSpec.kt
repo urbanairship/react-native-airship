@@ -407,11 +407,23 @@ abstract class AirshipSpec internal constructor(context: ReactApplicationContext
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
-    abstract fun featureFlagManagerFlag(flagName: String?, promise: Promise)
+    abstract fun featureFlagManagerFlag(flagName: String, useResultCache: Boolean, promise: Promise)
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
-    abstract fun featureFlagManagerTrackInteraction(flag: ReadableMap?, promise: Promise)
+    abstract fun featureFlagManagerTrackInteraction(flag: ReadableMap, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun featureFlagManagerResultCacheGetFlag(flagName: String, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun featureFlagManagerResultCacheSetFlag(flag: ReadableMap, ttl: Double, promise: Promise)
+
+    @ReactMethod
+    @com.facebook.proguard.annotations.DoNotStrip
+    abstract fun featureFlagManagerResultCacheRemoveFlag(flagName: String, promise: Promise)
 
     @ReactMethod
     @com.facebook.proguard.annotations.DoNotStrip
