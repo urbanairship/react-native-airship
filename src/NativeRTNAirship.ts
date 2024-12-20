@@ -113,8 +113,11 @@ export interface Spec extends TurboModule {
   localeClearLocaleOverride(): Promise<void>;
 
   // Feature Flag Manager
-  featureFlagManagerFlag(flagName: string):Promise<Object>;
+  featureFlagManagerFlag(flagName: string, userResultCache: boolean):Promise<Object>;
   featureFlagManagerTrackInteraction(flag: Object): Promise<void>;
+  featureFlagManagerResultGetFlag(flagName: string): Promise<Object>;
+  featureFlagManagerResultCacheSetFlag(flag: Object, ttl: number): Promise<void>;
+  featureFlagManagerResultCacheRemoveFlag(flagName: string): Promise<void>;
 
   // Live Activity
   liveActivityListAll(): Promise<Object>;
