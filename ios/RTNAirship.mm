@@ -783,14 +783,52 @@ RCT_REMAP_METHOD(featureFlagManagerTrackInteraction,
 
 RCT_REMAP_METHOD(featureFlagManagerFlag,
                  featureFlagManagerFlag:(NSString *)flagName
+                 useResultCache:(BOOL)useResultCache
                  featureFlagManagerFlag:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared featureFlagManagerFlagWithFlagName:flagName
+                                                   useResultCache:useResultCache
                                                 completionHandler:^(id result, NSError * _Nullable error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
 }
+
+RCT_REMAP_METHOD(featureFlagManagerResultCacheGetFlag,
+                 featureFlagManagerResultCacheGetFlag:(NSString *)flagName
+                 featureFlagManagerResultCacheGetFlag:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared featureFlagManagerResultCacheGetFlagWithName:flagName
+                                                completionHandler:^(id result, NSError * _Nullable error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
+    }];
+}
+
+RCT_REMAP_METHOD(featureFlagManagerResultCacheSetFlag,
+                 featureFlagManagerResultCacheSetFlag:(NSDictionary *)flag
+                 ttl:(nonnull NSNumber *)ttl
+                 featureFlagManagerResultCacheGetFlag:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared featureFlagManagerResultCacheSetFlagWithFlag:flag
+                                                                ttl:ttl
+                                                          completionHandler:^(NSError * _Nullable error) {
+                  [self handleResult:nil error:error resolve:resolve reject:reject];
+              }];
+}
+
+RCT_REMAP_METHOD(featureFlagManagerResultCacheRemoveFlag,
+                 featureFlagManagerResultCacheRemoveFlag:(NSString *)flagName
+                 featureFlagManagerResultCacheRemoveFlag:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared featureFlagManagerResultCacheRemoveFlagWithName:flagName
+                                                     completionHandler:^(NSError * _Nullable error) {
+        [self handleResult:nil error:error resolve:resolve reject:reject];
+    }];
+}
+
 
 RCT_REMAP_METHOD(liveActivityListAll,
                  liveActivityListAll:(RCTPromiseResolveBlock)resolve
