@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 20.2.1 - January 3, 2025
+
+Patch release that updates the Android SDK to 18.6.0 and the iOS SDK to 18.14.1
+
+### Changes
+- Updated Android SDK to [18.6.0](https://github.com/urbanairship/android-library/releases/tag/18.6.0
+- Updated iOS SDK to [18.14.1](https://github.com/urbanairship/ios-library/releases/tag/18.14.1
+
 ## Version 20.2.0 - December 20, 2024
 Minor release that updates to the latest Airship SDKs and adds new Feature Flag APIs.
 
