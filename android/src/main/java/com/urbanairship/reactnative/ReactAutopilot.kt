@@ -35,10 +35,10 @@ class ReactAutopilot : BaseAutopilot() {
 
         scope.launch {
             EventEmitter.shared().pendingEventListener
-                    .filter { !it.type.isForeground() }
-                    .collect {
-                        AirshipHeadlessEventService.startService(context)
-                    }
+                .filter { !it.type.isForeground() }
+                .collect {
+                    AirshipHeadlessEventService.startService(context)
+                }
         }
 
         scope.launch {
@@ -98,3 +98,4 @@ internal class PendingEmbeddedUpdated(pending: List<AirshipEmbeddedInfo>) : Even
         "pending" to pending.map { jsonMapOf( "embeddedId" to it.embeddedId ) }
     )
 }
+

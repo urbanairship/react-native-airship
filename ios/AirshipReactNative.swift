@@ -48,7 +48,7 @@ public class AirshipReactNative: NSObject {
 
     @objc
     public func setNotifier(_ notifier: ((String, [String: Any]) -> Void)?) {
-        self.serialQueue.enqueue {
+        self.serialQueue.enqueue { @MainActor in
             if let notifier = notifier {
                 await self.eventNotifier.setNotifier {
                     notifier(AirshipReactNative.pendingEventsEventName, [:])
@@ -135,7 +135,14 @@ public class AirshipReactNative: NSObject {
 
         return await AirshipProxyEventEmitter.shared.takePendingEvents(
             type: type
-        ).map { $0.body }
+        ).compactMap {
+            do {
+                return try $0.body.unwrapped()
+            } catch {
+                AirshipLogger.error("Failed to unwrap event body \($0) \(error)")
+                return nil
+            }
+        }
     }
 
 
@@ -187,7 +194,13 @@ public extension AirshipReactNative {
     
     @objc
     func channelEditTags(json: Any) throws {
-        try AirshipProxy.shared.channel.editTags(json: json)
+        let operations = try JSONDecoder().decode(
+            [TagOperation].self,
+            from: try AirshipJSONUtils.data(json)
+        )
+        try AirshipProxy.shared.channel.editTags(
+            operations: operations
+        )
     }
 
     @objc
@@ -197,27 +210,35 @@ public extension AirshipReactNative {
 
     @objc
     func channelGetTags() throws -> [String] {
-        return try AirshipProxy.shared.channel.getTags()
+        return try AirshipProxy.shared.channel.tags
     }
 
     @objc
     func channelGetSubscriptionLists() async throws -> [String] {
-        return try await AirshipProxy.shared.channel.getSubscriptionLists()
+        return try await AirshipProxy.shared.channel.fetchSubscriptionLists()
     }
 
     @objc
     func channelGetChannelIdOrEmpty() throws -> String {
-        return try AirshipProxy.shared.channel.getChannelId() ?? ""
+        return try AirshipProxy.shared.channel.channelID ?? ""
     }
 
     @objc
     func channelEditTagGroups(json: Any) throws {
-        try AirshipProxy.shared.channel.editTagGroups(json: json)
+        let operations = try JSONDecoder().decode(
+            [TagGroupOperation].self,
+            from: try AirshipJSONUtils.data(json)
+        )
+        try AirshipProxy.shared.channel.editTagGroups(operations: operations)
     }
 
     @objc
     func channelEditAttributes(json: Any) throws {
-        try AirshipProxy.shared.channel.editAttributes(json: json)
+        let operations = try JSONDecoder().decode(
+            [AttributeOperation].self,
+            from: try AirshipJSONUtils.data(json)
+        )
+        try AirshipProxy.shared.channel.editAttributes(operations: operations)
     }
 
     @objc
@@ -254,11 +275,13 @@ public extension AirshipReactNative {
     }
 
     @objc
+    @MainActor
     func pushGetRegistrationTokenOrEmpty() throws -> String {
         return try AirshipProxy.shared.push.getRegistrationToken() ?? ""
     }
 
     @objc
+    @MainActor
     func pushSetNotificationOptions(
         names:[String]
     ) throws {
@@ -266,6 +289,7 @@ public extension AirshipReactNative {
     }
 
     @objc
+    @MainActor
     func pushSetForegroundPresentationOptions(
         names:[String]
     ) throws {
@@ -276,7 +300,7 @@ public extension AirshipReactNative {
 
     @objc
     func pushGetNotificationStatus() async throws -> [String: Any] {
-        return try await AirshipProxy.shared.push.getNotificationStatus()
+        return try await AirshipProxy.shared.push.notificationStatus.unwrapped()
     }
 
     @objc
@@ -326,8 +350,8 @@ public extension AirshipReactNative {
     }
 
     @objc
-    func pushGetActiveNotifications() async -> [[String: Any]] {
-        return await AirshipProxy.shared.push.getActiveNotifications()
+    func pushGetActiveNotifications() async throws -> [[String: Any]] {
+        return try await AirshipProxy.shared.push.getActiveNotifications().map { try $0.unwrapped() }
     }
 }
 
@@ -394,7 +418,7 @@ public extension AirshipReactNative {
 
     @objc
     func contactGetNamedUserIdOrEmtpy() async throws -> String {
-        return try await AirshipProxy.shared.contact.getNamedUser() ?? ""
+        return try await AirshipProxy.shared.contact.namedUserID ?? ""
     }
 
     @objc
@@ -404,17 +428,29 @@ public extension AirshipReactNative {
 
     @objc
     func contactEditTagGroups(json: Any) throws {
-        try AirshipProxy.shared.contact.editTagGroups(json: json)
+        let operations = try JSONDecoder().decode(
+            [TagGroupOperation].self,
+            from: try AirshipJSONUtils.data(json)
+        )
+        try AirshipProxy.shared.contact.editTagGroups(operations: operations)
     }
 
     @objc
     func contactEditAttributes(json: Any) throws {
-        try AirshipProxy.shared.contact.editAttributes(json: json)
+        let operations = try JSONDecoder().decode(
+            [AttributeOperation].self,
+            from: try AirshipJSONUtils.data(json)
+        )
+        try AirshipProxy.shared.contact.editAttributes(operations: operations)
     }
 
     @objc
     func contactEditSubscriptionLists(json: Any) throws {
-        try AirshipProxy.shared.contact.editSubscriptionLists(json: json)
+        let operations = try JSONDecoder().decode(
+            [ScopedSubscriptionListOperation].self,
+            from: try AirshipJSONUtils.data(json)
+        )
+        try AirshipProxy.shared.contact.editSubscriptionLists(operations: operations)
     }
 }
 
@@ -438,7 +474,7 @@ public extension AirshipReactNative {
     @objc
     @MainActor
     func inAppSetDisplayInterval(milliseconds: Double) throws {
-        try AirshipProxy.shared.inApp.setDisplayInterval(Int(milliseconds))
+        try AirshipProxy.shared.inApp.setDisplayInterval(milliseconds: Int(milliseconds))
     }
 
     @objc
@@ -470,7 +506,7 @@ public extension AirshipReactNative {
 
     @objc
     func localeGetLocale() throws -> String {
-        return try AirshipProxy.shared.locale.getCurrentLocale()
+        return try AirshipProxy.shared.locale.currentLocale
     }
 }
 
@@ -479,12 +515,12 @@ public extension AirshipReactNative {
 public extension AirshipReactNative {
     @objc
     func messageCenterGetUnreadCount() async throws -> Double {
-        return try await Double(AirshipProxy.shared.messageCenter.getUnreadCount())
+        return try await Double(AirshipProxy.shared.messageCenter.unreadCount)
     }
 
     @objc
     func messageCenterGetMessages() async throws -> Any {
-        let messages = try await AirshipProxy.shared.messageCenter.getMessages()
+        let messages = try await AirshipProxy.shared.messageCenter.messages
         return try AirshipJSON.wrap(messages).unWrap() as Any
     }
 
@@ -528,6 +564,7 @@ public extension AirshipReactNative {
     }
 
     @objc
+    @MainActor
     func messageCenterSetAutoLaunchDefaultMessageCenter(autoLaunch: Bool) {
         AirshipProxy.shared.messageCenter.setAutoLaunchDefaultMessageCenter(autoLaunch)
     }
@@ -537,6 +574,7 @@ public extension AirshipReactNative {
 @objc
 public extension AirshipReactNative {
     @objc
+    @MainActor
     func preferenceCenterDisplay(preferenceCenterId: String) throws  {
         try AirshipProxy.shared.preferenceCenter.displayPreferenceCenter(
             preferenceCenterID: preferenceCenterId
@@ -551,6 +589,7 @@ public extension AirshipReactNative {
     }
 
     @objc
+    @MainActor
     func preferenceCenterAutoLaunchDefaultPreferenceCenter(
         preferenceCenterId: String,
         autoLaunch: Bool
@@ -691,9 +730,21 @@ extension AirshipReactNative: AirshipProxyDelegate {
     }
 
     public func loadDefaultConfig() -> AirshipConfig {
-        let config = AirshipConfig.default()
-        config.requireInitialRemoteConfigEnabled = true
-        return config
+        let path = Bundle.main.path(
+            forResource: "AirshipConfig",
+            ofType: "plist"
+        )
+
+        var config: AirshipConfig?
+        if let path = path, FileManager.default.fileExists(atPath: path) {
+            do {
+                config = try AirshipConfig.default()
+            } catch {
+                AirshipLogger.error("Failed to load config from plist: \(error)")
+            }
+        }
+
+        return config ?? AirshipConfig()
     }
 
     public func onAirshipReady() {
@@ -739,5 +790,15 @@ extension AirshipProxyEventType {
         }
 
         return type
+    }
+}
+
+
+fileprivate extension Encodable {
+    func unwrapped<T>() throws -> T {
+        guard let value = try AirshipJSON.wrap(self).unWrap() as? T else {
+            throw AirshipErrors.error("Failed to unwrap codable")
+        }
+        return value
     }
 }

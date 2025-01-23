@@ -48,7 +48,7 @@ public class MessageWebViewWrapper: NSObject {
 }
 
 
-class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelegate {
+class _MessageWebViewWrapper: NSObject, AirshipWKNavigationDelegate, NativeBridgeDelegate {
 
     public weak var delegate: MessageWebViewWrapperDelegate? = nil
 
@@ -69,7 +69,7 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
         self.webView.configuration.dataDetectorTypes = .all
 
         if #available(iOS 16.4, *) {
-            self.webView.isInspectable = Airship.isFlying && Airship.config.isWebViewInspectionEnabled
+            self.webView.isInspectable = Airship.isFlying && Airship.config.airshipConfig.isWebViewInspectionEnabled
         }
     }
 
@@ -103,7 +103,7 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
             self.delegate?.onMessageLoadFailed(messageID: messageID)
         }
 
-        guard let message = message, let user = await MessageCenter.shared.inbox.user else {
+        guard let message = message, let user = await Airship.messageCenter.inbox.user else {
             if (!Task.isCancelled) {
                 self.delegate?.onMessageGone(messageID: messageID)
             }
@@ -115,7 +115,7 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
             user: user
         )
         self.nativeBridge.nativeBridgeExtensionDelegate = self.nativeBridgeExtension
-        let auth = await MessageCenter.shared.inbox.user?.basicAuthString
+        let auth = await Airship.messageCenter.inbox.user?.basicAuthString
 
         var request = URLRequest(url: message.bodyURL)
         request.timeoutInterval = 60
@@ -130,13 +130,13 @@ class _MessageWebViewWrapper: NSObject, UANavigationDelegate, NativeBridgeDelega
     }
 
     private func getMessage(messageID: String) async throws -> MessageCenterMessage? {
-        let message = await MessageCenter.shared.inbox.message(forID: messageID)
+        let message = await Airship.messageCenter.inbox.message(forID: messageID)
         if let message = message {
             return message
         }
 
         try await AirshipProxy.shared.messageCenter.refresh()
-        return await MessageCenter.shared.inbox.message(forID: messageID)
+        return await Airship.messageCenter.inbox.message(forID: messageID)
     }
 
     public func close() {

@@ -65,10 +65,10 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             // Background events will create a headless JS task in ReactAutopilot since
             // initialized wont be called until we have a JS task.
             EventEmitter.shared().pendingEventListener
-                    .filter { it.type.isForeground() }
-                    .collect {
-                        notifyPending()
-                    }
+                .filter { it.type.isForeground() }
+                .collect {
+                    notifyPending()
+                }
         }
 
         context.addLifecycleEventListener(object : LifecycleEventListener {
@@ -94,14 +94,14 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun takeOff(config: ReadableMap?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.takeOff(Utils.convertMap(requireNotNull(config)).toJsonValue())
         }
     }
 
     @ReactMethod
     override fun isFlying(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             this.proxy.isFlying()
         }
     }
@@ -129,7 +129,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     @SuppressLint("RestrictedApi")
     @ReactMethod
     override fun takePendingEvents(eventName: String?, isHeadlessJS: Boolean, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             val eventTypes = Utils.parseEventTypes(requireNotNull(eventName))
                     .filter {
                         if (isHeadlessJS) {
@@ -157,93 +157,91 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun channelEnableChannelCreation(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.channel.enableChannelCreation()
         }
     }
 
     @ReactMethod
     override fun channelAddTag(tag: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.channel.addTag(requireNotNull(tag))
         }
     }
 
     @ReactMethod
     override fun channelRemoveTag(tag: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.channel.removeTag(requireNotNull(tag))
         }
     }
 
     @ReactMethod
     override fun channelEditTags(operations: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.channel.editTags(Utils.convertArray(operations).toJsonValue())
         }
     }
 
     @ReactMethod
     override fun channelGetTags(promise: Promise) {
-        promise.resolveResult {
-            JsonValue.wrapOpt(proxy.channel.getTags())
+        promise.resolve(scope) {
+            proxy.channel.getTags()
         }
     }
 
     @ReactMethod
     override fun channelGetChannelId(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.channel.getChannelId()
         }
     }
 
     @ReactMethod
     override fun channelGetSubscriptionLists(promise: Promise) {
-        promise.resolveDeferred<JsonValue> { callback ->
-            proxy.channel.getSubscriptionLists().addResultCallback {
-                callback(JsonValue.wrapOpt(it), null)
-            }
+        promise.resolve(scope) {
+            proxy.channel.getSubscriptionLists()
         }
     }
 
     @ReactMethod
     override fun channelEditTagGroups(operations: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.channel.editTagGroups(Utils.convertArray(operations).toJsonValue())
         }
     }
 
     @ReactMethod
     override fun channelEditAttributes(operations: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.channel.editAttributes(Utils.convertArray(operations).toJsonValue())
         }
     }
 
     @ReactMethod
     override fun channelEditSubscriptionLists(operations: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.channel.editSubscriptionLists(Utils.convertArray(operations).toJsonValue())
         }
     }
 
     @ReactMethod
     override fun pushSetUserNotificationsEnabled(enabled: Boolean, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.push.setUserNotificationsEnabled(enabled)
         }
     }
 
     @ReactMethod
     override fun pushIsUserNotificationsEnabled(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.push.isUserNotificationsEnabled()
         }
     }
 
     @ReactMethod
     override fun pushEnableUserNotifications(options: ReadableMap?, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             val args = options?.let {
                 EnableUserNotificationsArgs.fromJson(Utils.convertMap(it).toJsonValue())
             }
@@ -253,22 +251,22 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun pushGetNotificationStatus(promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.push.getNotificationStatus()
         }
     }
 
     @ReactMethod
     override fun pushGetRegistrationToken(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.push.getRegistrationToken()
         }
     }
 
     @ReactMethod
     override fun pushGetActiveNotifications(promise: Promise) {
-        promise.resolveResult {
-            JsonValue.wrapOpt(proxy.push.getActiveNotifications())
+        promise.resolve(scope) {
+            proxy.push.getActiveNotifications()
         }
     }
 
@@ -289,42 +287,42 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             options: ReadableArray?,
             promise: Promise
     ) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun pushIosSetNotificationOptions(options: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun pushIosSetAutobadgeEnabled(enabled: Boolean, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun pushIosIsAutobadgeEnabled(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun pushIosSetBadgeNumber(badgeNumber: Double, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun pushIosGetBadgeNumber(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
@@ -351,7 +349,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun pushAndroidIsNotificationChannelEnabled(channel: String?, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 proxy.push.isNotificationChannelEnabled(requireNotNull(channel))
             } else {
@@ -392,51 +390,49 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun contactIdentify(namedUser: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.contact.identify(namedUser)
         }
     }
 
     @ReactMethod
     override fun contactReset(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.contact.reset()
         }
     }
 
     @ReactMethod
     override fun contactNotifyRemoteLogin(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.contact.notifyRemoteLogin()
         }
     }
 
     @ReactMethod
     override fun contactGetNamedUserId(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.contact.getNamedUserId()
         }
     }
 
     @ReactMethod
     override fun contactGetSubscriptionLists(promise: Promise) {
-        promise.resolveDeferred<JsonValue> { callback ->
-            proxy.contact.getSubscriptionLists().addResultCallback {
-                callback(JsonValue.wrapOpt(it), null)
-            }
+        promise.resolve(scope) {
+            proxy.contact.getSubscriptionLists()
         }
     }
 
     @ReactMethod
     override fun contactEditTagGroups(operations: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.contact.editTagGroups(Utils.convertArray(operations).toJsonValue())
         }
     }
 
     @ReactMethod
     override fun contactEditAttributes(operations: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.contact.editAttributes(Utils.convertArray(operations).toJsonValue())
         }
     }
@@ -446,14 +442,14 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             operations: ReadableArray?,
             promise: Promise
     ) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.contact.editSubscriptionLists(Utils.convertArray(operations).toJsonValue())
         }
     }
 
     @ReactMethod
     override fun analyticsTrackScreen(screen: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.analytics.trackScreen(screen)
         }
     }
@@ -464,14 +460,14 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             identifier: String?,
             promise: Promise
     ) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.analytics.associateIdentifier(requireNotNull(key), identifier)
         }
     }
 
     @ReactMethod
     override fun addCustomEvent(event: ReadableMap?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.analytics.addEvent(Utils.convertMap(event).toJsonValue())
         }
     }
@@ -480,92 +476,90 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun analyticsGetSessionId(
         promise: Promise
     ) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.analytics.getSessionId()
         }
     }
 
     @ReactMethod
     override fun actionRun(action: ReadableMap, promise: Promise) {
-        promise.resolveDeferred<ActionValue> { callback ->
-            proxy.actions.runAction(requireNotNull(action.getString("name")), Utils.convertDynamic(action.getDynamic("value")))
-                    .addResultCallback { actionResult ->
-                        if (actionResult != null && actionResult.status == ActionResult.STATUS_COMPLETED) {
-                            callback(actionResult.value, null)
-                        } else {
-                            callback(null, Exception("Action failed ${actionResult?.status}"))
-                        }
-                    }
+        promise.resolve(scope) {
+            val result = proxy.actions.runAction(requireNotNull(action.getString("name")), Utils.convertDynamic(action.getDynamic("value")))
+            if (result.status == ActionResult.STATUS_COMPLETED) {
+                result.value
+            } else {
+                throw Exception("Action failed ${result.status}")
+            }
         }
     }
 
     @ReactMethod
     override fun privacyManagerSetEnabledFeatures(features: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.privacyManager.setEnabledFeatures(
-                    Utils.convertArray(requireNotNull(features))
+                Utils.convertArray(requireNotNull(features))
             )
         }
     }
 
     @ReactMethod
     override fun privacyManagerGetEnabledFeatures(promise: Promise) {
-        promise.resolveResult {
-            JsonValue.wrapOpt(proxy.privacyManager.getFeatureNames())
+        promise.resolve(scope) {
+            proxy.privacyManager.getFeatureNames()
         }
     }
 
     @ReactMethod
     override fun privacyManagerEnableFeature(features: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.privacyManager.enableFeatures(
-                    Utils.convertArray(requireNotNull(features))
+                Utils.convertArray(requireNotNull(features))
             )
         }
     }
 
     @ReactMethod
     override fun privacyManagerDisableFeature(features: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.privacyManager.disableFeatures(
-                    Utils.convertArray(requireNotNull(features))
+                Utils.convertArray(requireNotNull(features))
             )
         }
     }
 
     @ReactMethod
     override fun privacyManagerIsFeatureEnabled(features: ReadableArray?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.privacyManager.isFeatureEnabled(
-                    Utils.convertArray(requireNotNull(features))
+                Utils.convertArray(requireNotNull(features))
             )
         }
     }
 
     @ReactMethod
     override fun inAppSetDisplayInterval(milliseconds: Double, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             this.proxy.inApp.setDisplayInterval(milliseconds.toLong())
         }
     }
 
     @ReactMethod
     override fun inAppGetDisplayInterval(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             this.proxy.inApp.getDisplayInterval()
         }
     }
 
     @ReactMethod
     override fun inAppSetPaused(paused: Boolean, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.inApp.setPaused(paused)
         }
     }
 
     @ReactMethod
     override fun inAppIsPaused(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.inApp.isPaused()
         }
     }
@@ -577,55 +571,51 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun messageCenterGetUnreadCount(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.messageCenter.getUnreadMessagesCount()
         }
     }
 
     @ReactMethod
     override fun messageCenterDismiss(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.messageCenter.dismiss()
         }
     }
 
     @ReactMethod
     override fun messageCenterDisplay(messageId: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.messageCenter.display(messageId)
         }
     }
 
     @ReactMethod
     override fun messageCenterGetMessages(promise: Promise) {
-        promise.resolveResult {
-            JsonValue.wrapOpt(proxy.messageCenter.getMessages())
+        promise.resolve(scope) {
+            proxy.messageCenter.getMessages()
         }
     }
 
     @ReactMethod
     override fun messageCenterDeleteMessage(messageId: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.messageCenter.deleteMessage(requireNotNull(messageId))
         }
     }
 
     @ReactMethod
     override fun messageCenterMarkMessageRead(messageId: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.messageCenter.markMessageRead(requireNotNull(messageId))
         }
     }
 
     @ReactMethod
     override fun messageCenterRefresh(promise: Promise) {
-        promise.resolveDeferred<Void> { callback ->
-            proxy.messageCenter.refreshInbox().addResultCallback {
-                if (it == true) {
-                    callback(null, null)
-                } else {
-                    callback(null, Exception("Failed to refresh"))
-                }
+        promise.resolve(scope) {
+            if (!proxy.messageCenter.refreshInbox()) {
+                throw Exception("Failed to refresh")
             }
         }
     }
@@ -637,28 +627,28 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun messageCenterShowMessageCenter(messageId: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.messageCenter.showMessageCenter(messageId)
         }
     }
 
     @ReactMethod
     override fun messageCenterShowMessageView(messageId: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.messageCenter.showMessageView(requireNotNull(messageId))
         }
     }
 
     @ReactMethod
     override fun preferenceCenterDisplay(preferenceCenterId: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.preferenceCenter.displayPreferenceCenter(requireNotNull(preferenceCenterId))
         }
     }
 
     @ReactMethod
     override fun preferenceCenterGetConfig(preferenceCenterId: String?, promise: Promise) {
-        promise.resolvePending {
+        promise.resolve(scope) {
             proxy.preferenceCenter.getPreferenceCenterConfig(requireNotNull(preferenceCenterId))
         }
     }
@@ -675,7 +665,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun localeSetLocaleOverride(localeIdentifier: String?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             if (localeIdentifier.isNullOrEmpty()) {
                 proxy.locale.clearLocale()
             } else {
@@ -686,28 +676,28 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun localeGetLocale(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.locale.getCurrentLocale()
         }
     }
 
     @ReactMethod
     override fun localeClearLocaleOverride(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             proxy.locale.clearLocale()
         }
     }
 
     @ReactMethod
     override fun featureFlagManagerFlag(flagName: String, useResultCache: Boolean, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.featureFlagManager.flag(flagName, useResultCache)
         }
     }
 
     @ReactMethod
     override fun featureFlagManagerTrackInteraction(flag: ReadableMap, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             val parsedFlag = FeatureFlagProxy(Utils.convertMap(flag).toJsonValue())
             proxy.featureFlagManager.trackInteraction(parsedFlag)
         }
@@ -715,14 +705,14 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun featureFlagManagerResultCacheGetFlag(flagName: String, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.featureFlagManager.resultCache.flag(flagName)
         }
     }
 
     @ReactMethod
     override fun featureFlagManagerResultCacheSetFlag(flag: ReadableMap, ttl: Double, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             val parsedFlag = FeatureFlagProxy(Utils.convertMap(flag).toJsonValue())
             proxy.featureFlagManager.resultCache.cache(parsedFlag, ttl.milliseconds)
         }
@@ -730,69 +720,65 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun featureFlagManagerResultCacheRemoveFlag(flagName: String, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.featureFlagManager.resultCache.removeCachedFlag(flagName)
         }
     }
 
     @ReactMethod
     override fun liveActivityListAll(promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun liveActivityList(request: ReadableMap?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun liveActivityStart(request: ReadableMap?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun liveActivityUpdate(request: ReadableMap?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun liveActivityEnd(request: ReadableMap?, promise: Promise) {
-        promise.resolveResult {
+        promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
         }
     }
 
     @ReactMethod
     override fun liveUpdateListAll(promise: Promise) {
-        promise.resolveSuspending(scope) {
-            proxy.liveUpdateManager.listAll().let {
-                JsonValue.wrapOpt(it)
-            }
+        promise.resolve(scope) {
+            proxy.liveUpdateManager.listAll()
         }
     }
 
     @ReactMethod
     override fun liveUpdateList(request: ReadableMap?, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.liveUpdateManager.list(
                 LiveUpdateRequest.List.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
-            ).let {
-                JsonValue.wrapOpt(it)
-            }
+            )
         }
     }
 
     @ReactMethod
     override fun liveUpdateStart(request: ReadableMap?, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.liveUpdateManager.start(
                 LiveUpdateRequest.Start.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
             )
@@ -801,7 +787,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun liveUpdateUpdate(request: ReadableMap?, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.liveUpdateManager.update(
                 LiveUpdateRequest.Update.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
             )
@@ -810,7 +796,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun liveUpdateEnd(request: ReadableMap?, promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.liveUpdateManager.end(
                 LiveUpdateRequest.End.fromJson(Utils.convertMap(requireNotNull(request)).toJsonValue())
             )
@@ -819,7 +805,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun liveUpdateClearAll(promise: Promise) {
-        promise.resolveSuspending(scope) {
+        promise.resolve(scope) {
             proxy.liveUpdateManager.clearAll()
         }
     }
@@ -848,68 +834,26 @@ internal fun JsonSerializable.toReactType(): Any? {
     return Utils.convertJsonValue(toJsonValue())
 }
 
-internal fun Promise.resolveResult(function: () -> Any?) {
-    resolveDeferred<Any> { callback -> callback(function(), null) }
-}
 
-internal fun Promise.resolveSuspending(scope: CoroutineScope, function: suspend () -> Any?) {
+internal fun Promise.resolve(scope: CoroutineScope, function: suspend () -> Any?) {
     scope.launch {
         try {
             when (val result = function()) {
                 is Unit -> {
-                    this@resolveSuspending.resolve(null)
+                    this@resolve.resolve(null)
                 }
                 is JsonSerializable -> {
-                    this@resolveSuspending.resolve(result.toReactType())
+                    this@resolve.resolve(result.toReactType())
                 }
                 is Number -> {
-                    this@resolveSuspending.resolve(result.toDouble())
+                    this@resolve.resolve(result.toDouble())
                 }
                 else -> {
-                    this@resolveSuspending.resolve(result)
+                    this@resolve.resolve(JsonValue.wrapOpt(result).toReactType())
                 }
             }
         } catch (e: Exception) {
-            this@resolveSuspending.reject("AIRSHIP_ERROR", e)
-        }
-    }
-
-}
-
-internal fun <T> Promise.resolveDeferred(function: ((T?, Exception?) -> Unit) -> Unit) {
-    try {
-        function { result, error ->
-            if (error != null) {
-                this.reject("AIRSHIP_ERROR", error)
-            }
-            try {
-                when (result) {
-                    is Unit -> {
-                        this.resolve(null)
-                    }
-                    is JsonSerializable -> {
-                        this.resolve(result.toReactType())
-                    }
-                    is Number -> {
-                        this.resolve((result as Number).toDouble())
-                    }
-                    else -> {
-                        this.resolve(result)
-                    }
-                }
-            } catch (e: Exception) {
-                this.reject("AIRSHIP_ERROR", e)
-            }
-        }
-    } catch (e: Exception) {
-        this.reject("AIRSHIP_ERROR", e)
-    }
-}
-
-internal fun <T> Promise.resolvePending(function: () -> PendingResult<T>) {
-    resolveDeferred<T> { callback ->
-        function().addResultCallback {
-            callback(it, null)
+            this@resolve.reject("AIRSHIP_ERROR", e)
         }
     }
 }
