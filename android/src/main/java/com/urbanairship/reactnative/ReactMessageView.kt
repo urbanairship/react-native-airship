@@ -4,33 +4,17 @@ package com.urbanairship.reactnative
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.AttributeSet
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
-import androidx.annotation.CallSuper
-import androidx.annotation.MainThread
-import androidx.annotation.RestrictTo
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
-import com.urbanairship.Cancelable
-import com.urbanairship.UALog
-import com.urbanairship.UAirship
-import com.urbanairship.actions.ActionArguments
-import com.urbanairship.actions.ActionRunRequest
-import com.urbanairship.javascript.JavaScriptEnvironment
-import com.urbanairship.json.JsonMap
-import com.urbanairship.json.JsonValue
-import com.urbanairship.messagecenter.Inbox.FetchMessagesCallback
+import com.urbanairship.android.framework.proxy.ui.MessageWebView
+import com.urbanairship.android.framework.proxy.ui.MessageWebViewClient
 import com.urbanairship.messagecenter.Message
 import com.urbanairship.messagecenter.MessageCenter
-import com.urbanairship.webkit.AirshipWebViewClient
-import com.urbanairship.webkit.NestedScrollAirshipWebView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -39,11 +23,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import kotlinx.coroutines.runBlocking
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
 
+@SuppressLint("RestrictedApi")
 class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventListener {
 
     private var message: Message? = null
@@ -55,7 +36,7 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
 
         private var error: Int? = null
 
-        override fun onPageFinished(view: WebView?, url: String?) {
+        override fun onPageFinished(view: WebView?,  url: String?) {
             super.onPageFinished(view, url)
 
             message?.let { message ->
@@ -230,100 +211,4 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
 internal sealed class FetchMessageResult {
     data class Success(val message: Message) : FetchMessageResult()
     data class Error(val error: String, val isRetryable: Boolean) : FetchMessageResult()
-}
-
-
-/** Base WebView configured for Airship Message Center content. */
-internal class MessageWebView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyle: Int = 0,
-    defResStyle: Int = 0
-): NestedScrollAirshipWebView(context, attrs, defStyle, defResStyle) {
-
-    /**
-     * Loads the web view with the [Message].
-     *
-     * @param message The message that will be displayed.
-     */
-    fun loadMessage(message: Message) {
-        UALog.v { "Loading message: ${message.id}" }
-        val user = MessageCenter.shared().user
-
-        // Send authorization in the headers if the web view supports it
-        val headers = HashMap<String, String>()
-
-        // Set the auth
-        val (userId, password) = user.id to user.password
-        if (userId != null && password != null) {
-            setClientAuthRequest(message.bodyUrl, userId, password)
-            headers["Authorization"] = createBasicAuth(userId, password)
-        }
-        UALog.v { "Load URL: ${message.bodyUrl}" }
-        loadUrl(message.bodyUrl, headers)
-    }
-}
-
-/** A `WebViewClient` that enables the Airship Native Bridge for Message Center. */
-internal open class MessageWebViewClient : AirshipWebViewClient() {
-
-    /**
-     * @hide
-     */
-    @SuppressLint("RestrictedApi")
-    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-    override fun extendActionRequest(
-        request: ActionRunRequest,
-        webView: WebView
-    ): ActionRunRequest {
-        val metadata = Bundle()
-        val message = getMessage(webView)
-        if (message != null) {
-            metadata.putString(ActionArguments.RICH_PUSH_ID_METADATA, message.id)
-        }
-        request.setMetadata(metadata)
-        return request
-    }
-
-    /**
-     * @hide
-     */
-    @SuppressLint("RestrictedApi")
-    @CallSuper
-    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-    override fun extendJavascriptEnvironment(
-        builder: JavaScriptEnvironment.Builder,
-        webView: WebView
-    ): JavaScriptEnvironment.Builder {
-        val message = getMessage(webView)
-        val extras = message?.extras?.let { JsonValue.wrapOpt(it).optMap() } ?: JsonMap.EMPTY_MAP
-        val formattedSentDate = message?.sentDate?.let { DATE_FORMATTER.format(it) }
-
-        return super.extendJavascriptEnvironment(builder, webView)
-            .addGetter("getMessageSentDateMS", message?.sentDate?.time ?: -1)
-            .addGetter("getMessageId", message?.id)
-            .addGetter("getMessageTitle", message?.title)
-            .addGetter("getMessageSentDate", formattedSentDate)
-            .addGetter("getUserId", MessageCenter.shared().user.id)
-            .addGetter("getMessageExtras", extras)
-    }
-
-    /**
-     * Helper method to get the RichPushMessage from the web view.
-     *
-     * @param webView The web view.
-     * @return The rich push message, or null if the web view does not have an associated message.
-     * @note This method should only be called from the main thread.
-     */
-    @MainThread
-    private fun getMessage(webView: WebView): Message? = runBlocking {
-        val url = webView.url
-        MessageCenter.shared().inbox.getMessageByUrl(url)
-    }
-
-    private companion object {
-        private val DATE_FORMATTER = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.US).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
-    }
 }
