@@ -1,5 +1,15 @@
 # React Native Module Changelog
 
+## Version 21.0.0 - January 24, 2025
+Major release that updates the native SDKs to 19.0.0.
+
+### Changes
+- Updated Android SDK to [19.0.0](https://github.com/urbanairship/android-library/releases/tag/19.0.0).
+- Updated iOS SDK to [19.0.0](https://github.com/urbanairship/ios-library/releases/tag/19.0.0).
+- Xcode 16.2+ is required.
+- Updated min version to iOS 15+ & Android 23+.
+- Added manifest entry to disable the headless JS service when a background push is received before the module is loaded. This is not recommended to use unless its conflicting with a hybrid application. To disable the task, set the metadata entry to false for key `"com.urbanairship.reactnative.ALLOW_HEADLESS_JS_TASK_BEFORE_MODULE"`.
+
 ## Version 20.2.0 - December 20, 2024
 Minor release that updates to the latest Airship SDKs and adds new Feature Flag APIs.
 
