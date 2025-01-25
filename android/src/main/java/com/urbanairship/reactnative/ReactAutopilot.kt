@@ -33,12 +33,17 @@ class ReactAutopilot : BaseAutopilot() {
     override fun onReady(context: Context, airship: UAirship) {
         ProxyLogger.info("Airship React Native version: %s, SDK version: %s", BuildConfig.AIRSHIP_MODULE_VERSION, UAirship.getVersion())
 
-        scope.launch {
-            EventEmitter.shared().pendingEventListener
+        val allowHeadlessJsTaskBeforeModule = isHeadlessJSTaskEnabledOnStart(context)
+        ProxyLogger.debug("ALLOW_HEADLESS_JS_TASK_BEFORE_MODULE: $allowHeadlessJsTaskBeforeModule")
+
+        if (allowHeadlessJsTaskBeforeModule) {
+            scope.launch {
+                EventEmitter.shared().pendingEventListener
                     .filter { !it.type.isForeground() }
                     .collect {
                         AirshipHeadlessEventService.startService(context)
                     }
+            }
         }
 
         scope.launch {
@@ -86,7 +91,24 @@ class ReactAutopilot : BaseAutopilot() {
         return null
     }
 
+    private fun isHeadlessJSTaskEnabledOnStart(context: Context): Boolean {
+        val ai: ApplicationInfo
+        try {
+            ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+
+            if (ai.metaData == null) {
+                return true
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            return true
+        }
+
+        return ai.metaData.getBoolean(HEADLESS_JS_TASK_ON_START_MANIFEST_KEY, true)
+    }
+
+
     companion object {
+        const val HEADLESS_JS_TASK_ON_START_MANIFEST_KEY = "com.urbanairship.reactnative.ALLOW_HEADLESS_JS_TASK_BEFORE_MODULE"
         const val EXTENDER_MANIFEST_KEY = "com.urbanairship.reactnative.AIRSHIP_EXTENDER"
     }
 }
@@ -98,3 +120,4 @@ internal class PendingEmbeddedUpdated(pending: List<AirshipEmbeddedInfo>) : Even
         "pending" to pending.map { jsonMapOf( "embeddedId" to it.embeddedId ) }
     )
 }
+

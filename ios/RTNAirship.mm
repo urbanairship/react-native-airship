@@ -133,8 +133,8 @@ RCT_REMAP_METHOD(channelEnableChannelCreation,
 RCT_REMAP_METHOD(pushGetActiveNotifications,
                  pushGetActiveNotifications:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared pushGetActiveNotificationsWithCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result) {
-        resolve(result);
+    [AirshipReactNative.shared pushGetActiveNotificationsWithCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, NSError *error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
     }];
 }
 

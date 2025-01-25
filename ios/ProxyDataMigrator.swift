@@ -27,6 +27,7 @@ struct ProxyDataMigrator {
     private let configKey = "com.urbanairship.react.airship_config"
 
 
+    @MainActor
     func migrateData(store: ProxyStore) {
         // Presentation options
         let optionsInt = defaults.object(

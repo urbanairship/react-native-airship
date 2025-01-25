@@ -61,9 +61,3 @@ extension ExampleWidgetsAttributes.ContentState {
      }
 }
 
-#Preview("Notification", as: .content, using: ExampleWidgetsAttributes.preview) {
-   ExampleWidgetsLiveActivity()
-} contentStates: {
-    ExampleWidgetsAttributes.ContentState.smiley
-    ExampleWidgetsAttributes.ContentState.starEyes
-}

@@ -2,9 +2,8 @@
 
 package com.urbanairship.reactnative
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
@@ -12,37 +11,42 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
-import com.facebook.react.uimanager.events.RCTEventEmitter
-import com.urbanairship.Cancelable
-import com.urbanairship.UAirship
-import com.urbanairship.messagecenter.Inbox.FetchMessagesCallback
+import com.urbanairship.android.framework.proxy.ui.MessageWebView
+import com.urbanairship.android.framework.proxy.ui.MessageWebViewClient
 import com.urbanairship.messagecenter.Message
 import com.urbanairship.messagecenter.MessageCenter
-import com.urbanairship.messagecenter.webkit.MessageWebView
-import com.urbanairship.messagecenter.webkit.MessageWebViewClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 
+@SuppressLint("RestrictedApi")
 class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventListener {
 
     private var message: Message? = null
-    private var fetchMessageRequest: Cancelable? = null
     private var webView: MessageWebView? = null
-    private val loadHandler = Handler(Looper.getMainLooper())
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate) + SupervisorJob()
+    private var loadJob: Job? = null
 
     private val webViewClient: WebViewClient = object : MessageWebViewClient() {
 
         private var error: Int? = null
 
-        override fun onPageFinished(view: WebView?, url: String?) {
+        override fun onPageFinished(view: WebView?,  url: String?) {
             super.onPageFinished(view, url)
 
             message?.let { message ->
                 error?.let {
-                    notifyLoadError(message.messageId, ERROR_MESSAGE_LOAD_FAILED, false)
+                    notifyLoadError(message.id, ERROR_MESSAGE_LOAD_FAILED, false)
                     return
                 }
 
-                message.markRead()
-                notifyLoadFinished(message.messageId)
+                MessageCenter.shared().inbox.markMessagesRead(message.id)
+                notifyLoadFinished(message.id)
             }
         }
 
@@ -51,7 +55,7 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
 
             message?.let { message ->
                 failingUrl?.let {
-                    if (it == message.messageBodyUrl) {
+                    if (it == message.bodyUrl) {
                         error = errorCode
                     }
                 }
@@ -60,12 +64,31 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
 
         public override fun onClose(webView: WebView) {
             message?.let {
-                notifyClose(it.messageId)
+                notifyClose(it.id)
             }
         }
     }
 
+    private suspend fun fetchMessage(messageId: String): FetchMessageResult {
+        var message = MessageCenter.shared().inbox.getMessage(messageId)
+
+        if (message == null) {
+            if (!MessageCenter.shared().inbox.fetchMessages()) {
+                return FetchMessageResult.Error(ERROR_FAILED_TO_FETCH_MESSAGE, true)
+            }
+
+            message = MessageCenter.shared().inbox.getMessage(messageId)
+        }
+
+        return if (message == null || message.isExpired) {
+            FetchMessageResult.Error(ERROR_MESSAGE_NOT_AVAILABLE, false)
+        } else {
+            FetchMessageResult.Success(message)
+        }
+    }
+
     fun loadMessage(messageId: String) {
+        loadJob?.cancel()
         var delayLoading = false
 
         if (webView == null) {
@@ -75,50 +98,37 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
             delayLoading = true
         }
 
-        fetchMessageRequest?.let {
-            it.cancel()
-        }
         message = null
 
-        // Until ReactFeatureFlags.enableFabricPendingEventQueue is enabled by default, we need to avoid
-        // sending events when the view is unmounted because the events are discarded otherwise
-        if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED && delayLoading) {
-            loadHandler.postDelayed({
-                startLoading(messageId)
-            }, 50)
-        } else {
-            startLoading(messageId)
-        }
-    }
-
-    fun startLoading(messageId: String) {
-        notifyLoadStarted(messageId)
-
-        if (!(UAirship.isFlying() || UAirship.isTakingOff())) {
-            notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false)
-            return
-        }
-
-        message = MessageCenter.shared().inbox.getMessage(messageId)
-
-        if (message == null) {
-            fetchMessageRequest = MessageCenter.shared().inbox.fetchMessages(FetchMessagesCallback { success ->
-                    message = MessageCenter.shared().inbox.getMessage(messageId)
-                    if (!success) {
-                        notifyLoadError(messageId, ERROR_FAILED_TO_FETCH_MESSAGE, true)
-                        return@FetchMessagesCallback
-                    } else if (message == null || message!!.isExpired) {
-                        notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false)
-                        return@FetchMessagesCallback
-                    }
-                    webView?.loadMessage(message!!)
-                })
-        } else {
-            if (message!!.isExpired) {
-                notifyLoadError(messageId, ERROR_MESSAGE_NOT_AVAILABLE, false)
-                return
+        loadJob = scope.launch {
+            // Until ReactFeatureFlags.enableFabricPendingEventQueue is enabled by default, we need to avoid
+            // sending events when the view is unmounted because the events are discarded otherwise
+            if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED && delayLoading) {
+                delay(50)
             }
-            webView?.loadMessage(message!!)
+
+            if (!isActive) {
+                return@launch
+            }
+
+            notifyLoadStarted(messageId)
+
+            val messageResult = fetchMessage(messageId)
+
+            if (!isActive) {
+                return@launch
+            }
+
+            when (messageResult) {
+                is FetchMessageResult.Error -> {
+                    notifyLoadError(messageId, messageResult.error, messageResult.isRetryable)
+                }
+
+                is FetchMessageResult.Success -> {
+                    this@ReactMessageView.message = messageResult.message
+                    webView?.loadMessage(messageResult.message)
+                }
+            }
         }
     }
 
@@ -155,10 +165,12 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
 
     override fun onHostResume() {
         webView?.onResume()
+        webView?.resumeTimers()
     }
 
     override fun onHostPause() {
         webView?.onPause()
+        webView?.pauseTimers()
     }
 
     override fun onHostDestroy() {
@@ -166,7 +178,6 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
     }
 
     fun cleanup() {
-        webView?.setWebViewClient(null)
         webView?.destroy()
         webView = null
     }
@@ -195,4 +206,9 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
         private const val ERROR_FAILED_TO_FETCH_MESSAGE = "FAILED_TO_FETCH_MESSAGE"
         private const val ERROR_MESSAGE_LOAD_FAILED = "MESSAGE_LOAD_FAILED"
     }
+}
+
+internal sealed class FetchMessageResult {
+    data class Success(val message: Message) : FetchMessageResult()
+    data class Error(val error: String, val isRetryable: Boolean) : FetchMessageResult()
 }
