@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 21.0.2 - February 6, 2025
+
+Patch release that updates the iOS SDK to 19.0.3 and fixes a Swift 5 warning.
+
+### Changes
+- Updated iOS SDK to [19.0.3](https://github.com/urbanairship/ios-library/releases/tag/19.0.3)
+
 ## Version 21.0.1 - February 3, 2025
 
 Patch release that updates the iOS SDK to 19.0.2
