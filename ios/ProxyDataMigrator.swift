@@ -80,12 +80,12 @@ struct ProxyDataMigrator {
         }
 
         // Config
-        var config = defaults.object(forKey: configKey)
+        let config = defaults.object(forKey: configKey)
         if var config = config as? [String: Any] {
 
             // Proxy config is based off react-natives original config,
             // the only difference is the feature names.
-            if var features = config["enabledFeatures"] as? [String] {
+            if let features = config["enabledFeatures"] as? [String] {
                 config["enabledFeatures"] = features.compactMap { name in
                     featureNameMap[name]
                 }
