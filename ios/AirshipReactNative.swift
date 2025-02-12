@@ -39,7 +39,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "21.0.2"
+    public static let version: String = "21.1.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -54,7 +54,7 @@ public class AirshipReactNative: NSObject {
                     notifier(AirshipReactNative.pendingEventsEventName, [:])
                 }
 
-                if await AirshipProxyEventEmitter.shared.hasAnyEvents() {
+                if AirshipProxyEventEmitter.shared.hasAnyEvents() {
                     await self.eventNotifier.notifyPendingEvents()
                 }
 
@@ -107,7 +107,7 @@ public class AirshipReactNative: NSObject {
         try? AirshipProxy.shared.attemptTakeOff(launchOptions: launchOptions)
 
         Task {
-            let stream = await AirshipProxyEventEmitter.shared.pendingEventAdded
+            let stream = AirshipProxyEventEmitter.shared.pendingEventAdded
             for await _ in stream {
                 await self.eventNotifier.notifyPendingEvents()
             }

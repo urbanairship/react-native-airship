@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 21.1.0 - February 12, 2025
+Patch release that updates the Android SDK to 19.1.0 and fixes the `messageUnreadCount` on the `MessageCenterUpdated` event.
+
+
+### Changes
+- Updated Android SDK to [19.1.0](https://github.com/urbanairship/android-library/releases/tag/19.1.0)
+- Fixed MessageCenterUpdatedEvent.messageUnreadCount on iOS.
+
+
 ## Version 21.0.2 - February 6, 2025
 
 Patch release that updates the iOS SDK to 19.0.3 and fixes a Swift 5 warning.

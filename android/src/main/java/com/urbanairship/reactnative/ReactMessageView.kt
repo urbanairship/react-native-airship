@@ -11,8 +11,8 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
-import com.urbanairship.android.framework.proxy.ui.MessageWebView
-import com.urbanairship.android.framework.proxy.ui.MessageWebViewClient
+import com.urbanairship.messagecenter.ui.widget.MessageWebView
+import com.urbanairship.messagecenter.ui.widget.MessageWebViewClient
 import com.urbanairship.messagecenter.Message
 import com.urbanairship.messagecenter.MessageCenter
 import kotlinx.coroutines.CoroutineScope
