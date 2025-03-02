@@ -16,11 +16,21 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
-  if defined?(install_modules_dependencies()) != nil
-    install_modules_dependencies(s)
-  else
-    s.dependency "React-Core"
-  end
+  # Install the dependencies
+  s.dependency "React-Core"
+  s.dependency "React-RCTFabric"
+  s.dependency "React-Codegen"
+  s.dependency "RCT-Folly"
+  s.dependency "RCTRequired"
+  s.dependency "RCTTypeSafety"
+  s.dependency "ReactCommon/turbomodule/core"
   
+  # Use the Airship SDK proxy
   s.dependency "AirshipFrameworkProxy", "13.1.0"
+  
+  # Compile with C++17
+  s.pod_target_xcconfig = {
+    "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
+    "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\""
+  }
 end
