@@ -4,8 +4,8 @@
 ✅ [DONE] Step 1: Generate template with npx create-react-native-library - 2025-03-01
 ✅ [DONE] Step 2: Configure package.json for TurboModules - 2025-03-01
 ✅ [DONE] Step 3: Set up TypeScript specs - 2025-03-01
-⏳ [PENDING] Step 4: Implement native iOS code
-⏳ [PENDING] Step 5: Implement native Android code
+✅ [DONE] Step 4: Implement native iOS code - 2025-03-01
+✅ [DONE] Step 5: Implement native Android code - 2025-03-01
 ⏳ [PENDING] Step 6: Transfer TypeScript implementation
 ⏳ [PENDING] Step 7: Configure SDK dependencies
 ⏳ [PENDING] Step 8: Update example app

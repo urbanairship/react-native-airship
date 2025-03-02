@@ -49,6 +49,8 @@ RCT_EXPORT_MODULE()
 }
 #endif
 
+// Export all methods to match the TypeScript spec
+
 - (dispatch_queue_t)methodQueue {
     return dispatch_get_main_queue();
 }

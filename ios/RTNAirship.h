@@ -4,7 +4,7 @@
 #import <React/RCTEventEmitter.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "RTNAirshipSpec.h"
+#import <RTNAirshipSpec/RTNAirshipSpec.h>
 
 @interface RTNAirship : RCTEventEmitter <NativeRTNAirshipSpec>
 #else
@@ -14,6 +14,5 @@
 #endif
 
 @property(nonatomic, strong) RCTBridge *reactBridge;
-
 
 @end
