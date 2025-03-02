@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 22.0.0 - March 1, 2025
+Major release that migrates the plugin to use TurboModules and the new React Native architecture.
+
+### Changes
+- Complete rewrite using TurboModules and new React Native architecture
+- Preserve 100% functional parity with v21.2.0
+- Target React Native 0.72-0.78+
+- Remove all legacy architecture code
+
 ## Version 21.2.0 - February 24, 2025
 Patch release that updates the Android SDK to 19.2.0 and the iOS SDK to 19.1.0.
 

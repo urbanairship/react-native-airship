@@ -1,5 +1,28 @@
 # Migration Guide
 
+# 21.x to 22.x
+
+## TurboModules Architecture
+
+This version migrates the plugin to use TurboModules and the new React Native architecture. The API remains the same, preserving 100% functional parity with v21.2.0. Key changes to be aware of:
+
+- Minimum supported React Native version is now 0.72
+- The plugin now uses TurboModules for better performance
+- Legacy architecture code has been removed
+- TypeScript types have been preserved and are now even more accurate
+
+## Implementation Details
+
+If you were using direct imports from native modules, you'll need to update those imports to use the public API instead:
+
+```typescript
+// DON'T do this:
+import NativeRTNAirship from './NativeRTNAirship';
+
+// DO use the public API:
+import Airship from '@ua/react-native-airship';
+```
+
 # 15.x to 16.x
 
 ### Min iOS Version
