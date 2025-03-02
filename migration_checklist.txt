@@ -6,8 +6,8 @@
 ✅ [DONE] Step 3: Set up TypeScript specs - 2025-03-01
 ✅ [DONE] Step 4: Implement native iOS code - 2025-03-01
 ✅ [DONE] Step 5: Implement native Android code - 2025-03-01
-⏳ [PENDING] Step 6: Transfer TypeScript implementation
-⏳ [PENDING] Step 7: Configure SDK dependencies
+✅ [DONE] Step 6: Transfer TypeScript implementation - 2025-03-01
+✅ [DONE] Step 7: Configure SDK dependencies - 2025-03-01
 ⏳ [PENDING] Step 8: Update example app
 ⏳ [PENDING] Step 9: Testing and verification
 ⏳ [PENDING] Step 10: Update documentation
