@@ -11,8 +11,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/RTNAirshipComponents/ComponentDescriptors.h>
-#import <react/renderer/components/RTNAirshipComponents/Props.h>
+#import <react/renderer/components/RTNAirshipSpec/ComponentDescriptors.h>
+#import <react/renderer/components/RTNAirshipSpec/Props.h>
 using namespace facebook::react;
 #endif
 
