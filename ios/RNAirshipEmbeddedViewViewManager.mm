@@ -6,7 +6,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 
-@implementationRNAirshipEmbeddedViewManager
+@implementation RNAirshipEmbeddedViewManager
 RCT_REMAP_VIEW_PROPERTY(embeddedId, embeddedID, NSString)
 RCT_EXPORT_MODULE(RNAirshipEmbeddedView)
 

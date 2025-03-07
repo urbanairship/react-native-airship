@@ -884,7 +884,8 @@ RCT_REMAP_METHOD(liveActivityEnd,
 }
 
 RCT_REMAP_METHOD(liveUpdateListAll,
-                 liveUpdateListAll:(RCTPromiseResolveBlock)resolve
+                 liveUpdateListAll:(NSDictionary *)request
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
 }

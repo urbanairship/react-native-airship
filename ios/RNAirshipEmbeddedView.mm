@@ -17,17 +17,17 @@
 using namespace facebook::react;
 #endif
 
-@interfaceRNAirshipEmbeddedView()
+@interface RNAirshipEmbeddedView()
 @property (nonatomic, strong)RNAirshipEmbeddedViewWrapper *wrapper;
 @end
 
-@implementationRNAirshipEmbeddedView
+@implementation RNAirshipEmbeddedView
 
 #ifdef RCT_NEW_ARCH_ENABLED
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        static const auto defaultProps = std::make_shared<constRNAirshipMessageViewProps>();
+        static const auto defaultProps = std::make_shared<const RNAirshipMessageViewProps>();
         _props = defaultProps;
     }
     return self;
@@ -54,7 +54,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<constRNAirshipEmbeddedViewProps>(props);
+    const auto &newProps = *std::static_pointer_cast<const RNAirshipEmbeddedViewProps>(props);
     self.embeddedID = [NSString stringWithUTF8String:newProps.embeddedId.c_str()];
 
     [super updateProps:props oldProps:oldProps];
@@ -81,7 +81,7 @@ using namespace facebook::react;
 
 - (void)setEmbeddedID:(NSString *)embeddedID {
     _embeddedID = embeddedID;
-    __weakRNAirshipEmbeddedView *weakSelf = self;
+    __weak RNAirshipEmbeddedView *weakSelf = self;
     [weakSelf.wrapper setEmbeddedID:embeddedID];
 }
 
@@ -95,6 +95,6 @@ using namespace facebook::react;
 #ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol>RNAirshipEmbeddedViewCls(void)
 {
-    returnRNAirshipEmbeddedView.class;
+    return RNAirshipEmbeddedView.class;
 }
 #endif

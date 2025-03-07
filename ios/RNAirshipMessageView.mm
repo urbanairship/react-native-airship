@@ -17,19 +17,19 @@
 using namespace facebook::react;
 #endif
 
-@interfaceRNAirshipMessageView()<RNAirshipMessageWebViewWrapperDelegate>
+@interface RNAirshipMessageView()<RNAirshipMessageWebViewWrapperDelegate>
 @property (nonatomic, strong)RNAirshipMessageWebViewWrapper *wrapper;
 @end
 
-NSString *constRNAirshipMessageViewErrorMessageNotAvailable = @"MESSAGE_NOT_AVAILABLE";
-NSString *constRNAirshipMessageViewErrorFailedToFetchMessage = @"FAILED_TO_FETCH_MESSAGE";
-NSString *constRNAirshipMessageViewErrorMessageLoadFailed = @"MESSAGE_LOAD_FAILED";
+NSString *const RNAirshipMessageViewErrorMessageNotAvailable = @"MESSAGE_NOT_AVAILABLE";
+NSString *const RNAirshipMessageViewErrorFailedToFetchMessage = @"FAILED_TO_FETCH_MESSAGE";
+NSString *const RNAirshipMessageViewErrorMessageLoadFailed = @"MESSAGE_LOAD_FAILED";
 
-NSString *constRNAirshipMessageViewMessageIDKey = @"messageId";
-NSString *constRNAirshipMessageViewRetryableKey = @"retryable";
-NSString *constRNAirshipMessageViewErrorKey = @"error";
+NSString *const RNAirshipMessageViewMessageIDKey = @"messageId";
+NSString *const RNAirshipMessageViewRetryableKey = @"retryable";
+NSString *const RNAirshipMessageViewErrorKey = @"error";
 
-@implementationRNAirshipMessageView
+@implementation RNAirshipMessageView
 
 #ifdef RCT_NEW_ARCH_ENABLED
 
@@ -42,7 +42,7 @@ NSString *constRNAirshipMessageViewErrorKey = @"error";
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        static const auto defaultProps = std::make_shared<constRNAirshipMessageViewProps>();
+        static const auto defaultProps = std::make_shared<const RNAirshipMessageViewProps>();
         _props = defaultProps;
     }
     return self;
@@ -67,7 +67,7 @@ NSString *constRNAirshipMessageViewErrorKey = @"error";
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<constRNAirshipMessageViewProps>(props);
+    const auto &newProps = *std::static_pointer_cast<const RNAirshipMessageViewProps>(props);
     self.messageID = [NSString stringWithUTF8String:newProps.messageId.c_str()];
     
     [super updateProps:props oldProps:oldProps];
@@ -81,7 +81,7 @@ NSString *constRNAirshipMessageViewErrorKey = @"error";
 
 - (void)setMessageID:(NSString *)messageID {
     _messageID = messageID;
-    __weakRNAirshipMessageView *weakSelf = self;
+    __weak RNAirshipMessageView *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.wrapper loadMessageWithMessageID:messageID];
     });
@@ -186,6 +186,6 @@ NSString *constRNAirshipMessageViewErrorKey = @"error";
 #ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol>RNAirshipMessageViewCls(void)
 {
-    returnRNAirshipMessageView.class;
+    return RNAirshipMessageView.class;
 }
 #endif
