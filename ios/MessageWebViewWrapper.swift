@@ -4,7 +4,7 @@ import Foundation
 import AirshipKit
 import AirshipFrameworkProxy
 
-@objc(RTNAirshipMessageWebViewWrapperDelegate)
+@objc(RNAirshipMessageWebViewWrapperDelegate)
 public protocol MessageWebViewWrapperDelegate {
     func onMessageBodyLoadFailed(messageID: String)
     func onMessageGone(messageID: String)
@@ -14,7 +14,7 @@ public protocol MessageWebViewWrapperDelegate {
     func onClose(messageID: String)
 }
 
-@objc(RTNAirshipMessageWebViewWrapper)
+@objc(RNAirshipMessageWebViewWrapper)
 public class MessageWebViewWrapper: NSObject {
     private let innerWrapper: _MessageWebViewWrapper
 

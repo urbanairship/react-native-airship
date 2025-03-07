@@ -113,7 +113,7 @@ export interface Spec extends TurboModule {
   localeClearLocaleOverride(): Promise<void>;
 
   // Feature Flag Manager
-  featureFlagManagerFlag(flagName: string, userResultCache: boolean):Promise<Object>;
+  featureFlagManagerFlag(flagName: string, useResultCache: boolean):Promise<Object>;
   featureFlagManagerTrackInteraction(flag: Object): Promise<void>;
   featureFlagManagerResultCacheGetFlag(flagName: string): Promise<Object>;
   featureFlagManagerResultCacheSetFlag(flag: Object, ttl: number): Promise<void>;
@@ -135,4 +135,4 @@ export interface Spec extends TurboModule {
   liveUpdateClearAll(): Promise<void>;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('RTNAirship');
+export default TurboModuleRegistry.getEnforcing<Spec>('RNAirship');

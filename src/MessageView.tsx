@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { NativeSyntheticEvent } from 'react-native';
-import RTNAirshipMessageView from './MessageViewNativeComponent';
+import RNAirshipMessageView from './MessageViewNativeComponent';
 
 /**
  * Enum of possible message load errors
@@ -141,7 +141,7 @@ export class MessageView extends React.Component<MessageViewProps> {
 
   render() {
     return (
-      <RTNAirshipMessageView
+      <RNAirshipMessageView
         {...this.props}
         onLoadError={this._onLoadError}
         onLoadStarted={this._onLoadStarted}

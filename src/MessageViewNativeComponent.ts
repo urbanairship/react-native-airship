@@ -38,4 +38,4 @@ interface NativeProps extends ViewProps {
   onClose: BubblingEventHandler<MessageClosedEvent, 'topClose'>;
 }
 
-export default codegenNativeComponent<NativeProps>('RTNAirshipMessageView');
+export default codegenNativeComponent<NativeProps>('RNAirshipMessageView');

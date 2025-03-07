@@ -6,7 +6,7 @@
 /**
  * Handles takeOff for the Urban Airship SDK.
  */
-@interface RTNAirshipBootloader: NSObject
+@interface RNAirshipBootloader: NSObject
 
 /**
  * Disables automatic takeOff.

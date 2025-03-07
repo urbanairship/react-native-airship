@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-#import "RTNAirship.h"
+#import "RNAirship.h"
 
 #if __has_include(<react_native_airship/react_native_airship-Swift.h>)
 #import <react_native_airship/react_native_airship-Swift.h>
@@ -8,7 +8,7 @@
 #import "react_native_airship-Swift.h"
 #endif
 
-@implementation RTNAirship
+@implementation RNAirship
 RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents {
@@ -20,7 +20,7 @@ RCT_EXPORT_MODULE()
 }
 
 -(void)startObserving {
-    __weak RTNAirship *weakSelf = self;
+    __weak RNAirship *weakSelf = self;
     
     [AirshipReactNative.shared setNotifier:^(NSString *name, NSDictionary<NSString *,id> *body) {
         [weakSelf sendEventWithName:name body:body];
@@ -45,7 +45,7 @@ RCT_EXPORT_MODULE()
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
 (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-    return std::make_shared<facebook::react::NativeRTNAirshipSpecJSI>(params);
+    return std::make_shared<facebook::react::NativeRNAirshipSpecJSI>(params);
 }
 #endif
 
@@ -784,7 +784,7 @@ RCT_REMAP_METHOD(featureFlagManagerTrackInteraction,
 RCT_REMAP_METHOD(featureFlagManagerFlag,
                  featureFlagManagerFlag:(NSString *)flagName
                  useResultCache:(BOOL)useResultCache
-                 featureFlagManagerFlag:(RCTPromiseResolveBlock)resolve
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared featureFlagManagerFlagWithFlagName:flagName
@@ -796,7 +796,7 @@ RCT_REMAP_METHOD(featureFlagManagerFlag,
 
 RCT_REMAP_METHOD(featureFlagManagerResultCacheGetFlag,
                  featureFlagManagerResultCacheGetFlag:(NSString *)flagName
-                 featureFlagManagerResultCacheGetFlag:(RCTPromiseResolveBlock)resolve
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared featureFlagManagerResultCacheGetFlagWithName:flagName
@@ -807,12 +807,12 @@ RCT_REMAP_METHOD(featureFlagManagerResultCacheGetFlag,
 
 RCT_REMAP_METHOD(featureFlagManagerResultCacheSetFlag,
                  featureFlagManagerResultCacheSetFlag:(NSDictionary *)flag
-                 ttl:(nonnull NSNumber *)ttl
-                 featureFlagManagerResultCacheGetFlag:(RCTPromiseResolveBlock)resolve
+                 ttl:(double)ttl
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared featureFlagManagerResultCacheSetFlagWithFlag:flag
-                                                                ttl:ttl
+                                                                ttl:@(ttl)
                                                           completionHandler:^(NSError * _Nullable error) {
                   [self handleResult:nil error:error resolve:resolve reject:reject];
               }];
@@ -820,7 +820,7 @@ RCT_REMAP_METHOD(featureFlagManagerResultCacheSetFlag,
 
 RCT_REMAP_METHOD(featureFlagManagerResultCacheRemoveFlag,
                  featureFlagManagerResultCacheRemoveFlag:(NSString *)flagName
-                 featureFlagManagerResultCacheRemoveFlag:(RCTPromiseResolveBlock)resolve
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared featureFlagManagerResultCacheRemoveFlagWithName:flagName
@@ -841,7 +841,7 @@ RCT_REMAP_METHOD(liveActivityListAll,
 
 RCT_REMAP_METHOD(liveActivityList,
                  liveActivityListRequest:(NSDictionary *)request
-                 liveActivityList:(RCTPromiseResolveBlock)resolve
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared liveActivityListWithOptions:request
@@ -851,8 +851,8 @@ RCT_REMAP_METHOD(liveActivityList,
 }
 
 RCT_REMAP_METHOD(liveActivityStart,
-                 liveActivityStartRequest:(NSDictionary *)request
-                 liveActivityStart:(RCTPromiseResolveBlock)resolve
+                 liveActivityStart:(NSDictionary *)request
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared liveActivityStartWithOptions:request
@@ -862,8 +862,8 @@ RCT_REMAP_METHOD(liveActivityStart,
 }
 
 RCT_REMAP_METHOD(liveActivityUpdate,
-                 liveActivityUpdateRequest:(NSDictionary *)request
-                 liveActivityUpdate:(RCTPromiseResolveBlock)resolve
+                 liveActivityUpdate:(NSDictionary *)request
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared liveActivityUpdateWithOptions:request
@@ -873,8 +873,8 @@ RCT_REMAP_METHOD(liveActivityUpdate,
 }
 
 RCT_REMAP_METHOD(liveActivityEnd,
-                 liveActivityEndRequest:(NSDictionary *)request
-                 liveActivityEnd:(RCTPromiseResolveBlock)resolve
+                 liveActivityEnd:(NSDictionary *)request
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     [AirshipReactNative.shared liveActivityEndWithOptions:request
@@ -890,32 +890,32 @@ RCT_REMAP_METHOD(liveUpdateListAll,
 }
 
 RCT_REMAP_METHOD(liveUpdateList,
-                 liveUpdateListRequest:(NSDictionary *)request
-                 liveUpdateList:(RCTPromiseResolveBlock)resolve
+                 liveUpdateList:(NSDictionary *)request
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
 }
 
 RCT_REMAP_METHOD(liveUpdateStart,
-                 liveUpdateStartRequest:(NSDictionary *)request
-                 liveUpdateCreate:(RCTPromiseResolveBlock)resolve
+                 liveUpdateStart:(NSDictionary *)request
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
 }
 
 RCT_REMAP_METHOD(liveUpdateUpdate,
-                 liveUpdateUpdateRequest:(NSDictionary *)request
-                 liveUpdateUpdate:(RCTPromiseResolveBlock)resolve
+                 liveUpdateUpdate:(NSDictionary *)request
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
 }
 
 RCT_REMAP_METHOD(liveUpdateEnd,
-                 liveUpdateEndRequest:(NSDictionary *)request
-                 liveUpdateEnd:(RCTPromiseResolveBlock)resolve
+                 liveUpdateEnd:(NSDictionary *)request
+                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
     reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);

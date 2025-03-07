@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-#import "RTNAirshipEmbeddedView.h"
+#import "RNAirshipEmbeddedView.h"
 
 #if __has_include(<react_native_airship/react_native_airship-Swift.h>)
 #import <react_native_airship/react_native_airship-Swift.h>
@@ -9,24 +9,25 @@
 #endif
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import <React/RCTConversions.h>
-#import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/RTNAirshipComponents/ComponentDescriptors.h>
-#import <react/renderer/components/RTNAirshipComponents/Props.h>
+#import "generated/RNAirshipSpec/ComponentDescriptors.h"
+#import "generated/RNAirshipSpec/EventEmitters.h"
+#import "generated/RNAirshipSpec/Props.h"
+#import "generated/RNAirshipSpec/RCTComponentViewHelpers.h"
+#import "RCTFabricComponentsPlugins.h"
 using namespace facebook::react;
 #endif
 
-@interface RTNAirshipEmbeddedView()
-@property (nonatomic, strong) RTNAirshipEmbeddedViewWrapper *wrapper;
+@interfaceRNAirshipEmbeddedView()
+@property (nonatomic, strong)RNAirshipEmbeddedViewWrapper *wrapper;
 @end
 
-@implementation RTNAirshipEmbeddedView
+@implementationRNAirshipEmbeddedView
 
 #ifdef RCT_NEW_ARCH_ENABLED
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        static const auto defaultProps = std::make_shared<const RTNAirshipMessageViewProps>();
+        static const auto defaultProps = std::make_shared<constRNAirshipMessageViewProps>();
         _props = defaultProps;
     }
     return self;
@@ -38,7 +39,7 @@ using namespace facebook::react;
 - (instancetype) init {
     self = [self initWithFrame:CGRectZero];
     if (self) {
-        self.wrapper = [[RTNAirshipEmbeddedViewWrapper alloc] initWithFrame:self.bounds];
+        self.wrapper = [[RNAirshipEmbeddedViewWrapper alloc] initWithFrame:self.bounds];
         [self addSubview:self.wrapper];
     }
     return self;
@@ -48,12 +49,12 @@ using namespace facebook::react;
 #ifdef RCT_NEW_ARCH_ENABLED
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-  return concreteComponentDescriptorProvider<RTNAirshipMessageViewComponentDescriptor>();
+  return concreteComponentDescriptorProvider<RNAirshipMessageViewComponentDescriptor>();
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RTNAirshipEmbeddedViewProps>(props);
+    const auto &newProps = *std::static_pointer_cast<constRNAirshipEmbeddedViewProps>(props);
     self.embeddedID = [NSString stringWithUTF8String:newProps.embeddedId.c_str()];
 
     [super updateProps:props oldProps:oldProps];
@@ -80,7 +81,7 @@ using namespace facebook::react;
 
 - (void)setEmbeddedID:(NSString *)embeddedID {
     _embeddedID = embeddedID;
-    __weak RTNAirshipEmbeddedView *weakSelf = self;
+    __weakRNAirshipEmbeddedView *weakSelf = self;
     [weakSelf.wrapper setEmbeddedID:embeddedID];
 }
 
@@ -92,8 +93,8 @@ using namespace facebook::react;
 @end
 
 #ifdef RCT_NEW_ARCH_ENABLED
-Class<RCTComponentViewProtocol> RTNAirshipEmbeddedViewCls(void)
+Class<RCTComponentViewProtocol>RNAirshipEmbeddedViewCls(void)
 {
-    return RTNAirshipEmbeddedView.class;
+    returnRNAirshipEmbeddedView.class;
 }
 #endif

@@ -40,4 +40,6 @@ Pod::Spec.new do |s|
       s.dependency "ReactCommon/turbomodule/core"
     end
   end
+  
+  s.dependency "AirshipFrameworkProxy", "13.1.0"
 end

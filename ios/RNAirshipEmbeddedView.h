@@ -10,9 +10,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #ifdef RCT_NEW_ARCH_ENABLED
-@interface RTNAirshipEmbeddedView : RCTViewComponentView
+@interface RNAirshipEmbeddedView : RCTViewComponentView
 #else
-@interface RTNAirshipEmbeddedView : RCTView
+@interface RNAirshipEmbeddedView : RCTView
 #endif
 
 @property (nonatomic, copy) NSString *embeddedID;

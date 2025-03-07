@@ -12,6 +12,6 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 
-public interface RTNAirshipEmbeddedViewManagerInterface<T extends View> {
+public interface RNAirshipEmbeddedViewManagerInterface<T extends View> {
   void setEmbeddedId(T view, @Nullable String value);
 }

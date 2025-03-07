@@ -7,11 +7,11 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.viewmanagers.RTNAirshipMessageViewManagerInterface
+import com.facebook.react.viewmanagers.RNAirshipMessageViewManagerInterface
 import com.facebook.react.bridge.ReadableArray
 
 class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(), 
-    RTNAirshipMessageViewManagerInterface<ReactMessageView> {
+    RNAirshipMessageViewManagerInterface<ReactMessageView> {
 
     private val delegate = object : ViewManagerDelegate<ReactMessageView?> {
 
@@ -91,6 +91,6 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
     }
 
     companion object {
-        const val REACT_CLASS = "RTNAirshipMessageView"
+        const val REACT_CLASS = "RNAirshipMessageView"
     }
 }

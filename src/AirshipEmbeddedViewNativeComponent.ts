@@ -6,4 +6,4 @@ interface NativeProps extends ViewProps {
   embeddedId: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RTNAirshipEmbeddedView');
+export default codegenNativeComponent<NativeProps>('RNAirshipEmbeddedView');

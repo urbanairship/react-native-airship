@@ -10,9 +10,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #ifdef RCT_NEW_ARCH_ENABLED
-@interface RTNAirshipMessageView : RCTViewComponentView
+@interface RNAirshipMessageView : RCTViewComponentView
 #else
-@interface RTNAirshipMessageView : RCTView
+@interface RNAirshipMessageView : RCTView
 #endif
 
 @property (nonatomic, copy) RCTDirectEventBlock onLoadStarted;

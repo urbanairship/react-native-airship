@@ -6,10 +6,10 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.viewmanagers.RTNAirshipEmbeddedViewManagerInterface
+import com.facebook.react.viewmanagers.RNAirshipEmbeddedViewManagerInterface
 
 class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
-    RTNAirshipEmbeddedViewManagerInterface<ReactEmbeddedView> {
+    RNAirshipEmbeddedViewManagerInterface<ReactEmbeddedView> {
 
     private val manualDelegate = object : ViewManagerDelegate<ReactEmbeddedView?> {
 
@@ -49,6 +49,6 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
     }
 
     companion object {
-        const val REACT_CLASS = "RTNAirshipEmbeddedView"
+        const val REACT_CLASS = "RNAirshipEmbeddedView"
     }
 }
