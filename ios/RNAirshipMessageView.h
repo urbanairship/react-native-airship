@@ -15,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RNAirshipMessageView : RCTView
 #endif
 
-@property (nonatomic, copy) RCTDirectEventBlock onLoadStarted;
-@property (nonatomic, copy) RCTDirectEventBlock onLoadFinished;
-@property (nonatomic, copy) RCTDirectEventBlock onLoadError;
-@property (nonatomic, copy) RCTDirectEventBlock onClose;
+@property (nonatomic, copy) RCTBubblingEventBlock onLoadStarted;
+@property (nonatomic, copy) RCTBubblingEventBlock onLoadFinished;
+@property (nonatomic, copy) RCTBubblingEventBlock onLoadError;
+@property (nonatomic, copy) RCTBubblingEventBlock onClose;
 @property (nonatomic, copy) NSString *messageID;
 
 @end

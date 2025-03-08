@@ -1,8 +1,10 @@
 // @ts-ignore
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type { HostComponent, ViewProps } from 'react-native';
-import type { BubblingEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
-
+import type { ViewProps } from 'react-native';
+import type {
+  BubblingEventHandler,
+  // @ts-ignore
+} from 'react-native/Libraries/Types/CodegenTypes';
 
 type MessageLoadStartedEvent = Readonly<{
   messageId: string;
@@ -24,10 +26,16 @@ type MessageClosedEvent = Readonly<{
 
 interface NativeProps extends ViewProps {
   messageId: string;
-  onLoadStarted?: BubblingEventHandler<MessageLoadStartedEvent> | null;
-  onLoadFinished?: BubblingEventHandler<MessageLoadFinishedEvent> | null;
-  onLoadError?: BubblingEventHandler<MessageLoadErrorEvent> | null;
-  onClose?: BubblingEventHandler<MessageClosedEvent> | null;
+  onLoadStarted: BubblingEventHandler<
+    MessageLoadStartedEvent,
+    'topLoadStarted'
+  >;
+  onLoadFinished: BubblingEventHandler<
+    MessageLoadFinishedEvent,
+    'topLoadFinished'
+  >;
+  onLoadError: BubblingEventHandler<MessageLoadErrorEvent, 'topLoadError'>;
+  onClose: BubblingEventHandler<MessageClosedEvent, 'topClose'>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNAirshipMessageView') as HostComponent<NativeProps>;
+export default codegenNativeComponent<NativeProps>('RNAirshipMessageView');

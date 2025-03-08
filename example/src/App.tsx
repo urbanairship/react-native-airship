@@ -1,13 +1,25 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { multiply } from '@ua/react-native-airship';
+import Airship, { MessageView }  from '@ua/react-native-airship'
 
-const result = multiply(3, 7);
+Airship.takeOff({
+  default: {
+    appKey: "",
+    appSecret: ""
+  }
+})
+
+Airship.channel.getChannelId().then(channel => {
+  console.log("channel", channel)
+});
+
+Airship.messageCenter.getMessages().then(messages => {
+  console.log("messages", messages)
+});
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <MessageView style={styles.container} messageId='LfM4YKuBEe-r4-_-Gs6CYg' onLoadFinished={ console.log("nice!")}/>
+    
   );
 }
 

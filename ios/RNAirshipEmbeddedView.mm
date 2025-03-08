@@ -13,11 +13,13 @@
 #import "generated/RNAirshipSpec/EventEmitters.h"
 #import "generated/RNAirshipSpec/Props.h"
 #import "generated/RNAirshipSpec/RCTComponentViewHelpers.h"
+
 #import "RCTFabricComponentsPlugins.h"
+
 using namespace facebook::react;
 #endif
 
-@interface RNAirshipEmbeddedView()
+@interface RNAirshipEmbeddedView() <RCTRNAirshipEmbeddedViewViewProtocol>
 @property (nonatomic, strong)RNAirshipEmbeddedViewWrapper *wrapper;
 @end
 
@@ -27,7 +29,7 @@ using namespace facebook::react;
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        static const auto defaultProps = std::make_shared<const RNAirshipMessageViewProps>();
+      static const auto defaultProps = std::make_shared<const RNAirshipEmbeddedViewProps>();
         _props = defaultProps;
     }
     return self;
@@ -49,7 +51,7 @@ using namespace facebook::react;
 #ifdef RCT_NEW_ARCH_ENABLED
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-  return concreteComponentDescriptorProvider<RNAirshipMessageViewComponentDescriptor>();
+  return concreteComponentDescriptorProvider<RNAirshipEmbeddedViewComponentDescriptor>();
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
