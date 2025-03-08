@@ -10,23 +10,19 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNAirshipMessageViewManagerInterface
 import com.facebook.react.bridge.ReadableArray
 
-class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(), 
+class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
     RNAirshipMessageViewManagerInterface<ReactMessageView> {
 
-    private val delegate = object : ViewManagerDelegate<ReactMessageView?> {
+    private val delegate = object : ViewManagerDelegate<ReactMessageView> {
 
-        override fun setProperty(view: ReactMessageView?, propName: String?, value: Any?) {
-            if (view == null || propName == null) return
-
+        override fun setProperty(view: ReactMessageView, propName: String?, value: Any?) {
             when (propName) {
                 "messageId" -> setMessageId(view, value as? String)
-                else -> {
-                    
-                }
+                else -> {}
             }
         }
 
-        override fun receiveCommand(view: ReactMessageView?, commandName: String?, args: ReadableArray?) {
+        override fun receiveCommand(view: ReactMessageView, commandName: String?, args: ReadableArray?) {
             // No commands implemented, add if Airship adds some in future
         }
     }
@@ -35,7 +31,7 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
         return REACT_CLASS
     }
 
-    override fun getDelegate(): ViewManagerDelegate<ReactMessageView?> {
+    override fun getDelegate(): ViewManagerDelegate<ReactMessageView> {
         return delegate
     }
 

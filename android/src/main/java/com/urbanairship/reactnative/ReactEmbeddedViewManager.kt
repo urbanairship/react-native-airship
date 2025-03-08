@@ -11,20 +11,16 @@ import com.facebook.react.viewmanagers.RNAirshipEmbeddedViewManagerInterface
 class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
     RNAirshipEmbeddedViewManagerInterface<ReactEmbeddedView> {
 
-    private val manualDelegate = object : ViewManagerDelegate<ReactEmbeddedView?> {
+    private val manualDelegate = object : ViewManagerDelegate<ReactEmbeddedView> {
 
-        override fun setProperty(view: ReactEmbeddedView?, propName: String?, value: Any?) {
-            if (view == null || propName == null) return
-
+        override fun setProperty(view: ReactEmbeddedView, propName: String?, value: Any?) {
             when (propName) {
                 "embeddedId" -> setEmbeddedId(view, value as? String)
-                else -> {
-                    
-                }
+                else -> {}
             }
         }
 
-        override fun receiveCommand(view: ReactEmbeddedView?, commandName: String?, args: com.facebook.react.bridge.ReadableArray?) {
+        override fun receiveCommand(view: ReactEmbeddedView, commandName: String?, args: com.facebook.react.bridge.ReadableArray?) {
             // No commands supported — add if you need any
         }
     }
@@ -33,7 +29,7 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
         return REACT_CLASS
     }
 
-    override fun getDelegate(): ViewManagerDelegate<ReactEmbeddedView?> {
+    override fun getDelegate(): ViewManagerDelegate<ReactEmbeddedView> {
         return manualDelegate
     }
 
