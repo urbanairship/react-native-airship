@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 buildscript {
   ext.getExtOrDefault = {name ->
     return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['Airship_' + name]
