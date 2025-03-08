@@ -85,8 +85,6 @@ repositories {
   google()
 }
 
-def kotlin_version = getExtOrDefault("kotlinVersion")
-
 def getModuleVersion() {
   def jsonFile = file('../package.json')
   def parsedJson = new JsonSlurper().parseText(jsonFile.text)
