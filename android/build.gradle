@@ -97,14 +97,13 @@ def getModuleVersion() {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 def proxy_version = getExtOrDefault("airshipProxyVersion")
-def airship_version = getExtOrDefault("airshipVersion")
 
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
   api "com.urbanairship.android:airship-framework-proxy:$proxy_version"
-  
+
   if (isHmsEnabled()) {
     implementation "com.urbanairship.android:airship-framework-proxy-hms:$proxy_version"
   }
