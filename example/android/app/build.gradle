@@ -79,7 +79,7 @@ android {
 
     namespace "ua.reactnativeairship.example"
     defaultConfig {
-        applicationId "ua.reactnativeairship.example"
+        applicationId "com.urbanairship.sample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -135,4 +135,8 @@ if (isNewArchitectureEnabled()) {
       }
     }
     preBuild.dependsOn invokeLibraryCodegen
+}
+
+if (rootProject.file('app/google-services.json').exists()) {
+  apply plugin: 'com.google.gms.google-services'
 }
