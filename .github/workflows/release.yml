@@ -5,7 +5,6 @@ on:
     tags:
       - "[0-9]+.[0-9]+.[0-9]+*"
 
-
 jobs:
   check-version:
     runs-on: macos-latest
@@ -37,6 +36,8 @@ jobs:
   docs:
     needs: check-version
     runs-on: macos-latest
+    env:
+      NODE_ENV: development
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -53,7 +54,6 @@ jobs:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
             
-
       - run: npm run bootstrap
       - run: npm run docs
       - run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//}
@@ -88,4 +88,3 @@ jobs:
           body: ${{ steps.get_release_notes.outputs.NOTES }}
           draft: false
           prerelease: false
-  

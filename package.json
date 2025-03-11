@@ -79,6 +79,7 @@
     "react-native": "0.78.0",
     "react-native-builder-bob": "^0.37.0",
     "turbo": "^1.10.7",
+    "typedoc": "^0.27.9",
     "typescript": "^5.2.2"
   },
   "resolutions": {
