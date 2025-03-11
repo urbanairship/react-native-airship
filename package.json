@@ -64,7 +64,6 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
-    "@evilmartians/lefthook": "^1.5.0",
     "@react-native-community/cli": "15.0.1",
     "@react-native/eslint-config": "^0.73.1",
     "@types/jest": "^29.5.5",
@@ -165,6 +164,17 @@
     "android": {
       "javaPackageName": "com.urbanairship.reactnative"
     },
+    "ios": {
+      "componentProvider": {
+        "RNAirshipMessageView": "RNAirshipMessageView",
+        "RNAirshipEmbeddedView": "RNAirshipEmbeddedView"
+      }
+    },
     "includesGeneratedCode": true
+  },
+  "create-react-native-library": {
+    "languages": "kotlin-objc",
+    "type": "fabric-view",
+    "version": "0.48.3"
   }
 }

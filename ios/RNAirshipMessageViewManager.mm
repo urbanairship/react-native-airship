@@ -19,4 +19,5 @@ RCT_EXPORT_MODULE(RNAirshipMessageView)
     return [[RNAirshipMessageView alloc] init];
 }
 
+
 @end

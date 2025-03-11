@@ -36,8 +36,6 @@ using namespace facebook::react;
 }
 #endif
 
-
-
 - (instancetype) init {
     self = [self initWithFrame:CGRectZero];
     if (self) {
@@ -78,8 +76,6 @@ using namespace facebook::react;
 }
 
 #endif
-
-
 
 - (void)setEmbeddedID:(NSString *)embeddedID {
     _embeddedID = embeddedID;

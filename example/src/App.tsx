@@ -1,5 +1,14 @@
-import { Text, View, StyleSheet } from 'react-native';
-import Airship, { MessageView }  from '@ua/react-native-airship'
+import { Text, View, Button, StyleSheet } from 'react-native';
+import Airship, {
+  AirshipEmbeddedView,
+  EventType,
+  MessageView,
+} from '@ua/react-native-airship';
+
+const uiManager = global?.nativeFabricUIManager ? 'Fabric' : 'Paper';
+
+console.log(`Using ${uiManager}`);
+
 
 Airship.takeOff({
   default: {
@@ -8,25 +17,48 @@ Airship.takeOff({
   }
 })
 
-Airship.channel.getChannelId().then(channel => {
-  console.log("channel", channel)
+Airship.addListener(EventType.PushNotificationStatusChangedStatus, (event) => {
+  console.log('PushNotificationStatusChangedStatus', JSON.stringify(event));
+});
+Airship.channel.getChannelId().then((channel) => {
+  console.log('channel', channel);
 });
 
-Airship.messageCenter.getMessages().then(messages => {
-  console.log("messages", messages)
+Airship.messageCenter.getMessages().then((messages) => {
+  console.log('messages', messages);
 });
 
 export default function App() {
   return (
-    <MessageView style={styles.container} messageId='LfM4YKuBEe-r4-_-Gs6CYg' onLoadFinished={ console.log("nice!")}/>
-    
+    <View style={{ flex: 1, flexDirection: "column" }}>
+      <MessageView
+        style={{ flex: 1, backgroundColor: "#0FF000" }}
+        messageId="I8A4kI_OEe6zxzpQHdTvTg"
+        onLoadStarted={(event) => console.log('onLoadStarted', event)}
+        onLoadError={(event) => console.log('onLoadError', event)}
+        onLoadFinished={(event) => console.log('onLoadFinished', event)}
+      />
+
+    <AirshipEmbeddedView
+        style={{ flex: 1, backgroundColor: "#00FF00" }}
+        embeddedId="embedded-2"
+      />
+
+      <Button
+        onPress={async () => {
+          Airship.android.liveUpdateManager.start({
+            type: 'Example',
+            name: 'neat',
+            content: {
+              emoji: '🙌',
+            },
+          });
+        }}
+        title="Cools"
+        color="#841584"
+        accessibilityLabel="Learn more about this purple button"
+      />
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

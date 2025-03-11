@@ -17,7 +17,7 @@
 using namespace facebook::react;
 #endif
 
-@interface RNAirshipMessageView()<RNAirshipMessageWebViewWrapperDelegate>
+@interface RNAirshipMessageView() <RNAirshipMessageWebViewWrapperDelegate, RCTRNAirshipMessageViewViewProtocol>
 @property (nonatomic, strong)RNAirshipMessageWebViewWrapper *wrapper;
 @end
 
@@ -59,7 +59,6 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
     return self;
 }
 
-#ifdef RCT_NEW_ARCH_ENABLED
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
   return concreteComponentDescriptorProvider<RNAirshipMessageViewComponentDescriptor>();
@@ -72,7 +71,6 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
     
     [super updateProps:props oldProps:oldProps];
 }
-#endif
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -86,6 +84,7 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
         [weakSelf.wrapper loadMessageWithMessageID:messageID];
     });
 }
+
 
 - (void)onCloseWithMessageID:(NSString *)messageID {
     [self dispatchOnCloseEvent:messageID];
@@ -132,6 +131,12 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
     }
 #endif
 }
+
+- (const RNAirshipMessageViewEventEmitter &)eventEmitter
+{
+  return static_cast<const RNAirshipMessageViewEventEmitter &>(*_eventEmitter);
+}
+
 
 - (void)dispatchOnLoadErrorEvent: (NSString*)messageID
                 withErrorMessage: (NSString*)errorMessage
@@ -180,10 +185,10 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
     }
 #endif
 }
-
 @end
 
 #ifdef RCT_NEW_ARCH_ENABLED
+
 Class<RCTComponentViewProtocol>RNAirshipMessageViewCls(void)
 {
     return RNAirshipMessageView.class;

@@ -3,8 +3,8 @@
 'use strict';
 
 import React from 'react';
-import { NativeSyntheticEvent } from 'react-native';
-import RNAirshipMessageView from './MessageViewNativeComponent';
+import { NativeSyntheticEvent, ViewStyle } from 'react-native';
+import RNAirshipMessageView from './RNAirshipMessageViewNativeComponent';
 
 /**
  * Enum of possible message load errors
@@ -76,30 +76,32 @@ export interface MessageClosedEvent {
  * MessageView props
  */
 export interface MessageViewProps {
+  style?: ViewStyle;
+
   /**
    * A callback when the view starts loading a message.
    *
    * @param event: The message load started event.
    */
-  onLoadStarted: (event: MessageLoadStartedEvent) => void;
+  onLoadStarted?: (event: MessageLoadStartedEvent) => void;
   /**
    * A callback when the view finishes loading a message.
    *
    * @param event: The message load finished event.
    */
-  onLoadFinished: (event: MessageLoadFinishedEvent) => void;
+  onLoadFinished?: (event: MessageLoadFinishedEvent) => void;
   /**
    * A callback when the view fails to load a message with an error.
    *
    * @param event: The message load error event.
    */
-  onLoadError: (event: MessageLoadErrorEvent) => void;
+  onLoadError?: (event: MessageLoadErrorEvent) => void;
   /**
    * A callback when the message is closed.
    *
    * @param event: The message closed event.
    */
-  onClose: (event: MessageClosedEvent) => void;
+  onClose?: (event: MessageClosedEvent) => void;
 
   /**
    * The message Id.

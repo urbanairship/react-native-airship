@@ -3,6 +3,9 @@
 #import <WebKit/WebKit.h>
 #import <React/RCTView.h>
 
+#ifndef RNAirshipEmbeddedViewNativeComponent_h
+#define RNAirshipEmbeddedViewNativeComponent_h
+
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTViewComponentView.h>
 #endif
@@ -20,3 +23,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif
