@@ -12,17 +12,6 @@ export default function HomeScreen() {
   const isIOS = Platform.OS === 'ios';
   const liveLabel = isIOS ? 'Live Activities' : 'Live Updates';
 
-  const checkLiveActivities = async () => {
-    try {
-      const manager = isIOS ? Airship.iOS.liveActivityManager : Airship.android.liveUpdateManager;
-      const activities = await manager.listAll();
-      console.log(isIOS ? 'Live Activities:' : 'Live Updates:', activities);
-      alert(activities.length ? `Found ${activities.length} active ${liveLabel}` : `No active ${liveLabel} found`);
-    } catch (error) {
-      console.error('Error checking live activities/updates:', error);
-    }
-  };
-
   useEffect(() => {
     Airship.channel.getChannelId().then(id => id && setChannelId(id));
     Airship.push.getNotificationStatus().then(status => setNotificationsEnabled(status.isUserOptedIn));
@@ -32,12 +21,10 @@ export default function HomeScreen() {
       console.log('Event', event);
       setNotificationsEnabled(event.status.isUserOptedIn);
     });
-    const liveActivityListener = isIOS ? Airship.addListener(EventType.IOSLiveActivitiesUpdated, checkLiveActivities) : null;
 
     return () => {
       channelListener.remove();
       optInListener.remove();
-      liveActivityListener && liveActivityListener.remove();
     };
   }, []);
 
@@ -62,37 +49,6 @@ export default function HomeScreen() {
         content: { emoji: '🙌' },
       });
     }
-  };
-
-  const endAllLive = async () => {
-    const manager = isIOS ? Airship.iOS.liveActivityManager : Airship.android.liveUpdateManager;
-    const activities = await manager.listAll();
-    activities.forEach(activity => {
-      isIOS
-        ? manager.end({ activityId: activity.id, dismissalPolicy: { type: 'immediate' } })
-        : manager.end({ name: activity.name });
-    });
-  };
-
-  const updateAllLive = async () => {
-    const manager = isIOS ? Airship.iOS.liveActivityManager : Airship.android.liveUpdateManager;
-    const activities = await manager.listAll();
-    activities.forEach(activity => {
-      if (isIOS) {
-        manager.update({
-          activityId: activity.id,
-          content: {
-            state: { emoji: activity.content.state.emoji + '🙌' },
-            relevanceScore: 0.0,
-          },
-        });
-      } else {
-        manager.update({
-          name: activity.name,
-          content: { emoji: activity.content.emoji + '🙌' },
-        });
-      }
-    });
   };
 
   return (
@@ -125,13 +81,9 @@ export default function HomeScreen() {
             color={notificationsEnabled ? '#6CA15F' : '#E0E0E0'}
           />
         </View>
-
         <View style={[styles.roundedView, { marginBottom: 20, padding: 8 }]}>
           <Text style={{ fontWeight: 'bold', marginLeft: 8, marginBottom: 8 }}>{liveLabel}</Text>
           <Button onPress={startLive} title="Start New" color="#841584" />
-          <Button onPress={endAllLive} title="End All" color="#841584" />
-          <Button onPress={updateAllLive} title="Update All" color="#841584" />
-          <Button onPress={checkLiveActivities} title="Check Status" color="#1E88E5" />
         </View>
       </View>
     </KeyboardAvoidingView>
