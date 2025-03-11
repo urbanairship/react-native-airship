@@ -19,6 +19,7 @@
 		6308C1832D80AA8500296239 /* ExampleWidgetsLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6308C17B2D80AA8500296239 /* ExampleWidgetsLiveActivity.swift */; };
 		6308C1842D80AA8500296239 /* ExampleWidgetsAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6308C1792D80AA8500296239 /* ExampleWidgetsAttributes.swift */; };
 		6308C18A2D80AA9200296239 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6308C1872D80AA9200296239 /* NotificationService.swift */; };
+		6308C18E2D80B00300296239 /* AirshipPluginExtender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6308C18D2D80B00300296239 /* AirshipPluginExtender.swift */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4685ED317A73D5118DD4DCF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
@@ -76,6 +77,7 @@
 		6308C1852D80AA9200296239 /* AirshipExampleNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AirshipExampleNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		6308C1862D80AA9200296239 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6308C1872D80AA9200296239 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		6308C18D2D80B00300296239 /* AirshipPluginExtender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirshipPluginExtender.swift; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = AirshipExample/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AirshipExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAE1A68108700A75B9A /* AirshipExample */,
+				6308C18D2D80B00300296239 /* AirshipPluginExtender.swift */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				6308C1882D80AA9200296239 /* AirshipExampleNotificationServiceExtension */,
 				6308C17D2D80AA8500296239 /* ExampleWidgets */,
@@ -407,6 +410,7 @@
 			files = (
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
 				6308C1842D80AA8500296239 /* ExampleWidgetsAttributes.swift in Sources */,
+				6308C18E2D80B00300296239 /* AirshipPluginExtender.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -600,9 +604,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExampleWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ExampleWidgetExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = ExampleWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -612,7 +616,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.LiveActivity;
+				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.ExampleWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -644,9 +648,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExampleWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ExampleWidgetExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = ExampleWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -655,7 +659,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.LiveActivity;
+				PRODUCT_BUNDLE_IDENTIFIER = com.urbanairship.richpush.ExampleWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -734,10 +738,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -806,10 +807,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
