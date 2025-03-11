@@ -8,11 +8,12 @@
 #import "react_native_airship-Swift.h"
 #endif
 
-#ifdef RCT_NEW_ARCH_ENABLED
 #import "generated/RNAirshipSpec/ComponentDescriptors.h"
 #import "generated/RNAirshipSpec/EventEmitters.h"
 #import "generated/RNAirshipSpec/Props.h"
 #import "generated/RNAirshipSpec/RCTComponentViewHelpers.h"
+
+#ifdef RCT_NEW_ARCH_ENABLED
 #import "RCTFabricComponentsPlugins.h"
 using namespace facebook::react;
 #endif
@@ -47,6 +48,19 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
     }
     return self;
 }
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNAirshipMessageViewComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNAirshipMessageViewProps>(props);
+    self.messageID = [NSString stringWithUTF8String:newProps.messageId.c_str()];
+
+    [super updateProps:props oldProps:oldProps];
+}
 #endif
 
 - (instancetype) init {
@@ -59,18 +73,6 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
     return self;
 }
 
-+ (ComponentDescriptorProvider)componentDescriptorProvider
-{
-  return concreteComponentDescriptorProvider<RNAirshipMessageViewComponentDescriptor>();
-}
-
-- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
-{
-    const auto &newProps = *std::static_pointer_cast<const RNAirshipMessageViewProps>(props);
-    self.messageID = [NSString stringWithUTF8String:newProps.messageId.c_str()];
-    
-    [super updateProps:props oldProps:oldProps];
-}
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -84,7 +86,6 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
         [weakSelf.wrapper loadMessageWithMessageID:messageID];
     });
 }
-
 
 - (void)onCloseWithMessageID:(NSString *)messageID {
     [self dispatchOnCloseEvent:messageID];
@@ -130,11 +131,6 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
         });
     }
 #endif
-}
-
-- (const RNAirshipMessageViewEventEmitter &)eventEmitter
-{
-  return static_cast<const RNAirshipMessageViewEventEmitter &>(*_eventEmitter);
 }
 
 
@@ -186,6 +182,7 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
 #endif
 }
 @end
+
 
 #ifdef RCT_NEW_ARCH_ENABLED
 

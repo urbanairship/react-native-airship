@@ -8,12 +8,13 @@
 #import "react_native_airship-Swift.h"
 #endif
 
-#ifdef RCT_NEW_ARCH_ENABLED
 #import "generated/RNAirshipSpec/ComponentDescriptors.h"
 #import "generated/RNAirshipSpec/EventEmitters.h"
 #import "generated/RNAirshipSpec/Props.h"
 #import "generated/RNAirshipSpec/RCTComponentViewHelpers.h"
 
+
+#ifdef RCT_NEW_ARCH_ENABLED
 #import "RCTFabricComponentsPlugins.h"
 
 using namespace facebook::react;
@@ -34,19 +35,7 @@ using namespace facebook::react;
     }
     return self;
 }
-#endif
 
-- (instancetype) init {
-    self = [self initWithFrame:CGRectZero];
-    if (self) {
-        self.wrapper = [[RNAirshipEmbeddedViewWrapper alloc] initWithFrame:self.bounds];
-        [self addSubview:self.wrapper];
-    }
-    return self;
-}
-
-
-#ifdef RCT_NEW_ARCH_ENABLED
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
   return concreteComponentDescriptorProvider<RNAirshipEmbeddedViewComponentDescriptor>();
@@ -65,7 +54,16 @@ using namespace facebook::react;
 
 - (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index {
 }
-#else
+#endif
+
+- (instancetype) init {
+    self = [self initWithFrame:CGRectZero];
+    if (self) {
+        self.wrapper = [[RNAirshipEmbeddedViewWrapper alloc] initWithFrame:self.bounds];
+        [self addSubview:self.wrapper];
+    }
+    return self;
+}
 
 - (void)didMoveToSuperview {
     [super didMoveToSuperview];
@@ -74,8 +72,6 @@ using namespace facebook::react;
 - (void)didMoveToWindow {
     [super didMoveToWindow];
 }
-
-#endif
 
 - (void)setEmbeddedID:(NSString *)embeddedID {
     _embeddedID = embeddedID;
