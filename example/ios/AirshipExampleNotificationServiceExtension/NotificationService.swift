@@ -1,4 +1,4 @@
-//import UserNotifications
-//import AirshipServiceExtension
-//
-//class NotificationService: UANotificationServiceExtension {}
+import UserNotifications
+import AirshipServiceExtension
+
+class NotificationService: UANotificationServiceExtension {}
