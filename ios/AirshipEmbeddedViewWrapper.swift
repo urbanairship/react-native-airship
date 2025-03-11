@@ -5,7 +5,7 @@ import AirshipKit
 import AirshipFrameworkProxy
 import SwiftUI
 
-@objc(RTNAirshipEmbeddedViewWrapper)
+@objc(RNAirshipEmbeddedViewWrapper)
 public final class AirshipEmbeddedViewWrapper: UIView {
     private let viewModel = ReactAirshipEmbeddedView.ViewModel()
     @objc

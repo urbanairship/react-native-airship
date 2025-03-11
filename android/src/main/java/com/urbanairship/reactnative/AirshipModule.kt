@@ -825,7 +825,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     companion object {
-        const val NAME = "RTNAirship"
+        const val NAME = "RNAirship"
     }
 
 }

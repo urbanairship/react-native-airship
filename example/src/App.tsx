@@ -1,103 +1,67 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-
+import { Text, View, Button, StyleSheet } from 'react-native';
+import Airship, {
+  AirshipEmbeddedView,
+  EventType,
+  MessageView,
+} from '@ua/react-native-airship';
 import HomeScreen from './screens/HomeScreen';
-import MessageCenterScreen from './screens/MessageCenterScreen';
-import MessageScreen from './screens/MessageScreen';
-import PreferenceCenterScreen from './screens/PreferenceCenterScreen';
-import Airship, { EventType } from '@ua/react-native-airship';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const Tab = createBottomTabNavigator();
-const MessageCenterStack = createStackNavigator();
+const uiManager = global?.nativeFabricUIManager ? 'Fabric' : 'Paper';
 
-Airship.addListener(EventType.NotificationResponse, (event) => {
-  console.log('NotificationResponse:', JSON.stringify(event));
-});
+console.log(`Using ${uiManager}`);
 
-Airship.addListener(EventType.IOSLiveActivitiesUpdated, (event) => {
-  console.log('IOSLiveActivitiesUpdated:', JSON.stringify(event));
-});
 
-Airship.addListener(EventType.PushReceived, (event) => {
-  console.log('PushReceived:', JSON.stringify(event));
-});
-
-Airship.addListener(EventType.ChannelCreated, (event) => {
-  console.log('ChannelCreated:', JSON.stringify(event));
-});
+Airship.takeOff({
+  default: {
+    appKey: "",
+    appSecret: ""
+  }
+})
 
 Airship.addListener(EventType.PushNotificationStatusChangedStatus, (event) => {
-  console.log('PushNotificationStatusChangedStatus:', JSON.stringify(event));
+  console.log('PushNotificationStatusChangedStatus', JSON.stringify(event));
+});
+Airship.channel.getChannelId().then((channel) => {
+  console.log('channel', channel);
 });
 
-Airship.addListener(
-  EventType.IOSAuthorizedNotificationSettingsChanged,
-  (event) => {
-    console.log(
-      'IOSAuthorizedNotificationSettingsChanged:',
-      JSON.stringify(event)
-    );
-  }
-);
-
-function MessageCenterStackScreen() {
-  return (
-    <MessageCenterStack.Navigator>
-      <MessageCenterStack.Screen
-        name="MessageCenter.Home"
-        // @ts-ignore
-        component={MessageCenterScreen}
-        options={{ title: 'Message center' }}
-      />
-      <MessageCenterStack.Screen
-        name="MessageDetails"
-        // @ts-ignore
-        component={MessageScreen}
-        options={{ title: 'Message' }}
-      />
-    </MessageCenterStack.Navigator>
-  );
-}
+Airship.messageCenter.getMessages().then((messages) => {
+  console.log('messages', messages);
+});
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route, focused }) => ({
-          // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ size }) => {
-            let iconName;
-            if (route.name === 'Home') {
-              iconName = 'home';
-            } else if (route.name === 'MessageCenter') {
-              iconName = 'inbox';
-            } else if (route.name === 'PreferenceCenter') {
-              iconName = 'tune';
-            } else if (route.name === 'Settings') {
-              iconName = 'settings';
-            }
-            const color = focused ? '#004bff' : 'grey';
+    <View style={{ flex: 1, flexDirection: "column" }}>
+      <MessageView
+        style={{ flex: 1, backgroundColor: "#0FF000" }}
+        messageId="I8A4kI_OEe6zxzpQHdTvTg"
+        onLoadStarted={(event) => console.log('onLoadStarted', event)}
+        onLoadError={(event) => console.log('onLoadError', event)}
+        onLoadFinished={(event) => console.log('onLoadFinished', event)}
+      />
 
-            return <MaterialIcons name={iconName} size={size} color={color} />;
-          },
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen
-          name="MessageCenter"
-          component={MessageCenterStackScreen}
-          options={{ title: 'Message center', headerShown: false }}
-        />
-        <Tab.Screen
-          name="PreferenceCenter"
-          component={PreferenceCenterScreen}
-          options={{ title: 'Preference center' }}
-        />
-        {/* @ts-ignore */}
-      </Tab.Navigator>
-    </NavigationContainer>
+    <HomeScreen />
+
+    <AirshipEmbeddedView
+        style={{ flex: 1, backgroundColor: "#00FF00" }}
+        embeddedId="embedded-2"
+      />
+
+      <Button
+        onPress={async () => {
+          Airship.android.liveUpdateManager.start({
+            type: 'Example',
+            name: 'neat',
+            content: {
+              emoji: '🙌',
+            },
+          });
+        }}
+        title="Cools"
+        color="#841584"
+        accessibilityLabel="Learn more about this purple button"
+      />
+    </View>
   );
 }
+

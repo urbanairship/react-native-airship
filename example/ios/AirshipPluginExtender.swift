@@ -22,5 +22,4 @@ public class AirshipPluginExtender: NSObject, AirshipPluginExtenderProtocol {
       }
     }
   }
-
 }

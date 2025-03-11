@@ -3,7 +3,7 @@ name: CI
 on: [pull_request]
 
 jobs:
-  test:
+  test-new-arch:
     runs-on: macos-15-xlarge
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
       - run: bash ./scripts/run_ci_tasks.sh -i
       - run: bash ./scripts/run_ci_tasks.sh -a
 
-  test-android-old-arch:
+  test-old-arch:
     runs-on: macos-15-xlarge
     steps:
       - uses: actions/checkout@v4
@@ -60,7 +60,8 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'npm'
-      
+
+      - run: sed -i '' "s/ENV\['RCT_NEW_ARCH_ENABLED'\] = '1'/ENV\['RCT_NEW_ARCH_ENABLED'\] = '0'/g"  example/ios/Podfile
       - run: sed -i '' 's/newArchEnabled=true/newArchEnabled=false/' example/android/gradle.properties
       - run: npm run bootstrap
       - run: bash ./scripts/run_ci_tasks.sh -a

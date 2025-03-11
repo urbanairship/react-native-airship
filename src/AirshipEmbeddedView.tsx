@@ -3,12 +3,15 @@
 'use strict';
 
 import React from 'react';
-import RTNAirshipEmbeddedView from './AirshipEmbeddedViewNativeComponent';
+import RNAirshipEmbeddedView from './RNAirshipEmbeddedViewNativeComponent';
+import { ViewStyle } from 'react-native';
 
 /**
  * AirshipEmbeddedView props
  */
 export interface AirshipEmbeddedViewProp {
+  style?: ViewStyle;
+
   /**
    * The embedded Id.
    */
@@ -21,7 +24,7 @@ export interface AirshipEmbeddedViewProp {
 export class AirshipEmbeddedView extends React.Component<AirshipEmbeddedViewProp> {
   render() {
     return (
-      <RTNAirshipEmbeddedView
+      <RNAirshipEmbeddedView
         {...this.props}
       />
     );

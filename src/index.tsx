@@ -30,8 +30,8 @@ export { Subscription } from './UAEventEmitter';
 const isTurboModuleEnabled = global.__turboModuleProxy != null;
 
 const AirshipModule = isTurboModuleEnabled
-  ? require('./NativeRTNAirship').default
-  : NativeModules.RTNAirship;
+  ? require('./NativeRNAirship').default
+  : NativeModules.RNAirship;
 
 const sharedAirship = new AirshipRoot(AirshipModule);
 
