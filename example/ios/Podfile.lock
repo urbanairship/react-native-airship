@@ -19,6 +19,7 @@ PODS:
     - Airship/Core
   - AirshipFrameworkProxy (13.2.0):
     - Airship (= 19.1.0)
+  - AirshipServiceExtension (19.1.0)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
@@ -1571,6 +1572,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
+  - AirshipServiceExtension
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -1645,6 +1647,7 @@ SPEC REPOS:
   trunk:
     - Airship
     - AirshipFrameworkProxy
+    - AirshipServiceExtension
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1787,6 +1790,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Airship: eb4783c5465b9440a995169bdabfa6194ca8e3c5
   AirshipFrameworkProxy: de286bad2060f857bbe35215ac9711512c645b2b
+  AirshipServiceExtension: a2c1821277cc919b6b47dff8a5052562292d843d
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
@@ -1856,6 +1860,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: afd04ff05ebe0121a00c468a8a3c8080221cb14c
 
-PODFILE CHECKSUM: 91bfd7fee987554f02c640f004cb4d2084ff84ce
+PODFILE CHECKSUM: f92fc87a09e5775865911b0db68a401d9ba890d3
 
 COCOAPODS: 1.16.2
