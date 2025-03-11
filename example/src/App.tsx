@@ -4,6 +4,7 @@ import Airship, {
   EventType,
   MessageView,
 } from '@ua/react-native-airship';
+import HomeScreen from './screens/HomeScreen';
 
 const uiManager = global?.nativeFabricUIManager ? 'Fabric' : 'Paper';
 
@@ -38,6 +39,8 @@ export default function App() {
         onLoadError={(event) => console.log('onLoadError', event)}
         onLoadFinished={(event) => console.log('onLoadFinished', event)}
       />
+
+    <HomeScreen />
 
     <AirshipEmbeddedView
         style={{ flex: 1, backgroundColor: "#00FF00" }}
