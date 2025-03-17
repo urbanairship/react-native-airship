@@ -1,67 +1,72 @@
-import { Text, View, Button, StyleSheet } from 'react-native';
-import Airship, {
-  AirshipEmbeddedView,
-  EventType,
-  MessageView,
-} from '@ua/react-native-airship';
-import HomeScreen from './screens/HomeScreen';
-
-const uiManager = global?.nativeFabricUIManager ? 'Fabric' : 'Paper';
-
-console.log(`Using ${uiManager}`);
-
-
-Airship.takeOff({
-  default: {
-    appKey: "",
-    appSecret: ""
-  }
-})
-
-Airship.addListener(EventType.PushNotificationStatusChangedStatus, (event) => {
-  console.log('PushNotificationStatusChangedStatus', JSON.stringify(event));
-});
-Airship.channel.getChannelId().then((channel) => {
-  console.log('channel', channel);
-});
-
-Airship.messageCenter.getMessages().then((messages) => {
-  console.log('messages', messages);
-});
+import React, { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator, SafeAreaView } from 'react-native';
+import Airship, { EventType } from '@ua/react-native-airship';
+import TabNavigator from './navigation/TabNavigator';
+import styles from './Styles';
 
 export default function App() {
+  const [isAirshipReady, setIsAirshipReady] = useState(false);
+  const [airshipError, setAirshipError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Initialize Airship SDK
+    const initAirship = async () => {
+      try {
+        await Airship.takeOff({
+          default: {
+            appKey: "",
+            appSecret: ""
+          }
+        });
+
+        // Set up event listeners
+        Airship.addListener(EventType.NotificationResponse, (event) => {
+          // Handle notification responses
+        });
+
+        Airship.addListener(EventType.PushReceived, (event) => {
+          // Handle push received
+        });
+
+        Airship.addListener(EventType.ChannelCreated, (event) => {
+          // Handle channel creation
+        });
+
+        Airship.addListener(EventType.PushNotificationStatusChangedStatus, (event) => {
+          // Handle push notification status changes
+        });
+
+        setIsAirshipReady(true);
+      } catch (error) {
+        setAirshipError(error instanceof Error ? error.message : String(error));
+      }
+    };
+
+    initAirship();
+  }, []);
+
+  if (airshipError) {
+    return (
+      <View style={styles.appErrorContainer}>
+        <Text style={styles.appErrorTitle}>Airship Initialization Error</Text>
+        <Text style={styles.appErrorMessage}>{airshipError}</Text>
+      </View>
+    );
+  }
+
+  if (!isAirshipReady) {
+    return (
+      <View style={styles.appLoadingContainer}>
+        <ActivityIndicator size="large" color="#004bff" />
+        <Text style={styles.appLoadingText}>Initializing Airship SDK...</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={{ flex: 1, flexDirection: "column" }}>
-      <MessageView
-        style={{ flex: 1, backgroundColor: "#0FF000" }}
-        messageId="I8A4kI_OEe6zxzpQHdTvTg"
-        onLoadStarted={(event) => console.log('onLoadStarted', event)}
-        onLoadError={(event) => console.log('onLoadError', event)}
-        onLoadFinished={(event) => console.log('onLoadFinished', event)}
-      />
-
-    <HomeScreen />
-
-    <AirshipEmbeddedView
-        style={{ flex: 1, backgroundColor: "#00FF00" }}
-        embeddedId="embedded-2"
-      />
-
-      <Button
-        onPress={async () => {
-          Airship.android.liveUpdateManager.start({
-            type: 'Example',
-            name: 'neat',
-            content: {
-              emoji: '🙌',
-            },
-          });
-        }}
-        title="Cools"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-    </View>
+    <SafeAreaView style={styles.appContainer}>
+      <TabNavigator />
+    </SafeAreaView>
   );
 }
 
