@@ -11,9 +11,9 @@
     "build:ios": "react-native build-ios --scheme AirshipExample --mode Debug --extra-params \"-sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO\""
   },
   "dependencies": {
+    "moment": "^2.30.1",
     "react": "19.0.0",
-    "react-native": "0.78.0",
-    "react-native-uuid": "^2.0.1"
+    "react-native": "0.78.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -25,6 +25,7 @@
     "@react-native/babel-preset": "0.78.0",
     "@react-native/metro-config": "0.78.0",
     "@react-native/typescript-config": "0.78.0",
+    "@types/react": "^19.0.0",
     "react-native-builder-bob": "^0.37.0"
   },
   "engines": {
