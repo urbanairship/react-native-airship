@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 22.0.1 - March 25, 2025
+## Version 22.1.0 - March 25, 2025
 Minor release that updates the Android SDK to 19.4.0 and the iOS SDK to 19.1.1 and fixes a privacy manager bug.
 
 ### Changes
