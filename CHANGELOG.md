@@ -1,12 +1,26 @@
 # React Native Module Changelog
 
 ## Version 23.0.0 - March 31, 2025
+Major release that updates the Android SDK to 19.5.0 and the iOS SDK to 19.1.2. 
 
-Major release that updates the Android SDK to 19.4.0 and the iOS SDK to 19.1.2
+The only breaking change is related to the native plugin hooks, which make it easier
+to integrate the plugin with hybrid apps. Most applications won't be affected.
 
 ### Changes
-- Updated Android SDK to [19.4.0](https://github.com/urbanairship/android-library/releases/tag/19.4.0
+- Updated Android SDK to [19.5.0](https://github.com/urbanairship/android-library/releases/tag/19.5.0
 - Updated iOS SDK to [19.1.2](https://github.com/urbanairship/ios-library/releases/tag/19.1.2
+- Updated the native plugin hooks on Android:
+  - Renamed the `AirshipPluginForwardListeners` to `AirshipPluginExtenders`
+  - Renamed `AirshipPluginForwardListeners.notificationListener` to `AirshipPluginExtenders.forwardNotificationListner`
+  - Replaced `AirshipPluginForwardDelegates.deepLinkListener` with `AirshipPluginExtenders.onDeepLink`
+  - Added `AirshipPluginExtenders.onShouldDisplayForegroundNotification` to allow overriding foreground notification display behavior
+- Updated the native plugin hooks on iOS:
+  - Renamed the `AirshipPluginForwardDelegates` to `AirshipPluginExtenders`
+  - Renamed `AirshipPluginForwardDelegates.pushNotificationDelegate` to `AirshipPluginExtenders.pushNotificationForwardDelegate`. The delegate must now implement
+    the protocol `AirshipPluginPushNotificationDelegate` which is the same as `PushNotificationDelegate` but without the `extendPresentationOptions` method.
+  - Renamed `AirshipPluginForwardDelegates.registrationDelegate` to `AirshipPluginExtenders.registrationForwardDelegate`
+  - Replaced `AirshipPluginForwardDelegates.deepLinkDelegate` with `AirshipPluginExtenders.onDeepLink`
+  - Added `AirshipPluginExtenders.onWillPresentForegroundNotification` to allow overriding foreground notification display behavior
 
 ## Version 22.1.0 - March 25, 2025
 Minor release that updates the Android SDK to 19.4.0 and the iOS SDK to 19.1.1 and fixes a privacy manager bug.
