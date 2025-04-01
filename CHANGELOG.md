@@ -16,13 +16,6 @@ Major release that regenerates the plugin for React Native 0.78 and updates Andr
 - Update plugin to be compatible with React Native 0.78
 - Updated Android SDK to [19.3.0](https://github.com/urbanairship/android-library/releases/tag/19.3.0)
 
-## Version 21.3.0 - April 1, 2025
-Minor release that updates the Android SDK to 19.5.0 and the iOS SDK to 19.1.2.
-
-### Changes
-- Updated Android SDK to [19.5.0](https://github.com/urbanairship/android-library/releases/tag/19.5.0)
-- Updated iOS SDK to [19.1.2](https://github.com/urbanairship/ios-library/releases/tag/19.1.2)
-
 ## Version 21.2.0 - February 24, 2025
 Minor release that updates the Android SDK to 19.2.0 and the iOS SDK to 19.1.0.
 
