@@ -15,7 +15,8 @@
         "types": "./lib/typescript/commonjs/src/index.d.ts",
         "default": "./lib/commonjs/index.js"
       }
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "src",
@@ -132,7 +133,6 @@
     "source": "src",
     "output": "lib",
     "targets": [
-      "codegen",
       [
         "commonjs",
         {
@@ -171,7 +171,7 @@
         "RNAirshipEmbeddedView": "RNAirshipEmbeddedView"
       }
     },
-    "includesGeneratedCode": true
+    "includesGeneratedCode": false
   },
   "create-react-native-library": {
     "languages": "kotlin-objc",
