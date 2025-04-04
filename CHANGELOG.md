@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 21.4.0 - April 3, 2025
+Minor release that updates the iOS SDK to 19.2.0 and backports the new `AirshipPluginExtensions`.
+
+### Changes
+- Updated iOS SDK to [19.2.0](https://github.com/urbanairship/ios-library/releases/tag/19.2.0)
+- Backported `AirshipPluginExtensions` from 23.0.0
+- Deprecated `AirshipPluginForwardListeners` and `AirshipPluginForwardDelegates`
+
 ## Version 21.3.0 - April 1, 2025
 Minor release that updates the Android SDK to 19.5.0 and the iOS SDK to 19.1.2.
 
