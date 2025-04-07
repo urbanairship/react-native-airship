@@ -7,7 +7,8 @@ Minor release that updates the iOS SDK to 19.2.0 and remove commonjs in favor of
 - Updated iOS SDK to [19.2.0](https://github.com/urbanairship/ios-library/releases/tag/19.2.0)
 - Drops commonjs package
 - Adds back `types` to package.json for apps that are having troubles discovering type definitions
- 
+- Fixed null notification in Airship.push.iOS.setForegroundPresentationOptionsCallback
+
 ## Version 23.0.0 - March 31, 2025
 Major release that updates the Android SDK to 19.5.0 and the iOS SDK to 19.1.2. 
 
