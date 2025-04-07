@@ -39,7 +39,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "21.4.0"
+    public static let version: String = "21.4.1"
 
     private let eventNotifier = EventNotifier()
 
@@ -64,6 +64,17 @@ public class AirshipReactNative: NSObject {
                         return
                     }
 
+
+                    guard
+                        let requestPayload =  try? AirshipJSON.wrap(
+                            request.pushPayload
+                        ).unWrap()
+                    else {
+                        AirshipLogger.error("Failed to generate payload: \(request)")
+                        request.result(options: nil)
+                        return
+                    }
+
                     let requestID = UUID().uuidString
                     self.lock.sync {
                         self.pendingPresentationRequests[requestID] = request
@@ -71,7 +82,7 @@ public class AirshipReactNative: NSObject {
                     notifier(
                         AirshipReactNative.overridePresentationOptionsEventName,
                         [
-                            "pushPayload": request.pushPayload,
+                            "pushPayload": requestPayload,
                             "requestId": requestID
                         ]
                     )

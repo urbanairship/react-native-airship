@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 21.4.1 - April 7, 2025
+Patch release to fix the notification being null in `Airship.push.iOS.setForegroundPresentationOptionsCallback`.
+
+### Changes
+- Fixed null notification in `Airship.push.iOS.setForegroundPresentationOptionsCallback`
+
 ## Version 21.4.0 - April 3, 2025
 Minor release that updates the iOS SDK to 19.2.0 and backports the new `AirshipPluginExtensions`.
 
