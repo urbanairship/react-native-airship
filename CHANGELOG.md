@@ -1,6 +1,6 @@
 # React Native Module Changelog
 
-## Version 23.1.0 - April 7, 2025
+## Version 23.1.0 - April 8, 2025
 Minor release that updates the iOS SDK to 19.2.0 and remove commonjs in favor of ECM only to avoid [dual package hazard](https://nodejs.org/docs/latest-v19.x/api/packages.html#dual-package-hazard).  
 
 ### Changes
