@@ -64,6 +64,17 @@ public class AirshipReactNative: NSObject {
                         return
                     }
 
+
+                    guard
+                        let requestPayload =  try? AirshipJSON.wrap(
+                            request.pushPayload
+                        ).unWrap()
+                    else {
+                        AirshipLogger.error("Failed to generate payload: \(request)")
+                        request.result(options: nil)
+                        return
+                    }
+
                     let requestID = UUID().uuidString
                     self.lock.sync {
                         self.pendingPresentationRequests[requestID] = request
@@ -71,7 +82,7 @@ public class AirshipReactNative: NSObject {
                     notifier(
                         AirshipReactNative.overridePresentationOptionsEventName,
                         [
-                            "pushPayload": request.pushPayload,
+                            "pushPayload": requestPayload,
                             "requestId": requestID
                         ]
                     )

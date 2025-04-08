@@ -3,6 +3,7 @@
 import Foundation
 import AirshipKit
 import AirshipFrameworkProxy
+import WebKit
 
 @objc(RNAirshipMessageWebViewWrapperDelegate)
 public protocol MessageWebViewWrapperDelegate {

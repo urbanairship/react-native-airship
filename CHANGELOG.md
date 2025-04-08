@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 23.1.0 - April 8, 2025
+Minor release that updates the iOS SDK to 19.2.0 and remove commonjs in favor of ECM only to avoid [dual package hazard](https://nodejs.org/docs/latest-v19.x/api/packages.html#dual-package-hazard).  
+
+### Changes
+- Updated iOS SDK to [19.2.0](https://github.com/urbanairship/ios-library/releases/tag/19.2.0)
+- Drops commonjs package
+- Adds back `types` to package.json for apps that are having troubles discovering type definitions
+- Fixed null notification in Airship.push.iOS.setForegroundPresentationOptionsCallback
+
 ## Version 23.0.0 - March 31, 2025
 Major release that updates the Android SDK to 19.5.0 and the iOS SDK to 19.1.2. 
 
@@ -7,8 +16,8 @@ The only breaking change is related to the native plugin hooks, which make it ea
 to integrate the plugin with hybrid apps. Most applications won't be affected.
 
 ### Changes
-- Updated Android SDK to [19.5.0](https://github.com/urbanairship/android-library/releases/tag/19.5.0
-- Updated iOS SDK to [19.1.2](https://github.com/urbanairship/ios-library/releases/tag/19.1.2
+- Updated Android SDK to [19.5.0](https://github.com/urbanairship/android-library/releases/tag/19.5.0)
+- Updated iOS SDK to [19.1.2](https://github.com/urbanairship/ios-library/releases/tag/19.1.2)
 - Updated the native plugin hooks on Android:
   - Renamed the class `AirshipPluginForwardListeners` to `AirshipPluginExtenders`
   - Renamed `AirshipPluginForwardListeners.notificationListener` to `AirshipPluginExtenders.forwardNotificationListner`
