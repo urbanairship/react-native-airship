@@ -11,7 +11,7 @@ import com.urbanairship.android.framework.proxy.ProxyLogger
 
 class AirshipHeadlessEventService : HeadlessJsTaskService() {
 
-    override fun getTaskConfig(intent: Intent): HeadlessJsTaskConfig? {
+    override fun getTaskConfig(intent: Intent?): HeadlessJsTaskConfig? {
         return HeadlessJsTaskConfig(TASK_KEY, Arguments.createMap(), TASK_TIMEOUT, true)
     }
 
