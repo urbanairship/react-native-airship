@@ -15,14 +15,14 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
 
     private val delegate = object : ViewManagerDelegate<ReactMessageView> {
 
-        override fun setProperty(view: ReactMessageView, propName: String?, value: Any?) {
+        override fun setProperty(view: ReactMessageView, propName: String, value: Any?) {
             when (propName) {
                 "messageId" -> setMessageId(view, value as? String)
                 else -> {}
             }
         }
 
-        override fun receiveCommand(view: ReactMessageView, commandName: String?, args: ReadableArray?) {
+        override fun receiveCommand(view: ReactMessageView, commandName: String, args: ReadableArray?) {
             // No commands implemented, add if Airship adds some in future
         }
     }

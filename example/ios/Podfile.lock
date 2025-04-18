@@ -1353,7 +1353,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-airship (23.1.1):
+  - react-native-airship (24.0.0):
     - AirshipFrameworkProxy (= 14.1.1)
     - DoubleConversion
     - glog
@@ -1973,7 +1973,7 @@ SPEC CHECKSUMS:
   React-logger: cc55ca6e50aeb31216c0a9dec30871cac776ef9a
   React-Mapbuffer: 8df5296f9d9a61f980d293b55026cfebcd8dfb0a
   React-microtasksnativemodule: c8ed30f8ec30affbc73411c54207bd67b1125bbb
-  react-native-airship: 46e2c1617fe464e843f48b0418167bb7c9ef15c3
+  react-native-airship: fdceee72169982f999904f9a2099f0b54d59ebb3
   React-NativeModulesApple: 8a465be9a58afc56f48c1322331ffbdecd3d4877
   React-oscompat: 74eb4badd12e93899f37a5dbb03d8a638011a292
   React-perflogger: dba4ffef10c54537fa33cb2580cf6d4c48458d36

@@ -1,5 +1,11 @@
 # React Native Module Changelog
 
+## Version 24.0.0 - April 18, 2025
+Major release to support React Native 0.79.
+
+### Changes
+- Added support for React Native 0.79
+
 ## Version 23.1.1 - April 18, 2025
 
 Patch release that updates the Android SDK to 19.5.1 and the iOS SDK to 19.2.1
