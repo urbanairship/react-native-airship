@@ -1,24 +1,24 @@
 PODS:
-  - Airship (19.2.0):
-    - Airship/Automation (= 19.2.0)
-    - Airship/Basement (= 19.2.0)
-    - Airship/Core (= 19.2.0)
-    - Airship/FeatureFlags (= 19.2.0)
-    - Airship/MessageCenter (= 19.2.0)
-    - Airship/PreferenceCenter (= 19.2.0)
-  - Airship/Automation (19.2.0):
+  - Airship (19.2.1):
+    - Airship/Automation (= 19.2.1)
+    - Airship/Basement (= 19.2.1)
+    - Airship/Core (= 19.2.1)
+    - Airship/FeatureFlags (= 19.2.1)
+    - Airship/MessageCenter (= 19.2.1)
+    - Airship/PreferenceCenter (= 19.2.1)
+  - Airship/Automation (19.2.1):
     - Airship/Core
-  - Airship/Basement (19.2.0)
-  - Airship/Core (19.2.0):
+  - Airship/Basement (19.2.1)
+  - Airship/Core (19.2.1):
     - Airship/Basement
-  - Airship/FeatureFlags (19.2.0):
+  - Airship/FeatureFlags (19.2.1):
     - Airship/Core
-  - Airship/MessageCenter (19.2.0):
+  - Airship/MessageCenter (19.2.1):
     - Airship/Core
-  - Airship/PreferenceCenter (19.2.0):
+  - Airship/PreferenceCenter (19.2.1):
     - Airship/Core
-  - AirshipFrameworkProxy (14.1.0):
-    - Airship (= 19.2.0)
+  - AirshipFrameworkProxy (14.1.1):
+    - Airship (= 19.2.1)
   - AirshipServiceExtension (19.1.2)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
@@ -1354,7 +1354,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
   - react-native-airship (24.0.0):
-    - AirshipFrameworkProxy (= 14.1.0)
+    - AirshipFrameworkProxy (= 14.1.1)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1932,8 +1932,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: 4f4dc8dc616703787bdf73869437ccd0a52c6db7
-  AirshipFrameworkProxy: 6b6bee0ef983258931a67f701f1171e9ded2d8c5
+  Airship: a5de82c19ebca996fd8fecfcfbb3803f3de29a74
+  AirshipFrameworkProxy: 71ddba175bb22974cfa673d26ce8303ed6546212
   AirshipServiceExtension: b97fc3d231d21833aa9a27cffab8d67accd8a4cc
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
@@ -1973,7 +1973,7 @@ SPEC CHECKSUMS:
   React-logger: cc55ca6e50aeb31216c0a9dec30871cac776ef9a
   React-Mapbuffer: 8df5296f9d9a61f980d293b55026cfebcd8dfb0a
   React-microtasksnativemodule: c8ed30f8ec30affbc73411c54207bd67b1125bbb
-  react-native-airship: 1ec5b4efec6656473b150355c16befb058982539
+  react-native-airship: fdceee72169982f999904f9a2099f0b54d59ebb3
   React-NativeModulesApple: 8a465be9a58afc56f48c1322331ffbdecd3d4877
   React-oscompat: 74eb4badd12e93899f37a5dbb03d8a638011a292
   React-perflogger: dba4ffef10c54537fa33cb2580cf6d4c48458d36
@@ -2010,4 +2010,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: f92fc87a09e5775865911b0db68a401d9ba890d3
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
