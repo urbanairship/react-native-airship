@@ -16,13 +16,21 @@ export interface AttributeOperation {
    */
   key: string;
   /**
+   * The instance id.
+   */
+  instance_id?: string;
+  /**
+   * Expiration for json attributes.
+   */
+  expiration_milliseconds?: number
+  /**
    * The attribute value, if available.
    */
-  value?: string | number | Date;
+  value?: any
   /**
    * The attribute type, if available.
    */
-  type?: 'string' | 'number' | 'date';
+  type?: 'string' | 'number' | 'date' | 'json';
 }
 
 /**
@@ -88,6 +96,39 @@ export class AttributeEditor {
     return this;
   }
 
+   /**
+   * Adds a JSON attribute.
+   * 
+   * @param name The attribute name.
+   * @param value The attribute value.
+   * @param instanceId The instance ID.
+   * @param json The json value. Must not contain `exp` as top level key.
+   * @param expiration: Optional expiration.  
+   * @return The attribute editor instance.
+   */
+   setJsonAttribute(
+    name: string,
+    instanceId: string,
+    json: Record<string, any>,
+    expiration?: Date,
+  ): AttributeEditor {
+    var operation: AttributeOperation = {
+      action: 'set',
+      value: json,
+      key: name,
+      instance_id: instanceId,
+      type: 'json'
+    }
+
+    if (expiration != null) {
+      operation.expiration_milliseconds = expiration.getTime()
+    }
+    
+    this.operations.push(operation);
+    return this;
+  }
+
+
   /**
    * Removes an attribute.
    * @param name The name of the attribute to remove.
@@ -95,6 +136,18 @@ export class AttributeEditor {
    */
   removeAttribute(name: string): AttributeEditor {
     const operation = { action: 'remove', key: name };
+    this.operations.push(operation);
+    return this;
+  }
+
+  /**
+   * Removes a JSON attribute.
+   * @param name The name of the attribute to remove.
+   * @param instanceId The instance ID.
+   * @return The attribute editor instance.
+   */
+  removeJsonAttribute(name: string, instanceId: string): AttributeEditor {
+    const operation = { action: 'remove', key: name, instance_id: instanceId };
     this.operations.push(operation);
     return this;
   }

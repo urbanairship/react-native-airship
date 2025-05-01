@@ -1,12 +1,21 @@
 # React Native Module Changelog
 
+## Version 23.2.0 - May 1, 2025
+Minor release that updates the Android SDK to 19.6.2 and the iOS SDK to 19.3.1.
+
+### Changes
+- Updated Android SDK to [19.6.2](https://github.com/urbanairship/android-library/releases/tag/19.6.2)
+- Updated iOS SDK to [19.3.1](https://github.com/urbanairship/ios-library/releases/tag/19.3.1)
+- Added support for JSON attributes
+- Added new method `Airship.channel.waitForChannelId()` that waits for the channel ID to be created
+
 ## Version 23.1.1 - April 18, 2025
 
 Patch release that updates the Android SDK to 19.5.1 and the iOS SDK to 19.2.1
 
 ### Changes
-- Updated Android SDK to [19.5.1](https://github.com/urbanairship/android-library/releases/tag/19.5.1
-- Updated iOS SDK to [19.2.1](https://github.com/urbanairship/ios-library/releases/tag/19.2.1
+- Updated Android SDK to [19.5.1](https://github.com/urbanairship/android-library/releases/tag/19.5.1)
+- Updated iOS SDK to [19.2.1](https://github.com/urbanairship/ios-library/releases/tag/19.2.1)
 
 ## Version 23.1.0 - April 8, 2025
 Minor release that updates the iOS SDK to 19.2.0 and remove commonjs in favor of ECM only to avoid [dual package hazard](https://nodejs.org/docs/latest-v19.x/api/packages.html#dual-package-hazard).  

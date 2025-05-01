@@ -20,6 +20,7 @@ export interface Spec extends TurboModule {
   channelEditTags(operations: Object[]): Promise<void>;
   channelGetTags(): Promise<string[]>;
   channelGetChannelId(): Promise<string | null | undefined>;
+  channelWaitForChannelId(): Promise<string>;
   channelGetSubscriptionLists(): Promise<string[]>;
   channelEditTagGroups(operations: Object[]): Promise<void>;
   channelEditAttributes(operations: Object[]): Promise<void>;
