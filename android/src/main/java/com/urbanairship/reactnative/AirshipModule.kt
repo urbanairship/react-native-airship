@@ -196,6 +196,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             proxy.channel.getChannelId()
         }
     }
+    
+    @ReactMethod
+    override fun channelWaitForChannelId(promise: Promise) {
+        promise.resolve(scope) {
+            proxy.channel.waitForChannelId()
+        }
+    }
 
     @ReactMethod
     override fun channelGetSubscriptionLists(promise: Promise) {

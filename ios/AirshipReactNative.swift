@@ -235,6 +235,11 @@ public extension AirshipReactNative {
     }
 
     @objc
+    func channelWaitForChannelId() async throws -> String {
+        return try await AirshipProxy.shared.channel.waitForChannelID()
+    }
+
+    @objc
     func channelEditTagGroups(json: Any) throws {
         let operations = try JSONDecoder().decode(
             [TagGroupOperation].self,
