@@ -1,5 +1,14 @@
 # React Native Module Changelog
 
+## Version 21.5.0 - May 1, 2025
+Minor release that updates the Android SDK to 19.6.2 and the iOS SDK to 19.3.1.
+
+### Changes
+- Updated Android SDK to [19.6.2](https://github.com/urbanairship/android-library/releases/tag/19.6.2)
+- Updated iOS SDK to [19.3.1](https://github.com/urbanairship/ios-library/releases/tag/19.3.1)
+- Added support for JSON attributes
+- Added new method `Airship.channel.waitForChannelId()` that waits for the channel ID to be created
+
 ## Version 21.4.1 - April 7, 2025
 Patch release to fix the notification being null in `Airship.push.iOS.setForegroundPresentationOptionsCallback`.
 

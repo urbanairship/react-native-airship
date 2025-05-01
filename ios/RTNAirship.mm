@@ -319,6 +319,18 @@ RCT_REMAP_METHOD(channelGetChannelId,
                 reject:reject];
 }
 
+RCT_REMAP_METHOD(channelWaitForChannelId,
+                 channelWaitForChannelId:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared channelWaitForChannelIdWithCompletionHandler:^(NSString *result, NSError *error) {
+        [self handleResult:result
+                     error:error
+                   resolve:resolve
+                    reject:reject];
+    }];
+}
+
 
 RCT_REMAP_METHOD(channelGetSubscriptionLists,
                  channelGetSubscriptionLists:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
