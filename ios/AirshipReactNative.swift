@@ -39,7 +39,7 @@ public class AirshipReactNative: NSObject {
         AirshipProxy.shared
     }
 
-    public static let version: String = "24.0.0"
+    public static let version: String = "24.1.1"
 
     private let eventNotifier = EventNotifier()
 
@@ -597,11 +597,11 @@ public extension AirshipReactNative {
         )
     }
 
-    @objc
-    func preferenceCenterGetConfig(preferenceCenterId: String) async throws -> Any {
+  @objc
+  func preferenceCenterGetConfig(preferenceCenterId: String) async throws -> AnyHashable? {
         return try await AirshipProxy.shared.preferenceCenter.getPreferenceCenterConfig(
             preferenceCenterID: preferenceCenterId
-        )
+        ).unWrap()
     }
 
     @objc
