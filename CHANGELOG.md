@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 23.2.1 - May 9, 2025
+Patch release with several bug fixes for iOS.
+
+### Changes
+- Fixed `Airship.preferenceCenter.getConfig(preferenceCenterId)` on iOS
+- Updated iOS SDK to [19.3.2](https://github.com/urbanairship/ios-library/releases/tag/19.3.2)
+
 ## Version 23.2.0 - May 1, 2025
 Minor release that updates the Android SDK to 19.6.2 and the iOS SDK to 19.3.1.
 
