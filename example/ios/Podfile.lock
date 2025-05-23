@@ -1,25 +1,25 @@
 PODS:
-  - Airship (19.4.0):
-    - Airship/Automation (= 19.4.0)
-    - Airship/Basement (= 19.4.0)
-    - Airship/Core (= 19.4.0)
-    - Airship/FeatureFlags (= 19.4.0)
-    - Airship/MessageCenter (= 19.4.0)
-    - Airship/PreferenceCenter (= 19.4.0)
-  - Airship/Automation (19.4.0):
+  - Airship (19.5.0):
+    - Airship/Automation (= 19.5.0)
+    - Airship/Basement (= 19.5.0)
+    - Airship/Core (= 19.5.0)
+    - Airship/FeatureFlags (= 19.5.0)
+    - Airship/MessageCenter (= 19.5.0)
+    - Airship/PreferenceCenter (= 19.5.0)
+  - Airship/Automation (19.5.0):
     - Airship/Core
-  - Airship/Basement (19.4.0)
-  - Airship/Core (19.4.0):
+  - Airship/Basement (19.5.0)
+  - Airship/Core (19.5.0):
     - Airship/Basement
-  - Airship/FeatureFlags (19.4.0):
+  - Airship/FeatureFlags (19.5.0):
     - Airship/Core
-  - Airship/MessageCenter (19.4.0):
+  - Airship/MessageCenter (19.5.0):
     - Airship/Core
-  - Airship/PreferenceCenter (19.4.0):
+  - Airship/PreferenceCenter (19.5.0):
     - Airship/Core
-  - AirshipFrameworkProxy (14.3.0):
-    - Airship (= 19.4.0)
-  - AirshipServiceExtension (19.4.0)
+  - AirshipFrameworkProxy (14.4.0):
+    - Airship (= 19.5.0)
+  - AirshipServiceExtension (19.5.0)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
@@ -1353,8 +1353,8 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-airship (24.2.0):
-    - AirshipFrameworkProxy (= 14.3.0)
+  - react-native-airship (24.3.0):
+    - AirshipFrameworkProxy (= 14.4.0)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1932,9 +1932,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Airship: c52a35c940635d2316316f536da79c126736729e
-  AirshipFrameworkProxy: 551ab8325ddaccd0296b8ada55d00cda078cb739
-  AirshipServiceExtension: 5404ce8b174297cc0d7bcc0648dbb30b54d44ced
+  Airship: 838413fde24df760668c82524e6bdf06e5347f02
+  AirshipFrameworkProxy: 71f27f17bc872e9b881184dea4bc56976431a8fc
+  AirshipServiceExtension: b6f497c2e1e22f306f6599e8e0cfe79a7341b30b
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
@@ -1973,7 +1973,7 @@ SPEC CHECKSUMS:
   React-logger: cc55ca6e50aeb31216c0a9dec30871cac776ef9a
   React-Mapbuffer: 8df5296f9d9a61f980d293b55026cfebcd8dfb0a
   React-microtasksnativemodule: c8ed30f8ec30affbc73411c54207bd67b1125bbb
-  react-native-airship: 8f97d2597c552bae142663b75772c8ae1a6fca11
+  react-native-airship: 3a861757bc47413ac35ed2121f63a4dc7ae831cd
   React-NativeModulesApple: 8a465be9a58afc56f48c1322331ffbdecd3d4877
   React-oscompat: 74eb4badd12e93899f37a5dbb03d8a638011a292
   React-perflogger: dba4ffef10c54537fa33cb2580cf6d4c48458d36
