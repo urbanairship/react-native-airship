@@ -3,7 +3,7 @@
 
 [All Releases](https://github.com/urbanairship/react-native-airship/releases)
 
-## Version 24.2.0 - May 23, 2025
+## Version 24.3.0 - May 23, 2025
 Minor release focused on performance improvements for Scenes.
 
 ### Changes
