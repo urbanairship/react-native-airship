@@ -4,6 +4,13 @@
 
 [All Releases](https://github.com/urbanairship/react-native-airship/releases)
 
+## Version 21.7.0 - May 23, 2025
+Minor release focused on performance improvements for Scenes.
+
+### Changes
+- Updated Android SDK to [19.8.0](https://github.com/urbanairship/android-library/releases/tag/19.8.0)
+- Updated iOS SDK to [19.5.0](https://github.com/urbanairship/ios-library/releases/tag/19.5.0)
+
 ## Version 21.6.0 - May 15, 2025
 Minor release that adds support for using Feature Flags as an audience condition for other Feature Flags and Vimeo videos in Scenes.
 
