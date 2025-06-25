@@ -423,6 +423,18 @@ export interface ConfigEnvironment {
      */
     logPrivacyLevel?: 'private' | 'public';
   };
+
+  /**
+   * Optional Android config
+   */
+  android?: {
+    /**
+     * Log privacy level. By default it logs at `private`, not logging anything lower than info to the console
+     * and redacting logs with string interpolation. `public` will log all configured log levels to the console
+     * without redacting any of the log lines.
+     */
+    logPrivacyLevel?: 'private' | 'public';
+  };
 }
 
 /**
@@ -558,6 +570,13 @@ export interface AirshipConfig {
      * Notification config.
      */
     notificationConfig?: Android.NotificationConfig;
+
+    /**
+     * Log privacy level. By default it logs at `private`, not logging anything lower than info to the console
+     * and redacting logs with string interpolation. `public` will log all configured log levels to the console
+     * without redacting any of the log lines.
+     */
+    logPrivacyLevel?: 'private' | 'public';
   };
 }
 
