@@ -22,5 +22,5 @@ Pod::Spec.new do |s|
     s.dependency "React-Core"
   end
   
-  s.dependency "AirshipFrameworkProxy", "14.4.0"
+  s.dependency "AirshipFrameworkProxy", "14.5.1"
 end
