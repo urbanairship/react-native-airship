@@ -3,8 +3,6 @@
 package com.urbanairship.reactnative
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import com.urbanairship.UAirship
 import com.urbanairship.analytics.Extension
 import com.urbanairship.android.framework.proxy.BaseAutopilot
@@ -17,6 +15,8 @@ import com.urbanairship.embedded.AirshipEmbeddedInfo
 import com.urbanairship.embedded.AirshipEmbeddedObserver
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.jsonMapOf
+import com.urbanairship.reactnative.ManifestUtils.extenderClassName
+import com.urbanairship.reactnative.ManifestUtils.isHeadlessJSTaskEnabledOnStart
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -33,7 +33,7 @@ class ReactAutopilot : BaseAutopilot() {
     override fun onReady(context: Context, airship: UAirship) {
         ProxyLogger.info("Airship React Native version: %s, SDK version: %s", BuildConfig.AIRSHIP_MODULE_VERSION, UAirship.getVersion())
 
-        val allowHeadlessJsTaskBeforeModule = isHeadlessJSTaskEnabledOnStart(context)
+        val allowHeadlessJsTaskBeforeModule = context.isHeadlessJSTaskEnabledOnStart()
         ProxyLogger.debug("ALLOW_HEADLESS_JS_TASK_BEFORE_MODULE: $allowHeadlessJsTaskBeforeModule")
 
         if (allowHeadlessJsTaskBeforeModule) {
@@ -69,47 +69,14 @@ class ReactAutopilot : BaseAutopilot() {
 
     @Suppress("deprecation")
     private fun createExtender(context: Context): AirshipExtender? {
-        val ai: ApplicationInfo
+        val className = context.extenderClassName() ?: return null
         try {
-            ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
-
-            if (ai.metaData == null) {
-                return null
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            return null
-        }
-
-        val classname = ai.metaData.getString(EXTENDER_MANIFEST_KEY) ?: return null
-
-        try {
-            val extenderClass = Class.forName(classname)
+            val extenderClass = Class.forName(className)
             return extenderClass.getDeclaredConstructor().newInstance() as AirshipExtender
         } catch (e: Exception) {
-            ProxyLogger.error(e, "Unable to create extender: $classname")
+            ProxyLogger.error(e, "Unable to create extender: $className")
         }
         return null
-    }
-
-    private fun isHeadlessJSTaskEnabledOnStart(context: Context): Boolean {
-        val ai: ApplicationInfo
-        try {
-            ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
-
-            if (ai.metaData == null) {
-                return true
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            return true
-        }
-
-        return ai.metaData.getBoolean(HEADLESS_JS_TASK_ON_START_MANIFEST_KEY, true)
-    }
-
-
-    companion object {
-        const val HEADLESS_JS_TASK_ON_START_MANIFEST_KEY = "com.urbanairship.reactnative.ALLOW_HEADLESS_JS_TASK_BEFORE_MODULE"
-        const val EXTENDER_MANIFEST_KEY = "com.urbanairship.reactnative.AIRSHIP_EXTENDER"
     }
 }
 

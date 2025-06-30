@@ -4,11 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Build
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
-import com.urbanairship.PendingResult
 import com.urbanairship.actions.ActionResult
-import com.urbanairship.actions.ActionValue
 import com.urbanairship.android.framework.proxy.EventType
-import com.urbanairship.android.framework.proxy.NotificationConfig
 import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.events.EventEmitter
 import com.urbanairship.android.framework.proxy.proxies.AirshipProxy
@@ -19,6 +16,7 @@ import com.urbanairship.android.framework.proxy.proxies.SuspendingPredicate
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonSerializable
 import com.urbanairship.json.JsonValue
+import com.urbanairship.reactnative.ManifestUtils.isHeadlessJSTaskEnabledOnStart
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filter
@@ -60,6 +58,16 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     @SuppressLint("RestrictedApi")
     override fun initialize() {
         super.initialize()
+
+        if (!context.isHeadlessJSTaskEnabledOnStart()) {
+          scope.launch {
+            EventEmitter.shared().pendingEventListener
+              .filter { !it.type.isForeground() }
+              .collect {
+                AirshipHeadlessEventService.startService(context)
+              }
+          }
+        }
 
         scope.launch {
             // Background events will create a headless JS task in ReactAutopilot since
@@ -196,7 +204,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
             proxy.channel.getChannelId()
         }
     }
-    
+
     @ReactMethod
     override fun channelWaitForChannelId(promise: Promise) {
         promise.resolve(scope) {
