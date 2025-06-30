@@ -1,4 +1,12 @@
-# Airship React Native Module 24.x Changelog
+# React Native Module Changelog
+
+## Version 24.4.0 - June 25, 2025
+
+Minor release that updates the Android SDK to 19.9.1 and the iOS SDK to 19.6.1
+
+### Changes
+- Updated Android SDK to [19.9.1](https://github.com/urbanairship/android-library/releases/tag/19.9.1
+- Updated iOS SDK to [19.6.1](https://github.com/urbanairship/ios-library/releases/tag/19.6.1
 [Migration Guides](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
 
 [All Releases](https://github.com/urbanairship/react-native-airship/releases)

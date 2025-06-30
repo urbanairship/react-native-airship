@@ -16,6 +16,18 @@ export default function App() {
           default: {
             appKey: "",
             appSecret: ""
+          },
+          site: "us",
+          urlAllowList: ["*"],
+          android: {
+            notificationConfig: {
+              icon: "ic_notification",
+              accentColor: "#00ff00"
+            },
+            // Optional: Control log privacy level
+            // "private" (default) - redacts sensitive information
+            // "public" - logs all information without redaction
+            logPrivacyLevel: "private"
           }
         });
 
