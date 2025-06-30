@@ -1,16 +1,18 @@
 # Airship React Native Module 21.x Changelog
 
 [Migration Guides](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
-
 [All Releases](https://github.com/urbanairship/react-native-airship/releases)
 
 ## Version 21.8.0 - July 25, 2025
 Minor release that adds support for Android log privacy level configuration and updates the Android SDK to 19.9.1 and the iOS SDK to 19.6.1.
 
+The **21.x branch** is now considered **Unsupported*. This branch supports React Native 0.77.x and older, which is no longer supported by the React Native team.
+
 ### Changes
 - Updated Android SDK to [19.9.1](https://github.com/urbanairship/android-library/releases/tag/19.9.1)
 - Updated iOS SDK to [19.6.1](https://github.com/urbanairship/ios-library/releases/tag/19.6.1)
 - Added Android `logPrivacyLevel` configuration support
+- Fixed issue with push received pushes when disabling headless JS task before the module initializes
 
 ## Version 21.7.0 - May 23, 2025
 Minor release focused on performance improvements for Scenes.
