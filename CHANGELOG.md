@@ -1,18 +1,24 @@
 # React Native Module Changelog
 
-## Version 24.5.0 - July 31, 2025
+[Migration Guides](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
+[All Releases](https://github.com/urbanairship/react-native-airship/releases)
 
+## Version 24.5.1 - August 19, 2025
+Patch release with several bug fixes for Scenes, including an important reporting fix for embedded content.
+
+### Changes
+- Updated Android SDK to [19.10.2](https://github.com/urbanairship/android-library/releases/tag/19.10.2)
+- Updated iOS SDK to [19.8.2](https://github.com/urbanairship/ios-library/releases/tag/19.8.2)
+
+
+## Version 24.5.0 - July 31, 2025
 Minor release that updates the Android SDK to 19.10.0 and the iOS SDK to 19.7.0
 
 ### Changes
 - Updated Android SDK to [19.10.0](https://github.com/urbanairship/android-library/releases/tag/19.10.0)
 - Updated iOS SDK to [19.7.0](https://github.com/urbanairship/ios-library/releases/tag/19.7.0)
 
-[Migration Guides](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
-[All Releases](https://github.com/urbanairship/react-native-airship/releases)
-
 ## Version 24.4.0 - June 25, 2025
-
 Minor release that updates the Android SDK to 19.9.1 and the iOS SDK to 19.6.1
 
 ### Changes
