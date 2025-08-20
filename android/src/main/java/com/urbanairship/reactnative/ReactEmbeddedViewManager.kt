@@ -2,6 +2,7 @@
 
 package com.urbanairship.reactnative
 
+import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewManagerDelegate
@@ -20,8 +21,12 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
             }
         }
 
-        override fun receiveCommand(view: ReactEmbeddedView, commandName: String, args: com.facebook.react.bridge.ReadableArray?) {
-            // No commands supported — add if you need any
+        override fun receiveCommand(
+            view: ReactEmbeddedView,
+            commandName: String,
+            args: ReadableArray
+        ) {
+            // No commands supported
         }
     }
 
