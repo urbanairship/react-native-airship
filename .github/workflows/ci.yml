@@ -17,12 +17,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0.1' 
-        
-      - name: Install CocoaPods
-        run: gem install cocoapods -v '1.16.1'
       
       - name: Select Xcode version
-        run: sudo xcode-select -s '/Applications/Xcode_16.1.app/Contents/Developer'
+        run: sudo xcode-select -s '/Applications/Xcode_16.4.app/Contents/Developer'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -49,11 +46,9 @@ jobs:
         with:
           ruby-version: '3.0.1' 
 
-      - name: Install CocoaPods
-        run: gem install cocoapods -v '1.16.1'
         
       - name: Select Xcode version
-        run: sudo xcode-select -s '/Applications/Xcode_16.2.app/Contents/Developer'
+        run: sudo xcode-select -s '/Applications/Xcode_16.4.app/Contents/Developer'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
