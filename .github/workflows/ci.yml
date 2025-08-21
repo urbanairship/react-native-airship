@@ -27,7 +27,7 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
-      - run: npm run bootstrap
+      - run: npm ci
       - run: bash ./scripts/run_ci_tasks.sh -i
       - run: bash ./scripts/run_ci_tasks.sh -a
 
@@ -58,7 +58,7 @@ jobs:
 
       - run: sed -i '' "s/ENV\['RCT_NEW_ARCH_ENABLED'\] = '1'/ENV\['RCT_NEW_ARCH_ENABLED'\] = '0'/g"  example/ios/Podfile
       - run: sed -i '' 's/newArchEnabled=true/newArchEnabled=false/' example/android/gradle.properties
-      - run: npm run bootstrap
+      - run: npm ci
       - run: bash ./scripts/run_ci_tasks.sh -a
 
 

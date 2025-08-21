@@ -7,7 +7,7 @@ The example is set up to reference the module using a yarn workspace.
 Execute the following command in the root directory
 
 ```
-npm run bootstrap install
+npm ci
 ```
 
 2) Run Android
