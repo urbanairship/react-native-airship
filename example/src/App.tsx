@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, SafeAreaView } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator, StatusBar, useColorScheme } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import Airship, { EventType } from '@ua/react-native-airship';
 import TabNavigator from './navigation/TabNavigator';
 import styles from './Styles';
@@ -56,6 +57,7 @@ export default function App() {
 
     initAirship();
   }, []);
+  const isDarkMode = useColorScheme() === 'dark';
 
   if (airshipError) {
     return (
@@ -69,6 +71,7 @@ export default function App() {
   if (!isAirshipReady) {
     return (
       <View style={styles.appLoadingContainer}>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <ActivityIndicator size="large" color="#004bff" />
         <Text style={styles.appLoadingText}>Initializing Airship SDK...</Text>
       </View>
@@ -76,9 +79,9 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={styles.appContainer}>
-      <TabNavigator />
-    </SafeAreaView>
+    <SafeAreaProvider>
+         <TabNavigator />
+    </SafeAreaProvider>
   );
 }
 
