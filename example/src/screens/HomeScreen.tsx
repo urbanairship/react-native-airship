@@ -12,7 +12,6 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
 import styles from '../Styles';
 import Airship, { 

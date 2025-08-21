@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   Pressable,
   Image,
@@ -14,6 +13,7 @@ import HomeScreen from '../screens/HomeScreen';
 import MessageCenterScreen from '../screens/MessageCenterScreen';
 import PreferenceCenterScreen from '../screens/PreferenceCenterScreen';
 import MessageDetailsScreen from '../screens/MessageDetailsScreen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Enum for tab navigation
 enum TabScreens {
@@ -82,6 +82,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
     },
     setOptions: () => {},
   };
+  const insets = useSafeAreaInsets();
 
   // Create a mock route object for screens
   const route = {
@@ -117,8 +118,8 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image 
+      <View style={[styles.headerContainer, { paddingTop: insets.top }]}>
+      <Image 
           source={require('../img/airship-mark.png')} 
           style={styles.headerImage}
         />
@@ -129,7 +130,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
       </View>
 
       {shouldShowTabBar && (
-        <View style={styles.tabBar}>
+        <View style={[styles.tabBar, { paddingBottom: insets.bottom }]}>
         <Pressable
           style={({pressed}) => [
             styles.tabItem,
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#001f9e',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    height: 50,
+    minHeight: 50,
   },
   headerImage: {
     width: 30,
@@ -224,12 +225,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
-    height: 70,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 5,
+    minHeight: 70,
   },
   tabItem: {
     flex: 1,

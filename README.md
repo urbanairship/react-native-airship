@@ -6,12 +6,13 @@ A React Native module for Airship's iOS and Android SDK.
 
 | RN Version      | Airship RN Version         | Support level |
 | --------------- | -------------------------- | ------------- |
+| 0.81.x          | 25.x                       | Active        |
 | 0.80.x          | 24.x                       | Active        |
-| 0.79.x          | 24.x                       | Active        |
-| 0.78.x          | 23.x                       | End of Cycle  |
+| 0.79.x          | 24.x                       | End of Cycle  |
+| 0.78.x          | 23.x                       | Unsupported   |
 | 0.70.x<=0.77.x  | 21.x                       | Unsupported   |
 
-*Last Updated: June 30, 2025*
+*Last Updated: August 20, 2025*
 
 Airship adheres to the [React Native Support Policy](https://github.com/reactwg/react-native-releases/blob/main/docs/support.md)
 and will support at least two major React Native versions at any given time.

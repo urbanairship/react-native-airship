@@ -22,8 +22,12 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
             }
         }
 
-        override fun receiveCommand(view: ReactMessageView, commandName: String, args: ReadableArray?) {
-            // No commands implemented, add if Airship adds some in future
+        override fun receiveCommand(
+            view: ReactMessageView,
+            commandName: String,
+            args: ReadableArray
+        ) {
+            // No commands supported
         }
     }
 
