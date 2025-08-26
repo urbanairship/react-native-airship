@@ -157,10 +157,12 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
 - (void)dispatchOnLoadFinishedEvent: (NSString*)messageID
 {
 #ifdef RCT_NEW_ARCH_ENABLED
-    std::dynamic_pointer_cast<const facebook::react::RNAirshipMessageViewEventEmitter>(_eventEmitter)
-        ->onLoadFinished(facebook::react::RNAirshipMessageViewEventEmitter::OnLoadFinished{
-            .messageId = std::string([messageID UTF8String])
-        });
+  auto emitter = std::dynamic_pointer_cast<const facebook::react::RNAirshipMessageViewEventEmitter>(_eventEmitter);
+  if (emitter){
+    emitter->onLoadFinished(facebook::react::RNAirshipMessageViewEventEmitter::OnLoadFinished{
+      .messageId = std::string([messageID UTF8String])
+    });
+  }
 #else
     if (self.onLoadFinished) {
         self.onLoadFinished(@{RNAirshipMessageViewMessageIDKey: messageID });
