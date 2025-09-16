@@ -46,9 +46,16 @@ jobs:
           if [ -n "${{ github.event.inputs.proxy_version }}" ]; then
             ./scripts/update_proxy_version.sh "${{ github.event.inputs.proxy_version }}" || exit 1
           fi
-          ./scripts/update_changelog.sh "${{ github.event.inputs.react_native_version }}" \
-            $([ -n "${{ github.event.inputs.ios_version }}" ] && echo "--ios ${{ github.event.inputs.ios_version }}") \
-            $([ -n "${{ github.event.inputs.android_version }}" ] && echo "--android ${{ github.event.inputs.android_version }}") || exit 1
+
+          # Build changelog command with optional parameters
+          CHANGELOG_CMD="./scripts/update_changelog.sh '${{ github.event.inputs.react_native_version }}'"
+          if [ -n "${{ github.event.inputs.ios_version }}" ]; then
+            CHANGELOG_CMD="$CHANGELOG_CMD --ios '${{ github.event.inputs.ios_version }}'"
+          fi
+          if [ -n "${{ github.event.inputs.android_version }}" ]; then
+            CHANGELOG_CMD="$CHANGELOG_CMD --android '${{ github.event.inputs.android_version }}'"
+          fi
+          eval "$CHANGELOG_CMD" || exit 1
 
       - name: Verify Changes
         id: verify
