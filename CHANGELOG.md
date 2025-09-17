@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 24.7.0 - September 16, 2025
+
+Minor release that updates the Android SDK to 19.13.1 and the iOS SDK to 19.9.2.
+
+### Changes
+- Updated Android SDK to [19.13.1](https://github.com/urbanairship/android-library/releases/tag/19.13.1)
+- Updated iOS SDK to [19.9.2](https://github.com/urbanairship/ios-library/releases/tag/19.9.2)
+
 [Migration Guides](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
 [All Releases](https://github.com/urbanairship/react-native-airship/releases)
 
