@@ -1,5 +1,13 @@
 # React Native Module Changelog
 
+## Version 24.8.0 - October 7, 2025
+
+Minor release that updates the Android SDK to 19.13.4 and the iOS SDK to 19.11.0
+
+### Changes
+- Updated Android SDK to [19.13.4](https://github.com/urbanairship/android-library/releases/tag/19.13.4)
+- Updated iOS SDK to [19.11.0](https://github.com/urbanairship/ios-library/releases/tag/19.11.0)
+
 ## Version 24.7.0 - September 16, 2025
 
 Minor release that updates the Android SDK to 19.13.1 and the iOS SDK to 19.9.2.
