@@ -1,5 +1,14 @@
 # React Native Module 25.0.0 Changelog
 
+## Version 25.3.1 - November 14, 2025
+
+Patch release that fixes YouTube video playback in In-App Automation and Scenes. Applications that use YouTube videos in Scenes and non-html In-App Automations (IAA) must update to resolve playback errors.
+
+### Changes
+- Updated Android SDK to [19.13.6](https://github.com/urbanairship/android-library/releases/tag/19.13.6)
+- Updated iOS SDK to [19.11.2](https://github.com/urbanairship/ios-library/releases/tag/19.11.2)
+- Fixed the HeadlessJSService from preventing the app from terminating right away on Android.
+
 ## Version 25.3.0 - October 6, 2025
 
 Minor release that updates the Android SDK to 19.13.4 and the iOS SDK to 19.11.0.
