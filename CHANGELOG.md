@@ -7,6 +7,7 @@ Patch release that fixes YouTube video playback in In-App Automation and Scenes.
 ### Changes
 - Updated Android SDK to [19.13.6](https://github.com/urbanairship/android-library/releases/tag/19.13.6)
 - Updated iOS SDK to [19.11.2](https://github.com/urbanairship/ios-library/releases/tag/19.11.2)
+- Fixed the HeadlessJSService from preventing the app from terminating right away on Android.
 
 ## Version 24.8.0 - October 7, 2025
 
