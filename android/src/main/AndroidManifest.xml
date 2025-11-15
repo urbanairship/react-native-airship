@@ -9,7 +9,8 @@
 
         <service
             android:name="com.urbanairship.reactnative.AirshipHeadlessEventService"
-            android:exported="false" />
+            android:exported="false"
+            android:stopWithTask="true" />
 
         <activity
             android:name="com.urbanairship.android.framework.proxy.CustomMessageCenterActivity"

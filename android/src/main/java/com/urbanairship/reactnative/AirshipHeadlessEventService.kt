@@ -26,7 +26,7 @@ class AirshipHeadlessEventService : HeadlessJsTaskService() {
     }
 
     companion object {
-        private const val TASK_TIMEOUT: Long = 60000
+        private const val TASK_TIMEOUT: Long = 1000
         private const val TASK_KEY = "AirshipAndroidBackgroundEventTask"
 
         fun startService(context: Context): Boolean {
