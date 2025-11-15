@@ -31,23 +31,6 @@ export default function App() {
           }
         });
 
-        // Set up event listeners
-        Airship.addListener(EventType.NotificationResponse, (event) => {
-          // Handle notification responses
-        });
-
-        Airship.addListener(EventType.PushReceived, (event) => {
-          // Handle push received
-        });
-
-        Airship.addListener(EventType.ChannelCreated, (event) => {
-          // Handle channel creation
-        });
-
-        Airship.addListener(EventType.PushNotificationStatusChangedStatus, (event) => {
-          // Handle push notification status changes
-        });
-
         setIsAirshipReady(true);
       } catch (error) {
         setAirshipError(error instanceof Error ? error.message : String(error));
