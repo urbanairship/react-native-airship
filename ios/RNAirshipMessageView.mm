@@ -8,10 +8,10 @@
 #import "react_native_airship-Swift.h"
 #endif
 
-#import "generated/RNAirshipSpec/ComponentDescriptors.h"
-#import "generated/RNAirshipSpec/EventEmitters.h"
-#import "generated/RNAirshipSpec/Props.h"
-#import "generated/RNAirshipSpec/RCTComponentViewHelpers.h"
+#import "react/renderer/components/RNAirshipSpec/ComponentDescriptors.h"
+#import "react/renderer/components/RNAirshipSpec/EventEmitters.h"
+#import "react/renderer/components/RNAirshipSpec/Props.h"
+#import "react/renderer/components/RNAirshipSpec/RCTComponentViewHelpers.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RCTFabricComponentsPlugins.h"

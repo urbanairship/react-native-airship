@@ -9,7 +9,10 @@
 #endif
 
 @implementation RNAirship
-RCT_EXPORT_MODULE()
++ (NSString *)moduleName
+{
+  return @"RNAirship";
+}
 
 - (NSArray<NSString *> *)supportedEvents {
     return @[

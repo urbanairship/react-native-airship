@@ -1,6 +1,5 @@
 // @ts-ignore
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type { HostComponent, ViewProps } from 'react-native';
+import { codegenNativeComponent, type HostComponent, type ViewProps } from 'react-native';
 
 interface NativeProps extends ViewProps {
   embeddedId: string;
