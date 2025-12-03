@@ -4,14 +4,15 @@ The official Airship React Native module for iOS and Android.
 
 ## Supported Versions
 
-| Airship RN Version | Supported RN Versions | Support Status                        |
-| :----------------- | :-------------------- | :------------------------------------ |
-| **25.x**           | 0.81.x – 0.82.x       | **Active**                            |
-| **24.x**           | 0.79.x – 0.80.x       | **Maintenance** (Until Feb 21, 2026)  |
-| **23.x**           | 0.78.x                | **Unsupported**                       |
-| **21.x**           | 0.70.x – 0.77.x       | **Unsupported**                       |
+| Airship RN Version | Airship SDK Version | Supported RN Versions | Support Status                        |
+| :----------------- | :------------------ | :-------------------- | :------------------------------------ |
+| **26.x**           | 20.x                | 0.82.x – 0.83.x       | **Active**                            |
+| **25.x**           | 19.x                | 0.81.x – 0.82.x       | **Maintenance** (Until Jun 8, 2026)   |
+| **24.x**           | 19.x                | 0.79.x – 0.80.x       | **Maintenance** (Until Feb 21, 2026)  |
+| **23.x**           | 19.x                | 0.78.x                | **Unsupported**                       |
+| **21.x**           | 19.x                | 0.70.x – 0.77.x       | **Unsupported**                       |
 
-*Table last updated: December 2, 2025*
+*Table last updated: December 8, 2025*
 
 ## Support Policy Definitions
 
