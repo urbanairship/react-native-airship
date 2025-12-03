@@ -3,11 +3,7 @@
 package com.urbanairship.reactnative
 
 import android.content.Context
-import android.graphics.Color
-import android.view.View
 import android.widget.FrameLayout
-import androidx.core.view.doOnAttach
-import com.facebook.react.bridge.LifecycleEventListener
 import com.urbanairship.embedded.AirshipEmbeddedView
 
 class ReactEmbeddedView(context: Context) : FrameLayout(context) {

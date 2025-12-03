@@ -3,8 +3,7 @@
 package com.urbanairship.reactnative
 
 import com.facebook.react.bridge.*
-import com.urbanairship.PrivacyManager
-import com.urbanairship.android.framework.proxy.EventType
+import com.urbanairship.android.framework.proxy.events.EventType
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonValue
 
@@ -68,7 +67,6 @@ object Utils {
                 val array = obj.asArray()
                 convertArray(array)
             }
-            else -> JsonValue.NULL
         }
     }
 

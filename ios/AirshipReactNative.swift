@@ -111,11 +111,9 @@ public class AirshipReactNative: NSObject {
     
 
     @MainActor
-    func onLoad(
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-    ) {
+    func onLoad() {
         AirshipProxy.shared.delegate = self
-        try? AirshipProxy.shared.attemptTakeOff(launchOptions: launchOptions)
+        try? AirshipProxy.shared.attemptTakeOff()
 
         Task {
             let stream = AirshipProxyEventEmitter.shared.pendingEventAdded
@@ -159,10 +157,8 @@ public class AirshipReactNative: NSObject {
 
     @objc
     @MainActor
-    public func attemptTakeOff(
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-    )  {
-        try? AirshipProxy.shared.attemptTakeOff(launchOptions: launchOptions)
+    public func attemptTakeOff() {
+        try? AirshipProxy.shared.attemptTakeOff()
     }
 }
 
@@ -172,12 +168,10 @@ public extension AirshipReactNative {
     @MainActor
     func takeOff(
         json: Any,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) throws -> NSNumber {
         return try NSNumber(
             value: AirshipProxy.shared.takeOff(
-                json: json,
-                launchOptions: launchOptions
+                json: json
             )
         )
     }
@@ -782,7 +776,6 @@ private actor EventNotifier {
         self.notifier?()
     }
 }
-
 
 extension AirshipProxyEventType {
     private static let nameMap: [String: AirshipProxyEventType] = [

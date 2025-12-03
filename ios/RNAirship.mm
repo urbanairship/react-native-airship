@@ -37,7 +37,7 @@
 - (void)setBridge:(RCTBridge *)bridge {
     self.reactBridge = bridge;
 
-    [AirshipReactNative.shared attemptTakeOffWithLaunchOptions:self.bridge.launchOptions];
+    [AirshipReactNative.shared attemptTakeOff];
 }
 
 - (RCTBridge *)bridge {
@@ -81,7 +81,6 @@ RCT_REMAP_METHOD(takeOff,
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
     id result = [AirshipReactNative.shared takeOffWithJson:config
-                                             launchOptions:nil
                                                      error:&error];
     
     [self handleResult:result error:error resolve:resolve reject:reject];
@@ -855,7 +854,7 @@ RCT_REMAP_METHOD(liveActivityListAll,
 }
 
 RCT_REMAP_METHOD(liveActivityList,
-                 liveActivityListRequest:(NSDictionary *)request
+                 liveActivityList:(NSDictionary *)request
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
@@ -899,8 +898,7 @@ RCT_REMAP_METHOD(liveActivityEnd,
 }
 
 RCT_REMAP_METHOD(liveUpdateListAll,
-                 liveUpdateListAll:(NSDictionary *)request
-                 resolve:(RCTPromiseResolveBlock)resolve
+                 liveUpdateListAll:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
 }
@@ -912,6 +910,8 @@ RCT_REMAP_METHOD(liveUpdateList,
 
     reject(@"AIRSHIP_ERROR", @"Not supported on iOS", nil);
 }
+
+
 
 RCT_REMAP_METHOD(liveUpdateStart,
                  liveUpdateStart:(NSDictionary *)request

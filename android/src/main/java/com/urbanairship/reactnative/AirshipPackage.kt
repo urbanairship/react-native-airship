@@ -1,3 +1,5 @@
+/* Copyright Airship and Contributors */
+
 package com.urbanairship.reactnative
 
 import com.facebook.react.BaseReactPackage

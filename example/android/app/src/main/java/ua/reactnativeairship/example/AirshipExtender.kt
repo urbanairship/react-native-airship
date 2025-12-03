@@ -9,19 +9,19 @@ import android.os.Build
 import androidx.annotation.Keep
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.urbanairship.UAirship
 import com.urbanairship.android.framework.proxy.AirshipPluginExtender
+import com.urbanairship.Airship
 import com.urbanairship.json.requireField
 import com.urbanairship.liveupdate.LiveUpdate
 import com.urbanairship.liveupdate.LiveUpdateEvent
-import com.urbanairship.liveupdate.LiveUpdateManager
 import com.urbanairship.liveupdate.LiveUpdateResult
 import com.urbanairship.liveupdate.SuspendLiveUpdateNotificationHandler
+import com.urbanairship.liveupdate.liveUpdateManager
 
 @Keep
 public final class AirshipExtender: AirshipPluginExtender {
-  override fun onAirshipReady(context: Context, airship: UAirship) {
-    LiveUpdateManager.shared().register("Example", ExampleLiveUpdateHandler())
+  override fun onAirshipReady(context: Context) {
+    Airship.liveUpdateManager.register("Example", ExampleLiveUpdateHandler())
   }
 }
 
