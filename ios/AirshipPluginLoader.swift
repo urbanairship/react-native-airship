@@ -6,12 +6,9 @@ import AirshipFrameworkProxy
 public class AirshipPluginLoader: NSObject, AirshipPluginLoaderProtocol {
     @objc
     public static var disabled: Bool = false
-
-    public static func onApplicationDidFinishLaunching(
-        launchOptions: [UIApplication.LaunchOptionsKey : Any]?
-    ) {
+    public static func onLoad() {
         if (!disabled) {
-            AirshipReactNative.shared.onLoad(launchOptions: launchOptions)
+            AirshipReactNative.shared.onLoad()
         }
     }
 }

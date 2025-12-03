@@ -2,7 +2,6 @@
 
 package com.urbanairship.reactnative
 
-import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewManagerDelegate
@@ -66,19 +65,12 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
                 ReactMessageView.EVENT_LOAD_STARTED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
             )
 
-        val builder = MapBuilder.builder<String, Any>()
 
-        for ((name, handlerName) in events) {
-            builder.put(
-                name,
-                MapBuilder.of(
-                    "phasedRegistrationNames",
-                    MapBuilder.of("bubbled", handlerName)
-                )
+        return events.associate { (name, handlerName) ->
+            name to mapOf(
+                "phasedRegistrationNames" to mapOf("bubbled" to handlerName)
             )
         }
-
-        return builder.build()
     }
 
     companion object {

@@ -1,3 +1,5 @@
+/* Copyright Airship and Contributors */
+
 package com.urbanairship.reactnative
 
 import android.annotation.SuppressLint
@@ -5,7 +7,7 @@ import android.os.Build
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
 import com.urbanairship.actions.ActionResult
-import com.urbanairship.android.framework.proxy.EventType
+import com.urbanairship.android.framework.proxy.events.EventType
 import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.android.framework.proxy.events.EventEmitter
 import com.urbanairship.android.framework.proxy.proxies.AirshipProxy
@@ -81,7 +83,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
         context.addLifecycleEventListener(object : LifecycleEventListener {
             override fun onHostResume() {
-                val backgroundTypes = EventType.values().filter { !it.isForeground() }
+                val backgroundTypes = EventType.entries.filter { !it.isForeground() }
                 if (EventEmitter.shared().hasEvents(backgroundTypes)) {
                     AirshipHeadlessEventService.startService(context)
                 }
@@ -500,7 +502,7 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     override fun actionRun(action: ReadableMap, promise: Promise) {
         promise.resolve(scope) {
             val result = proxy.actions.runAction(requireNotNull(action.getString("name")), Utils.convertDynamic(action.getDynamic("value")))
-            if (result.status == ActionResult.STATUS_COMPLETED) {
+            if (result.status == ActionResult.Status.COMPLETED) {
                 result.value
             } else {
                 throw Exception("Action failed ${result.status}")

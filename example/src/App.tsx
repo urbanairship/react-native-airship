@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, StatusBar, useColorScheme } from 'react-native';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Airship, { EventType } from '@ua/react-native-airship';
 import TabNavigator from './navigation/TabNavigator';
 import styles from './Styles';

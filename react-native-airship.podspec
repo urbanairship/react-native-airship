@@ -10,12 +10,13 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "15.0" }
+  s.platforms    = { :ios => "16.0" }
   s.source       = { :git => "https://github.com/urbanairship/react-native-module.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm,cpp,swift}"
+  s.source_files = "ios/**/*.{h,m,mm,swift,cpp}"
+  s.private_header_files = "ios/**/*.h"
 
   install_modules_dependencies(s)
   
-  s.dependency "AirshipFrameworkProxy", "14.10.1"
+  s.dependency "AirshipFrameworkProxy", "15.0.1"
 end
