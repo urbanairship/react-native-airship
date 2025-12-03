@@ -4,7 +4,7 @@
 #import <React/RCTEventEmitter.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "generated/RNAirshipSpec/RNAirshipSpec.h"
+#import "RNAirshipSpec/RNAirshipSpec.h"
 
 @interface RNAirship : RCTEventEmitter <NativeRNAirshipSpec>
 #else
