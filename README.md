@@ -12,8 +12,8 @@ The official Airship React Native module for iOS and Android.
 - **In-App Experiences** - Contextual messaging, automation, and Scenes
 - **Embedded Content** - Render Airship Scenes directly in your React Native app
 - **Custom Views** - Extend Scenes with native content
-- **Message Center** - Inbox for push notifications and messages
-- **Preference Center** - User preference management with customizable UI
+- **Message Center** - Persistent inbox for rich messages with HTML, video, and interactive content
+- **Preference Center** - User preference management
 - **Feature Flags** - Dynamic feature toggles and experimentation
 - **Analytics** - Comprehensive user behavior tracking
 - **Contacts** - User identification and contact management
