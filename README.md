@@ -5,23 +5,21 @@
 
 The official Airship React Native module for iOS and Android.
 
-## Platform Support
+## Features
 
-| Feature                               | iOS | Android |
-| :------------------------------------ | :-: | :-----: |
-| Push Notifications                    | ✅  | ✅      |
-| Live Activities                       | ✅  | ❌      |
-| Live Updates                          | ❌  | ✅      |
-| In-App Experiences                    | ✅  | ✅      |
-| Custom Views                          | ✅  | ✅      |
-| Embedded Content                      | ✅  | ✅      |
-| Message Center                        | ✅  | ✅      |
-| Preference Center                     | ✅  | ✅      |
-| Feature Flags                         | ✅  | ✅      |
-| Analytics                             | ✅  | ✅      |
-| Contacts                              | ✅  | ✅      |
-| Tags, Attributes & Subscription Lists | ✅  | ✅      |
-| Privacy Controls                      | ✅  | ✅      |
+- **Push Notifications** - Rich, interactive push notifications with deep linking
+- **Live Activities & Live Updates** - Real-time content updates on iOS Lock Screen and Android Live Content
+- **In-App Experiences** - Contextual messaging, automation, and Scenes
+- **Embedded Content** - Render Airship Scenes directly in your React Native app
+- **Custom Views** - Extend Scenes with native content
+- **Message Center** - Inbox for push notifications and messages
+- **Preference Center** - User preference management with customizable UI
+- **Feature Flags** - Dynamic feature toggles and experimentation
+- **Analytics** - Comprehensive user behavior tracking
+- **Contacts** - User identification and contact management
+- **Tags, Attributes & Subscription Lists** - User segmentation, personalization, and subscription management
+- **Privacy Controls** - Granular data collection and feature management
+- **Extensible & Hybrid Compatible** - Works seamlessly in hybrid apps and supports native extensions
 
 ## Quick Start
 
