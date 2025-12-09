@@ -49,7 +49,7 @@ public class MessageWebViewWrapper: NSObject {
 }
 
 
-class _MessageWebViewWrapper: NSObject, AirshipWKNavigationDelegate, NativeBridgeDelegate {
+class _MessageWebViewWrapper: NSObject, AirshipWKNavigationDelegate, @preconcurrency NativeBridgeDelegate {
 
     public weak var delegate: MessageWebViewWrapperDelegate? = nil
 

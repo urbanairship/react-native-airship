@@ -6,6 +6,7 @@ import AirshipFrameworkProxy
 import React
 
 @objc
+@MainActor
 public class AirshipReactNative: NSObject {
     
     @objc
@@ -50,12 +51,12 @@ public class AirshipReactNative: NSObject {
     public func setNotifier(_ notifier: ((String, [String: Any]) -> Void)?) {
         self.serialQueue.enqueue { @MainActor in
             if let notifier = notifier {
-                await self.eventNotifier.setNotifier {
+                self.eventNotifier.setNotifier {
                     notifier(AirshipReactNative.pendingEventsEventName, [:])
                 }
 
                 if AirshipProxyEventEmitter.shared.hasAnyEvents() {
-                    await self.eventNotifier.notifyPendingEvents()
+                    self.eventNotifier.notifyPendingEvents()
                 }
 
                 AirshipProxy.shared.push.presentationOptionOverrides = { request in
@@ -88,7 +89,7 @@ public class AirshipReactNative: NSObject {
                     )
                 }
             } else {
-                await self.eventNotifier.setNotifier(nil)
+                self.eventNotifier.setNotifier(nil)
                 AirshipProxy.shared.push.presentationOptionOverrides = nil
 
                 self.lock.sync {
@@ -120,7 +121,7 @@ public class AirshipReactNative: NSObject {
         Task {
             let stream = AirshipProxyEventEmitter.shared.pendingEventAdded
             for await _ in stream {
-                await self.eventNotifier.notifyPendingEvents()
+                self.eventNotifier.notifyPendingEvents()
             }
         }
     }
@@ -133,7 +134,7 @@ public class AirshipReactNative: NSObject {
 
         Task {
             if (await AirshipProxyEventEmitter.shared.hasEvent(type: type)) {
-                await self.eventNotifier.notifyPendingEvents()
+                self.eventNotifier.notifyPendingEvents()
             }
         }
     }
@@ -772,7 +773,8 @@ extension AirshipReactNative: AirshipProxyDelegate {
 }
 
 
-private actor EventNotifier {
+@MainActor
+private final class EventNotifier {
     private var notifier: (() -> Void)?
     func setNotifier(_ notifier: (() -> Void)?) {
         self.notifier = notifier
