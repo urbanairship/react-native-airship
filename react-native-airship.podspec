@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/urbanairship/react-native-module.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift,cpp}"
+  s.exclude_files = "ios/generated/**/*"
   s.private_header_files = "ios/**/*.h"
 
   install_modules_dependencies(s)
