@@ -101,9 +101,7 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
         message = null
 
         loadJob = scope.launch {
-            // Until ReactFeatureFlags.enableFabricPendingEventQueue is enabled by default, we need to avoid
-            // sending events when the view is unmounted because the events are discarded otherwise
-            if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED && delayLoading) {
+            if (delayLoading) {
                 delay(50)
             }
 
@@ -137,25 +135,25 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
         event.putString(MESSAGE_ID_KEY, messageId)
         event.putBoolean(RETRYABLE_KEY, retryable)
         event.putString(ERROR_KEY, error)
-        notify(if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) EVENT_LOAD_ERROR else EVENT_LOAD_ERROR_HANDLER_NAME, event)
+        notify(EVENT_LOAD_ERROR, event)
     }
 
     private fun notifyLoadFinished(messageId: String) {
         val event = Arguments.createMap()
         event.putString(MESSAGE_ID_KEY, messageId)
-        notify(if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) EVENT_LOAD_FINISHED else EVENT_LOAD_FINISHED_HANDLER_NAME, event)
+        notify(EVENT_LOAD_FINISHED, event)
     }
 
     private fun notifyLoadStarted(messageId: String) {
         val event = Arguments.createMap()
         event.putString(MESSAGE_ID_KEY, messageId)
-        notify(if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) EVENT_LOAD_STARTED else EVENT_LOAD_STARTED_HANDLER_NAME, event)
+        notify(EVENT_LOAD_STARTED, event)
     }
 
     private fun notifyClose(messageId: String) {
         val event = Arguments.createMap()
         event.putString(MESSAGE_ID_KEY, messageId)
-        notify(if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) EVENT_CLOSE else EVENT_CLOSE_HANDLER_NAME, event)
+        notify(EVENT_CLOSE, event)
     }
 
     private fun notify(eventName: String, event: WritableMap) {

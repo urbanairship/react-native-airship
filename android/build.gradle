@@ -11,23 +11,16 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.11.1"
+    classpath "com.android.tools.build:gradle:8.13.0"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
   }
 }
 
 
-def isNewArchitectureEnabled() {
-  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
-}
-
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
-
-if (isNewArchitectureEnabled()) {
-  apply plugin: "com.facebook.react"
-}
+apply plugin: "com.facebook.react"
 
 def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["Airship_" + name]).toInteger()
@@ -45,7 +38,6 @@ android {
     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
     buildConfigField("String", "AIRSHIP_MODULE_VERSION", "\"${getModuleVersion()}\"")
-    buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     consumerProguardFiles 'proguard-rules.pro'
   }
 
@@ -64,21 +56,16 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
   }
 
   sourceSets {
     main {
-      if (isNewArchitectureEnabled()) {
-          java.srcDirs += [
-            "src/newarch/java",
-            "generated/java",
-            "generated/jni"
-          ]
-      } else {
-          java.srcDirs += ["src/oldarch/java"]
-      }
+      java.srcDirs += [
+        "generated/java",
+        "generated/jni"
+      ]
     }
   }
 }
@@ -106,13 +93,5 @@ dependencies {
 
   if (isHmsEnabled()) {
     implementation "com.urbanairship.android:airship-framework-proxy-hms:$proxy_version"
-  }
-}
-
-if (isNewArchitectureEnabled()) {
-  react {
-    jsRootDir = file("../src/")
-    libraryName = "Airship"
-    codegenJavaPackageName = "com.urbanairship.reactnative"
   }
 }

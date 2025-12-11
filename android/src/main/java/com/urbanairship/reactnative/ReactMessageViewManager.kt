@@ -2,7 +2,6 @@
 
 package com.urbanairship.reactnative
 
-import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewManagerDelegate
@@ -59,35 +58,19 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
     }
 
     override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
-        val events = if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-            listOf(
+        val events = listOf(
                 ReactMessageView.EVENT_CLOSE_REGISTRATION_NAME to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
                 ReactMessageView.EVENT_LOAD_ERROR_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
                 ReactMessageView.EVENT_LOAD_FINISHED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
                 ReactMessageView.EVENT_LOAD_STARTED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
             )
-        } else {
-            listOf(
-                ReactMessageView.EVENT_CLOSE_HANDLER_NAME to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
+
+
+        return events.associate { (name, handlerName) ->
+            name to mapOf(
+                "phasedRegistrationNames" to mapOf("bubbled" to handlerName)
             )
         }
-
-        val builder = MapBuilder.builder<String, Any>()
-
-        for ((name, handlerName) in events) {
-            builder.put(
-                name,
-                MapBuilder.of(
-                    "phasedRegistrationNames",
-                    MapBuilder.of("bubbled", handlerName)
-                )
-            )
-        }
-
-        return builder.build()
     }
 
     companion object {

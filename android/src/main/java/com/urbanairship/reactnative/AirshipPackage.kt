@@ -1,3 +1,5 @@
+/* Copyright Airship and Contributors */
+
 package com.urbanairship.reactnative
 
 import com.facebook.react.BaseReactPackage
@@ -20,12 +22,12 @@ class AirshipPackage : BaseReactPackage() {
     return ReactModuleInfoProvider {
       val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
       moduleInfos[AirshipModule.NAME] = ReactModuleInfo(
-        name =AirshipModule.NAME,
+        name = AirshipModule.NAME,
         className = AirshipModule.NAME,
         canOverrideExistingModule = false,
         needsEagerInit = false,
         isCxxModule = false,  // isCxxModule
-        isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED // isTurboModule
+        isTurboModule = true
       )
       moduleInfos
     }
