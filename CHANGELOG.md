@@ -1,5 +1,14 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.0.1 - December 16, 2025
+
+Patch release that updates the Android SDK to  and the iOS SDK to .
+
+### Changes
+- Updated Android SDK to [](https://github.com/urbanairship/android-library/releases/tag/)
+- Updated iOS SDK to [](https://github.com/urbanairship/ios-library/releases/tag/)
+
+
 [Migration Guide](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
 
 ## Version 26.0.0 - December 8, 2025
