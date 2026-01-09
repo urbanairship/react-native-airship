@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-import {Component} from 'react';
+import  {Component} from 'react';
 import {
   ActivityIndicator,
   RefreshControl,
@@ -8,7 +8,6 @@ import {
   StyleSheet,
   Switch,
   Text,
-  TouchableHighlight,
   View,
 } from 'react-native';
 import Airship, {SubscriptionScope} from '@ua/react-native-airship';
@@ -20,6 +19,7 @@ interface PreferenceCenterProps {
       goBack?: () => void;
     };
   };
+  navigation?: any;
 }
 
 interface PreferenceCenterData {
@@ -39,72 +39,78 @@ export default class PreferenceCenterScreen extends Component<
   PreferenceCenterProps,
   PreferenceCenterState
 > {
+  private focusListener: any;
+
   constructor(props: PreferenceCenterProps) {
     super(props);
-    console.log('🚀 [PreferenceCenter] Constructor called!');
+    console.log('[PreferenceCenter] Constructor called!');
     this.state = {
-      preferenceCenterId: 'app_default',
+      preferenceCenterId: 'my_preference_center',
       isFetching: true,
       activeChannelSubscriptions: [],
       activeContactSubscriptions: {},
       preferenceCenterData: [],
     };
+  }
 
-    this.fillInSubscriptionList();
-    this.refreshPreferenceCenterConfig();
+  componentDidMount() {
+    console.log('[PreferenceCenter] componentDidMount called');
+    this.onRefresh();
+
+    this.focusListener = this.props.navigation?.addListener?.('focus', () => {
+      console.log('[PreferenceCenter] Screen focused - refreshing data');
+      this.onRefresh();
+    });
+  }
+
+  componentWillUnmount() {
+    this.focusListener?.remove?.();
   }
 
   async fillInSubscriptionList() {
     console.log('[PreferenceCenter] Fetching subscription lists...');
 
-    // Check if contact is identified
     try {
       const namedUserId = await Airship.contact.getNamedUserId();
-      console.log('[PreferenceCenter] Named User ID:', namedUserId ?? 'NOT SET - THIS IS THE PROBLEM!');
+      console.log('[PreferenceCenter] Named User ID:', namedUserId ?? 'NOT SET');
     } catch (e) {
       console.error('[PreferenceCenter] Error getting named user:', e);
     }
 
-    Promise.all([
-      Airship.contact.getSubscriptionLists(),
-      Airship.channel.getSubscriptionLists(),
-    ])
-      .then(results => {
-        console.log('[PreferenceCenter] Contact subscriptions:', JSON.stringify(results[0], null, 2));
-        console.log('[PreferenceCenter] Channel subscriptions:', JSON.stringify(results[1], null, 2));
-        this.setState({
-          activeContactSubscriptions: results[0],
-          activeChannelSubscriptions: results[1],
-        });
-      })
-      .catch((error) => {
-        console.error('[PreferenceCenter] Error fetching subscriptions:', error);
+    try {
+      const [contactSubs, channelSubs] = await Promise.all([
+        Airship.contact.getSubscriptionLists(),
+        Airship.channel.getSubscriptionLists(),
+      ]);
+      console.log('[PreferenceCenter] Contact subscriptions:', JSON.stringify(contactSubs, null, 2));
+      console.log('[PreferenceCenter] Channel subscriptions:', JSON.stringify(channelSubs, null, 2));
+      this.setState({
+        activeContactSubscriptions: contactSubs,
+        activeChannelSubscriptions: channelSubs,
       });
+    } catch (error) {
+      console.error('[PreferenceCenter] Error fetching subscriptions:', error);
+    }
   }
 
-  refreshPreferenceCenterConfig() {
+  async refreshPreferenceCenterConfig() {
     console.log('[PreferenceCenter] Fetching config for:', this.state.preferenceCenterId);
-    Airship.preferenceCenter
-      .getConfig(this.state.preferenceCenterId)
-      .then(config => {
-        console.log('[PreferenceCenter] Config received:', JSON.stringify(config, null, 2));
-        var sections = config?.sections;
-        if (sections && sections.length > 0) {
-          var data: PreferenceCenterData[] = [];
-          sections.map(section => {
-            data = data.concat({title: section.display, data: section.items});
-          });
-          this.setState({preferenceCenterData: data});
-          this.stopActivityIndicator();
-        } else {
-          console.warn('[PreferenceCenter] No sections found in config');
-          this.stopActivityIndicator();
-        }
-      })
-      .catch((error) => {
-        console.error('[PreferenceCenter] Error fetching config:', error);
-        this.stopActivityIndicator();
-      });
+    try {
+      const config = await Airship.preferenceCenter.getConfig(this.state.preferenceCenterId);
+      console.log('[PreferenceCenter] Config received:', JSON.stringify(config, null, 2));
+      const sections = config?.sections;
+      if (sections && sections.length > 0) {
+        const data: PreferenceCenterData[] = [];
+        sections.forEach(section => {
+          data.push({title: section.display, data: section.items});
+        });
+        this.setState({preferenceCenterData: data});
+      } else {
+        console.warn('[PreferenceCenter] No sections found in config');
+      }
+    } catch (error) {
+      console.error('[PreferenceCenter] Error fetching config:', error);
+    }
   }
 
   isSubscribedChannelSubscription(subscriptionId: string) {
@@ -140,8 +146,9 @@ export default class PreferenceCenterScreen extends Component<
     return false;
   }
 
-  onPreferenceChannelItemToggled(subscriptionId: string, subscribe: boolean) {
+  async onPreferenceChannelItemToggled(subscriptionId: string, subscribe: boolean) {
     console.log('[PreferenceCenter] Channel toggle:', subscriptionId, 'subscribe:', subscribe);
+    this.startActivityIndicator();
     var editor = Airship.channel.editSubscriptionLists();
     var updatedArray = this.state.activeChannelSubscriptions!;
     if (subscribe) {
@@ -151,30 +158,44 @@ export default class PreferenceCenterScreen extends Component<
       editor.unsubscribe(subscriptionId);
       updatedArray = updatedArray.filter(item => item !== subscriptionId);
     }
-    editor.apply();
+    await editor.apply();
     console.log('[PreferenceCenter] Channel subscriptions updated:', updatedArray);
     this.setState({
       activeChannelSubscriptions: updatedArray,
     });
+    this.stopActivityIndicator();
   }
 
-  onPreferenceContactSubscriptionItemToggled(
+  async onPreferenceContactSubscriptionItemToggled(
     subscriptionId: string,
     scopes: SubscriptionScope[],
     subscribe: boolean,
   ) {
     console.log('[PreferenceCenter] Contact toggle:', subscriptionId, 'scopes:', scopes, 'subscribe:', subscribe);
-    var editor = Airship.contact.editSubscriptionLists();
-    scopes.forEach(scope => {
-      console.log('[PreferenceCenter] Processing scope:', scope);
-      if (subscribe) {
-        editor.subscribe(subscriptionId, scope);
-      } else {
-        editor.unsubscribe(subscriptionId, scope);
-      }
-      editor.apply();
-    });
-    this.applyContactSubscription(subscriptionId, scopes, subscribe);
+    this.startActivityIndicator();
+    try {
+      var editor = Airship.contact.editSubscriptionLists();
+      scopes.forEach(scope => {
+        console.log('[PreferenceCenter] Processing scope:', scope);
+        if (subscribe) {
+          editor.subscribe(subscriptionId, scope);
+        } else {
+          editor.unsubscribe(subscriptionId, scope);
+        }
+      });
+      await editor.apply();
+      console.log('[PreferenceCenter] Contact subscription apply() SUCCESS for:', subscriptionId);
+
+      // Verify by re-fetching from Airship
+      const verifySubscriptions = await Airship.contact.getSubscriptionLists();
+      console.log('[PreferenceCenter] Verified subscriptions after apply:', JSON.stringify(verifySubscriptions, null, 2));
+
+      this.applyContactSubscription(subscriptionId, scopes, subscribe);
+    } catch (error) {
+      console.error('[PreferenceCenter] Contact subscription apply() FAILED:', error);
+    } finally {
+      this.stopActivityIndicator();
+    }
   }
 
   applyContactSubscription(
@@ -215,6 +236,18 @@ export default class PreferenceCenterScreen extends Component<
     }, 500);
   }
 
+  onRefresh = async () => {
+    this.startActivityIndicator();
+    try {
+      await this.fillInSubscriptionList();
+      await this.refreshPreferenceCenterConfig();
+    } catch (error) {
+      console.error('[PreferenceCenter] Error during refresh:', error);
+    } finally {
+      this.stopActivityIndicator();
+    }
+  };
+
   render() {
     const goBack = this.props.route?.params?.goBack;
     const isCosmoApp = true;
@@ -234,125 +267,64 @@ export default class PreferenceCenterScreen extends Component<
       };
     }
 
-    const SampleItem = ({item}: ItemProp) => (
-      <View>
-        <Text style={styles.cellTitle}>{item.display.name}</Text>
-        <Text style={styles.cellSubtitle}>{item.display.description}</Text>
-      </View>
-    );
-
-    const AlertItem = ({item}: ItemProp) => (
-      <View style={{flexDirection: 'row'}}>
-        <View style={styles.alertContainer}>
-          <SampleItem item={item} />
-        </View>
-      </View>
-    );
-
     const ChannelSubscriptionItem = ({item}: ItemProp) => (
       <View style={styles.cellContainer}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: 1}}>
-            <SampleItem item={item} />
-          </View>
-          <Switch
-            trackColor={{
-              true: isCosmoApp ? Colors.cosmoBlack : Colors.peach,
-              false: Colors.gray300,
-            }}
-            thumbColor={Colors.white}
-            onValueChange={value =>
-              this.onPreferenceChannelItemToggled(item.subscription_id, value)
-            }
-            value={this.isSubscribedChannelSubscription(item.subscription_id)}
-          />
-        </View>
+        <Text style={styles.cellTitle}>{item.display.name}</Text>
+        <AppSwitch
+          onValueChange={value =>
+            this.onPreferenceChannelItemToggled(item.subscription_id, value)
+          }
+          value={this.isSubscribedChannelSubscription(item.subscription_id)}
+        />
       </View>
     );
 
     const ContactSubscriptionItem = ({item}: ItemProp) => (
       <View style={styles.cellContainer}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: 0.99}}>
-            <SampleItem item={item} />
-          </View>
-          <Switch
-            trackColor={{
-              true: isCosmoApp ? Colors.cosmoBlack : Colors.peach,
-              false: Colors.gray300,
-            }}
-            thumbColor={Colors.white}
-            onValueChange={value =>
-              this.onPreferenceContactSubscriptionItemToggled(
-                item.subscription_id,
-                item.scopes,
-                value,
-              )
-            }
-            value={this.isSubscribedContactSubscription(
+        <Text style={styles.cellTitle}>{item.display.name}</Text>
+        <AppSwitch
+          onValueChange={value =>
+            this.onPreferenceContactSubscriptionItemToggled(
               item.subscription_id,
               item.scopes,
-            )}
-          />
-        </View>
+              value,
+            )
+          }
+          value={this.isSubscribedContactSubscription(
+            item.subscription_id,
+            item.scopes,
+          )}
+        />
       </View>
     );
 
     const ContactSubscriptionGroupItem = ({item}: ItemProp) => (
-      <View style={styles.cellContainer}>
-        <View>
-          <SampleItem item={item} />
-          <View style={styles.scopesRow}>
-            {item.components.map((component: any) => {
-              return (
-                <ScopeItem
-                  subscriptionId={item.subscription_id}
-                  component={component}
-                  key={component.uniqueId}
-                />
-              );
-            })}
+      <View style={styles.groupContainer}>
+        <Text style={styles.groupTitle}>{item.display.name}</Text>
+        {item.components.map((component: any) => (
+          <View style={styles.cellContainer} key={component.uniqueId}>
+            <Text style={styles.cellTitle}>{component.display.name}</Text>
+            <Switch
+              onValueChange={(value: boolean) =>
+                this.onPreferenceContactSubscriptionItemToggled(
+                  item.subscription_id,
+                  component.scopes,
+                  value,
+                )
+              }
+              value={this.isSubscribedContactSubscription(
+                item.subscription_id,
+                component.scopes,
+              )}
+            />
           </View>
-        </View>
+        ))}
       </View>
     );
 
-    const ScopeItem = ({
-      subscriptionId,
-      component,
-    }: {
-      subscriptionId: string;
-      component: any;
-    }) => (
-      <View style={styles.scopeContainer}>
-        <TouchableHighlight
-          style={[
-            this.isSubscribedContactSubscription(subscriptionId, component.scopes)
-              ? styles.subscribedScopeButton
-              : styles.unsubscribedScopeButton,
-          ]}
-          underlayColor={isCosmoApp ? Colors.gray200 : Colors.cream}
-          onPress={() =>
-            this.onPreferenceContactSubscriptionItemToggled(
-              subscriptionId,
-              component.scopes,
-              !this.isSubscribedContactSubscription(
-                subscriptionId,
-                component.scopes,
-              ),
-            )
-          }>
-          <View style={styles.scopeContainer}>
-            <Text
-              style={[
-                styles.scopeText,
-                this.isSubscribedContactSubscription(subscriptionId, component.scopes) &&
-                  styles.subscribedScopeText,
-              ]}>
-              {component.display.name}
-            </Text>
-          </View>
-        </TouchableHighlight>
+    const AlertItem = ({item}: ItemProp) => (
+      <View style={styles.alertContainer}>
+        <Text style={styles.alertText}>{item.display.name}</Text>
       </View>
     );
 
@@ -387,12 +359,14 @@ export default class PreferenceCenterScreen extends Component<
       return <View style={styles.sectionSpacer} />;
     };
 
-    const onRefresh = () => {
-      this.startActivityIndicator();
-      this.fillInSubscriptionList();
-      this.refreshPreferenceCenterConfig();
-      return;
-    };
+    const ListHeaderComponent = () => (
+      <View style={styles.pageHeader}>
+        <Text style={styles.pageTitle}> My Interests </Text>
+        <Text style={styles.pageSubtitle}>
+          My Interests
+        </Text>
+      </View>
+    );
 
     return (
       <View style={styles.container}>
@@ -410,11 +384,12 @@ export default class PreferenceCenterScreen extends Component<
             keyExtractor={(item, _index) => item.id}
             renderItem={renderItem}
             renderSectionHeader={renderSectionHeader}
+            ListHeaderComponent={ListHeaderComponent}
             contentContainerStyle={styles.listContainer}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.isFetching}
-                onRefresh={onRefresh}
+                onRefresh={this.onRefresh}
               />
             }
           />
@@ -447,79 +422,74 @@ const getStyles = (isCosmoApp: boolean) =>
       padding: 16,
     },
     listContainer: {
-      padding: 16,
+      paddingHorizontal: 16,
       paddingBottom: 32,
     },
-    cellContainer: {
-      backgroundColor: Colors.white,
-      padding: 16,
-      borderRadius: isCosmoApp ? 4 : 8,
+    pageHeader: {
+      paddingTop: 24,
+      paddingBottom: 16,
+    },
+    pageTitle: {
+      fontSize: 24,
+      fontFamily: isCosmoApp ? 'Jost-SemiBold' : 'FoundersGrotesk-Semibold',
+      color: isCosmoApp ? Colors.cosmoBlack : Colors.sallyBlack,
       marginBottom: 8,
+    },
+    pageSubtitle: {
+      fontSize: 14,
+      fontFamily: isCosmoApp ? 'Jost-Regular' : 'FoundersGrotesk-Regular',
+      color: Colors.gray600,
+      lineHeight: 20,
+    },
+    sectionHeaderContainer: {
+      paddingTop: 16,
+      paddingBottom: 8,
+    },
+    sectionTitle: {
+      fontSize: 16,
+      fontFamily: isCosmoApp ? 'Jost-SemiBold' : 'FoundersGrotesk-Semibold',
+      color: isCosmoApp ? Colors.cosmoBlack : Colors.sallyBlack,
+    },
+    cellContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: Colors.white,
+      paddingVertical: 16,
+      paddingHorizontal: 16,
+      marginBottom: 8,
+      borderRadius: 4,
+      shadowColor: '#000',
+      shadowOffset: {width: 0, height: 1},
+      shadowOpacity: 0.05,
+      shadowRadius: 2,
+      elevation: 1,
     },
     cellTitle: {
       fontSize: 16,
-      fontFamily: isCosmoApp ? 'Jost-SemiBold' : 'FoundersGrotesk-Medium',
-      color: isCosmoApp ? Colors.cosmoBlack : Colors.sallyBlack,
-      marginBottom: 4,
-    },
-    cellSubtitle: {
-      fontSize: 14,
       fontFamily: isCosmoApp ? 'Jost-Regular' : 'FoundersGrotesk-Regular',
-      color: Colors.gray600,
-    },
-    sectionHeaderContainer: {
-      paddingVertical: 12,
-      paddingHorizontal: 4,
-    },
-    sectionTitle: {
-      fontSize: 20,
-      fontFamily: isCosmoApp ? 'Jost-SemiBold' : 'FoundersGrotesk-Semibold',
       color: isCosmoApp ? Colors.cosmoBlack : Colors.sallyBlack,
-      marginBottom: 4,
+      flex: 1,
     },
-    sectionSubtitle: {
+    groupContainer: {
+      marginTop: 8,
+    },
+    groupTitle: {
       fontSize: 14,
-      fontFamily: isCosmoApp ? 'Jost-Regular' : 'FoundersGrotesk-Regular',
+      fontFamily: isCosmoApp ? 'Jost-Medium' : 'FoundersGrotesk-Medium',
       color: Colors.gray600,
+      marginBottom: 8,
     },
     alertContainer: {
       backgroundColor: Colors.alertInfoBg,
       padding: 16,
-      borderRadius: isCosmoApp ? 4 : 8,
-      marginBottom: 8,
-      flex: 1,
+      borderRadius: 4,
+      marginVertical: 8,
     },
-    scopesRow: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      paddingTop: 10,
-      paddingBottom: 10,
-    },
-    scopeContainer: {
-      marginRight: 4,
-      marginBottom: 4,
-    },
-    subscribedScopeButton: {
-      backgroundColor: isCosmoApp ? Colors.cosmoBlack : Colors.peach,
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      borderRadius: 20,
-    },
-    unsubscribedScopeButton: {
-      backgroundColor: Colors.white,
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      borderRadius: 20,
-      borderWidth: 1,
-      borderColor: Colors.gray300,
-    },
-    scopeText: {
+    alertText: {
       fontSize: 14,
-      fontFamily: isCosmoApp ? 'Jost-Medium' : 'FoundersGrotesk-Medium',
+      fontFamily: isCosmoApp ? 'Jost-Regular' : 'FoundersGrotesk-Regular',
       color: isCosmoApp ? Colors.cosmoBlack : Colors.sallyBlack,
-    },
-    subscribedScopeText: {
-      color: isCosmoApp ? Colors.white : Colors.sallyBlack,
     },
     warningContainer: {
       flex: 1,
