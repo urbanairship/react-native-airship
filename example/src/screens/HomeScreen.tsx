@@ -66,6 +66,18 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     }
   }, [namedUserText, refreshNamedUser]);
 
+  const handleNamedUserReset = useCallback(async () => {
+    setLoading(true);
+    try {
+      await Airship.contact.reset();
+      await refreshNamedUser();
+    } catch (error) {
+      // Ignore errors
+    } finally {
+      setLoading(false);
+    }
+  }, [refreshNamedUser]);
+
   const handleTagAdd = useCallback(async () => {
     if (!tagText) return;
     setLoading(true);
@@ -361,6 +373,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                     onPress={handleNamedUserSet}
                   >
                     <Text style={styles.inputButtonText}>Set</Text>
+                  </TouchableOpacity>
+                  <View style={{ width: 10 }} />
+                  <TouchableOpacity
+                    style={styles.inputButton}
+                    onPress={handleNamedUserReset}
+                  >
+                    <Text style={styles.inputButtonText}>Reset</Text>
                   </TouchableOpacity>
                 </View>
               </View>
