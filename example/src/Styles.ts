@@ -22,21 +22,35 @@ const Colors = {
   // Neutral palette
   text: '#020202',          // Black text
   textSecondary: '#666666', // Secondary text
+  textMuted: '#94a3b8',     // Muted text
   background: '#F8F8F8',    // Background gray
+  backgroundAlt: '#f1f5f9', // Alternative background
   cardBackground: '#FFFFFF',// Card background
   border: '#E0E0E0',        // Border color
+  borderLight: '#e2e8f0',   // Light border
   
   // Semantic colors
   error: '#D32F2F',
   warning: '#FFEBEE',
   overlay: 'rgba(255, 255, 255, 0.7)',
+  
+  // Preference Center specific
+  switchTrackActive: '#10b981',
+  switchTrackInactive: '#cbd5e1',
+  scopeActive: '#0ea5e9',
+  scopeInactive: '#f1f5f9',
+  alertBackground: '#dbeafe',
+  alertBorder: '#3b82f6',
 };
+
+// Export Colors for use in components that need direct access
+export { Colors };
 
 // Typography presets
 const Typography = {
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: Colors.text,
   },
   subtitle: {
@@ -356,55 +370,233 @@ export default StyleSheet.create({
   /**
    * PREFERENCE CENTER SCREEN
    */
+  // Main container
   pcContainer: {
-    padding: 0,
+    flex: 1,
+    backgroundColor: Colors.backgroundAlt,
+  },
+  pcListContainer: {
     flex: 1,
   },
-  sectionHeaderContainer: {
-    paddingTop: 20,
-    paddingBottom: 10,
-  },
-  cellTitle: {
-    fontSize: 20,
-    color: Colors.text,
-  },
-  cellSubtitle: {
-    fontSize: 15,
-    color: Colors.textSecondary,
-  },
-  pcCellContainer: {
-    backgroundColor: Colors.cardBackground,
-    padding: Spacing.xs,
+  pcListContent: {
+    paddingHorizontal: Spacing.l,
+    paddingTop: Spacing.m,
+    paddingBottom: 32,
   },
   
-  // Subscription Components
-  alertContainer: {
-    borderWidth: 1,
-    borderRadius: 3,
-    flex: 0.25,
-    backgroundColor: '#3399ff',
-  },
-  scopeContainer: {
+  // Loading state
+  pcLoadingContainer: {
+    flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: Spacing.m,
+    alignItems: 'center',
+    backgroundColor: Colors.backgroundAlt,
+  },
+  pcLoadingText: {
+    marginTop: Spacing.l,
+    fontSize: 16,
+    color: Colors.textSecondary,
+    fontWeight: '500',
+  },
+  
+  // Section header
+  pcSectionHeader: {
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.m,
+    paddingHorizontal: Spacing.xs,
+  },
+  pcSectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.primaryDark,
+    marginBottom: Spacing.xs,
+    letterSpacing: -0.3,
+  },
+  pcSectionDescription: {
+    fontSize: 14,
+    color: Colors.textSecondary,
+    lineHeight: 20,
+  },
+  pcSectionSpacer: {
+    height: Spacing.m,
+  },
+  
+  // Subscription card
+  pcSubscriptionCard: {
+    backgroundColor: Colors.cardBackground,
+    borderRadius: 14,
+    padding: Spacing.l,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  pcSubscriptionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  
+  // Item text
+  pcItemTextContainer: {
+    flex: 1,
+    paddingRight: Spacing.m,
+  },
+  pcItemTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text,
+    marginBottom: Spacing.xs,
+    letterSpacing: -0.2,
+  },
+  pcItemDescription: {
+    fontSize: 14,
+    color: Colors.textSecondary,
+    lineHeight: 20,
+  },
+  
+  // Switch
+  pcSwitchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  pcSwitchLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.textMuted,
+    marginRight: Spacing.s,
+    minWidth: 24,
+    textAlign: 'right',
+  },
+  pcSwitchLabelActive: {
+    color: Colors.switchTrackActive,
+  },
+  
+  // Scope buttons
+  pcScopeContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: Spacing.m,
+    marginHorizontal: -Spacing.xs,
+  },
+  pcScopeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.scopeInactive,
     borderRadius: 20,
+    paddingVertical: Spacing.s,
+    paddingHorizontal: Spacing.l,
+    margin: Spacing.xs,
+    borderWidth: 1.5,
+    borderColor: Colors.borderLight,
   },
-  subscribedScopeButton: {
-    alignItems: 'center',
-    backgroundColor: Colors.accent,
-    borderRadius: 15,
-    padding: Spacing.m,
+  pcScopeButtonActive: {
+    backgroundColor: Colors.scopeActive,
+    borderColor: Colors.scopeActive,
   },
-  unsubscribedScopeButton: {
-    alignItems: 'center',
-    backgroundColor: Colors.success,
-    borderRadius: 15,
-    padding: Spacing.m,
+  pcScopeButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.textSecondary,
   },
-  scopeText: {
+  pcScopeButtonTextActive: {
     color: Colors.cardBackground,
+  },
+  pcScopeCheckmark: {
+    marginLeft: Spacing.xs,
     fontSize: 12,
-    alignSelf: 'center',
+    color: Colors.cardBackground,
+    fontWeight: '700',
+  },
+  
+  // Alert card
+  pcAlertCard: {
+    backgroundColor: Colors.alertBackground,
+    borderRadius: 14,
+    padding: Spacing.l,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    borderLeftWidth: 4,
+    borderLeftColor: Colors.alertBorder,
+  },
+  pcAlertIconContainer: {
+    marginRight: Spacing.m,
+    marginTop: 2,
+  },
+  pcAlertIcon: {
+    fontSize: 20,
+  },
+  pcAlertContent: {
+    flex: 1,
+  },
+  pcAlertTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text,
+    marginBottom: Spacing.xs,
+  },
+  pcAlertDescription: {
+    fontSize: 14,
+    color: Colors.textSecondary,
+    lineHeight: 20,
+  },
+  
+  // Separators
+  pcItemSeparator: {
+    height: Spacing.m,
+  },
+  pcSectionSeparator: {
+    height: Spacing.xs,
+  },
+  
+  // Empty state
+  pcEmptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xxl,
+  },
+  pcEmptyIconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: Colors.cardBackground,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.xl,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  pcEmptyIcon: {
+    fontSize: 36,
+  },
+  pcEmptyTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.text,
+    marginBottom: Spacing.s,
+    textAlign: 'center',
+  },
+  pcEmptyDescription: {
+    fontSize: 15,
+    color: Colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: Spacing.xl,
+  },
+  pcRetryButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: Spacing.m,
+    paddingHorizontal: Spacing.xxl,
+    borderRadius: 12,
+  },
+  pcRetryButtonText: {
+    color: Colors.cardBackground,
+    fontSize: 16,
+    fontWeight: '600',
   },
   
   /**
