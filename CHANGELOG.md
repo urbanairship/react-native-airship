@@ -1,5 +1,16 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.1.0 - January 15, 2026
+
+Patch release that updates the Android and iOS SDKs, bringing several improvements and fixes to Scenes.
+
+### Changes
+- Updated Android SDK to [20.1.0](https://github.com/urbanairship/android-library/releases/tag/20.1.0)
+- Updated iOS SDK to [20.0.3](https://github.com/urbanairship/ios-library/releases/tag/20.0.3)
+- Added support for additional text styles, highlight markdown, and Story controls in Scenes on Android.
+- Fixed an issue with keyboard safe area handling in Scenes on iOS.
+
+
 [Migration Guide](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
 
 ## Version 26.0.0 - December 8, 2025
