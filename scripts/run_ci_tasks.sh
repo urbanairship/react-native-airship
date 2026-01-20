@@ -55,7 +55,7 @@ if $IOS; then
     PROJECT_PLATFORM_PATH="$(pwd)"
     DERIVED_DATA=$(mktemp -d /tmp/ci-derived-data-XXXXX)
     TARGET_SDK='iphonesimulator'
-    TEST_DESTINATION='platform=iOS Simulator,OS=18.4,name=iPhone 16 Pro Max'
+    TEST_DESTINATION='generic/platform=iOS Simulator'
 
     # Use Debug configurations and a simulator SDK so the build process doesn't attempt to sign the output
     xcrun xcodebuild -workspace "${PROJECT_PLATFORM_PATH}/AirshipExample.xcworkspace" -derivedDataPath "${DERIVED_DATA}" -scheme "AirshipExample" -configuration Debug -sdk $TARGET_SDK -destination "${TEST_DESTINATION}"
