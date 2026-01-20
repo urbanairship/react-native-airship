@@ -1,5 +1,17 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.1.0 - January 20, 2026
+
+Minor release that includes accessibility improvements for Message Center and fixes a potential crash on Android.
+
+### Changes
+- Updated Android SDK to [20.1.1](https://github.com/urbanairship/android-library/releases/tag/20.1.1)
+- Updated iOS SDK to [20.1.1](https://github.com/urbanairship/ios-library/releases/tag/20.1.1)
+- Fixed a potential crash in Android Scenes with specific image and display settings.
+- Improved VoiceOver focus handling for Message Center on iOS.
+- Fixed an issue where the Message Center title was not being marked as a heading on Android.
+
+
 [Migration Guide](https://github.com/urbanairship/react-native-airship/blob/main/MIGRATION.md)
 
 ## Version 26.0.0 - December 8, 2025
