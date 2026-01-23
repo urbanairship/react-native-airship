@@ -60,14 +60,10 @@ android {
     targetCompatibility JavaVersion.VERSION_17
   }
 
-  sourceSets {
-    main {
-      java.srcDirs += [
-        "generated/java",
-        "generated/jni"
-      ]
-    }
-  }
+  // Note: android/generated/ directory contains pre-generated codegen files
+  // for backwards compatibility with older React Native versions (< 0.72).
+  // For RN 0.72+ with new architecture, codegen generates these automatically
+  // in build/generated/source/codegen/, so we don't include them here.
 }
 
 repositories {
