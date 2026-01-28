@@ -16,6 +16,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,swift,cpp}"
   s.exclude_files = "ios/generated/**/*"
   s.private_header_files = "ios/**/*.h"
+  s.swift_version = "6.0"
 
   install_modules_dependencies(s)
   

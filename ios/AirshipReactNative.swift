@@ -6,8 +6,8 @@ import AirshipFrameworkProxy
 import React
 
 @objc
-public class AirshipReactNative: NSObject {
-    
+public final class AirshipReactNative: NSObject, Sendable {
+
     @objc
     public static let pendingEventsEventName = "com.airship.pending_events"
 
@@ -18,19 +18,16 @@ public class AirshipReactNative: NSObject {
     public static let pendingEmbeddedUpdated = "com.airship.iax.pending_embedded_updated"
 
     private let serialQueue = AirshipAsyncSerialQueue()
-    var lock = AirshipLock()
-    var pendingPresentationRequests: [String: PresentationOptionsOverridesRequest] = [:]
-    
+    private let _pendingPresentationRequests = AirshipAtomicValue<[String: PresentationOptionsOverridesRequest]>([:])
+    private let _overridePresentationOptionsEnabled = AirshipAtomicValue<Bool>(false)
+
     @objc
-    public var overridePresentationOptionsEnabled: Bool = false {
-        didSet {
-            if (!overridePresentationOptionsEnabled) {
-                lock.sync {
-                    self.pendingPresentationRequests.values.forEach { request in
-                        request.result(options: nil)
-                    }
-                    self.pendingPresentationRequests.removeAll()
-                }
+    public var overridePresentationOptionsEnabled: Bool {
+        get { _overridePresentationOptionsEnabled.value }
+        set {
+            _overridePresentationOptionsEnabled.value = newValue
+            if (!newValue) {
+                self.clearPendingPresentationRequests()
             }
         }
     }
@@ -48,10 +45,11 @@ public class AirshipReactNative: NSObject {
 
     @objc
     public func setNotifier(_ notifier: ((String, [String: Any]) -> Void)?) {
+        let wrappedNotifier = AirshipUnsafeSendableWrapper(notifier)
         self.serialQueue.enqueue { @MainActor in
-            if let notifier = notifier {
+          if wrappedNotifier.value != nil {
                 await self.eventNotifier.setNotifier {
-                    notifier(AirshipReactNative.pendingEventsEventName, [:])
+                    wrappedNotifier.value?(AirshipReactNative.pendingEventsEventName, [:])
                 }
 
                 if AirshipProxyEventEmitter.shared.hasAnyEvents() {
@@ -76,10 +74,13 @@ public class AirshipReactNative: NSObject {
                     }
 
                     let requestID = UUID().uuidString
-                    self.lock.sync {
-                        self.pendingPresentationRequests[requestID] = request
+                    self._pendingPresentationRequests.update {
+                        var requests = $0
+                        requests[requestID] = request
+                        return requests
                     }
-                    notifier(
+
+                    wrappedNotifier.value?(
                         AirshipReactNative.overridePresentationOptionsEventName,
                         [
                             "pushPayload": requestPayload,
@@ -90,25 +91,29 @@ public class AirshipReactNative: NSObject {
             } else {
                 await self.eventNotifier.setNotifier(nil)
                 AirshipProxy.shared.push.presentationOptionOverrides = nil
-
-                self.lock.sync {
-                    self.pendingPresentationRequests.values.forEach { request in
-                        request.result(options: nil)
-                    }
-                    self.pendingPresentationRequests.removeAll()
-                }
+                self.clearPendingPresentationRequests()
             }
         }
     }
     
     @objc
     public func presentationOptionOverridesResult(requestID: String, presentationOptions: [String]?) {
-        lock.sync {
-            pendingPresentationRequests[requestID]?.result(optionNames: presentationOptions)
-            pendingPresentationRequests[requestID] = nil
+        _pendingPresentationRequests.update {
+            var requests = $0
+            requests[requestID]?.result(optionNames: presentationOptions)
+            requests[requestID] = nil
+            return requests
         }
     }
-    
+
+    private func clearPendingPresentationRequests() {
+        _pendingPresentationRequests.update { requests in
+            requests.values.forEach { request in
+                request.result(options: nil)
+            }
+            return [:]
+        }
+    }
 
     @MainActor
     func onLoad() {
@@ -767,8 +772,8 @@ extension AirshipReactNative: AirshipProxyDelegate {
 
 
 private actor EventNotifier {
-    private var notifier: (() -> Void)?
-    func setNotifier(_ notifier: (() -> Void)?) {
+    private var notifier: (@Sendable () -> Void)?
+    func setNotifier(_ notifier: (@Sendable () -> Void)?) {
         self.notifier = notifier
     }
 
