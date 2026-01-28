@@ -59,10 +59,10 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
 
     override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
         val events = listOf(
-                ReactMessageView.EVENT_CLOSE_REGISTRATION_NAME to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_ERROR_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_FINISHED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_STARTED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
+                ReactMessageView.EVENT_CLOSE to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_ERROR to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_FINISHED to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
+                ReactMessageView.EVENT_LOAD_STARTED to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
             )
 
 
