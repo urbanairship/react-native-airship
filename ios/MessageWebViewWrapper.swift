@@ -16,6 +16,7 @@ public protocol MessageWebViewWrapperDelegate {
 }
 
 @objc(RNAirshipMessageWebViewWrapper)
+@MainActor
 public class MessageWebViewWrapper: NSObject {
     private let innerWrapper: _MessageWebViewWrapper
 
@@ -36,7 +37,6 @@ public class MessageWebViewWrapper: NSObject {
         }
     }
 
-    @MainActor
     @objc
     public func loadMessage(messageID: String?) {
         self.innerWrapper.loadMessage(messageID: messageID)
@@ -49,7 +49,7 @@ public class MessageWebViewWrapper: NSObject {
 }
 
 
-class _MessageWebViewWrapper: NSObject, AirshipWKNavigationDelegate, NativeBridgeDelegate {
+class _MessageWebViewWrapper: NSObject, AirshipWKNavigationDelegate, @preconcurrency NativeBridgeDelegate {
 
     public weak var delegate: MessageWebViewWrapperDelegate? = nil
 
@@ -92,8 +92,6 @@ class _MessageWebViewWrapper: NSObject, AirshipWKNavigationDelegate, NativeBridg
             await startLoad(messageID: messageID)
         }
     }
-
-
 
     @MainActor
     private func startLoad(messageID: String) async {
