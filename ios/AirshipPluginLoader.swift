@@ -3,6 +3,8 @@
 import AirshipFrameworkProxy
 
 @objc(AirshipPluginLoader)
+
+@MainActor
 public class AirshipPluginLoader: NSObject, AirshipPluginLoaderProtocol {
     @objc
     public static var disabled: Bool = false
