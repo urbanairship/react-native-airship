@@ -1,5 +1,13 @@
 # React Native Module 25.0.0 Changelog
 
+## Version 25.4.0 - February 2, 2026
+
+Minor release that updates MessageView event names to avoid collisions and pins the Swift version for iOS builds. No breaking API changes.
+
+### Changes
+- Namespaced MessageView UI event registration names
+- Set the Swift version for the Airship React Native module
+
 ## Version 25.3.1 - November 14, 2025
 
 Patch release that fixes YouTube video playback in In-App Automation and Scenes. Applications that use YouTube videos in Scenes and non-html In-App Automations (IAA) must update to resolve playback errors.
