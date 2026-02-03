@@ -181,10 +181,10 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
     }
 
     companion object {
-        const val EVENT_LOAD_STARTED = "airship_message_view_topLoadStarted"
-        const val EVENT_LOAD_FINISHED = "airship_message_view_topLoadFinished"
-        const val EVENT_LOAD_ERROR = "airship_message_view_topLoadError"
-        const val EVENT_CLOSE = "airship_message_view_topClose"
+        const val EVENT_LOAD_STARTED = "topAirshipMessageViewLoadStarted"
+        const val EVENT_LOAD_FINISHED = "topAirshipMessageViewLoadFinished"
+        const val EVENT_LOAD_ERROR = "topAirshipMessageViewLoadError"
+        const val EVENT_CLOSE = "topAirshipMessageViewClose"
 
         const val EVENT_LOAD_STARTED_HANDLER_NAME = "onLoadStarted"
         const val EVENT_LOAD_FINISHED_HANDLER_NAME = "onLoadFinished"

@@ -27,14 +27,14 @@ interface NativeProps extends ViewProps {
   messageId: string;
   onLoadStarted: BubblingEventHandler<
     MessageLoadStartedEvent,
-    'airship_message_view_topLoadStarted'
+    'topAirshipMessageViewLoadStarted'
   >;
   onLoadFinished: BubblingEventHandler<
     MessageLoadFinishedEvent,
-    'airship_message_view_topLoadFinished'
+    'topAirshipMessageViewLoadFinished'
   >;
-  onLoadError: BubblingEventHandler<MessageLoadErrorEvent, 'airship_message_view_topLoadError'>;
-  onClose: BubblingEventHandler<MessageClosedEvent, 'airship_message_view_topClose'>;
+  onLoadError: BubblingEventHandler<MessageLoadErrorEvent, 'topAirshipMessageViewLoadError'>;
+  onClose: BubblingEventHandler<MessageClosedEvent, 'topAirshipMessageViewClose'>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNAirshipMessageView') as HostComponent<NativeProps>;
