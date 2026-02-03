@@ -1,6 +1,7 @@
 /* Copyright Airship and Contributors */
 
 import AirshipFrameworkProxy
+import AirshipKit
 
 @objc(AirshipPluginLoader)
 @MainActor
@@ -10,7 +11,10 @@ public class AirshipPluginLoader: NSObject, AirshipPluginLoaderProtocol {
 
     public static func onLoad() {
         if (!disabled) {
+            AirshipLogger.trace("AirshipPluginLoader onLoad.")
             AirshipReactNative.shared.onLoad()
+        } else {
+            AirshipLogger.trace("AirshipPluginLoader onLoad skipped (disabled).")
         }
     }
 }

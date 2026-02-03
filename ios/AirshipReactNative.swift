@@ -36,7 +36,7 @@ public final class AirshipReactNative: NSObject, Sendable {
         AirshipProxy.shared
     }
 
-    public static let version: String = "26.1.0"
+    public static let version: String = "26.2.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -45,18 +45,22 @@ public final class AirshipReactNative: NSObject, Sendable {
 
     @objc
     public func setNotifier(_ notifier: ((String, [String: Any]) -> Void)?) {
+        AirshipLogger.trace("AirshipReactNative setNotifier called. Enabled: \(notifier != nil)")
         let wrappedNotifier = AirshipUnsafeSendableWrapper(notifier)
         self.serialQueue.enqueue { @MainActor in
           if wrappedNotifier.value != nil {
+                AirshipLogger.trace("AirshipReactNative notifier registered.")
                 await self.eventNotifier.setNotifier {
                     wrappedNotifier.value?(AirshipReactNative.pendingEventsEventName, [:])
                 }
 
                 if AirshipProxyEventEmitter.shared.hasAnyEvents() {
+                    AirshipLogger.trace("AirshipReactNative has pending events; notifying.")
                     await self.eventNotifier.notifyPendingEvents()
                 }
 
                 AirshipProxy.shared.push.presentationOptionOverrides = { request in
+                    AirshipLogger.trace("AirshipReactNative presentation override request received.")
                     guard self.overridePresentationOptionsEnabled else {
                         request.result(options: nil)
                         return
@@ -89,6 +93,7 @@ public final class AirshipReactNative: NSObject, Sendable {
                     )
                 }
             } else {
+                AirshipLogger.trace("AirshipReactNative notifier cleared.")
                 await self.eventNotifier.setNotifier(nil)
                 AirshipProxy.shared.push.presentationOptionOverrides = nil
                 self.clearPendingPresentationRequests()
@@ -117,6 +122,7 @@ public final class AirshipReactNative: NSObject, Sendable {
 
     @MainActor
     func onLoad() {
+        AirshipLogger.trace("AirshipReactNative onLoad.")
         AirshipProxy.shared.delegate = self
         try? AirshipProxy.shared.attemptTakeOff()
 
@@ -130,6 +136,7 @@ public final class AirshipReactNative: NSObject, Sendable {
 
     @objc
     public func onListenerAdded(eventName: String) {
+        AirshipLogger.trace("AirshipReactNative listener added: \(eventName)")
         guard let type = try? AirshipProxyEventType.fromReactName(eventName) else {
             return
         }

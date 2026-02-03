@@ -1,5 +1,16 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.2.0 - February 2, 2026
+
+Minor release that updates the native SDKs, improves logging, and resolves UI event name conflicts.
+
+### Changes
+- Updated Android SDK to [20.2.0](https://github.com/urbanairship/android-library/releases/tag/20.2.0)
+- Updated iOS SDK to [20.3.0](https://github.com/urbanairship/ios-library/releases/tag/20.3.0)
+- Pinned Swift version to 6.0 for the Airship React Native module
+- Resolved MessageView UI event name conflicts
+- Improved logging
+
 ## Version 26.1.0 - January 20, 2026
 
 Minor release that includes accessibility improvements for Message Center and fixes a potential crash on Android.
