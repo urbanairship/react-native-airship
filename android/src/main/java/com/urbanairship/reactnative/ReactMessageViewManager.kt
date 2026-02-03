@@ -55,27 +55,18 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
     }
 
     override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
-        val events = if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-            listOf(
-                ReactMessageView.EVENT_CLOSE_REGISTRATION_NAME to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_ERROR_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_FINISHED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_STARTED_REGISTRATION_NAME to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
-            )
-        } else {
-            listOf(
-                ReactMessageView.EVENT_CLOSE_HANDLER_NAME to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
-                ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
-            )
-        }
+        val events = listOf(
+            ReactMessageView.EVENT_CLOSE to ReactMessageView.EVENT_CLOSE_HANDLER_NAME,
+            ReactMessageView.EVENT_LOAD_ERROR to ReactMessageView.EVENT_LOAD_ERROR_HANDLER_NAME,
+            ReactMessageView.EVENT_LOAD_FINISHED to ReactMessageView.EVENT_LOAD_FINISHED_HANDLER_NAME,
+            ReactMessageView.EVENT_LOAD_STARTED to ReactMessageView.EVENT_LOAD_STARTED_HANDLER_NAME
+        )
 
         val builder = MapBuilder.builder<String, Any>()
 
-        for ((name, handlerName) in events) {
+        for ((internalName, handlerName) in events) {
             builder.put(
-                name,
+                internalName,
                 MapBuilder.of(
                     "phasedRegistrationNames",
                     MapBuilder.of("bubbled", handlerName)
