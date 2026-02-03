@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
 
   s.platforms    = { :ios => "15.0" }
   s.source       = { :git => "https://github.com/urbanairship/react-native-module.git", :tag => "#{s.version}" }
-
+  s.swift_version = "5.0"
   s.source_files = "ios/**/*.{h,m,mm,cpp,swift}"
   s.private_header_files = "ios/generated/**/*.h"
 
