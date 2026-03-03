@@ -58,6 +58,11 @@ jobs:
       - run: npm run docs
       - run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//}
 
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
   github-release:
     needs: check-version
     runs-on: ubuntu-latest
@@ -88,3 +93,18 @@ jobs:
           body: ${{ steps.get_release_notes.outputs.NOTES }}
           draft: false
           prerelease: false
+
+  deploy-docs:
+    needs: docs
+    runs-on: ubuntu-latest
+    continue-on-error: true  # Remove when migration to GH Pages is complete
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
