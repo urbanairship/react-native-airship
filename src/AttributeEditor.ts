@@ -100,10 +100,9 @@ export class AttributeEditor {
    * Adds a JSON attribute.
    * 
    * @param name The attribute name.
-   * @param value The attribute value.
    * @param instanceId The instance ID.
    * @param json The json value. Must not contain `exp` as top level key.
-   * @param expiration: Optional expiration.  
+   * @param expiration Optional expiration.
    * @return The attribute editor instance.
    */
    setJsonAttribute(
