@@ -46,13 +46,13 @@
     "android",
     "airship"
   ],
-  "repository": "https://github.com/urbanairship/react-native-module",
+  "repository": "https://github.com/urbanairship/react-native-airship",
   "author": "Airship <support@airship.com> (https://docs.airship.com/)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/urbanairship/react-native-module/issues"
+    "url": "https://github.com/urbanairship/react-native-airship/issues"
   },
-  "homepage": "https://github.com/urbanairship/react-native-module#readme",
+  "homepage": "https://github.com/urbanairship/react-native-airship#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
