@@ -1,5 +1,12 @@
 # React Native Module Changelog
 
+## Version 24.9.1 - March 26, 2026
+
+Patch release that fixes an Xcode 26.4 Swift compiler crash affecting iOS builds.
+
+### Changes
+- Updated iOS SDK to [19.11.6](https://github.com/urbanairship/ios-library/releases/tag/19.11.6) to fix a Swift compiler crash ("Failed to produce diagnostic for expression") introduced in Xcode 26.4.
+
 ## Version 24.9.0 - February 2, 2026
 
 Minor release that updates MessageView event names to avoid collisions and pins the Swift version for iOS builds. No breaking API changes.
