@@ -1,6 +1,6 @@
 # React Native Module 26.0.0 Changelog
 
-## Version 26.4.0 - March 31, 2026
+## Version 26.4.0 - April 1, 2026
 
 Minor release that updates the Android SDK to 20.6.1 and the iOS SDK to 20.6.0.
 
