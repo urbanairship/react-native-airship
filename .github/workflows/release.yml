@@ -31,7 +31,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
-      - run: npm publish --access public
+      - run: npm publish --access public --tag v24
 
   docs:
     needs: check-version
