@@ -25,6 +25,8 @@
 		771CC994661F0393421A1C6F /* libPods-AirshipExampleNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCC87EB02FD8477295970574 /* libPods-AirshipExampleNotificationServiceExtension.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4685ED317A73D5118DD4DCF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		AA000004000000000000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA000003000000000000001 /* Localizable.strings */; };
+		AA000008000000000000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA000007000000000000001 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +90,10 @@
 		DCC87EB02FD8477295970574 /* libPods-AirshipExampleNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirshipExampleNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FC6A83ED7671930C7AD05AAC /* libPods-AirshipExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AirshipExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA000001000000000000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA000002000000000000001 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA000005000000000000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA000006000000000000001 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +134,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				AA000003000000000000001 /* Localizable.strings */,
 			);
 			name = AirshipExample;
 			sourceTree = "<group>";
@@ -152,6 +159,7 @@
 				6308C17A2D80AA8500296239 /* ExampleWidgetsBundle.swift */,
 				6308C17B2D80AA8500296239 /* ExampleWidgetsLiveActivity.swift */,
 				6308C17C2D80AA8500296239 /* Info.plist */,
+				AA000007000000000000001 /* Localizable.strings */,
 			);
 			path = ExampleWidgets;
 			sourceTree = "<group>";
@@ -300,6 +308,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				es,
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
@@ -323,6 +332,7 @@
 				63D503112D8A7630003302CB /* Images.xcassets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				A4685ED317A73D5118DD4DCF /* PrivacyInfo.xcprivacy in Resources */,
+				AA000004000000000000001 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +348,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6308C17E2D80AA8500296239 /* Assets.xcassets in Resources */,
+				AA000008000000000000001 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +481,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		AA000003000000000000001 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA000001000000000000001 /* en */,
+				AA000002000000000000001 /* es */,
+			);
+			name = "Localizable.strings";
+			sourceTree = "<group>";
+		};
+		AA000007000000000000001 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA000005000000000000001 /* en */,
+				AA000006000000000000001 /* es */,
+			);
+			name = "Localizable.strings";
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin PBXTargetDependency section */
 		6308BFD82D7FF2A700296239 /* PBXTargetDependency */ = {
