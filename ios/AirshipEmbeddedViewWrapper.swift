@@ -39,10 +39,20 @@ public final class AirshipEmbeddedViewWrapper: UIView {
 
     public override func didMoveToWindow() {
         super.didMoveToWindow()
-        guard !self.isAdded else { return }
-        self.viewController.willMove(toParent: self.parentViewController())
-        self.parentViewController().addChild(self.viewController)
-        self.viewController.didMove(toParent: self.parentViewController())
+
+        if self.window == nil {
+            if self.isAdded {
+                self.viewController.willMove(toParent: nil)
+                self.viewController.removeFromParent()
+                self.isAdded = false
+            }
+            return
+        }
+
+        guard !self.isAdded, let parentVC = self.parentViewController() else { return }
+        self.viewController.willMove(toParent: parentVC)
+        parentVC.addChild(self.viewController)
+        self.viewController.didMove(toParent: parentVC)
         self.viewController.view.isUserInteractionEnabled = true
         isAdded = true
     }
@@ -53,18 +63,16 @@ public final class AirshipEmbeddedViewWrapper: UIView {
     }
 }
 
-extension UIView
-{
-    //Get Parent View Controller from any view
-    func parentViewController() -> UIViewController {
+extension UIView {
+    func parentViewController() -> UIViewController? {
         var responder: UIResponder? = self
-        while !(responder is UIViewController) {
-            responder = responder?.next
-            if nil == responder {
-                break
+        while let r = responder {
+            if let vc = r as? UIViewController {
+                return vc
             }
+            responder = r.next
         }
-        return (responder as? UIViewController)!
+        return nil
     }
 }
 

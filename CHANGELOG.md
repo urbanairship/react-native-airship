@@ -1,5 +1,12 @@
 # React Native Module 25.0.0 Changelog
 
+## Version 25.4.2 - April 10, 2026
+
+Patch release that fixes a `UIViewControllerHierarchyInconsistency` crash in the Airship embedded view wrapper on iOS when an embedded view is pushed and popped on a navigation stack.
+
+### Changes
+- Fixed iOS embedded view wrapper to properly remove its hosted `UIHostingController` as a child view controller when its window is detached, avoiding a `UIViewControllerHierarchyInconsistency` crash on re-attachment.
+
 ## Version 25.4.1 - March 26, 2026
 
 Patch release that fixes an Xcode 26.4 Swift compiler crash affecting iOS builds.
