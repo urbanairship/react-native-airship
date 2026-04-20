@@ -81,25 +81,25 @@ export interface MessageViewProps {
   /**
    * A callback when the view starts loading a message.
    *
-   * @param event: The message load started event.
+   * @param event The message load started event.
    */
   onLoadStarted?: (event: MessageLoadStartedEvent) => void;
   /**
    * A callback when the view finishes loading a message.
    *
-   * @param event: The message load finished event.
+   * @param event The message load finished event.
    */
   onLoadFinished?: (event: MessageLoadFinishedEvent) => void;
   /**
    * A callback when the view fails to load a message with an error.
    *
-   * @param event: The message load error event.
+   * @param event The message load error event.
    */
   onLoadError?: (event: MessageLoadErrorEvent) => void;
   /**
    * A callback when the message is closed.
    *
-   * @param event: The message closed event.
+   * @param event The message closed event.
    */
   onClose?: (event: MessageClosedEvent) => void;
 

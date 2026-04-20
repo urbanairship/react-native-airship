@@ -23,7 +23,6 @@ export class AirshipLiveActivityManager {
 
   /**
    * Lists all Live Activities.
-   * @param request The request options.
    * @returns A promise with the result.
    */
   public listAll(): Promise<LiveActivity[]> {

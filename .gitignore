@@ -85,3 +85,11 @@ android/generated
 
 # React Native Nitro Modules
 nitrogen/
+
+# Generated docs
+docs/
+
+# Secrets
+airshipconfig.properties
+AirshipConfig.plist
+google-services.json
