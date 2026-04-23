@@ -1,5 +1,12 @@
 # React Native Module 25.0.0 Changelog
 
+## Version 25.4.3 - April 23, 2026
+
+Patch release that updates the iOS SDK to 19.11.8 to fix Xcode 26.4 build issues with whole module optimization.
+
+### Changes
+- Updated iOS SDK to [19.11.8](https://github.com/urbanairship/ios-library/releases/tag/19.11.8)
+
 ## Version 25.4.2 - April 10, 2026
 
 Patch release that fixes a `UIViewControllerHierarchyInconsistency` crash in the Airship embedded view wrapper on iOS when an embedded view is pushed and popped on a navigation stack.
