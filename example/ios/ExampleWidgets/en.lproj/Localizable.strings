@@ -1,0 +1,3 @@
+/* Live Activity */
+"live_activity.title" = "Live Update";
+"live_activity.status" = "Status: %@";
