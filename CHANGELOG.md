@@ -1,5 +1,13 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.4.2 - April 24, 2026
+
+Patch release that updates the Android SDK to 20.6.4 and the iOS SDK to 20.6.3.
+
+### Changes
+- Updated Android SDK to [20.6.4](https://github.com/urbanairship/android-library/releases/tag/20.6.4)
+- Updated iOS SDK to [20.6.3](https://github.com/urbanairship/ios-library/releases/tag/20.6.3)
+
 ## Version 26.4.1 - April 10, 2026
 
 Patch release that fixes a `UIViewControllerHierarchyInconsistency` crash in the Airship embedded view wrapper on iOS when an embedded view is pushed and popped on a navigation stack.
