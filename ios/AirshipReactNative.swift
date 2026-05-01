@@ -213,7 +213,7 @@ public extension AirshipReactNative {
     func channelEditTags(json: Any) throws {
         let operations = try JSONDecoder().decode(
             [TagOperation].self,
-            from: try AirshipJSONUtils.data(json)
+            from: try AirshipJSON.wrap(json).toData()
         )
         try AirshipProxy.shared.channel.editTags(
             operations: operations
@@ -249,7 +249,7 @@ public extension AirshipReactNative {
     func channelEditTagGroups(json: Any) throws {
         let operations = try JSONDecoder().decode(
             [TagGroupOperation].self,
-            from: try AirshipJSONUtils.data(json)
+            from: try AirshipJSON.wrap(json).toData()
         )
         try AirshipProxy.shared.channel.editTagGroups(operations: operations)
     }
@@ -258,7 +258,7 @@ public extension AirshipReactNative {
     func channelEditAttributes(json: Any) throws {
         let operations = try JSONDecoder().decode(
             [AttributeOperation].self,
-            from: try AirshipJSONUtils.data(json)
+            from: try AirshipJSON.wrap(json).toData()
         )
         try AirshipProxy.shared.channel.editAttributes(operations: operations)
     }
@@ -452,7 +452,7 @@ public extension AirshipReactNative {
     func contactEditTagGroups(json: Any) throws {
         let operations = try JSONDecoder().decode(
             [TagGroupOperation].self,
-            from: try AirshipJSONUtils.data(json)
+            from: try AirshipJSON.wrap(json).toData()
         )
         try AirshipProxy.shared.contact.editTagGroups(operations: operations)
     }
@@ -461,7 +461,7 @@ public extension AirshipReactNative {
     func contactEditAttributes(json: Any) throws {
         let operations = try JSONDecoder().decode(
             [AttributeOperation].self,
-            from: try AirshipJSONUtils.data(json)
+            from: try AirshipJSON.wrap(json).toData()
         )
         try AirshipProxy.shared.contact.editAttributes(operations: operations)
     }
@@ -470,7 +470,7 @@ public extension AirshipReactNative {
     func contactEditSubscriptionLists(json: Any) throws {
         let operations = try JSONDecoder().decode(
             [ScopedSubscriptionListOperation].self,
-            from: try AirshipJSONUtils.data(json)
+            from: try AirshipJSON.wrap(json).toData()
         )
         try AirshipProxy.shared.contact.editSubscriptionLists(operations: operations)
     }
