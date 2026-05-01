@@ -211,12 +211,8 @@ public extension AirshipReactNative {
     
     @objc
     func channelEditTags(json: Any) throws {
-        let operations = try JSONDecoder().decode(
-            [TagOperation].self,
-            from: try AirshipJSON.wrap(json).toData()
-        )
         try AirshipProxy.shared.channel.editTags(
-            operations: operations
+            operations: AirshipJSON.wrap(json).decode()
         )
     }
 
@@ -247,20 +243,16 @@ public extension AirshipReactNative {
 
     @objc
     func channelEditTagGroups(json: Any) throws {
-        let operations = try JSONDecoder().decode(
-            [TagGroupOperation].self,
-            from: try AirshipJSON.wrap(json).toData()
+        try AirshipProxy.shared.channel.editTagGroups(
+            operations: AirshipJSON.wrap(json).decode()
         )
-        try AirshipProxy.shared.channel.editTagGroups(operations: operations)
     }
 
     @objc
     func channelEditAttributes(json: Any) throws {
-        let operations = try JSONDecoder().decode(
-            [AttributeOperation].self,
-            from: try AirshipJSON.wrap(json).toData()
+        try AirshipProxy.shared.channel.editAttributes(
+            operations: AirshipJSON.wrap(json).decode()
         )
-        try AirshipProxy.shared.channel.editAttributes(operations: operations)
     }
 
     @objc
@@ -450,29 +442,23 @@ public extension AirshipReactNative {
 
     @objc
     func contactEditTagGroups(json: Any) throws {
-        let operations = try JSONDecoder().decode(
-            [TagGroupOperation].self,
-            from: try AirshipJSON.wrap(json).toData()
+        try AirshipProxy.shared.contact.editTagGroups(
+            operations: AirshipJSON.wrap(json).decode()
         )
-        try AirshipProxy.shared.contact.editTagGroups(operations: operations)
     }
 
     @objc
     func contactEditAttributes(json: Any) throws {
-        let operations = try JSONDecoder().decode(
-            [AttributeOperation].self,
-            from: try AirshipJSON.wrap(json).toData()
+        try AirshipProxy.shared.contact.editAttributes(
+            operations: AirshipJSON.wrap(json).decode()
         )
-        try AirshipProxy.shared.contact.editAttributes(operations: operations)
     }
 
     @objc
     func contactEditSubscriptionLists(json: Any) throws {
-        let operations = try JSONDecoder().decode(
-            [ScopedSubscriptionListOperation].self,
-            from: try AirshipJSON.wrap(json).toData()
+        try AirshipProxy.shared.contact.editSubscriptionLists(
+            operations: AirshipJSON.wrap(json).decode()
         )
-        try AirshipProxy.shared.contact.editSubscriptionLists(operations: operations)
     }
 }
 
