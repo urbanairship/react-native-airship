@@ -32,36 +32,6 @@ jobs:
 
       - run: npm ci
       - run: npm publish --access public
-          
-  docs:
-    needs: check-version
-    runs-on: macos-latest
-    env:
-      NODE_ENV: development
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          always-auth: true
-          registry-url: 'https://registry.npmjs.org'
-
-      - uses: google-github-actions/setup-gcloud@v0
-        with:
-          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-            
-      - run: npm ci
-      - run: npm run docs
-      - run: bash ./scripts/upload_docs.sh ${GITHUB_REF/refs\/tags\//}
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs
 
   github-release:
     needs: check-version
@@ -82,7 +52,7 @@ jobs:
           NOTES="${NOTES//$'\n'/'%0A'}"
           NOTES="${NOTES//$'\r'/'%0D'}"
           echo ::set-output name=NOTES::"$NOTES"
-     
+
       - name: Github Release
         uses: actions/create-release@v1.0.1
         env:
@@ -94,17 +64,24 @@ jobs:
           draft: false
           prerelease: false
 
-  deploy-docs:
-    needs: docs
-    runs-on: ubuntu-latest
-    continue-on-error: true  # Remove when migration to GH Pages is complete
+  publish-docs:
+    needs: check-version
     permissions:
+      contents: read
       pages: write
       id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    uses: ./.github/workflows/publish-docs.yml
+    with:
+      version: ${{ github.ref_name }}
+    secrets: inherit
+
+  notify-release:
+    if: always()
+    needs: [check-version, module, github-release, publish-docs]
+    runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - uses: homoluctus/slatify@master
+        with:
+          type: ${{ (contains(needs.*.result, 'failure') && 'failure') || (contains(needs.*.result, 'cancelled') && 'cancelled') || 'success' }}
+          job_name: "React Native Release"
+          url: ${{ secrets.MOBILE_SLACK_WEBHOOK }}
