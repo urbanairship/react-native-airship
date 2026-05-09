@@ -41,8 +41,7 @@ export class TagGroupEditor {
 
   /**
    * Adds tags to a tag group.
-   *
-   * @param tagGroup The tag group.
+   * @param group The tag group.
    * @param tags Tags to add.
    * @return The tag group editor instance.
    */
@@ -55,7 +54,7 @@ export class TagGroupEditor {
   /**
    * Removes tags from the tag group.
    *
-   * @param tagGroup The tag group.
+   * @param group The tag group.
    * @param tags Tags to remove.
    * @return The tag group editor instance.
    */
@@ -68,7 +67,7 @@ export class TagGroupEditor {
   /**
    * Overwrite the current set of tags on the Tag Group.
    *
-   * @param tagGroup The tag group.
+   * @param group The tag group.
    * @param tags Tags to set.
    * @return The tag group editor instance.
    */
