@@ -7,12 +7,15 @@ import {
   StyleSheet,
   Pressable,
   Image,
+  TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import HomeScreen from '../screens/HomeScreen';
 import MessageCenterScreen from '../screens/MessageCenterScreen';
 import PreferenceCenterScreen from '../screens/PreferenceCenterScreen';
 import MessageDetailsScreen from '../screens/MessageDetailsScreen';
+import EmbeddedViewsScreen from '../screens/EmbeddedViewsScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Enum for tab navigation
@@ -20,6 +23,7 @@ enum TabScreens {
   HOME = 'Home',
   MESSAGE_CENTER = 'MessageCenter',
   PREFERENCE_CENTER = 'PreferenceCenter',
+  EMBEDDED_VIEWS = 'EmbeddedViews',
   MESSAGE_DETAILS = 'MessageDetails',
 }
 
@@ -100,6 +104,8 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
         return <MessageCenterScreen navigation={navigation} route={route} />;
       case TabScreens.PREFERENCE_CENTER:
         return <PreferenceCenterScreen navigation={navigation} route={route} />;
+      case TabScreens.EMBEDDED_VIEWS:
+        return <EmbeddedViewsScreen navigation={navigation} />;
       case TabScreens.MESSAGE_DETAILS:
         return (
           <MessageDetailsScreen 
@@ -113,17 +119,36 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
     }
   };
 
-  // Hide tab bar when showing message details
-  const shouldShowTabBar = activeScreen !== TabScreens.MESSAGE_DETAILS;
+  // Hide tab bar when showing message details or embedded views
+  const shouldShowTabBar = activeScreen !== TabScreens.MESSAGE_DETAILS && activeScreen !== TabScreens.EMBEDDED_VIEWS;
+  const shouldShowBackButton = activeScreen === TabScreens.MESSAGE_DETAILS || activeScreen === TabScreens.EMBEDDED_VIEWS;
+
+  const getHeaderTitle = () => {
+    switch (activeScreen) {
+      case TabScreens.EMBEDDED_VIEWS:
+        return 'Embedded Views';
+      case TabScreens.MESSAGE_DETAILS:
+        return 'Message Details';
+      default:
+        return 'Airship Example';
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={[styles.headerContainer, { paddingTop: insets.top }]}>
-      <Image 
-          source={require('../img/airship-mark.png')} 
-          style={styles.headerImage}
-        />
-        <Text style={styles.headerText}>Airship Example</Text>
+        {shouldShowBackButton ? (
+          <TouchableOpacity style={styles.headerBackButton} onPress={goBack}>
+            <Icon name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        ) : (
+          <Image 
+            source={require('../img/airship-mark.png')} 
+            style={styles.headerImage}
+          />
+        )}
+        <Text style={styles.headerText}>{getHeaderTitle()}</Text>
+        {shouldShowBackButton && <View style={styles.headerBackButton} />}
       </View>
       <View style={styles.contentContainer}>
         {renderScreen()}
