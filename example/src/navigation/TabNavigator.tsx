@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import HomeScreen from '../screens/HomeScreen';
 import MessageCenterScreen from '../screens/MessageCenterScreen';
@@ -138,7 +139,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
       <View style={[styles.headerContainer, { paddingTop: insets.top }]}>
         {shouldShowBackButton ? (
           <TouchableOpacity style={styles.headerBackButton} onPress={goBack}>
-            <Text style={styles.headerBackIcon}>{'\u2190'}</Text>
+            <Icon name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         ) : (
           <Image 
@@ -163,7 +164,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
           ]}
           onPress={() => navigate(TabScreens.HOME)}
         >
-          <Text style={styles.tabIcon}>🏠</Text>
+          <Icon name="home" size={26} color={activeScreen === TabScreens.HOME ? '#004bff' : '#666666'} />
           <Text
             style={[
               styles.tabText,
@@ -182,7 +183,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
           ]}
           onPress={() => navigate(TabScreens.MESSAGE_CENTER)}
         >
-          <Text style={styles.tabIcon}>✉️</Text>
+          <Icon name="email" size={26} color={activeScreen === TabScreens.MESSAGE_CENTER ? '#004bff' : '#666666'} />
           <Text
             style={[
               styles.tabText,
@@ -201,7 +202,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
           ]}
           onPress={() => navigate(TabScreens.PREFERENCE_CENTER)}
         >
-          <Text style={styles.tabIcon}>⚙️</Text>
+          <Icon name="settings" size={26} color={activeScreen === TabScreens.PREFERENCE_CENTER ? '#004bff' : '#666666'} />
           <Text
             style={[
               styles.tabText,
@@ -242,10 +243,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerBackIcon: {
-    fontSize: 24,
-    color: '#FFFFFF',
-  },
   headerText: {
     flex: 1,
     color: '#FFFFFF',
@@ -271,10 +268,6 @@ const styles = StyleSheet.create({
   activeTab: {
     borderTopWidth: 3,
     borderTopColor: '#004bff',
-  },
-  tabIcon: {
-    fontSize: 22,
-    marginBottom: 2,
   },
   tabText: {
     fontSize: 12,
