@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Airship, { EventType } from '@ua/react-native-airship';
+import Airship from '@ua/react-native-airship';
 import TabNavigator from './navigation/TabNavigator';
 import styles from './Styles';
 
@@ -31,6 +31,8 @@ export default function App() {
             logPrivacyLevel: "private"
           }
         });
+
+        await Airship.channel.addTag('react-app');
 
         setIsAirshipReady(true);
       } catch (error) {

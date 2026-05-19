@@ -7,6 +7,7 @@ module.exports = {
       automaticPodsInstallation: true,
     },
   },
+  assets: ['./node_modules/react-native-vector-icons/Fonts'],
   dependencies: {
     [pkg.name]: {
       root: path.join(__dirname, '..'),
