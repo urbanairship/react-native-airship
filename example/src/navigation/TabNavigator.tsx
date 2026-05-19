@@ -9,7 +9,6 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import HomeScreen from '../screens/HomeScreen';
 import MessageCenterScreen from '../screens/MessageCenterScreen';
@@ -139,7 +138,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
       <View style={[styles.headerContainer, { paddingTop: insets.top }]}>
         {shouldShowBackButton ? (
           <TouchableOpacity style={styles.headerBackButton} onPress={goBack}>
-            <Icon name="arrow-back" size={24} color="#FFFFFF" />
+            <Text style={styles.headerBackIcon}>{'\u2190'}</Text>
           </TouchableOpacity>
         ) : (
           <Image 
@@ -237,7 +236,18 @@ const styles = StyleSheet.create({
     marginRight: 10,
     resizeMode: 'contain',
   },
+  headerBackButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerBackIcon: {
+    fontSize: 24,
+    color: '#FFFFFF',
+  },
   headerText: {
+    flex: 1,
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
