@@ -494,6 +494,30 @@ RCT_REMAP_METHOD(contactReset,
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
+RCT_REMAP_METHOD(contactRegisterSms,
+                 contactRegisterSms:(NSString *)msisdn
+                 options:(NSDictionary *)options
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    [AirshipReactNative.shared contactRegisterSms:msisdn
+                                          options:options
+                                           error:&error];
+    [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
+RCT_REMAP_METHOD(contactRegisterEmail,
+                 contactRegisterEmail:(NSString *)address
+                 options:(NSDictionary *)options
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    NSError *error;
+    [AirshipReactNative.shared contactRegisterEmail:address
+                                            options:options
+                                             error:&error];
+    [self handleResult:nil error:error resolve:resolve reject:reject];
+}
+
 RCT_REMAP_METHOD(contactNotifyRemoteLogin,
                  contactNotifyRemoteLogin:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {

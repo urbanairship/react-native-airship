@@ -14,9 +14,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import styles from '../Styles';
-import Airship, { 
+import Airship, {
   EventType,
   AirshipEmbeddedView,
+  SmsRegistrationOptions,
+  EmailRegistrationOptions,
 } from '@ua/react-native-airship';
 
 type HomeScreenProps = {
@@ -33,6 +35,10 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const [namedUser, setNamedUser] = useState<string | undefined>(undefined);
   const [namedUserText, setNamedUserText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [smsNumber, setSmsNumber] = useState<string | undefined>(undefined);
+  const [smsText, setSmsText] = useState('');
+  const [emailAddress, setEmailAddress] = useState<string | undefined>(undefined);
+  const [emailText, setEmailText] = useState('');
 
   const refreshTags = useCallback(async () => {
     try {
@@ -66,6 +72,41 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     }
   }, [namedUserText, refreshNamedUser]);
 
+  const handleSmsRegister = useCallback(async () => {
+    if (!smsText) return;
+    setLoading(true);
+    try {
+      const smsOptions: SmsRegistrationOptions = { senderId: '123123123' };
+      await Airship.contact.registerSms(smsText, smsOptions);
+      setSmsNumber(smsText);
+      setSmsText('');
+    } catch (error) {
+      console.error('registerSms error:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [smsText]);
+
+  const handleEmailRegister = useCallback(async () => {
+    if (!emailText) return;
+    setLoading(true);
+    try {
+      const emailOptions: EmailRegistrationOptions = {
+        transactionalOptedIn: Date.now(),
+        commercialOptedIn: Date.now(),
+        properties: {},
+        doubleOptIn: false,
+      };
+      await Airship.contact.registerEmail(emailText, emailOptions);
+      setEmailAddress(emailText);
+      setEmailText('');
+    } catch (error) {
+      console.error('registerEmail error:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [emailText]);
+
   const handleTagAdd = useCallback(async () => {
     if (!tagText) return;
     setLoading(true);
@@ -74,8 +115,8 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       await refreshTags();
       setTagText('');
     } catch (error) {
-      // Ignore errors
-    } finally {
+      //Ignore error
+    }finally {
       setLoading(false);
     }
   }, [tagText, refreshTags]);
@@ -196,6 +237,17 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
           });
         }
       }
+    } catch (error) {
+      // Ignore errors
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const registerSms = async () => {
+    setLoading(true);
+    try {
+      Airship.contact.registerSms("0669793554", )
     } catch (error) {
       // Ignore errors
     } finally {
@@ -366,6 +418,66 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
               </View>
             </View>
 
+            {/* SMS Registration Section */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>SMS Registration</Text>
+              </View>
+              <View style={styles.namedUserContainer}>
+                <Text style={styles.namedUserLabel}>
+                  Current Number: {smsNumber ? smsNumber : 'Not set'}
+                </Text>
+                <View style={styles.inputRow}>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="Enter phone number (MSISDN)"
+                    value={smsText}
+                    onChangeText={setSmsText}
+                    onSubmitEditing={handleSmsRegister}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="phone-pad"
+                  />
+                  <TouchableOpacity
+                    style={styles.inputButton}
+                    onPress={handleSmsRegister}
+                  >
+                    <Text style={styles.inputButtonText}>Set</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            {/* Email Registration Section */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Email Registration</Text>
+              </View>
+              <View style={styles.namedUserContainer}>
+                <Text style={styles.namedUserLabel}>
+                  Current Email: {emailAddress ? emailAddress : 'Not set'}
+                </Text>
+                <View style={styles.inputRow}>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="Enter email address"
+                    value={emailText}
+                    onChangeText={setEmailText}
+                    onSubmitEditing={handleEmailRegister}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                  />
+                  <TouchableOpacity
+                    style={styles.inputButton}
+                    onPress={handleEmailRegister}
+                  >
+                    <Text style={styles.inputButtonText}>Set</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
             {/* Tags Section */}
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
@@ -414,14 +526,14 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
               </View>
               <View style={styles.liveButtonRow}>
                 <Button
-                  title="Start New"
+                  title="Register SMS FR"
                   onPress={startLiveActivity}
                   color="#004bff"
                 />
               </View>
               <View style={styles.liveButtonRow}>
                 <Button
-                  title="End All"
+                  title="Register Email"
                   onPress={endAllLiveActivities}
                   color="#004bff"
                 />

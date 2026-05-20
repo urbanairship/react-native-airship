@@ -56,6 +56,8 @@ export interface Spec extends TurboModule {
   // Contact
   contactIdentify(namedUser: string): Promise<void>;
   contactReset(): Promise<void>;
+  contactRegisterSms(msisdn: string, options: Object): Promise<void>;
+  contactRegisterEmail(address: string, options: Object): Promise<void>;
   contactNotifyRemoteLogin(): Promise<void>;
   contactGetNamedUserId(): Promise<string | null | undefined>;
   contactGetSubscriptionLists(): Promise<Object>;

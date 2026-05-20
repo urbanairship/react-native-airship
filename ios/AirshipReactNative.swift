@@ -426,6 +426,22 @@ public extension AirshipReactNative {
     }
 
     @objc
+    func contactRegisterSms(_ msisdn: String, options: Any) throws {
+        try AirshipProxy.shared.contact.registerSMS(
+            msisdn,
+            options: try AirshipJSON.wrap(options).decode()
+        )
+    }
+
+    @objc
+    func contactRegisterEmail(_ address: String, options: Any) throws {
+        try AirshipProxy.shared.contact.registerEmail(
+            address,
+            options: try AirshipJSON.wrap(options).decode()
+        )
+    }
+
+    @objc
     func contactNotifyRemoteLogin() throws {
         try AirshipProxy.shared.contact.notifyRemoteLogin()
     }
