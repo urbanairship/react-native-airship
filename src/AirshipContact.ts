@@ -4,7 +4,7 @@ import {
   ScopedSubscriptionListOperation,
 } from './ScopedSubscriptionListEditor';
 import { TagGroupEditor, TagGroupOperation } from './TagGroupEditor';
-import { SubscriptionScope } from './types';
+import { EmailRegistrationOptions, SmsRegistrationOptions, SubscriptionScope } from './types';
 
 /**
  * Airship contact.
@@ -27,6 +27,26 @@ export class AirshipContact {
    */
   public reset(): Promise<void> {
     return this.module.contactReset();
+  }
+
+  /**
+   * Registers an SMS channel with the contact.
+   * @param msisdn The phone number in E.164 format.
+   * @param options The SMS registration options.
+   * @returns A promise.
+   */
+  public registerSms(msisdn: string, options: SmsRegistrationOptions): Promise<void> {
+    return this.module.contactRegisterSms(msisdn, options);
+  }
+
+  /**
+   * Registers an email channel with the contact.
+   * @param address The email address.
+   * @param options The email registration options.
+   * @returns A promise.
+   */
+  public registerEmail(address: string, options: EmailRegistrationOptions): Promise<void> {
+    return this.module.contactRegisterEmail(address, options);
   }
 
   /**

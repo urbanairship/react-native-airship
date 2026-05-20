@@ -420,6 +420,20 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun contactRegisterSms(msisdn: String, options: ReadableMap?, promise: Promise) {
+        promise.resolve(scope) {
+          proxy.contact.registerSms(msisdn, Utils.convertMap(options).toJsonValue())
+        }
+    }
+
+    @ReactMethod
+    override fun contactRegisterEmail(address: String, options: ReadableMap?, promise: Promise) {
+        promise.resolve(scope) {
+          proxy.contact.registerEmail(address, Utils.convertMap(options).toJsonValue())
+        }
+    }
+
+    @ReactMethod
     override fun contactNotifyRemoteLogin(promise: Promise) {
         promise.resolve(scope) {
             proxy.contact.notifyRemoteLogin()
