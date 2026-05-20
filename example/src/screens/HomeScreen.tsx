@@ -81,7 +81,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       setSmsNumber(smsText);
       setSmsText('');
     } catch (error) {
-      // Ignore errors
+      console.error('registerSms error:', error);
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         properties: {},
         doubleOptIn: false,
       };
-      console.log('registerEmail options:', JSON.stringify(emailOptions));
       await Airship.contact.registerEmail(emailText, emailOptions);
       setEmailAddress(emailText);
       setEmailText('');
@@ -116,7 +115,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       await refreshTags();
       setTagText('');
     } catch (error) {
-      console.error('registerEmail error:', error);
+      //Ignore error
     }finally {
       setLoading(false);
     }
