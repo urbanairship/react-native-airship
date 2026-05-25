@@ -1136,5 +1136,5 @@ export interface EmailRegistrationOptions {
   /** Optional custom properties. */
   properties?: Record<string, string>;
   /** If true, a double opt-in confirmation email is sent. Defaults to false. */
-  doubleOptIn: boolean;
+  doubleOptIn?: boolean;
 }

@@ -244,17 +244,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     }
   };
 
-  const registerSms = async () => {
-    setLoading(true);
-    try {
-      Airship.contact.registerSms("0669793554", )
-    } catch (error) {
-      // Ignore errors
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     const fetchInitialData = async () => {
       setLoading(true);
@@ -526,14 +515,14 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
               </View>
               <View style={styles.liveButtonRow}>
                 <Button
-                  title="Register SMS FR"
+                  title="Start New"
                   onPress={startLiveActivity}
                   color="#004bff"
                 />
               </View>
               <View style={styles.liveButtonRow}>
                 <Button
-                  title="Register Email"
+                  title="End All"
                   onPress={endAllLiveActivities}
                   color="#004bff"
                 />
