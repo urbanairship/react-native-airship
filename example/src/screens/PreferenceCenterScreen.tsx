@@ -14,6 +14,7 @@ import {
   RefreshControl,
   Animated,
 } from 'react-native';
+import Icon from '@react-native-vector-icons/material-icons';
 import Airship, { SubscriptionScope } from '@ua/react-native-airship';
 
 import styles, { Colors } from '../Styles';
@@ -181,7 +182,7 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
   const AlertItem = ({ item }: ItemProps) => (
     <View style={styles.pcAlertCard}>
       <View style={styles.pcAlertIconContainer}>
-        <Text style={styles.pcAlertIcon}>ℹ️</Text>
+        <Icon name="info" size={20} color="#3b82f6" />
       </View>
       <View style={styles.pcAlertContent}>
         <Text style={styles.pcAlertTitle}>{item.display.name}</Text>
@@ -331,7 +332,7 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
   const EmptyState = () => (
     <View style={styles.pcEmptyContainer}>
       <View style={styles.pcEmptyIconContainer}>
-        <Text style={styles.pcEmptyIcon}>⚙️</Text>
+        <Icon name="settings" size={36} color="#666666" />
       </View>
       <Text style={styles.pcEmptyTitle}>Preference Center Unavailable</Text>
       <Text style={styles.pcEmptyDescription}>

@@ -19,6 +19,7 @@ export type RootStackParamList = {
   MessageDetails: { messageId: string; title?: string };
   PreferenceCenter: undefined;
   CustomEvents: undefined;
+  EmbeddedViews: undefined;
 };
 
 import HomeScreen from '../screens/HomeScreen';
@@ -26,6 +27,7 @@ import MessageCenterScreen from '../screens/MessageCenterScreen';
 import MessageScreen from '../screens/MessageScreen';
 import PreferenceCenterScreen from '../screens/PreferenceCenterScreen';
 import CustomEventsScreen from '../screens/CustomEventsScreen';
+import EmbeddedViewsScreen from '../screens/EmbeddedViewsScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -68,6 +70,11 @@ export default function AppNavigator() {
           name="CustomEvents" 
           component={CustomEventsScreen} 
           options={{ title: 'Custom Events' }}
+        />
+        <Stack.Screen 
+          name="EmbeddedViews" 
+          component={EmbeddedViewsScreen} 
+          options={{ title: 'Embedded Views' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

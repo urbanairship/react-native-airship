@@ -298,6 +298,12 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                   <Text style={styles.sectionSubtitle}>Embedded view with ID: "{embeddedViewId}" is not available yet</Text>
                 </View>
               )}
+              <TouchableOpacity
+                style={styles.linkButton}
+                onPress={() => navigation.navigate('EmbeddedViews')}
+              >
+                <Text style={styles.linkButtonText}>View Size Examples →</Text>
+              </TouchableOpacity>
             </View>
             {/* Push Notifications Section */}
             <View style={styles.section}>

@@ -7,12 +7,15 @@ import {
   StyleSheet,
   Pressable,
   Image,
+  TouchableOpacity,
 } from 'react-native';
+import Icon from '@react-native-vector-icons/material-icons';
 
 import HomeScreen from '../screens/HomeScreen';
 import MessageCenterScreen from '../screens/MessageCenterScreen';
 import PreferenceCenterScreen from '../screens/PreferenceCenterScreen';
 import MessageDetailsScreen from '../screens/MessageDetailsScreen';
+import EmbeddedViewsScreen from '../screens/EmbeddedViewsScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Enum for tab navigation
@@ -20,6 +23,7 @@ enum TabScreens {
   HOME = 'Home',
   MESSAGE_CENTER = 'MessageCenter',
   PREFERENCE_CENTER = 'PreferenceCenter',
+  EMBEDDED_VIEWS = 'EmbeddedViews',
   MESSAGE_DETAILS = 'MessageDetails',
 }
 
@@ -100,6 +104,8 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
         return <MessageCenterScreen navigation={navigation} route={route} />;
       case TabScreens.PREFERENCE_CENTER:
         return <PreferenceCenterScreen navigation={navigation} route={route} />;
+      case TabScreens.EMBEDDED_VIEWS:
+        return <EmbeddedViewsScreen navigation={navigation} />;
       case TabScreens.MESSAGE_DETAILS:
         return (
           <MessageDetailsScreen 
@@ -113,17 +119,36 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
     }
   };
 
-  // Hide tab bar when showing message details
-  const shouldShowTabBar = activeScreen !== TabScreens.MESSAGE_DETAILS;
+  // Hide tab bar when showing message details or embedded views
+  const shouldShowTabBar = activeScreen !== TabScreens.MESSAGE_DETAILS && activeScreen !== TabScreens.EMBEDDED_VIEWS;
+  const shouldShowBackButton = activeScreen === TabScreens.MESSAGE_DETAILS || activeScreen === TabScreens.EMBEDDED_VIEWS;
+
+  const getHeaderTitle = () => {
+    switch (activeScreen) {
+      case TabScreens.EMBEDDED_VIEWS:
+        return 'Embedded Views';
+      case TabScreens.MESSAGE_DETAILS:
+        return 'Message Details';
+      default:
+        return 'Airship Example';
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={[styles.headerContainer, { paddingTop: insets.top }]}>
-      <Image 
-          source={require('../img/airship-mark.png')} 
-          style={styles.headerImage}
-        />
-        <Text style={styles.headerText}>Airship Example</Text>
+        {shouldShowBackButton ? (
+          <TouchableOpacity style={styles.headerBackButton} onPress={goBack}>
+            <Icon name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        ) : (
+          <Image 
+            source={require('../img/airship-mark.png')} 
+            style={styles.headerImage}
+          />
+        )}
+        <Text style={styles.headerText}>{getHeaderTitle()}</Text>
+        {shouldShowBackButton && <View style={styles.headerBackButton} />}
       </View>
       <View style={styles.contentContainer}>
         {renderScreen()}
@@ -139,7 +164,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
           ]}
           onPress={() => navigate(TabScreens.HOME)}
         >
-          <Text style={styles.tabIcon}>🏠</Text>
+          <Icon name="home" size={26} color={activeScreen === TabScreens.HOME ? '#004bff' : '#666666'} />
           <Text
             style={[
               styles.tabText,
@@ -158,7 +183,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
           ]}
           onPress={() => navigate(TabScreens.MESSAGE_CENTER)}
         >
-          <Text style={styles.tabIcon}>✉️</Text>
+          <Icon name="email" size={26} color={activeScreen === TabScreens.MESSAGE_CENTER ? '#004bff' : '#666666'} />
           <Text
             style={[
               styles.tabText,
@@ -177,7 +202,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
           ]}
           onPress={() => navigate(TabScreens.PREFERENCE_CENTER)}
         >
-          <Text style={styles.tabIcon}>⚙️</Text>
+          <Icon name="settings" size={26} color={activeScreen === TabScreens.PREFERENCE_CENTER ? '#004bff' : '#666666'} />
           <Text
             style={[
               styles.tabText,
@@ -212,7 +237,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
     resizeMode: 'contain',
   },
+  headerBackButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   headerText: {
+    flex: 1,
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
@@ -236,10 +268,6 @@ const styles = StyleSheet.create({
   activeTab: {
     borderTopWidth: 3,
     borderTopColor: '#004bff',
-  },
-  tabIcon: {
-    fontSize: 22,
-    marginBottom: 2,
   },
   tabText: {
     fontSize: 12,

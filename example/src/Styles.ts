@@ -210,6 +210,19 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginBottom: Spacing.s,
   },
+  // Input button (used next to text inputs)
+  inputButton: {
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+    paddingHorizontal: Spacing.l,
+    paddingVertical: Spacing.s,
+    justifyContent: 'center',
+  },
+  inputButtonText: {
+    color: Colors.cardBackground,
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
   // Standard button 
   button: {
     backgroundColor: Colors.primary,
@@ -280,6 +293,16 @@ export default StyleSheet.create({
     ...Typography.caption,
     fontStyle: 'italic',
     textAlign: 'center',
+  },
+  linkButton: {
+    marginTop: Spacing.m,
+    paddingVertical: Spacing.s,
+    alignItems: 'center',
+  },
+  linkButtonText: {
+    color: Colors.primary,
+    fontSize: 14,
+    fontWeight: '600',
   },
   
   // Channel ID
@@ -853,5 +876,203 @@ export default StyleSheet.create({
   appErrorMessage: {
     textAlign: 'center',
     color: Colors.text,
-  }
+  },
+  
+  /**
+   * EMBEDDED VIEWS SCREEN
+   */
+  // Screen header with back button
+  evScreenHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.l,
+    paddingVertical: Spacing.m,
+    backgroundColor: Colors.cardBackground,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+  },
+  evBackButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  evScreenTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.primaryDark,
+  },
+  // Content container for embedded views
+  evContentContainer: {
+    padding: Spacing.l,
+    paddingBottom: 40,
+  },
+  // Header section
+  evHeader: {
+    marginBottom: Spacing.l,
+  },
+  evHeaderTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.primaryDark,
+    marginBottom: Spacing.xs,
+  },
+  evHeaderSubtitle: {
+    fontSize: 14,
+    color: Colors.textSecondary,
+  },
+  // Info box
+  evInfoBox: {
+    backgroundColor: '#E3F2FD',
+    borderRadius: 8,
+    padding: Spacing.m,
+    marginBottom: Spacing.l,
+    borderLeftWidth: 4,
+    borderLeftColor: '#2196F3',
+  },
+  evInfoTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1565C0',
+    marginBottom: Spacing.xs,
+  },
+  evInfoText: {
+    fontSize: 13,
+    color: '#1976D2',
+    lineHeight: 18,
+  },
+  // Card styles
+  evCard: {
+    backgroundColor: Colors.cardBackground,
+    borderRadius: 12,
+    padding: Spacing.l,
+    marginBottom: Spacing.l,
+    ...Shadows.small,
+  },
+  evCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.s,
+  },
+  evCardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.primaryDark,
+  },
+  evCardDescription: {
+    fontSize: 13,
+    color: Colors.textSecondary,
+    marginBottom: Spacing.xs,
+  },
+  // Status badges
+  evStatusBadge: {
+    paddingHorizontal: Spacing.s,
+    paddingVertical: Spacing.xs,
+    borderRadius: 12,
+  },
+  evStatusReady: {
+    backgroundColor: '#E8F5E9',
+  },
+  evStatusPending: {
+    backgroundColor: '#FFF3E0',
+  },
+  evStatusText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: Colors.textSecondary,
+  },
+  // Code and label styles
+  evCodeText: {
+    fontFamily: 'monospace',
+    backgroundColor: '#F5F5F5',
+    color: Colors.error,
+  },
+  evIdLabel: {
+    fontSize: 11,
+    color: Colors.textMuted,
+    marginBottom: Spacing.m,
+    fontStyle: 'italic',
+  },
+  // Embedded view wrappers
+  evEmbeddedWrapper: {
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#F0F0F0',
+  },
+  evCenteredWrapper: {
+    alignItems: 'center',
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#F0F0F0',
+  },
+  // Placeholder styles
+  evPlaceholder: {
+    backgroundColor: Colors.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  evPlaceholderText: {
+    color: '#757575',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  // Size variants
+  evFixedHeight: {
+    height: 120,
+    width: '100%',
+  },
+  evPercentWidth: {
+    width: '80%',
+    height: 100,
+  },
+  evFlexContainer: {
+    flexDirection: 'row',
+    height: 200,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#F0F0F0',
+  },
+  evFlexSidebar: {
+    width: 60,
+    backgroundColor: Colors.primaryDark,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  evSidebarText: {
+    color: Colors.cardBackground,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  evFlexGrow: {
+    flex: 1,
+  },
+  evAspectRatio: {
+    width: '100%',
+    aspectRatio: 16 / 9,
+  },
+  evMinMaxHeight: {
+    width: '100%',
+    minHeight: 80,
+    maxHeight: 150,
+    height: 120,
+  },
+  evExplicitSize: {
+    height: 100,
+  },
+  // Footer
+  evFooter: {
+    marginTop: Spacing.s,
+    padding: Spacing.l,
+    backgroundColor: '#FFF8E1',
+    borderRadius: 8,
+  },
+  evFooterText: {
+    fontSize: 12,
+    color: '#F57C00',
+    textAlign: 'center',
+    lineHeight: 18,
+  },
 });
