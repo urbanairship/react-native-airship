@@ -14,7 +14,7 @@ import {
   RefreshControl,
   Animated,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import Airship, { SubscriptionScope } from '@ua/react-native-airship';
 
 import styles, { Colors } from '../Styles';
