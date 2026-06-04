@@ -1114,3 +1114,27 @@ export interface LiveUpdateStartRequest {
    */
   dismissTimestamp?: string;
 }
+
+/**
+ * SMS Registration Options
+ */
+export interface SmsRegistrationOptions {
+  /**
+   * The sender ID
+   */
+  senderId: string;
+}
+
+/**
+ * Email Registration Options
+ */
+export interface EmailRegistrationOptions {
+  /** Milliseconds since epoch when the user opted into transactional emails. */
+  transactionalOptedIn?: number;
+  /** Milliseconds since epoch when the user opted into commercial emails. */
+  commercialOptedIn?: number;
+  /** Optional custom properties. */
+  properties?: Record<string, string>;
+  /** If true, a double opt-in confirmation email is sent. */
+  doubleOptIn: boolean;
+}
