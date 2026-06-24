@@ -43,7 +43,6 @@ jobs:
   deploy-docs:
     needs: release-docs
     runs-on: ubuntu-latest
-    continue-on-error: true  # Remove when migration to GH Pages is complete
     permissions:
       pages: write
       id-token: write
