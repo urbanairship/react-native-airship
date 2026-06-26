@@ -1,5 +1,14 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.7.0 - June 25, 2026
+
+Minor release that updates the iOS SDK to 20.8.1 and the Android SDK to 20.8.1.
+
+### Changes
+- Updated iOS SDK to [20.8.1](https://github.com/urbanairship/ios-library/releases/tag/20.8.1)
+- Updated Android SDK to [20.8.1](https://github.com/urbanairship/android-library/releases/tag/20.8.1)
+- Fixed iOS Message Center inbox failing to load after upgrading across SDK versions that changed the Core Data model
+
 ## Version 26.6.0 - June 12, 2026
 
 Minor release that updates the Android SDK to 20.7.4 and the iOS SDK to 20.7.2.
