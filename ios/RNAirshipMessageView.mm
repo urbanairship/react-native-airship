@@ -68,7 +68,7 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
     if (self) {
         self.wrapper = [[RNAirshipMessageWebViewWrapper alloc] initWithFrame:self.bounds];
         self.wrapper.delegate = self;
-        [self addSubview:self.wrapper.webView];
+        [self addSubview:self.wrapper];
     }
     return self;
 }
@@ -76,7 +76,7 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.wrapper.webView.frame = self.bounds;
+    self.wrapper.frame = self.bounds;
 }
 
 - (void)setMessageID:(NSString *)messageID {

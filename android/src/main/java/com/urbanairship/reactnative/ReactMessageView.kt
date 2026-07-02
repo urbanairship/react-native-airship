@@ -2,132 +2,91 @@
 
 package com.urbanairship.reactnative
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.view.ContextThemeWrapper
 import android.widget.FrameLayout
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
-import com.urbanairship.messagecenter.ui.widget.MessageWebView
-import com.urbanairship.messagecenter.ui.widget.MessageWebViewClient
 import com.urbanairship.messagecenter.Message
-import com.urbanairship.messagecenter.MessageCenter
+import com.urbanairship.messagecenter.ui.view.MessageView
+import com.urbanairship.messagecenter.ui.view.MessageViewState
+import com.urbanairship.messagecenter.ui.view.MessageViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
-@SuppressLint("RestrictedApi")
 class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventListener {
 
-    private var message: Message? = null
-    private var webView: MessageWebView? = null
+    private val viewModel = MessageViewModel()
+    private val messageView: MessageView = MessageView(
+        ContextThemeWrapper(context, R.style.RNAirshipMessageViewTheme)
+    )
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate) + SupervisorJob()
-    private var loadJob: Job? = null
+    private var currentMessageId: String? = null
 
-    private val webViewClient: WebViewClient = object : MessageWebViewClient() {
-
-        private var error: Int? = null
-
-        override fun onPageFinished(view: WebView?,  url: String?) {
-            super.onPageFinished(view, url)
-
-            message?.let { message ->
-                error?.let {
-                    notifyLoadError(message.id, ERROR_MESSAGE_LOAD_FAILED, false)
-                    return
-                }
-
-                MessageCenter.shared().inbox.markMessagesRead(message.id)
-                notifyLoadFinished(message.id)
-            }
-        }
-
-        override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String?) {
-            super.onReceivedError(view, errorCode, description, failingUrl)
-
-            message?.let { message ->
-                failingUrl?.let {
-                    if (it == message.bodyUrl) {
-                        error = errorCode
-                    }
-                }
-            }
-        }
-
-        public override fun onClose(webView: WebView) {
-            message?.let {
-                notifyClose(it.id)
-            }
+    // React Native intercepts requestLayout and doesn't always propagate it to children.
+    override fun requestLayout() {
+        super.requestLayout()
+        post {
+            measure(
+                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+            )
+            layout(left, top, right, bottom)
         }
     }
 
-    private suspend fun fetchMessage(messageId: String): FetchMessageResult {
-        var message = MessageCenter.shared().inbox.getMessage(messageId)
+    init {
+        addView(messageView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
 
-        if (message == null) {
-            if (!MessageCenter.shared().inbox.fetchMessages()) {
-                return FetchMessageResult.Error(ERROR_FAILED_TO_FETCH_MESSAGE, true)
+        messageView.listener = object : MessageView.Listener {
+            override fun onMessageLoaded(message: Message) {
+                viewModel.markMessagesRead(message)
+                notifyLoadFinished(message.id)
             }
 
-            message = MessageCenter.shared().inbox.getMessage(messageId)
+            override fun onMessageLoadError(error: MessageViewState.Error.Type) {
+                val messageId = currentMessageId ?: return
+                // If the ViewModel is in an error state, the error originated from fetching.
+                // Otherwise it came from the WebView itself.
+                val (errorStr, retryable) = if (viewModel.states.value is MessageViewState.Error) {
+                    when (error) {
+                        MessageViewState.Error.Type.LOAD_FAILED -> ERROR_FAILED_TO_FETCH_MESSAGE to true
+                        MessageViewState.Error.Type.UNAVAILABLE -> ERROR_MESSAGE_NOT_AVAILABLE to false
+                    }
+                } else {
+                    ERROR_MESSAGE_LOAD_FAILED to false
+                }
+                notifyLoadError(messageId, errorStr, retryable)
+            }
+
+            override fun onRetryClicked() {
+                currentMessageId?.let { viewModel.loadMessage(it) }
+            }
+
+            override fun onCloseMessage() {
+                currentMessageId?.let { notifyClose(it) }
+            }
         }
 
-        return if (message == null || message.isExpired) {
-            FetchMessageResult.Error(ERROR_MESSAGE_NOT_AVAILABLE, false)
-        } else {
-            FetchMessageResult.Success(message)
+        scope.launch {
+            viewModel.states.collect { state ->
+                messageView.render(state)
+                if (state is MessageViewState.Loading) {
+                    currentMessageId?.let { notifyLoadStarted(it) }
+                }
+            }
         }
     }
 
     fun loadMessage(messageId: String) {
-        loadJob?.cancel()
-        var delayLoading = false
-
-        if (webView == null) {
-            webView = MessageWebView(context)
-            webView?.webViewClient = webViewClient
-            addView(webView)
-            delayLoading = true
-        }
-
-        message = null
-
-        loadJob = scope.launch {
-            if (delayLoading) {
-                delay(50)
-            }
-
-            if (!isActive) {
-                return@launch
-            }
-
-            notifyLoadStarted(messageId)
-
-            val messageResult = fetchMessage(messageId)
-
-            if (!isActive) {
-                return@launch
-            }
-
-            when (messageResult) {
-                is FetchMessageResult.Error -> {
-                    notifyLoadError(messageId, messageResult.error, messageResult.isRetryable)
-                }
-
-                is FetchMessageResult.Success -> {
-                    this@ReactMessageView.message = messageResult.message
-                    webView?.loadMessage(messageResult.message)
-                }
-            }
-        }
+        currentMessageId = messageId
+        viewModel.loadMessage(messageId)
     }
 
     private fun notifyLoadError(messageId: String, error: String, retryable: Boolean) {
@@ -162,13 +121,11 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
     }
 
     override fun onHostResume() {
-        webView?.onResume()
-        webView?.resumeTimers()
+        messageView.resumeWebView()
     }
 
     override fun onHostPause() {
-        webView?.onPause()
-        webView?.pauseTimers()
+        messageView.pauseWebView()
     }
 
     override fun onHostDestroy() {
@@ -176,8 +133,8 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
     }
 
     fun cleanup() {
-        webView?.destroy()
-        webView = null
+        scope.cancel()
+        viewModel.clearMessage()
     }
 
     companion object {
@@ -199,9 +156,4 @@ class ReactMessageView(context: Context) : FrameLayout(context), LifecycleEventL
         private const val ERROR_FAILED_TO_FETCH_MESSAGE = "FAILED_TO_FETCH_MESSAGE"
         private const val ERROR_MESSAGE_LOAD_FAILED = "MESSAGE_LOAD_FAILED"
     }
-}
-
-internal sealed class FetchMessageResult {
-    data class Success(val message: Message) : FetchMessageResult()
-    data class Error(val error: String, val isRetryable: Boolean) : FetchMessageResult()
 }
