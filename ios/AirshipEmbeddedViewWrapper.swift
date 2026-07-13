@@ -12,19 +12,19 @@ public final class AirshipEmbeddedViewWrapper: UIView {
     public let viewController: UIViewController
     public var isAdded: Bool = false
 
-    @objc(setEmbeddedID:)
-    public func setEmbeddedID(_ embeddedID: String?) {
-        self.viewModel.embeddedID = embeddedID
-    }
+    @objc(setConfig:)
+    public func setConfig(_ json: String?) {
+        guard let json, let data = json.data(using: .utf8),
+              let config = try? JSONDecoder().decode(EmbeddedViewConfig.self, from: data) else {
+            return
+        }
 
-    @objc(setSelectionType:)
-    public func setSelectionType(_ selectionType: String?) {
-        self.viewModel.selectionType = selectionType
-    }
-
-    @objc(setSelectionInstanceId:)
-    public func setSelectionInstanceId(_ selectionInstanceId: String?) {
-        self.viewModel.selectionInstanceId = selectionInstanceId
+        self.viewModel.embeddedID = config.embeddedId
+        if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId {
+            self.viewModel.selection = .instance(instanceId)
+        } else {
+            self.viewModel.selection = .priority
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -73,6 +73,16 @@ public final class AirshipEmbeddedViewWrapper: UIView {
     }
 }
 
+private struct EmbeddedViewConfig: Decodable {
+    let embeddedId: String
+    let selection: Selection?
+
+    struct Selection: Decodable {
+        let type: String
+        let instanceId: String?
+    }
+}
+
 extension UIView {
     func parentViewController() -> UIViewController? {
         var responder: UIResponder? = self
@@ -107,15 +117,7 @@ struct ReactAirshipEmbeddedView: View {
     class ViewModel: ObservableObject {
       @Published var embeddedID: String?
         @Published var size: CGSize?
-        @Published var selectionType: String?
-        @Published var selectionInstanceId: String?
-
-        var selection: AirshipEmbeddedSelection {
-            if selectionType == "instance_id", let selectionInstanceId {
-                return .instance(selectionInstanceId)
-            }
-            return .priority
-        }
+        @Published var selection: AirshipEmbeddedSelection = .priority
 
         var height: CGFloat {
             guard let height = self.size?.height, height > 0 else {

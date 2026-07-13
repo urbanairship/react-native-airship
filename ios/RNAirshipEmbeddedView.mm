@@ -44,9 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNAirshipEmbeddedViewProps>(props);
-    self.embeddedID = [NSString stringWithUTF8String:newProps.embeddedId.c_str()];
-    self.selectionType = [NSString stringWithUTF8String:toString(newProps.selectionType).c_str()];
-    self.selectionInstanceId = newProps.selectionInstanceId.empty() ? nil : [NSString stringWithUTF8String:newProps.selectionInstanceId.c_str()];
+    self.config = [NSString stringWithUTF8String:newProps.config.c_str()];
 
     [super updateProps:props oldProps:oldProps];
 }
@@ -75,22 +73,10 @@ using namespace facebook::react;
     [super didMoveToWindow];
 }
 
-- (void)setEmbeddedID:(NSString *)embeddedID {
-    _embeddedID = embeddedID;
+- (void)setConfig:(NSString *)config {
+    _config = config;
     __weak RNAirshipEmbeddedView *weakSelf = self;
-    [weakSelf.wrapper setEmbeddedID:embeddedID];
-}
-
-- (void)setSelectionType:(NSString *)selectionType {
-    _selectionType = selectionType;
-    __weak RNAirshipEmbeddedView *weakSelf = self;
-    [weakSelf.wrapper setSelectionType:selectionType];
-}
-
-- (void)setSelectionInstanceId:(nullable NSString *)selectionInstanceId {
-    _selectionInstanceId = selectionInstanceId;
-    __weak RNAirshipEmbeddedView *weakSelf = self;
-    [weakSelf.wrapper setSelectionInstanceId:selectionInstanceId];
+    [weakSelf.wrapper setConfig:config];
 }
 
 

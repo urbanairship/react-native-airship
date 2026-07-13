@@ -6,40 +6,33 @@ import android.content.Context
 import android.widget.FrameLayout
 import com.urbanairship.embedded.AirshipEmbeddedSelection
 import com.urbanairship.embedded.AirshipEmbeddedView
+import com.urbanairship.json.JsonException
+import com.urbanairship.json.JsonValue
 
 class ReactEmbeddedView(context: Context) : FrameLayout(context) {
 
-    private var embeddedId: String? = null
-    private var selectionType: String? = null
-    private var selectionInstanceId: String? = null
-    private var rendered: Triple<String?, String?, String?>? = null
+    private var renderedConfig: String? = null
 
-    fun load(embeddedId: String) {
-        this.embeddedId = embeddedId
-        rebuild()
-    }
-
-    fun setSelectionType(selectionType: String?) {
-        this.selectionType = selectionType
-        rebuild()
-    }
-
-    fun setSelectionInstanceId(selectionInstanceId: String?) {
-        this.selectionInstanceId = selectionInstanceId
-        rebuild()
-    }
-
-    private fun rebuild() {
-        val embeddedId = this.embeddedId ?: return
-        val current = Triple(embeddedId, selectionType, selectionInstanceId)
-        if (current == rendered) {
+    fun setConfig(config: String?) {
+        if (config == null || config == renderedConfig) {
             return
         }
-        rendered = current
+        renderedConfig = config
 
-        val selectionInstanceId = this.selectionInstanceId
-        val selection = if (selectionType == "instance_id" && selectionInstanceId != null) {
-            AirshipEmbeddedSelection.ByInstanceId(selectionInstanceId)
+        val json = try {
+            JsonValue.parseString(config).optMap()
+        } catch (e: JsonException) {
+            return
+        }
+
+        val embeddedId = json.opt("embeddedId").optString()
+        if (embeddedId.isEmpty()) {
+            return
+        }
+
+        val selectionJson = json.opt("selection").optMap()
+        val selection = if (selectionJson.opt("type").optString() == "instance_id") {
+            AirshipEmbeddedSelection.ByInstanceId(selectionJson.opt("instanceId").optString())
         } else {
             AirshipEmbeddedSelection.Priority
         }

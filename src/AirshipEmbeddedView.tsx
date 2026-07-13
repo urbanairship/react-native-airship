@@ -37,14 +37,11 @@ export interface AirshipEmbeddedViewProp {
  */
 export class AirshipEmbeddedView extends React.Component<AirshipEmbeddedViewProp> {
   render() {
-    const { selection, ...rest } = this.props;
+    const { style, embeddedId, selection } = this.props;
     return (
       <RNAirshipEmbeddedView
-        {...rest}
-        selectionType={selection?.type}
-        selectionInstanceId={
-          selection?.type === 'instance_id' ? selection.instanceId : undefined
-        }
+        style={style}
+        config={JSON.stringify({ embeddedId, selection })}
       />
     );
   }
