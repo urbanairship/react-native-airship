@@ -250,6 +250,30 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
 
       {SIZE_CONFIGS.map(renderSizeCard)}
 
+      <View style={styles.evCard}>
+        <View style={styles.evCardHeader}>
+          <Text style={styles.evCardTitle}>Instance Selection</Text>
+        </View>
+        <Text style={styles.evCardDescription}>
+          <Text style={styles.evCodeText}>
+            selection={'{'}{'{'} type: 'instance_id', instanceId: 'demo-instance' {'}'}{'}'}
+          </Text>
+        </Text>
+        <View style={styles.evEmbeddedWrapper}>
+          {isEmbeddedReady ? (
+            <AirshipEmbeddedView
+              embeddedId={EMBEDDED_ID}
+              style={styles.evFixedHeight}
+              selection={{ type: 'instance_id', instanceId: 'demo-instance' }}
+            />
+          ) : (
+            <View style={[styles.evPlaceholder, styles.evFixedHeight]}>
+              <Text style={styles.evPlaceholderText}>{placeholderText}</Text>
+            </View>
+          )}
+        </View>
+      </View>
+
       <View style={styles.evFooter}>
         <Text style={styles.evFooterText}>
           Create one embedded content in Airship dashboard with ID: "{EMBEDDED_ID}"

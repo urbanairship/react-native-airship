@@ -7,6 +7,14 @@ import RNAirshipEmbeddedView from './RNAirshipEmbeddedViewNativeComponent';
 import { ViewStyle } from 'react-native';
 
 /**
+ * Controls which pending embedded content instance is displayed when more
+ * than one is available for the same embedded ID.
+ */
+export type AirshipEmbeddedViewSelection =
+  | { type: 'priority' }
+  | { type: 'instance_id'; instanceId: string };
+
+/**
  * AirshipEmbeddedView props
  */
 export interface AirshipEmbeddedViewProp {
@@ -16,6 +24,12 @@ export interface AirshipEmbeddedViewProp {
    * The embedded Id.
    */
   embeddedId: string;
+
+  /**
+   * How to select which pending content to display when more than one is
+   * available. Defaults to priority ordering.
+   */
+  selection?: AirshipEmbeddedViewSelection;
 }
 
 /**
@@ -23,9 +37,14 @@ export interface AirshipEmbeddedViewProp {
  */
 export class AirshipEmbeddedView extends React.Component<AirshipEmbeddedViewProp> {
   render() {
+    const { selection, ...rest } = this.props;
     return (
       <RNAirshipEmbeddedView
-        {...this.props}
+        {...rest}
+        selectionType={selection?.type}
+        selectionInstanceId={
+          selection?.type === 'instance_id' ? selection.instanceId : undefined
+        }
       />
     );
   }

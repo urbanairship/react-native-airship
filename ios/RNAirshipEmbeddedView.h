@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 #endif
 
 @property (nonatomic, copy) NSString *embeddedID;
+@property (nonatomic, copy) NSString *selectionType;
+@property (nonatomic, copy, nullable) NSString *selectionInstanceId;
 
 @end
 

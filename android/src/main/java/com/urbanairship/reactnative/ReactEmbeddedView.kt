@@ -4,20 +4,48 @@ package com.urbanairship.reactnative
 
 import android.content.Context
 import android.widget.FrameLayout
+import com.urbanairship.embedded.AirshipEmbeddedSelection
 import com.urbanairship.embedded.AirshipEmbeddedView
 
 class ReactEmbeddedView(context: Context) : FrameLayout(context) {
 
     private var embeddedId: String? = null
+    private var selectionType: String? = null
+    private var selectionInstanceId: String? = null
+    private var rendered: Triple<String?, String?, String?>? = null
 
     fun load(embeddedId: String) {
-        if (this.embeddedId == embeddedId) {
+        this.embeddedId = embeddedId
+        rebuild()
+    }
+
+    fun setSelectionType(selectionType: String?) {
+        this.selectionType = selectionType
+        rebuild()
+    }
+
+    fun setSelectionInstanceId(selectionInstanceId: String?) {
+        this.selectionInstanceId = selectionInstanceId
+        rebuild()
+    }
+
+    private fun rebuild() {
+        val embeddedId = this.embeddedId ?: return
+        val current = Triple(embeddedId, selectionType, selectionInstanceId)
+        if (current == rendered) {
             return
+        }
+        rendered = current
+
+        val selectionInstanceId = this.selectionInstanceId
+        val selection = if (selectionType == "instance_id" && selectionInstanceId != null) {
+            AirshipEmbeddedSelection.ByInstanceId(selectionInstanceId)
+        } else {
+            AirshipEmbeddedSelection.Priority
         }
 
         removeAllViews()
-        this.embeddedId = embeddedId
-        addView(AirshipEmbeddedView(context, embeddedId))
+        addView(AirshipEmbeddedView(context, embeddedId, selection = selection))
     }
 
     override fun requestLayout() {

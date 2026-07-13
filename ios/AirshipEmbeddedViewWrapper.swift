@@ -17,6 +17,16 @@ public final class AirshipEmbeddedViewWrapper: UIView {
         self.viewModel.embeddedID = embeddedID
     }
 
+    @objc(setSelectionType:)
+    public func setSelectionType(_ selectionType: String?) {
+        self.viewModel.selectionType = selectionType
+    }
+
+    @objc(setSelectionInstanceId:)
+    public func setSelectionInstanceId(_ selectionInstanceId: String?) {
+        self.viewModel.selectionInstanceId = selectionInstanceId
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -87,7 +97,8 @@ struct ReactAirshipEmbeddedView: View {
                 embeddedSize: .init(
                     parentWidth: viewModel.width,
                     parentHeight: viewModel.height
-                )
+                ),
+                selection: viewModel.selection
             )
         }
     }
@@ -96,6 +107,15 @@ struct ReactAirshipEmbeddedView: View {
     class ViewModel: ObservableObject {
       @Published var embeddedID: String?
         @Published var size: CGSize?
+        @Published var selectionType: String?
+        @Published var selectionInstanceId: String?
+
+        var selection: AirshipEmbeddedSelection {
+            if selectionType == "instance_id", let selectionInstanceId {
+                return .instance(selectionInstanceId)
+            }
+            return .priority
+        }
 
         var height: CGFloat {
             guard let height = self.size?.height, height > 0 else {

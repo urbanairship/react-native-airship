@@ -17,6 +17,8 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
         override fun setProperty(view: ReactEmbeddedView, propName: String, value: Any?) {
             when (propName) {
                 "embeddedId" -> setEmbeddedId(view, value as? String)
+                "selectionType" -> setSelectionType(view, value as? String)
+                "selectionInstanceId" -> setSelectionInstanceId(view, value as? String)
                 else -> {}
             }
         }
@@ -47,6 +49,16 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
         embeddedId?.let {
             view.load(it)
         }
+    }
+
+    @ReactProp(name = "selectionType")
+    override fun setSelectionType(view: ReactEmbeddedView, selectionType: String?) {
+        view.setSelectionType(selectionType)
+    }
+
+    @ReactProp(name = "selectionInstanceId")
+    override fun setSelectionInstanceId(view: ReactEmbeddedView, selectionInstanceId: String?) {
+        view.setSelectionInstanceId(selectionInstanceId)
     }
 
     companion object {
