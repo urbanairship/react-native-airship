@@ -1,6 +1,7 @@
 /* Copyright Airship and Contributors */
 
 import Foundation
+import Combine
 import AirshipKit
 import AirshipFrameworkProxy
 import React
@@ -17,9 +18,17 @@ public final class AirshipReactNative: NSObject, Sendable {
     @objc
     public static let pendingEmbeddedUpdated = "com.airship.iax.pending_embedded_updated"
 
+    @objc
+    public static let pendingEmbeddedInfoUpdated = "com.airship.iax.pending_embedded_info_updated"
+
     private let serialQueue = AirshipAsyncSerialQueue()
     private let _pendingPresentationRequests = AirshipAtomicValue<[String: PresentationOptionsOverridesRequest]>([:])
     private let _overridePresentationOptionsEnabled = AirshipAtomicValue<Bool>(false)
+
+    @MainActor
+    private var embeddedInfoObserver: AirshipEmbeddedObserver?
+    @MainActor
+    private var embeddedInfoSubscription: AnyCancellable?
 
     @objc
     public var overridePresentationOptionsEnabled: Bool {
@@ -92,11 +101,30 @@ public final class AirshipReactNative: NSObject, Sendable {
                         ]
                     )
                 }
+
+                let observer = AirshipEmbeddedObserver()
+                self.embeddedInfoObserver = observer
+                self.embeddedInfoSubscription = observer.$embeddedInfos.sink { infos in
+                    let pending = infos.map { info -> [String: Any] in
+                        [
+                            "embeddedId": info.embeddedID,
+                            "instanceId": info.instanceID,
+                            "priority": info.priority,
+                            "extras": (info.extras?.unWrap() as? [String: Any]) ?? [:]
+                        ]
+                    }
+                    wrappedNotifier.value?(
+                        AirshipReactNative.pendingEmbeddedInfoUpdated,
+                        ["pending": pending]
+                    )
+                }
             } else {
                 AirshipLogger.trace("AirshipReactNative notifier cleared.")
                 await self.eventNotifier.setNotifier(nil)
                 AirshipProxy.shared.push.presentationOptionOverrides = nil
                 self.clearPendingPresentationRequests()
+                self.embeddedInfoSubscription = nil
+                self.embeddedInfoObserver = nil
             }
         }
     }
