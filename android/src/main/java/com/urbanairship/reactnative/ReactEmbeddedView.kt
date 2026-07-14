@@ -17,7 +17,6 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
         if (config == null || config == renderedConfig) {
             return
         }
-        renderedConfig = config
 
         val json = try {
             JsonValue.parseString(config).optMap()
@@ -31,12 +30,14 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
         }
 
         val selectionJson = json.opt("selection").optMap()
-        val selection = if (selectionJson.opt("type").optString() == "instance_id") {
-            AirshipEmbeddedSelection.ByInstanceId(selectionJson.opt("instanceId").optString())
+        val instanceId = selectionJson.opt("instanceId").optString()
+        val selection = if (selectionJson.opt("type").optString() == "instance_id" && instanceId.isNotEmpty()) {
+            AirshipEmbeddedSelection.ByInstanceId(instanceId)
         } else {
             AirshipEmbeddedSelection.Priority
         }
 
+        renderedConfig = config
         removeAllViews()
         addView(AirshipEmbeddedView(context, embeddedId, selection = selection))
     }
