@@ -18,8 +18,7 @@
     return @[
         AirshipReactNative.pendingEventsEventName,
         AirshipReactNative.overridePresentationOptionsEventName,
-        AirshipReactNative.pendingEmbeddedUpdated,
-        AirshipReactNative.pendingEmbeddedInfoUpdated
+        AirshipReactNative.pendingEmbeddedUpdated
     ];
 }
 

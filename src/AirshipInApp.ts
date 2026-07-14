@@ -31,15 +31,14 @@ export interface PendingEmbedded {
  * Airship InApp Experiences.
  */
 export class AirshipInApp {
-  private pendingEmbeddedReady: Map<string, { embeddedId: string }[]> = new Map()
-  private pendingEmbeddedListeners: Map<string, ((pending: { embeddedId: string }[]) => any)[]> = new Map();
-  private embeddedInfo: Map<string, PendingEmbedded[]> = new Map()
+  private pendingEmbedded: Map<string, PendingEmbedded[]> = new Map()
+  private pendingEmbeddedListeners: Map<string, ((pending: PendingEmbedded[]) => any)[]> = new Map();
 
   constructor(private readonly module: any, private readonly eventEmitter: UAEventEmitter) {
     this.eventEmitter.addListener("com.airship.pending_embedded_updated", (event) => {
-      let pending = event["pending"] as { embeddedId: string }[];
+      let pending = event["pending"] as PendingEmbedded[];
 
-      this.pendingEmbeddedReady = pending.reduce((map, entry) => {
+      this.pendingEmbedded = pending.reduce((map, entry) => {
         var embeddedId = entry.embeddedId
         if (!map.has(embeddedId)) {
           map.set(embeddedId, [entry])
@@ -47,26 +46,13 @@ export class AirshipInApp {
           map.get(embeddedId)?.push(entry)
         }
         return map
-      }, new Map<string, { embeddedId: string }[]>());
+      }, new Map<string, PendingEmbedded[]>());
 
 
       this.pendingEmbeddedListeners.forEach((listeners, embeddedId) => {
-        let pending = this.pendingEmbeddedReady.get(embeddedId);
+        let pending = this.pendingEmbedded.get(embeddedId);
         listeners.forEach((listener) => { listener(pending ?? []) });
       });
-    });
-
-    this.eventEmitter.addListener("com.airship.iax.pending_embedded_info_updated", (event) => {
-      let pending = event["pending"] as PendingEmbedded[];
-
-      this.embeddedInfo = pending.reduce((map, entry) => {
-        if (!map.has(entry.embeddedId)) {
-          map.set(entry.embeddedId, [entry])
-        } else {
-          map.get(entry.embeddedId)?.push(entry)
-        }
-        return map
-      }, new Map<string, PendingEmbedded[]>());
     });
 
     module.inAppResendPendingEmbeddedEvent();
@@ -78,7 +64,7 @@ export class AirshipInApp {
    * @returns The pending embedded content info, including instance ID and extras.
    */
   public getPendingEmbedded(embeddedId: string): PendingEmbedded[] {
-    return this.embeddedInfo.get(embeddedId) ?? [];
+    return this.pendingEmbedded.get(embeddedId) ?? [];
   }
 
   /**
@@ -87,11 +73,11 @@ export class AirshipInApp {
    * @param listener  The listener.
    * @returns A subscription that can be used to cancel the listener.
    */
-  public addEmbeddedReadyListener(embeddedId: string, listener: (isReady: boolean) => void): Subscription {    
+  public addEmbeddedReadyListener(embeddedId: string, listener: (isReady: boolean) => void): Subscription {
     var currentValue = this.isEmbeddedReady(embeddedId);
     listener(currentValue);
 
-    let wrappedListener = (pending: { embeddedId: string }[]) => {
+    let wrappedListener = (pending: PendingEmbedded[]) => {
       var nextValue = pending.length > 0;
       if (currentValue != nextValue) {
         listener(nextValue);
@@ -116,7 +102,7 @@ export class AirshipInApp {
    * @returns `true` if one is ready, otherwise `false`.
    */
   public isEmbeddedReady(embeddedId: string): boolean {
-    return (this.pendingEmbeddedReady.get(embeddedId)?.length ?? 0) > 0;
+    return (this.pendingEmbedded.get(embeddedId)?.length ?? 0) > 0;
   }
 
   /**

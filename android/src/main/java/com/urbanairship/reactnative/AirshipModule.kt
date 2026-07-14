@@ -15,7 +15,6 @@ import com.urbanairship.android.framework.proxy.proxies.EnableUserNotificationsA
 import com.urbanairship.android.framework.proxy.proxies.FeatureFlagProxy
 import com.urbanairship.android.framework.proxy.proxies.LiveUpdateRequest
 import com.urbanairship.android.framework.proxy.proxies.SuspendingPredicate
-import com.urbanairship.embedded.AirshipEmbeddedObserver
 import com.urbanairship.json.JsonMap
 import com.urbanairship.json.JsonSerializable
 import com.urbanairship.json.JsonValue
@@ -34,8 +33,6 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     private val foregroundDisplayRequestMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
 
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main) + SupervisorJob()
-
-    private val embeddedInfoObserver = AirshipEmbeddedObserver(filter = { true })
 
     private val foregroundDisplayPredicate = object : SuspendingPredicate<Map<String, Any>> {
         override suspend fun apply(value: Map<String, Any>): Boolean {
@@ -82,20 +79,6 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
                 .collect {
                     notifyPending()
                 }
-        }
-
-        embeddedInfoObserver.listener = AirshipEmbeddedObserver.Listener { infos ->
-            val pending = infos.map { info ->
-                JsonMap.newBuilder()
-                    .put("embeddedId", info.embeddedId)
-                    .put("instanceId", info.instanceId)
-                    .put("priority", info.priority)
-                    .put("extras", info.extras)
-                    .build()
-            }
-            notifyEmbeddedInfoUpdated(
-                JsonMap.newBuilder().putOpt("pending", pending).build()
-            )
         }
 
         context.addLifecycleEventListener(object : LifecycleEventListener {
@@ -869,13 +852,6 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
         if (context.hasActiveReactInstance()) {
             val appEventEmitter = context.getJSModule(RCTNativeAppEventEmitter::class.java)
             appEventEmitter.emit("com.airship.android.override_foreground_display", body.toReactType())
-        }
-    }
-
-    private fun notifyEmbeddedInfoUpdated(body: JsonMap) {
-        if (context.hasActiveReactInstance()) {
-            val appEventEmitter = context.getJSModule(RCTNativeAppEventEmitter::class.java)
-            appEventEmitter.emit("com.airship.iax.pending_embedded_info_updated", body.toReactType())
         }
     }
 
