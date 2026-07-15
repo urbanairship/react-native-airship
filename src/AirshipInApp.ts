@@ -68,6 +68,27 @@ export class AirshipInApp {
   }
 
   /**
+   * Adds a listener that is called whenever the list of pending embedded
+   * content changes for the given embedded ID.
+   * @param embeddedId The embedded ID to watch.
+   * @param listener The listener, called with the current pending list.
+   * @returns A subscription that can be used to cancel the listener.
+   */
+  public addPendingEmbeddedListener(embeddedId: string, listener: (pending: PendingEmbedded[]) => void): Subscription {
+    listener(this.getPendingEmbedded(embeddedId));
+
+    if (!this.pendingEmbeddedListeners.has(embeddedId)) {
+      this.pendingEmbeddedListeners.set(embeddedId, [listener]);
+    } else {
+      this.pendingEmbeddedListeners.get(embeddedId)?.push(listener);
+    }
+
+    return new Subscription(() => {
+      this.pendingEmbeddedListeners.set(embeddedId, this.pendingEmbeddedListeners.get(embeddedId)?.filter((obj) => obj !== listener) ?? []);
+    });
+  }
+
+  /**
    * Adds a listener to listen for if an embedded ID is ready to display or not.
    * @param embeddedId The embedded ID to check.
    * @param listener  The listener.
