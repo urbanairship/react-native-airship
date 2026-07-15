@@ -4,20 +4,42 @@ package com.urbanairship.reactnative
 
 import android.content.Context
 import android.widget.FrameLayout
+import com.urbanairship.embedded.AirshipEmbeddedSelection
 import com.urbanairship.embedded.AirshipEmbeddedView
+import com.urbanairship.json.JsonException
+import com.urbanairship.json.JsonValue
 
 class ReactEmbeddedView(context: Context) : FrameLayout(context) {
 
-    private var embeddedId: String? = null
+    private var renderedConfig: String? = null
 
-    fun load(embeddedId: String) {
-        if (this.embeddedId == embeddedId) {
+    fun setConfig(config: String?) {
+        if (config == null || config == renderedConfig) {
             return
         }
 
+        val json = try {
+            JsonValue.parseString(config).optMap()
+        } catch (e: JsonException) {
+            return
+        }
+
+        val embeddedId = json.opt("embeddedId").optString()
+        if (embeddedId.isEmpty()) {
+            return
+        }
+
+        val selectionJson = json.opt("selection").optMap()
+        val instanceId = selectionJson.opt("instanceId").optString()
+        val selection = if (selectionJson.opt("type").optString() == "instance_id" && instanceId.isNotEmpty()) {
+            AirshipEmbeddedSelection.ByInstanceId(instanceId)
+        } else {
+            AirshipEmbeddedSelection.Priority
+        }
+
+        renderedConfig = config
         removeAllViews()
-        this.embeddedId = embeddedId
-        addView(AirshipEmbeddedView(context, embeddedId))
+        addView(AirshipEmbeddedView(context, embeddedId, selection = selection))
     }
 
     override fun requestLayout() {

@@ -12,9 +12,19 @@ public final class AirshipEmbeddedViewWrapper: UIView {
     public let viewController: UIViewController
     public var isAdded: Bool = false
 
-    @objc(setEmbeddedID:)
-    public func setEmbeddedID(_ embeddedID: String?) {
-        self.viewModel.embeddedID = embeddedID
+    @objc(setConfig:)
+    public func setConfig(_ json: String?) {
+        guard let json, let data = json.data(using: .utf8),
+              let config = try? JSONDecoder().decode(EmbeddedViewConfig.self, from: data) else {
+            return
+        }
+
+        self.viewModel.embeddedID = config.embeddedId
+        if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId, !instanceId.isEmpty {
+            self.viewModel.selection = .instance(instanceId)
+        } else {
+            self.viewModel.selection = .priority
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -63,6 +73,16 @@ public final class AirshipEmbeddedViewWrapper: UIView {
     }
 }
 
+private struct EmbeddedViewConfig: Decodable {
+    let embeddedId: String
+    let selection: Selection?
+
+    struct Selection: Decodable {
+        let type: String
+        let instanceId: String?
+    }
+}
+
 extension UIView {
     func parentViewController() -> UIViewController? {
         var responder: UIResponder? = self
@@ -87,7 +107,8 @@ struct ReactAirshipEmbeddedView: View {
                 embeddedSize: .init(
                     parentWidth: viewModel.width,
                     parentHeight: viewModel.height
-                )
+                ),
+                selection: viewModel.selection
             )
         }
     }
@@ -96,6 +117,7 @@ struct ReactAirshipEmbeddedView: View {
     class ViewModel: ObservableObject {
       @Published var embeddedID: String?
         @Published var size: CGSize?
+        @Published var selection: AirshipEmbeddedSelection = .priority
 
         var height: CGFloat {
             guard let height = self.size?.height, height > 0 else {

@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RNAirshipEmbeddedView : RCTView
 #endif
 
-@property (nonatomic, copy) NSString *embeddedID;
+@property (nonatomic, copy) NSString *config;
 
 @end
 

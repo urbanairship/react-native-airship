@@ -44,7 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNAirshipEmbeddedViewProps>(props);
-    self.embeddedID = [NSString stringWithUTF8String:newProps.embeddedId.c_str()];
+    self.config = [NSString stringWithUTF8String:newProps.config.c_str()];
 
     [super updateProps:props oldProps:oldProps];
 }
@@ -73,10 +73,10 @@ using namespace facebook::react;
     [super didMoveToWindow];
 }
 
-- (void)setEmbeddedID:(NSString *)embeddedID {
-    _embeddedID = embeddedID;
+- (void)setConfig:(NSString *)config {
+    _config = config;
     __weak RNAirshipEmbeddedView *weakSelf = self;
-    [weakSelf.wrapper setEmbeddedID:embeddedID];
+    [weakSelf.wrapper setConfig:config];
 }
 
 

@@ -16,7 +16,7 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
 
         override fun setProperty(view: ReactEmbeddedView, propName: String, value: Any?) {
             when (propName) {
-                "embeddedId" -> setEmbeddedId(view, value as? String)
+                "config" -> setConfig(view, value as? String)
                 else -> {}
             }
         }
@@ -42,11 +42,9 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
         return ReactEmbeddedView(reactContext)
     }
 
-    @ReactProp(name = "embeddedId")
-    override fun setEmbeddedId(view: ReactEmbeddedView, embeddedId: String?) {
-        embeddedId?.let {
-            view.load(it)
-        }
+    @ReactProp(name = "config")
+    override fun setConfig(view: ReactEmbeddedView, config: String?) {
+        view.setConfig(config)
     }
 
     companion object {

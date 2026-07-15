@@ -2,7 +2,7 @@
 import { codegenNativeComponent, type HostComponent, type ViewProps } from 'react-native';
 
 interface NativeProps extends ViewProps {
-  embeddedId: string;
+  config: string;
 }
 
 export default codegenNativeComponent<NativeProps>('RNAirshipEmbeddedView') as HostComponent<NativeProps>;

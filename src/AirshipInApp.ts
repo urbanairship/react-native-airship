@@ -1,8 +1,30 @@
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
+import { JsonObject } from './types';
 
 
-interface PendingEmbedded {
-  embeddedId: string
+/**
+ * Info for a pending embedded content instance.
+ */
+export interface PendingEmbedded {
+  /**
+   * The embedded Id.
+   */
+  embeddedId: string;
+
+  /**
+   * The instance Id of this specific pending content.
+   */
+  instanceId: string;
+
+  /**
+   * The priority. Lower numbers are higher priority.
+   */
+  priority: number;
+
+  /**
+   * The extras.
+   */
+  extras: JsonObject;
 }
 
 /**
@@ -37,12 +59,21 @@ export class AirshipInApp {
   }
 
   /**
+   * Gets the pending embedded content info for the given embedded ID.
+   * @param embeddedId The embedded ID to check.
+   * @returns The pending embedded content info, including instance ID and extras.
+   */
+  public getPendingEmbedded(embeddedId: string): PendingEmbedded[] {
+    return this.pendingEmbedded.get(embeddedId) ?? [];
+  }
+
+  /**
    * Adds a listener to listen for if an embedded ID is ready to display or not.
    * @param embeddedId The embedded ID to check.
    * @param listener  The listener.
    * @returns A subscription that can be used to cancel the listener.
    */
-  public addEmbeddedReadyListener(embeddedId: string, listener: (isReady: boolean) => void): Subscription {    
+  public addEmbeddedReadyListener(embeddedId: string, listener: (isReady: boolean) => void): Subscription {
     var currentValue = this.isEmbeddedReady(embeddedId);
     listener(currentValue);
 
