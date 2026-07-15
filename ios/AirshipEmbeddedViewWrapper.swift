@@ -20,7 +20,7 @@ public final class AirshipEmbeddedViewWrapper: UIView {
         }
 
         self.viewModel.embeddedID = config.embeddedId
-        if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId {
+        if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId, !instanceId.isEmpty {
             self.viewModel.selection = .instance(instanceId)
         } else {
             self.viewModel.selection = .priority
