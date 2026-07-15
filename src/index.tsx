@@ -7,6 +7,7 @@ export { AirshipAnalytics } from './AirshipAnalytics';
 export { AirshipChannel } from './AirshipChannel';
 export { AirshipContact } from './AirshipContact';
 export { AirshipInApp } from './AirshipInApp';
+export type { PendingEmbedded } from './AirshipInApp';
 export { AirshipLocale } from './AirshipLocale';
 export { AirshipMessageCenter } from './AirshipMessageCenter';
 export { AirshipPreferenceCenter } from './AirshipPreferenceCenter';
