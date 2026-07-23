@@ -69,6 +69,7 @@ public final class MessageWebViewWrapper: UIView {
             case .loading:
                 break
             case .loaded:
+                Task { await self.state.viewModel?.markRead() }
                 self.delegate?.onLoadFinished(messageID: messageID)
             case .error(let error):
                 switch error {
