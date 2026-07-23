@@ -1,5 +1,16 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.9.0 - July 23, 2026
+
+Minor release that updates the Android SDK to 20.10.0 and the iOS SDK to 20.11.0, adds a pending embedded listener, and fixes a message center mark-as-read regression on iOS.
+
+### Changes
+- Updated Android SDK to [20.10.0](https://github.com/urbanairship/android-library/releases/tag/20.10.0)
+- Updated iOS SDK to [20.11.0](https://github.com/urbanairship/ios-library/releases/tag/20.11.0)
+- Added `addPendingEmbeddedListener` to `AirshipInApp`
+- Fixed message center mark-as-read regression on iOS
+
+
 ## Version 26.8.0 - July 13, 2026
 
 Minor release that updates the Android SDK to 20.9.0 and the iOS SDK to 20.10.0; adds improved prioritization control for embedded displays, and fixes a bug causing messages to fail to render in the embedded message view.
