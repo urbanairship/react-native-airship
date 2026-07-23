@@ -9,7 +9,6 @@ Minor release that updates the Android SDK to 20.10.0 and the iOS SDK to 20.11.0
 - Updated iOS SDK to [20.11.0](https://github.com/urbanairship/ios-library/releases/tag/20.11.0)
 - Added `addPendingEmbeddedListener` to `AirshipInApp`
 - Fixed message center mark-as-read regression on iOS
-- Updated to React Native 0.86
 
 
 ## Version 26.8.0 - July 13, 2026
