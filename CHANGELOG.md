@@ -6,6 +6,7 @@ Minor release that updates the Android SDK to 20.11.0.
 
 ### Changes
 - Updated Android SDK to [20.11.0](https://github.com/urbanairship/android-library/releases/tag/20.11.0)
+- Fixed an Android build failure in the embedded view manager on newer Kotlin versions ([#753](https://github.com/urbanairship/react-native-airship/issues/753))
 
 
 ## Version 26.9.0 - July 23, 2026

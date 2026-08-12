@@ -14,6 +14,7 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
 
     private val manualDelegate = object : ViewManagerDelegate<ReactEmbeddedView> {
 
+        @Suppress("ACCIDENTAL_OVERRIDE")
         override fun setProperty(view: ReactEmbeddedView, propName: String, value: Any?) {
             when (propName) {
                 "config" -> setConfig(view, value as? String)
