@@ -1,5 +1,14 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.10.0 - August 12, 2026
+
+Minor release that updates the Android SDK to 20.11.0.
+
+### Changes
+- Updated Android SDK to [20.11.0](https://github.com/urbanairship/android-library/releases/tag/20.11.0)
+- Fixed an Android build failure in the embedded view manager on newer Kotlin versions ([#753](https://github.com/urbanairship/react-native-airship/issues/753))
+
+
 ## Version 26.9.0 - July 23, 2026
 
 Minor release that updates the Android SDK to 20.10.0 and the iOS SDK to 20.11.0, adds a pending embedded listener, and fixes a message center mark-as-read regression on iOS.
