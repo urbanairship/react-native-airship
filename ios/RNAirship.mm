@@ -92,6 +92,14 @@ RCT_REMAP_METHOD(isFlying,
     resolve(@([AirshipReactNative.shared isFlying]));
 }
 
+RCT_REMAP_METHOD(getLaunchDeepLink,
+                 getLaunchDeepLink:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+    [AirshipReactNative.shared getLaunchDeepLinkWithCompletionHandler:^(NSString *result) {
+        resolve(result);
+    }];
+}
+
 RCT_REMAP_METHOD(channelAddTag,
                  channelAddTag:(NSString *)tag
                  resolve:(RCTPromiseResolveBlock)resolve

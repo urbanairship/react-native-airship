@@ -81,6 +81,34 @@ export class AirshipRoot {
   }
 
   /**
+   * Returns the deep link that launched the app from a notification tap, or
+   * null if the app was not launched by a notification with a deep link.
+   *
+   * One-shot: the value is consumed on read. Intended to be wired as React
+   * Navigation's `linking.getInitialURL`, with an `EventType.DeepLink`
+   * listener as `linking.subscribe`:
+   *
+   * ```ts
+   * const linking = {
+   *   prefixes: ['myapp://'],
+   *   getInitialURL: () => Airship.getLaunchDeepLink(),
+   *   subscribe: (listener) => {
+   *     const subscription = Airship.addListener(
+   *       EventType.DeepLink,
+   *       (event) => listener(event.deepLink)
+   *     );
+   *     return () => subscription.remove();
+   *   },
+   * };
+   * ```
+   *
+   * @returns A promise with the launching deep link, or null.
+   */
+  public getLaunchDeepLink(): Promise<string | null | undefined> {
+    return this.module.getLaunchDeepLink();
+  }
+
+  /**
    * Adds a listener.
    * @param eventType The listener type.
    * @param listener The listener.

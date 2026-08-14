@@ -193,6 +193,12 @@ public extension AirshipReactNative {
         return Airship.isFlying
     }
 
+    @objc
+    @MainActor
+    func getLaunchDeepLink() async -> String? {
+        return await AirshipProxy.shared.getLaunchDeepLink()
+    }
+
 }
 
 // Channel
