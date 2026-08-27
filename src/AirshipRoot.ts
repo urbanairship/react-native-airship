@@ -84,6 +84,11 @@ export class AirshipRoot {
    * Returns the deep link that launched the app from a notification tap, or
    * null if the app was not launched by a notification with a deep link.
    *
+   * Only reflects a cold app launch or background-to-foreground launch
+   * triggered by the tap. A notification tapped while the app is already in
+   * the foreground will not be returned here; use the `EventType.DeepLink`
+   * listener below for that case.
+   *
    * One-shot: the value is consumed on read. Intended to be wired as React
    * Navigation's `linking.getInitialURL`, with an `EventType.DeepLink`
    * listener as `linking.subscribe`:
