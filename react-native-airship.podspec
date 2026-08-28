@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
 
   install_modules_dependencies(s)
   
-  s.dependency "AirshipFrameworkProxy", "15.14.1"
+  s.dependency "AirshipFrameworkProxy", "15.16.0"
 end
