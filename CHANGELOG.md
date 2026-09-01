@@ -1,5 +1,13 @@
 # React Native Module 26.0.0 Changelog
 
+## Version 26.12.0 - September 1, 2026
+
+Minor release that adds `Airship.getLaunchDeepLink` for retrieving the deep link that launched the app from a cold start.
+
+### Changes
+- Added `Airship.getLaunchDeepLink()` to retrieve the deep link that triggered a cold or background launch
+
+
 ## Version 26.11.0 - August 27, 2026
 
 Minor release that updates the Android SDK to 20.12.0 and the iOS SDK to 20.12.0.
