@@ -117,6 +117,13 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun getLaunchDeepLink(promise: Promise) {
+        promise.resolve(scope) {
+            this.proxy.getLaunchDeepLink()
+        }
+    }
+
+    @ReactMethod
     override fun airshipListenerAdded(eventName: String?) {
         if (eventName == null) {
             return

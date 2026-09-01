@@ -4,6 +4,7 @@ export interface Spec extends TurboModule {
   // Airship
   takeOff(config: Object): Promise<boolean>;
   isFlying(): Promise<boolean>;
+  getLaunchDeepLink(): Promise<string | null | undefined>;
   airshipListenerAdded(eventName: string): void;
   takePendingEvents(
     eventName: string,
