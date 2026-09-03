@@ -1,12 +1,20 @@
 /* Copyright Airship and Contributors */
 
 import Foundation
+#if canImport(AirshipKit)
 import AirshipKit
+#elseif canImport(AirshipCore)
+import AirshipCore
+import AirshipAutomation
+#endif
 import AirshipFrameworkProxy
 import SwiftUI
+#if canImport(ReactNativeAirshipBridge)
+import ReactNativeAirshipBridge
+#endif
 
 @objc(RNAirshipEmbeddedViewWrapper)
-public final class AirshipEmbeddedViewWrapper: UIView {
+public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBridge {
     private let viewModel = ReactAirshipEmbeddedView.ViewModel()
     @objc
     public let viewController: UIViewController

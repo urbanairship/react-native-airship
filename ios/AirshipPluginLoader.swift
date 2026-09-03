@@ -1,7 +1,12 @@
 /* Copyright Airship and Contributors */
 
+import Foundation
 import AirshipFrameworkProxy
+#if canImport(AirshipKit)
 import AirshipKit
+#elseif canImport(AirshipCore)
+import AirshipCore
+#endif
 
 @objc(AirshipPluginLoader)
 @MainActor

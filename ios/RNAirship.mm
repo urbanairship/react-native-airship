@@ -2,11 +2,7 @@
 
 #import "RNAirship.h"
 
-#if __has_include(<react_native_airship/react_native_airship-Swift.h>)
-#import <react_native_airship/react_native_airship-Swift.h>
-#else
-#import "react_native_airship-Swift.h"
-#endif
+#import "RNAirshipBridge.h"
 
 @implementation RNAirship
 + (NSString *)moduleName
@@ -16,28 +12,28 @@
 
 - (NSArray<NSString *> *)supportedEvents {
     return @[
-        AirshipReactNative.pendingEventsEventName,
-        AirshipReactNative.overridePresentationOptionsEventName,
-        AirshipReactNative.pendingEmbeddedUpdated
+        [RNAirshipBridgeClass() pendingEventsEventName],
+        [RNAirshipBridgeClass() overridePresentationOptionsEventName],
+        [RNAirshipBridgeClass() pendingEmbeddedUpdated]
     ];
 }
 
 -(void)startObserving {
     __weak RNAirship *weakSelf = self;
     
-    [AirshipReactNative.shared setNotifier:^(NSString *name, NSDictionary<NSString *,id> *body) {
+    [RNAirshipBridgeShared() setNotifier:^(NSString *name, NSDictionary<NSString *,id> *body) {
         [weakSelf sendEventWithName:name body:body];
     }];
 }
 
 -(void)stopObserving {
-    [AirshipReactNative.shared setNotifier:nil];
+    [RNAirshipBridgeShared() setNotifier:nil];
 }
 
 - (void)setBridge:(RCTBridge *)bridge {
     self.reactBridge = bridge;
 
-    [AirshipReactNative.shared attemptTakeOff];
+    [RNAirshipBridgeShared() attemptTakeOff];
 }
 
 - (RCTBridge *)bridge {
@@ -61,7 +57,7 @@
 }
 
 RCT_EXPORT_METHOD(airshipListenerAdded:(NSString *)eventName) {
-    [AirshipReactNative.shared onListenerAddedWithEventName:eventName];
+    [RNAirshipBridgeShared() onListenerAddedWithEventName:eventName];
 }
 
 RCT_REMAP_METHOD(takePendingEvents,
@@ -70,7 +66,7 @@ RCT_REMAP_METHOD(takePendingEvents,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     // isHeadlessJS is always false for iOS. It's an Android only flag.
-    [AirshipReactNative.shared takePendingEventsWithEventName:eventName completionHandler:^(NSArray *result) {
+    [RNAirshipBridgeShared() takePendingEventsWithEventName:eventName completionHandler:^(NSArray *result) {
         resolve(result);
     }];
 }
@@ -80,7 +76,7 @@ RCT_REMAP_METHOD(takeOff,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared takeOffWithJson:config
+    id result = [RNAirshipBridgeShared() takeOffWithJson:config
                                                      error:&error];
     
     [self handleResult:result error:error resolve:resolve reject:reject];
@@ -89,13 +85,13 @@ RCT_REMAP_METHOD(takeOff,
 RCT_REMAP_METHOD(isFlying,
                  isFlying:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    resolve(@([AirshipReactNative.shared isFlying]));
+    resolve(@([RNAirshipBridgeShared() isFlying]));
 }
 
 RCT_REMAP_METHOD(getLaunchDeepLink,
                  getLaunchDeepLink:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared getLaunchDeepLinkWithCompletionHandler:^(NSString *result) {
+    [RNAirshipBridgeShared() getLaunchDeepLinkWithCompletionHandler:^(NSString *result) {
         resolve(result);
     }];
 }
@@ -105,7 +101,7 @@ RCT_REMAP_METHOD(channelAddTag,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared channelAddTag:tag error:&error];
+    [RNAirshipBridgeShared() channelAddTag:tag error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -115,7 +111,7 @@ RCT_REMAP_METHOD(channelRemoveTag,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared channelRemoveTag:tag error:&error];
+    [RNAirshipBridgeShared() channelRemoveTag:tag error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -125,7 +121,7 @@ RCT_REMAP_METHOD(channelEditTags,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared channelEditTagsWithJson:operations
+    [RNAirshipBridgeShared() channelEditTagsWithJson:operations
                                                       error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -135,7 +131,7 @@ RCT_REMAP_METHOD(channelEnableChannelCreation,
                  channelEnableChannelCreation:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared channelEnableChannelCreationAndReturnError:&error];
+    [RNAirshipBridgeShared() channelEnableChannelCreationAndReturnError:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -143,24 +139,24 @@ RCT_REMAP_METHOD(channelEnableChannelCreation,
 RCT_REMAP_METHOD(pushGetActiveNotifications,
                  pushGetActiveNotifications:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared pushGetActiveNotificationsWithCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, NSError *error) {
+    [RNAirshipBridgeShared() pushGetActiveNotificationsWithCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, NSError *error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
 }
 
 RCT_EXPORT_METHOD(pushClearNotifications) {
-    [AirshipReactNative.shared pushClearNotifications];
+    [RNAirshipBridgeShared() pushClearNotifications];
 }
 
 RCT_EXPORT_METHOD(pushClearNotification:(NSString *)identifier) {
-    [AirshipReactNative.shared pushClearNotification:identifier];
+    [RNAirshipBridgeShared() pushClearNotification:identifier];
 }
 
 RCT_REMAP_METHOD(pushGetNotificationStatus,
                  pushGetNotificationStatus:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared pushGetNotificationStatusWithCompletionHandler:^(id result, NSError *error) {
+    [RNAirshipBridgeShared() pushGetNotificationStatusWithCompletionHandler:^(id result, NSError *error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
 }
@@ -169,7 +165,7 @@ RCT_REMAP_METHOD(pushGetRegistrationToken,
                  pushGetRegistrationToken:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    NSString *result = [AirshipReactNative.shared pushGetRegistrationTokenOrEmptyAndReturnError:&error];
+    NSString *result = [RNAirshipBridgeShared() pushGetRegistrationTokenOrEmptyAndReturnError:&error];
 
     [self handleResult:result.length ? result : nil
                  error:error
@@ -181,7 +177,7 @@ RCT_REMAP_METHOD(pushIsUserNotificationsEnabled,
                  pushIsUserNotificationsEnabled:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared  pushIsUserNotificationsEnabledAndReturnError:&error];
+    id result = [RNAirshipBridgeShared()  pushIsUserNotificationsEnabledAndReturnError:&error];
 
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
@@ -191,7 +187,7 @@ RCT_REMAP_METHOD(pushSetUserNotificationsEnabled,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared pushSetUserNotificationsEnabled:enabled
+    [RNAirshipBridgeShared() pushSetUserNotificationsEnabled:enabled
                                                          error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -201,7 +197,7 @@ RCT_REMAP_METHOD(pushEnableUserNotifications,
                  pushEnableUserNotifications:(NSDictionary *)options
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared pushEnableUserNotificationsWithOptions:options completionHandler:^(BOOL result, NSError *error) {
+    [RNAirshipBridgeShared() pushEnableUserNotificationsWithOptions:options completionHandler:^(BOOL result, NSError *error) {
         [self handleResult:@(result)
                      error:error
                    resolve:resolve
@@ -224,7 +220,7 @@ RCT_REMAP_METHOD(pushIosGetBadgeNumber,
                  pushIosGetBadgeNumber:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared  pushGetBadgeNumberAndReturnError:&error];
+    id result = [RNAirshipBridgeShared()  pushGetBadgeNumberAndReturnError:&error];
 
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
@@ -233,7 +229,7 @@ RCT_REMAP_METHOD(pushIosIsAutobadgeEnabled,
                  pushIosIsAutobadgeEnabled:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared  pushIsAutobadgeEnabledAndReturnError:&error];
+    id result = [RNAirshipBridgeShared()  pushIsAutobadgeEnabledAndReturnError:&error];
 
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
@@ -243,7 +239,7 @@ RCT_REMAP_METHOD(pushIosSetAutobadgeEnabled,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared pushSetAutobadgeEnabled:enabled
+    [RNAirshipBridgeShared() pushSetAutobadgeEnabled:enabled
                                                  error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -253,7 +249,7 @@ RCT_REMAP_METHOD(pushIosSetBadgeNumber,
                  pushIosSetBadgeNumber:(double)badgeNumber
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared pushSetBadgeNumber:badgeNumber completionHandler:^(NSError *error) {
+    [RNAirshipBridgeShared() pushSetBadgeNumber:badgeNumber completionHandler:^(NSError *error) {
         [self handleResult:nil
                      error:error
                    resolve:resolve
@@ -266,7 +262,7 @@ RCT_REMAP_METHOD(pushIosSetForegroundPresentationOptions,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared pushSetForegroundPresentationOptionsWithNames:options
+    [RNAirshipBridgeShared() pushSetForegroundPresentationOptionsWithNames:options
                                                                        error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -277,7 +273,7 @@ RCT_REMAP_METHOD(pushIosSetNotificationOptions,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared pushSetNotificationOptionsWithNames:options
+    [RNAirshipBridgeShared() pushSetNotificationOptionsWithNames:options
                                                              error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -288,7 +284,7 @@ RCT_REMAP_METHOD(channelEditAttributes,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared channelEditAttributesWithJson:operations
+    [RNAirshipBridgeShared() channelEditAttributesWithJson:operations
                                                        error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -299,7 +295,7 @@ RCT_REMAP_METHOD(channelEditSubscriptionLists,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared channelEditSubscriptionListsWithJson:operations
+    [RNAirshipBridgeShared() channelEditSubscriptionListsWithJson:operations
                                                               error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -310,7 +306,7 @@ RCT_REMAP_METHOD(channelEditTagGroups,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared channelEditTagGroupsWithJson:operations
+    [RNAirshipBridgeShared() channelEditTagGroupsWithJson:operations
                                                       error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -321,7 +317,7 @@ RCT_REMAP_METHOD(channelGetChannelId,
                  channelGetChannelId:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    NSString *result = [AirshipReactNative.shared  channelGetChannelIdOrEmptyAndReturnError:&error];
+    NSString *result = [RNAirshipBridgeShared()  channelGetChannelIdOrEmptyAndReturnError:&error];
 
     [self handleResult:result.length ? result : nil
                  error:error
@@ -333,7 +329,7 @@ RCT_REMAP_METHOD(channelWaitForChannelId,
                  channelWaitForChannelId:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared channelWaitForChannelIdWithCompletionHandler:^(NSString *result, NSError *error) {
+    [RNAirshipBridgeShared() channelWaitForChannelIdWithCompletionHandler:^(NSString *result, NSError *error) {
         [self handleResult:result
                      error:error
                    resolve:resolve
@@ -344,7 +340,7 @@ RCT_REMAP_METHOD(channelWaitForChannelId,
 
 RCT_REMAP_METHOD(channelGetSubscriptionLists,
                  channelGetSubscriptionLists:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared channelGetSubscriptionListsWithCompletionHandler:^(NSArray<NSString *> *result, NSError *error) {
+    [RNAirshipBridgeShared() channelGetSubscriptionListsWithCompletionHandler:^(NSArray<NSString *> *result, NSError *error) {
 
         [self handleResult:result
                      error:error
@@ -357,7 +353,7 @@ RCT_REMAP_METHOD(channelGetTags,
                  channelGetTags:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared channelGetTagsAndReturnError:&error];
+    id result = [RNAirshipBridgeShared() channelGetTagsAndReturnError:&error];
 
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
@@ -366,7 +362,7 @@ RCT_REMAP_METHOD(actionRun,
                  actionRun:(NSDictionary *)action
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared actionsRunWithAction:action
+    [RNAirshipBridgeShared() actionsRunWithAction:action
                                       completionHandler:^(id result , NSError *error) {
 
 
@@ -383,7 +379,7 @@ RCT_REMAP_METHOD(analyticsAssociateIdentifier,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared analyticsAssociateIdentifier:identifier
+    [RNAirshipBridgeShared() analyticsAssociateIdentifier:identifier
                                                         key:key
                                                       error:&error];
 
@@ -395,7 +391,7 @@ RCT_REMAP_METHOD(analyticsTrackScreen,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared analyticsTrackScreen:screen
+    [RNAirshipBridgeShared() analyticsTrackScreen:screen
                                               error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -406,7 +402,7 @@ RCT_REMAP_METHOD(addCustomEvent,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared addCustomEvent:event
+    [RNAirshipBridgeShared() addCustomEvent:event
                                         error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -416,7 +412,7 @@ RCT_REMAP_METHOD(analyticsGetSessionId,
                  analyticsGetSessionId:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    NSString *result = [AirshipReactNative.shared analyticsGetSessionIdAndReturnError:&error];
+    NSString *result = [RNAirshipBridgeShared() analyticsGetSessionIdAndReturnError:&error];
 
     [self handleResult:result
                  error:error
@@ -430,7 +426,7 @@ RCT_REMAP_METHOD(contactEditAttributes,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared contactEditAttributesWithJson:operations
+    [RNAirshipBridgeShared() contactEditAttributesWithJson:operations
                                                        error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -441,7 +437,7 @@ RCT_REMAP_METHOD(contactEditSubscriptionLists,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared contactEditSubscriptionListsWithJson:operations
+    [RNAirshipBridgeShared() contactEditSubscriptionListsWithJson:operations
                                                               error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -452,7 +448,7 @@ RCT_REMAP_METHOD(contactEditTagGroups,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared contactEditTagGroupsWithJson:operations
+    [RNAirshipBridgeShared() contactEditTagGroupsWithJson:operations
                                                       error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -461,7 +457,7 @@ RCT_REMAP_METHOD(contactEditTagGroups,
 RCT_REMAP_METHOD(contactGetSubscriptionLists,
                  contactGetSubscriptionLists:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared contactGetSubscriptionListsWithCompletionHandler:^(NSDictionary *result, NSError *error) {
+    [RNAirshipBridgeShared() contactGetSubscriptionListsWithCompletionHandler:^(NSDictionary *result, NSError *error) {
 
         [self handleResult:result
                      error:error
@@ -474,7 +470,7 @@ RCT_REMAP_METHOD(contactGetNamedUserId,
                  contactGetNamedUserId:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared contactGetNamedUserIdOrEmtpyWithCompletionHandler:^(NSString *result, NSError *error) {
+    [RNAirshipBridgeShared() contactGetNamedUserIdOrEmtpyWithCompletionHandler:^(NSString *result, NSError *error) {
         [self handleResult:result.length ? result : nil
                      error:error
                    resolve:resolve
@@ -487,7 +483,7 @@ RCT_REMAP_METHOD(contactIdentify,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared contactIdentify:namedUser
+    [RNAirshipBridgeShared() contactIdentify:namedUser
                                          error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -497,7 +493,7 @@ RCT_REMAP_METHOD(contactReset,
                  contactReset:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared contactResetAndReturnError:&error];
+    [RNAirshipBridgeShared() contactResetAndReturnError:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -508,7 +504,7 @@ RCT_REMAP_METHOD(contactRegisterSms,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared contactRegisterSms:msisdn
+    [RNAirshipBridgeShared() contactRegisterSms:msisdn
                                           options:options
                                            error:&error];
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -520,7 +516,7 @@ RCT_REMAP_METHOD(contactRegisterEmail,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared contactRegisterEmail:address
+    [RNAirshipBridgeShared() contactRegisterEmail:address
                                             options:options
                                              error:&error];
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -530,7 +526,7 @@ RCT_REMAP_METHOD(contactNotifyRemoteLogin,
                  contactNotifyRemoteLogin:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared contactNotifyRemoteLoginAndReturnError:&error];
+    [RNAirshipBridgeShared() contactNotifyRemoteLoginAndReturnError:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -539,7 +535,7 @@ RCT_REMAP_METHOD(inAppGetDisplayInterval,
                  inAppGetDisplayInterval:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared inAppGetDisplayIntervalAndReturnError:&error];
+    id result = [RNAirshipBridgeShared() inAppGetDisplayIntervalAndReturnError:&error];
 
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
@@ -548,7 +544,7 @@ RCT_REMAP_METHOD(inAppIsPaused,
                  inAppIsPaused:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared inAppIsPausedAndReturnError:&error];
+    id result = [RNAirshipBridgeShared() inAppIsPausedAndReturnError:&error];
     
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
@@ -558,7 +554,7 @@ RCT_REMAP_METHOD(inAppSetDisplayInterval,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared inAppSetDisplayIntervalWithMilliseconds:milliseconds
+    [RNAirshipBridgeShared() inAppSetDisplayIntervalWithMilliseconds:milliseconds
                                                                  error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -569,21 +565,21 @@ RCT_REMAP_METHOD(inAppSetPaused,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared inAppSetPaused:paused
+    [RNAirshipBridgeShared() inAppSetPaused:paused
                                         error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
 RCT_EXPORT_METHOD(inAppResendPendingEmbeddedEvent) {
-    [AirshipReactNative.shared inAppResendPendingEmbeddedEvent];
+    [RNAirshipBridgeShared() inAppResendPendingEmbeddedEvent];
 }
 
 RCT_REMAP_METHOD(localeClearLocaleOverride,
                  localeClearLocaleOverride:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared localeClearLocaleOverrideAndReturnError:&error];
+    [RNAirshipBridgeShared() localeClearLocaleOverrideAndReturnError:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -592,7 +588,7 @@ RCT_REMAP_METHOD(localeGetLocale,
                  localeGetLocale:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared localeGetLocaleAndReturnError:&error];
+    id result = [RNAirshipBridgeShared() localeGetLocaleAndReturnError:&error];
 
     
     [self handleResult:result error:error resolve:resolve reject:reject];
@@ -603,7 +599,7 @@ RCT_REMAP_METHOD(localeSetLocaleOverride,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared localeSetLocaleOverrideWithLocaleIdentifier:localeIdentifier
+    [RNAirshipBridgeShared() localeSetLocaleOverrideWithLocaleIdentifier:localeIdentifier
                                                                      error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -613,7 +609,7 @@ RCT_REMAP_METHOD(messageCenterDeleteMessage,
                  messageCenterDeleteMessage:(NSString *)messageId
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared messageCenterDeleteMessageWithMessageId:messageId
+    [RNAirshipBridgeShared() messageCenterDeleteMessageWithMessageId:messageId
                                                      completionHandler:^(NSError * error) {
         [self handleResult:nil error:error resolve:resolve reject:reject];
     }];
@@ -624,7 +620,7 @@ RCT_REMAP_METHOD(messageCenterDismiss,
                  reject:(RCTPromiseRejectBlock)reject) {
 
     NSError *error;
-    [AirshipReactNative.shared messageCenterDismissAndReturnError:&error];
+    [RNAirshipBridgeShared() messageCenterDismissAndReturnError:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -634,7 +630,7 @@ RCT_REMAP_METHOD(messageCenterDisplay,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared messageCenterDisplayWithMessageId:messageId
+    [RNAirshipBridgeShared() messageCenterDisplayWithMessageId:messageId
                                                            error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -645,7 +641,7 @@ RCT_REMAP_METHOD(messageCenterShowMessageCenter,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared messageCenterShowMessageCenterWithMessageId:messageId
+    [RNAirshipBridgeShared() messageCenterShowMessageCenterWithMessageId:messageId
                                                            error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -656,7 +652,7 @@ RCT_REMAP_METHOD(messageCenterShowMessageView,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared messageCenterShowMessageViewWithMessageId:messageId
+    [RNAirshipBridgeShared() messageCenterShowMessageViewWithMessageId:messageId
                                                            error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -666,7 +662,7 @@ RCT_REMAP_METHOD(messageCenterGetMessages,
                  messageCenterGetMessages:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared messageCenterGetMessagesWithCompletionHandler:^(NSArray *result, NSError *error) {
+    [RNAirshipBridgeShared() messageCenterGetMessagesWithCompletionHandler:^(NSArray *result, NSError *error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
 }
@@ -675,7 +671,7 @@ RCT_REMAP_METHOD(messageCenterGetUnreadCount,
                  messageCenterGetUnreadCount:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared messageCenterGetUnreadCountWithCompletionHandler:^(double result, NSError *error) {
+    [RNAirshipBridgeShared() messageCenterGetUnreadCountWithCompletionHandler:^(double result, NSError *error) {
         [self handleResult:@(result) error:error resolve:resolve reject:reject];
     }];
 }
@@ -684,7 +680,7 @@ RCT_REMAP_METHOD(messageCenterMarkMessageRead,
                  messageCenterMarkMessageRead:(NSString *)messageId
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared messageCenterMarkMessageReadWithMessageId:messageId
+    [RNAirshipBridgeShared() messageCenterMarkMessageReadWithMessageId:messageId
                                                        completionHandler:^(NSError * error) {
         [self handleResult:nil error:error resolve:resolve reject:reject];
     }];
@@ -693,18 +689,18 @@ RCT_REMAP_METHOD(messageCenterMarkMessageRead,
 RCT_REMAP_METHOD(messageCenterRefresh,
                  messageCenterRefresh:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
-    [AirshipReactNative.shared messageCenterRefreshWithCompletionHandler:^(NSError *error) {
+    [RNAirshipBridgeShared() messageCenterRefreshWithCompletionHandler:^(NSError *error) {
         [self handleResult:nil error:error resolve:resolve reject:reject];
     }];
 }
 
 RCT_EXPORT_METHOD(messageCenterSetAutoLaunchDefaultMessageCenter:(BOOL)enabled) {
-    [AirshipReactNative.shared messageCenterSetAutoLaunchDefaultMessageCenterWithAutoLaunch:enabled];
+    [RNAirshipBridgeShared() messageCenterSetAutoLaunchDefaultMessageCenterWithAutoLaunch:enabled];
 }
 
 RCT_EXPORT_METHOD(preferenceCenterAutoLaunchDefaultPreferenceCenter:(NSString *)preferenceCenterId
                   autoLaunch:(BOOL)autoLaunch) {
-    [AirshipReactNative.shared preferenceCenterAutoLaunchDefaultPreferenceCenterWithPreferenceCenterId:preferenceCenterId
+    [RNAirshipBridgeShared() preferenceCenterAutoLaunchDefaultPreferenceCenterWithPreferenceCenterId:preferenceCenterId
                                                                                             autoLaunch:autoLaunch];
 }
 
@@ -714,7 +710,7 @@ RCT_REMAP_METHOD(preferenceCenterDisplay,
                  reject:(RCTPromiseRejectBlock)reject) {
 
     NSError *error;
-    [AirshipReactNative.shared preferenceCenterDisplayWithPreferenceCenterId:preferenceCenterId
+    [RNAirshipBridgeShared() preferenceCenterDisplayWithPreferenceCenterId:preferenceCenterId
                                                                        error:&error];
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -724,7 +720,7 @@ RCT_REMAP_METHOD(preferenceCenterGetConfig,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared preferenceCenterGetConfigWithPreferenceCenterId:preferenceCenterId
+    [RNAirshipBridgeShared() preferenceCenterGetConfigWithPreferenceCenterId:preferenceCenterId
                                                            completionHandler:^(id result, NSError *error) {
         [self handleResult:result
                      error:error
@@ -738,7 +734,7 @@ RCT_REMAP_METHOD(privacyManagerDisableFeature,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared privacyManagerDisableFeatureWithFeatures:features error:&error];
+    [RNAirshipBridgeShared() privacyManagerDisableFeatureWithFeatures:features error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -748,7 +744,7 @@ RCT_REMAP_METHOD(privacyManagerEnableFeature,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared privacyManagerEnableFeatureWithFeatures:features error:&error];
+    [RNAirshipBridgeShared() privacyManagerEnableFeatureWithFeatures:features error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
@@ -757,7 +753,7 @@ RCT_REMAP_METHOD(privacyManagerGetEnabledFeatures,
                  privacyManagerGetEnabledFeatures:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared privacyManagerGetEnabledFeaturesAndReturnError:&error];
+    id result = [RNAirshipBridgeShared() privacyManagerGetEnabledFeaturesAndReturnError:&error];
 
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
@@ -767,7 +763,7 @@ RCT_REMAP_METHOD(privacyManagerIsFeatureEnabled,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared privacyManagerIsFeatureEnabledWithFeatures:features
+    id result = [RNAirshipBridgeShared() privacyManagerIsFeatureEnabledWithFeatures:features
                                                                                 error:&error];
 
     [self handleResult:result error:error resolve:resolve reject:reject];
@@ -778,25 +774,25 @@ RCT_REMAP_METHOD(privacyManagerSetEnabledFeatures,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    [AirshipReactNative.shared privacyManagerSetEnabledFeaturesWithFeatures:features error:&error];
+    [RNAirshipBridgeShared() privacyManagerSetEnabledFeaturesWithFeatures:features error:&error];
 
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
 
 RCT_EXPORT_METHOD(pushIosIsOverridePresentationOptionsEnabled:(BOOL)enabled) {
-    AirshipReactNative.shared.overridePresentationOptionsEnabled = enabled;
+    RNAirshipBridgeShared().overridePresentationOptionsEnabled = enabled;
 }
 
 RCT_EXPORT_METHOD(pushIosOverridePresentationOptions:(NSString *)requestID options:(NSArray *)presentationOptions) {
-    [AirshipReactNative.shared presentationOptionOverridesResultWithRequestID:requestID presentationOptions:presentationOptions];
+    [RNAirshipBridgeShared() presentationOptionOverridesResultWithRequestID:requestID presentationOptions:presentationOptions];
 }
 
 RCT_REMAP_METHOD(pushIosGetAuthorizedNotificationSettings,
                  pushIosGetAuthorizedNotificationSettings:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared pushGetAuthorizedNotificationSettingsAndReturnError:&error];
+    id result = [RNAirshipBridgeShared() pushGetAuthorizedNotificationSettingsAndReturnError:&error];
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
 
@@ -804,7 +800,7 @@ RCT_REMAP_METHOD(pushIosGetAuthorizedNotificationStatus,
                  pushIosGetAuthorizedNotificationStatus:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
     NSError *error;
-    id result = [AirshipReactNative.shared pushGetAuthorizedNotificationStatusAndReturnError:&error];
+    id result = [RNAirshipBridgeShared() pushGetAuthorizedNotificationStatusAndReturnError:&error];
     [self handleResult:result error:error resolve:resolve reject:reject];
 }
 
@@ -823,7 +819,7 @@ RCT_REMAP_METHOD(featureFlagManagerTrackInteraction,
 
 
     NSError *error;
-    [AirshipReactNative.shared featureFlagManagerTrackInteractedWithFlag:flag error:&error];
+    [RNAirshipBridgeShared() featureFlagManagerTrackInteractedWithFlag:flag error:&error];
     [self handleResult:nil error:error resolve:resolve reject:reject];
 }
 
@@ -833,7 +829,7 @@ RCT_REMAP_METHOD(featureFlagManagerFlag,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared featureFlagManagerFlagWithFlagName:flagName
+    [RNAirshipBridgeShared() featureFlagManagerFlagWithFlagName:flagName
                                                    useResultCache:useResultCache
                                                 completionHandler:^(id result, NSError * _Nullable error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
@@ -845,7 +841,7 @@ RCT_REMAP_METHOD(featureFlagManagerResultCacheGetFlag,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared featureFlagManagerResultCacheGetFlagWithName:flagName
+    [RNAirshipBridgeShared() featureFlagManagerResultCacheGetFlagWithName:flagName
                                                 completionHandler:^(id result, NSError * _Nullable error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
@@ -857,7 +853,7 @@ RCT_REMAP_METHOD(featureFlagManagerResultCacheSetFlag,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared featureFlagManagerResultCacheSetFlagWithFlag:flag
+    [RNAirshipBridgeShared() featureFlagManagerResultCacheSetFlagWithFlag:flag
                                                                 ttl:@(ttl)
                                                           completionHandler:^(NSError * _Nullable error) {
                   [self handleResult:nil error:error resolve:resolve reject:reject];
@@ -869,7 +865,7 @@ RCT_REMAP_METHOD(featureFlagManagerResultCacheRemoveFlag,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared featureFlagManagerResultCacheRemoveFlagWithName:flagName
+    [RNAirshipBridgeShared() featureFlagManagerResultCacheRemoveFlagWithName:flagName
                                                      completionHandler:^(NSError * _Nullable error) {
         [self handleResult:nil error:error resolve:resolve reject:reject];
     }];
@@ -880,7 +876,7 @@ RCT_REMAP_METHOD(liveActivityListAll,
                  liveActivityListAll:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared liveActivityListAllWithCompletionHandler:^(id result, NSError * _Nullable error) {
+    [RNAirshipBridgeShared() liveActivityListAllWithCompletionHandler:^(id result, NSError * _Nullable error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
 }
@@ -890,7 +886,7 @@ RCT_REMAP_METHOD(liveActivityList,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared liveActivityListWithOptions:request
+    [RNAirshipBridgeShared() liveActivityListWithOptions:request
                                                 completionHandler:^(id result, NSError * _Nullable error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
@@ -901,7 +897,7 @@ RCT_REMAP_METHOD(liveActivityStart,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared liveActivityStartWithOptions:request
+    [RNAirshipBridgeShared() liveActivityStartWithOptions:request
                                            completionHandler:^(id result, NSError * _Nullable error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
@@ -912,7 +908,7 @@ RCT_REMAP_METHOD(liveActivityUpdate,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared liveActivityUpdateWithOptions:request
+    [RNAirshipBridgeShared() liveActivityUpdateWithOptions:request
                                            completionHandler:^(NSError * _Nullable error) {
         [self handleResult:nil error:error resolve:resolve reject:reject];
     }];
@@ -923,7 +919,7 @@ RCT_REMAP_METHOD(liveActivityEnd,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared liveActivityEndWithOptions:request
+    [RNAirshipBridgeShared() liveActivityEndWithOptions:request
                                         completionHandler:^(NSError * _Nullable error) {
         [self handleResult:nil error:error resolve:resolve reject:reject];
     }];

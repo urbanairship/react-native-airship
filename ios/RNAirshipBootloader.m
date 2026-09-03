@@ -2,17 +2,13 @@
 
 #import "RNAirshipBootloader.h"
 
-#if __has_include(<react_native_airship/react_native_airship-Swift.h>)
-#import <react_native_airship/react_native_airship-Swift.h>
-#else
-#import "react_native_airship-Swift.h"
-#endif
+#import "RNAirshipBridge.h"
 
 @implementation RNAirshipBootloader
 
 
 + (void)disable {
-    AirshipPluginLoader.disabled = YES;
+    RNAirshipBridgeDisablePluginLoader();
 }
 @end
 

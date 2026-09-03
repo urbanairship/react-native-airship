@@ -75,6 +75,17 @@ Then, add the plugin to your `app.json`:
   ]
   ```
 
+### Swift Package Manager (iOS, experimental)
+
+React Native 0.87 adds an experimental, opt-in Swift Package Manager integration as an alternative to CocoaPods. This package ships a `Package.swift`, so it is picked up automatically once your app is set up for SwiftPM:
+
+```bash
+cd ios
+npx react-native spm
+```
+
+CocoaPods remains the default integration. React Native's SwiftPM support is still marked experimental, and its generated autolinking package currently declares an iOS 15 minimum, which prevents packages that require iOS 16 (including this one) from resolving until React Native raises that floor.
+
 ### Initialization
 
 Initialize Airship in your `App.tsx`:
