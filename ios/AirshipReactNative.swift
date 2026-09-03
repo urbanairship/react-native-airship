@@ -1,12 +1,19 @@
 /* Copyright Airship and Contributors */
 
 import Foundation
+#if canImport(AirshipKit)
 import AirshipKit
+#elseif canImport(AirshipCore)
+import AirshipCore
+#endif
 import AirshipFrameworkProxy
 import React
+#if canImport(ReactNativeAirshipBridge)
+import ReactNativeAirshipBridge
+#endif
 
-@objc
-public final class AirshipReactNative: NSObject, Sendable {
+@objc(AirshipReactNative)
+public final class AirshipReactNative: NSObject, Sendable, @preconcurrency RNAirshipBridge {
 
     @objc
     public static let pendingEventsEventName = "com.airship.pending_events"
@@ -612,7 +619,7 @@ public extension AirshipReactNative {
     }
 
   @objc
-  func preferenceCenterGetConfig(preferenceCenterId: String) async throws -> AnyHashable? {
+  func preferenceCenterGetConfig(preferenceCenterId: String) async throws -> Any? {
         return try await AirshipProxy.shared.preferenceCenter.getPreferenceCenterConfig(
             preferenceCenterID: preferenceCenterId
         ).unWrap()

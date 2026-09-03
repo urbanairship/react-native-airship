@@ -1,18 +1,16 @@
 /* Copyright Airship and Contributors */
 
 import Foundation
+#if canImport(AirshipKit)
 import AirshipKit
+#elseif canImport(AirshipCore)
+import AirshipCore
+import AirshipMessageCenter
+#endif
 import SwiftUI
-
-@objc(RNAirshipMessageWebViewWrapperDelegate)
-public protocol MessageWebViewWrapperDelegate: AnyObject {
-    func onMessageBodyLoadFailed(messageID: String)
-    func onMessageGone(messageID: String)
-    func onMessageLoadFailed(messageID: String)
-    func onLoadStarted(messageID: String)
-    func onLoadFinished(messageID: String)
-    func onClose(messageID: String)
-}
+#if canImport(ReactNativeAirshipBridge)
+import ReactNativeAirshipBridge
+#endif
 
 @MainActor
 private class MessageState: ObservableObject {
@@ -42,9 +40,9 @@ private struct MessageContainerView: View {
 
 @objc(RNAirshipMessageWebViewWrapper)
 @MainActor
-public final class MessageWebViewWrapper: UIView {
+public final class MessageWebViewWrapper: UIView, RNAirshipMessageWebViewBridge {
 
-    @objc public weak var delegate: MessageWebViewWrapperDelegate?
+    @objc public weak var delegate: RNAirshipMessageWebViewWrapperDelegate?
 
     private let state: MessageState
     private let hostingController: UIHostingController<MessageContainerView>
