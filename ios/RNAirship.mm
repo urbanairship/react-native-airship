@@ -875,6 +875,26 @@ RCT_REMAP_METHOD(featureFlagManagerResultCacheRemoveFlag,
     }];
 }
 
+RCT_REMAP_METHOD(featureFlagManagerStatus,
+                 featureFlagManagerStatus:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared featureFlagManagerStatusWithCompletionHandler:^(NSString * _Nullable result, NSError * _Nullable error) {
+        [self handleResult:result error:error resolve:resolve reject:reject];
+    }];
+}
+
+RCT_REMAP_METHOD(featureFlagManagerWaitRefresh,
+                 featureFlagManagerWaitRefresh:(NSNumber *)maxTimeMillis
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject) {
+
+    [AirshipReactNative.shared featureFlagManagerWaitRefreshWithMaxTimeMillis:maxTimeMillis
+                                                            completionHandler:^(NSError * _Nullable error) {
+        [self handleResult:nil error:error resolve:resolve reject:reject];
+    }];
+}
+
 
 RCT_REMAP_METHOD(liveActivityListAll,
                  liveActivityListAll:(RCTPromiseResolveBlock)resolve

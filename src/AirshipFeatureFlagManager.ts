@@ -1,4 +1,4 @@
-import { FeatureFlag } from './types';
+import { FeatureFlag, FeatureFlagUpdateStatus } from './types';
 
 /**
  * Airship feature flag manager.
@@ -35,6 +35,26 @@ export class AirshipFeatureFlagManager {
    */
   public trackInteraction(flag: FeatureFlag): Promise<void> {
     return this.module.featureFlagManagerTrackInteraction(flag);
+  }
+
+  /**
+   * Gets the current feature flag rule update status.
+   * @return {Promise<FeatureFlagUpdateStatus>} A promise resolving to the status.
+   */
+  public status(): Promise<FeatureFlagUpdateStatus> {
+    return this.module.featureFlagManagerStatus();
+  }
+
+  /**
+   * Waits for the feature flag rules to refresh. Returns immediately if the
+   * last refresh already succeeded. Use `EventType.FeatureFlagStatusChanged`
+   * to be notified if the refresh completes after the wait times out.
+   * @param {number} maxTimeMillis Optional max time in milliseconds to wait.
+   * If not provided, waits until the refresh succeeds.
+   * @return {Promise<Void>} A promise with an empty result.
+   */
+  public waitRefresh(maxTimeMillis?: number): Promise<void> {
+    return this.module.featureFlagManagerWaitRefresh(maxTimeMillis);
   }
 }
 

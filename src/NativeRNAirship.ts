@@ -121,6 +121,8 @@ export interface Spec extends TurboModule {
   featureFlagManagerResultCacheGetFlag(flagName: string): Promise<Object>;
   featureFlagManagerResultCacheSetFlag(flag: Object, ttl: number): Promise<void>;
   featureFlagManagerResultCacheRemoveFlag(flagName: string): Promise<void>;
+  featureFlagManagerStatus(): Promise<string>;
+  featureFlagManagerWaitRefresh(maxTimeMillis?: number): Promise<void>;
 
   // Live Activity
   liveActivityListAll(): Promise<Object>;

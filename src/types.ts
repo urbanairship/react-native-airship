@@ -174,6 +174,25 @@ export interface PushNotificationStatusChangedEvent {
 }
 
 /**
+ * Feature flag rule update status.
+ */
+export enum FeatureFlagUpdateStatus {
+  UpToDate = 'up_to_date',
+  Stale = 'stale',
+  OutOfDate = 'out_of_date',
+}
+
+/**
+ * Event fired when the feature flag rule update status changes.
+ */
+export interface FeatureFlagStatusChangedEvent {
+  /**
+   * The feature flag rule update status.
+   */
+  status: FeatureFlagUpdateStatus;
+}
+
+/**
  * Event fired when the Message Center is updated.
  */
 export interface MessageCenterUpdatedEvent {
@@ -229,6 +248,7 @@ export enum EventType {
   PushTokenReceived = 'com.airship.push_token_received',
   IOSAuthorizedNotificationSettingsChanged = 'com.airship.authorized_notification_settings_changed',
   IOSLiveActivitiesUpdated = 'com.airship.live_activities_updated',
+  FeatureFlagStatusChanged = 'com.airship.feature_flag_status_changed',
 }
 
 export interface EventTypeMap {
@@ -243,6 +263,7 @@ export interface EventTypeMap {
   [EventType.DisplayPreferenceCenter]: DisplayPreferenceCenterEvent;
   [EventType.PushTokenReceived]: PushTokenReceivedEvent;
   [EventType.IOSLiveActivitiesUpdated]: LiveActivitiesUpdatedEvent;
+  [EventType.FeatureFlagStatusChanged]: FeatureFlagStatusChangedEvent;
 }
 
 /**

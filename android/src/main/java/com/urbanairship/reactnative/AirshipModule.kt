@@ -764,6 +764,20 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
     }
 
     @ReactMethod
+    override fun featureFlagManagerStatus(promise: Promise) {
+        promise.resolve(scope) {
+            proxy.featureFlagManager.status
+        }
+    }
+
+    @ReactMethod
+    override fun featureFlagManagerWaitRefresh(maxTimeMillis: Double?, promise: Promise) {
+        promise.resolve(scope) {
+            proxy.featureFlagManager.waitRefresh(maxTimeMillis?.toLong())
+        }
+    }
+
+    @ReactMethod
     override fun liveActivityListAll(promise: Promise) {
         promise.resolve(scope) {
             throw IllegalStateException("Not supported on Android")
