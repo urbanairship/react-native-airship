@@ -698,6 +698,18 @@ public extension AirshipReactNative {
     func featureFlagManagerResultCacheRemoveFlag(name: String) async throws {
         try await AirshipProxy.shared.featureFlagManager.resultCache.removeCachedFlag(name: name)
     }
+
+    @objc
+    func featureFlagManagerStatus() async throws -> String {
+        return try await AirshipProxy.shared.featureFlagManager.status.rawValue
+    }
+
+    @objc
+    func featureFlagManagerWaitRefresh(maxTimeMillis: NSNumber?) async throws {
+        try await AirshipProxy.shared.featureFlagManager.waitRefresh(
+            maxTime: maxTimeMillis.map { $0.doubleValue / 1000.0 }
+        )
+    }
 }
 
 
@@ -810,7 +822,8 @@ extension AirshipProxyEventType {
         "com.airship.notification_status_changed": .notificationStatusChanged,
         "com.airship.authorized_notification_settings_changed": .authorizedNotificationSettingsChanged,
         "com.airship.pending_embedded_updated": .pendingEmbeddedUpdated,
-        "com.airship.live_activities_updated": .liveActivitiesUpdated
+        "com.airship.live_activities_updated": .liveActivitiesUpdated,
+        "com.airship.feature_flag_status_changed": .featureFlagStatusChanged
     ]
 
     public static func fromReactName(_ name: String) throws -> AirshipProxyEventType {
