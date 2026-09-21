@@ -22,7 +22,7 @@
 		63D503112D8A7630003302CB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63D503102D8A7630003302CB /* Images.xcassets */; };
 		710647E33BF9426922E8DDF1 /* Pods_AirshipExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE98DF4483C9CFA8443C889 /* Pods_AirshipExample.framework */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
-		816B7387DFD1DF0E24E24D3F /* AirshipExample/SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B87CAE1CB45FBCF4185349 /* AirshipExample/SceneDelegate.swift */; };
+		816B7387DFD1DF0E24E24D3F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B87CAE1CB45FBCF4185349 /* SceneDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4685ED317A73D5118DD4DCF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		AA000004000000000000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA000003000000000000001 /* Localizable.strings */; };
@@ -67,7 +67,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AirshipExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AirshipExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = AirshipExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		48B87CAE1CB45FBCF4185349 /* AirshipExample/SceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AirshipExample/SceneDelegate.swift; sourceTree = "<group>"; };
+		48B87CAE1CB45FBCF4185349 /* SceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AirshipExample/SceneDelegate.swift; sourceTree = "<group>"; };
 		5AE98DF4483C9CFA8443C889 /* Pods_AirshipExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirshipExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6308BFD22D7FF2A700296239 /* AirshipExampleNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AirshipExampleNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6308BFF92D80999200296239 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -137,7 +137,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 				AA000003000000000000001 /* Localizable.strings */,
-				48B87CAE1CB45FBCF4185349 /* AirshipExample/SceneDelegate.swift */,
+				48B87CAE1CB45FBCF4185349 /* SceneDelegate.swift */,
 			);
 			name = AirshipExample;
 			sourceTree = "<group>";
@@ -382,13 +382,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AirshipExample/Pods-AirshipExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AirshipExample/Pods-AirshipExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -425,13 +421,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AirshipExample/Pods-AirshipExample-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AirshipExample/Pods-AirshipExample-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -470,7 +462,7 @@
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
 				6308C1842D80AA8500296239 /* ExampleWidgetsAttributes.swift in Sources */,
 				6308C18E2D80B00300296239 /* AirshipPluginExtender.swift in Sources */,
-				816B7387DFD1DF0E24E24D3F /* AirshipExample/SceneDelegate.swift in Sources */,
+				816B7387DFD1DF0E24E24D3F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,7 +843,10 @@
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				PODFILE_DIR = "$(SRCROOT)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -943,7 +938,10 @@
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				PODFILE_DIR = "$(SRCROOT)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../node_modules/react-native";
 				SDKROOT = iphoneos;
