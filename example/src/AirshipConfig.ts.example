@@ -1,0 +1,27 @@
+import type { AirshipConfig } from '@ua/react-native-airship';
+
+/**
+ * Copy this file to `AirshipConfig.ts` and fill in your own app's
+ * credentials. `AirshipConfig.ts` is gitignored, so your credentials never
+ * get committed.
+ */
+const config: AirshipConfig = {
+  default: {
+    appKey: 'YOUR_APP_KEY',
+    appSecret: 'YOUR_APP_SECRET',
+  },
+  site: 'us', // use "eu" for EU cloud projects
+  urlAllowList: ['*'],
+  android: {
+    notificationConfig: {
+      icon: 'ic_notification',
+      accentColor: '#00ff00',
+    },
+    // Optional: Control log privacy level
+    // "private" (default) - redacts sensitive information
+    // "public" - logs all information without redaction
+    logPrivacyLevel: 'private',
+  },
+};
+
+export default config;

@@ -1,5 +1,4 @@
 import Foundation
-import AirshipKit
 import AirshipFrameworkProxy
 import ActivityKit
 

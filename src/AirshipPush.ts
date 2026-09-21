@@ -115,7 +115,7 @@ export class AirshipPushIOS {
     this.eventEmitter = new NativeEventEmitter(module);
 
     if (Platform.OS === 'ios') {
-      this.eventEmitter.addListener("com.airship.ios.override_presentation_options", (event) => {
+      this.eventEmitter.addListener("com.airship.ios.override_presentation_options", (event: any) => {
         let payload = event["pushPayload"] as PushPayload
         let requestId = event["requestId"] as string
   
@@ -230,7 +230,7 @@ export class AirshipPushAndroid {
     this.eventEmitter = new NativeEventEmitter(module);
 
     if (Platform.OS === 'android') {
-      this.eventEmitter.addListener("com.airship.android.override_foreground_display", (event) => {
+      this.eventEmitter.addListener("com.airship.android.override_foreground_display", (event: any) => {
         let payload = event["pushPayload"] as PushPayload
         let requestId = event["requestId"] as string
   

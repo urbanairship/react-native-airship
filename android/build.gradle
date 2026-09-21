@@ -26,7 +26,6 @@ apply plugin: "com.android.library"
 if (project.extensions.findByName('kotlin') == null) {
   apply plugin: "kotlin-android"
 }
-
 apply plugin: "com.facebook.react"
 
 def getExtOrIntegerDefault(name) {

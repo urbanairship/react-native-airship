@@ -1,5 +1,38 @@
 # Migration Guide
 
+## 26.x to 27.0.0
+
+Airship React Native module 27.0.0 updates the native Airship SDKs to version 21.x on iOS and Android, and raises the minimum supported React Native version to 0.85.0.
+
+### Package Changes
+- **React Native**: 0.85+ is now required.
+- **Native SDKs**: Updated to 21.x on iOS and Android.
+
+#### iOS Requirements
+- **Xcode**: 27+ is now required.
+- **CocoaPods**: `use_frameworks! :linkage => :dynamic` is now required in your `ios/Podfile`. The Airship SDK is pulled in through React Native's CocoaPods+SPM bridge rather than a published pod, and statically linking it can produce duplicate-symbol errors at link time.
+
+#### Android Requirements
+- **minSdk**: 26+ is now required.
+- **React Native 0.87+**: React Native 0.87 moved to Android Gradle Plugin 9, which requires Gradle 9.4.1+ and applies its own built-in Kotlin support. If your app's `android/build.gradle` or `android/app/build.gradle` applies `org.jetbrains.kotlin.android` unconditionally, guard it the same way this package does:
+  ```groovy
+  if (project.extensions.findByName('kotlin') == null) {
+    apply plugin: "org.jetbrains.kotlin.android"
+  }
+  ```
+
+### iOS Migration
+Most applications will not be affected by these changes. They only apply to applications that have implemented native extensions or customizations to the Airship SDK.
+
+#### Airship SDK 21
+- [iOS Migration Guide](https://github.com/urbanairship/ios-library/blob/main/Documentation/Migration/migration-guide-20-21.md): Detailed guide for migrating native iOS code from Airship SDK 20.x to 21.0.
+
+### Android Migration
+Most applications will not be affected by these changes. They only apply to applications that have implemented native extensions or customizations to the Airship SDK.
+
+#### Airship SDK 21
+- [Android Migration Guide](https://github.com/urbanairship/android-library/blob/main/documentation/migration/migration-guide-20-21.md): Detailed guide for migrating native Android code from Airship SDK 20.x to 21.0.
+
 ## 21.x - 25.x to 26.0.0
 
 Airship React Native module 26.0.0 updates the native Airship SDKs to version 20.0, adds support for React Native 0.82+, and raises the minimum supported iOS version to 16.0.

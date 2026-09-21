@@ -10,11 +10,14 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, 16
 prepare_react_native_project!
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+# AirshipFrameworkProxy is pulled in via React Native's CocoaPods+SPM bridge
+# (see react-native-airship.podspec) as an automatic-type Swift package
+# product. Statically linking it lets every pod that embeds it carry its own
+# copy, which collides at link time as duplicate-symbol errors, so dynamic
+# linkage is required here.
+linkage = ENV['USE_FRAMEWORKS'] || 'dynamic'
+Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+use_frameworks! :linkage => linkage.to_sym
 
 target 'AirshipExample' do
   config = use_native_modules!

@@ -34,6 +34,8 @@ or
 yarn add @ua/react-native-airship
 ```
 
+See [iOS Integration](#ios-integration) below for the required `Podfile` setup.
+
 ### Expo
 
 Apps using Expo can use the `airship-expo-plugin` to configure the project. You will need to use `expo prebuild` (custom dev client) or `eas build` since this package contains native code.
@@ -75,16 +77,21 @@ Then, add the plugin to your `app.json`:
   ]
   ```
 
-### Swift Package Manager (iOS, experimental)
+### iOS Integration
 
-React Native 0.87 adds an experimental, opt-in Swift Package Manager integration as an alternative to CocoaPods. This package ships a `Package.swift`, so it is picked up automatically once your app is set up for SwiftPM:
+This package supports two iOS dependency managers:
 
-```bash
-cd ios
-npx react-native spm
-```
+- **CocoaPods (default).** The Airship SDK is pulled in through React Native's CocoaPods+SPM bridge (`spm_dependency` in `react-native-airship.podspec`) as an automatic-type Swift package product. Statically linking an automatic-type package lets every pod that embeds it carry its own copy, which collides at link time as duplicate-symbol errors, so your `ios/Podfile` needs:
+  ```ruby
+  use_frameworks! :linkage => :dynamic
+  ```
 
-CocoaPods remains the default integration. React Native's SwiftPM support is still marked experimental, and its generated autolinking package currently declares an iOS 15 minimum, which prevents packages that require iOS 16 (including this one) from resolving until React Native raises that floor.
+- **Swift Package Manager (experimental).** React Native 0.87 adds an experimental, opt-in SwiftPM integration as an alternative to CocoaPods. This package ships a `Package.swift`, so it is picked up automatically once your app is set up for SwiftPM:
+  ```bash
+  cd ios
+  npx react-native spm
+  ```
+  React Native's SwiftPM support is still marked experimental. On React Native <0.88, the generated autolinking package hardcodes an iOS 15 minimum, which prevents packages that require iOS 16 (including this one) from resolving. React Native 0.88 fixes this by reading the floor from your app's own Xcode deployment target instead.
 
 ### Initialization
 
