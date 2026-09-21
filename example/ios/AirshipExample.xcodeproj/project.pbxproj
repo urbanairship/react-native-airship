@@ -27,7 +27,6 @@
 		A4685ED317A73D5118DD4DCF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		AA000004000000000000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA000003000000000000001 /* Localizable.strings */; };
 		AA000008000000000000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA000007000000000000001 /* Localizable.strings */; };
-		F6EF20A4652975D1D60F3DEF /* Pods_AirshipExampleNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81058CC857E9AFA4C23C331F /* Pods_AirshipExampleNotificationServiceExtension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,15 +84,12 @@
 		6308C18F2D80C21D00296239 /* AirshipExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AirshipExample.entitlements; path = AirshipExample/AirshipExample.entitlements; sourceTree = "<group>"; };
 		63D503102D8A7630003302CB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = AirshipExample/AppDelegate.swift; sourceTree = "<group>"; };
-		7922FAAC4F9BA9CD0AA20548 /* Pods-AirshipExampleNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipExampleNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-AirshipExampleNotificationServiceExtension/Pods-AirshipExampleNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
-		81058CC857E9AFA4C23C331F /* Pods_AirshipExampleNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AirshipExampleNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AirshipExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		90756ACFCBE96D65D29D4888 /* Pods-AirshipExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipExample.release.xcconfig"; path = "Target Support Files/Pods-AirshipExample/Pods-AirshipExample.release.xcconfig"; sourceTree = "<group>"; };
 		AA000001000000000000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = AirshipExample/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AA000002000000000000001 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = AirshipExample/es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AA000005000000000000001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AA000006000000000000001 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		C7BCD42851667694BA3CC24F /* Pods-AirshipExampleNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipExampleNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-AirshipExampleNotificationServiceExtension/Pods-AirshipExampleNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		D148027A562F250A96779B7A /* Pods-AirshipExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AirshipExample.debug.xcconfig"; path = "Target Support Files/Pods-AirshipExample/Pods-AirshipExample.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -111,7 +107,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F6EF20A4652975D1D60F3DEF /* Pods_AirshipExampleNotificationServiceExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,7 +144,6 @@
 				6308BFF92D80999200296239 /* WidgetKit.framework */,
 				6308BFFB2D80999200296239 /* SwiftUI.framework */,
 				5AE98DF4483C9CFA8443C889 /* Pods_AirshipExample.framework */,
-				81058CC857E9AFA4C23C331F /* Pods_AirshipExampleNotificationServiceExtension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -217,8 +211,6 @@
 			children = (
 				D148027A562F250A96779B7A /* Pods-AirshipExample.debug.xcconfig */,
 				90756ACFCBE96D65D29D4888 /* Pods-AirshipExample.release.xcconfig */,
-				7922FAAC4F9BA9CD0AA20548 /* Pods-AirshipExampleNotificationServiceExtension.debug.xcconfig */,
-				C7BCD42851667694BA3CC24F /* Pods-AirshipExampleNotificationServiceExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -254,7 +246,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6308BFDE2D7FF2A700296239 /* Build configuration list for PBXNativeTarget "AirshipExampleNotificationServiceExtension" */;
 			buildPhases = (
-				B89299DAA039C75CF1CB1177 /* [CP] Check Pods Manifest.lock */,
 				6308BFCE2D7FF2A700296239 /* Sources */,
 				6308BFCF2D7FF2A700296239 /* Frameworks */,
 				6308BFD02D7FF2A700296239 /* Resources */,
@@ -264,6 +255,9 @@
 			dependencies = (
 			);
 			name = AirshipExampleNotificationServiceExtension;
+			packageProductDependencies = (
+				A0771D939BB9885179648930 /* AirshipNotificationServiceExtension */,
+			);
 			productName = AirshipExampleNotificationServiceExtension;
 			productReference = 6308BFD22D7FF2A700296239 /* AirshipExampleNotificationServiceExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -315,6 +309,9 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				4E571492A26D6F77A96F583C /* XCRemoteSwiftPackageReference "ios-library" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -428,28 +425,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AirshipExample/Pods-AirshipExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B89299DAA039C75CF1CB1177 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AirshipExampleNotificationServiceExtension-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -587,7 +562,6 @@
 		};
 		6308BFDB2D7FF2A700296239 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7922FAAC4F9BA9CD0AA20548 /* Pods-AirshipExampleNotificationServiceExtension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -629,7 +603,6 @@
 		};
 		6308BFDC2D7FF2A700296239 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7BCD42851667694BA3CC24F /* Pods-AirshipExampleNotificationServiceExtension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -991,6 +964,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4E571492A26D6F77A96F583C /* XCRemoteSwiftPackageReference "ios-library" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/urbanairship/ios-library.git";
+			requirement = {
+				kind = exactVersion;
+				version = 21.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A0771D939BB9885179648930 /* AirshipNotificationServiceExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E571492A26D6F77A96F583C /* XCRemoteSwiftPackageReference "ios-library" */;
+			productName = AirshipNotificationServiceExtension;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

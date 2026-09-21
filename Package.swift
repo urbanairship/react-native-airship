@@ -24,8 +24,11 @@ let package = Package(
     name: "ReactNativeAirship",
     platforms: [.iOS(.v16)],
     products: [
+        // React Native's autolinker requires this product name to exactly
+        // match the npm package name (minus scope), since the generated
+        // top-level aggregate package depends on it by that name.
         .library(
-            name: "ReactNativeAirship",
+            name: "react-native-airship",
             targets: ["ReactNativeAirshipBridge", "react_native_airship", "ReactNativeAirshipObjC"]
         ),
     ],

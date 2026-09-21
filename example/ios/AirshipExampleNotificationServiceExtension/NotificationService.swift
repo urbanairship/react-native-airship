@@ -1,4 +1,4 @@
 import UserNotifications
-import AirshipServiceExtension
+import AirshipNotificationServiceExtension
 
 class NotificationService: UANotificationServiceExtension {}

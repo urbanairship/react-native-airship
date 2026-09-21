@@ -40,6 +40,7 @@ target 'AirshipExample' do
   end
 end
 
-target 'AirshipExampleNotificationServiceExtension' do
-  pod 'AirshipServiceExtension'
-end
+# AirshipServiceExtension's CocoaPods release is stuck at 20.12.1 (SDK 21
+# dropped CocoaPods entirely), so this target gets the SPM equivalent,
+# AirshipNotificationServiceExtension, wired directly into its Xcode target
+# instead of through a pod.
