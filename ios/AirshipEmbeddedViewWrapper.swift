@@ -126,24 +126,25 @@ struct ReactAirshipEmbeddedView: View {
 
         var height: CGFloat {
             guard let height = self.size?.height, height > 0 else {
-                return Self.mainWindow?.screen.bounds.height ?? 500
+                return Self.defaultScreenBounds.height
             }
             return height
         }
 
         var width: CGFloat {
             guard let width = self.size?.width, width > 0 else {
-                return Self.mainWindow?.screen.bounds.width ?? 500
+                return Self.defaultScreenBounds.width
             }
             return width
         }
 
         @MainActor
-        private static var mainWindow: UIWindow? {
-            UIApplication.shared.connectedScenes
+        private static var defaultScreenBounds: CGRect {
+            let window = UIApplication.shared.connectedScenes
                 .compactMap { $0 as? UIWindowScene }
                 .flatMap { $0.windows }
-                .first { $0.isKeyWindow }
+                .first { $0.isKeyWindow } ?? UIApplication.shared.delegate?.window ?? nil
+            return window?.screen.bounds ?? CGRect(x: 0, y: 0, width: 500, height: 500)
         }
     }
 

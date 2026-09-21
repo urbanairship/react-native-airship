@@ -30,13 +30,9 @@ Pod::Spec.new do |s|
     products: ["AirshipFrameworkProxy"]
   )
 
-  # react-native-airship imports AirshipCore/AirshipAutomation/AirshipMessageCenter
-  # directly (not just through AirshipFrameworkProxy), so it needs its own
-  # dependency edge to the SDK rather than relying on whatever
-  # AirshipFrameworkProxy happens to pull in transitively. PreferenceCenter and
-  # FeatureFlags aren't used by our own sources, but are included so native
-  # extension code (AirshipPluginExtender, etc.) has the same module access
-  # the old combined AirshipKit CocoaPods module used to give it.
+  # Our sources import Core/Automation/MessageCenter directly, so this needs
+  # its own edge to ios-library. PreferenceCenter/FeatureFlags are unused here
+  # but included so native extension code can import them too.
   spm_dependency(
     s,
     url: "https://github.com/urbanairship/ios-library.git",

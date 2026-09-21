@@ -20,6 +20,7 @@
 		6308C18A2D80AA9200296239 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6308C1872D80AA9200296239 /* NotificationService.swift */; };
 		6308C18E2D80B00300296239 /* AirshipPluginExtender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6308C18D2D80B00300296239 /* AirshipPluginExtender.swift */; };
 		63D503112D8A7630003302CB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63D503102D8A7630003302CB /* Images.xcassets */; };
+		6E003A443061E13600AE3F05 /* AirshipNotificationServiceExtension in Frameworks */ = {isa = PBXBuildFile; productRef = A0771D939BB9885179648930 /* AirshipNotificationServiceExtension */; };
 		710647E33BF9426922E8DDF1 /* Pods_AirshipExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE98DF4483C9CFA8443C889 /* Pods_AirshipExample.framework */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		816B7387DFD1DF0E24E24D3F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B87CAE1CB45FBCF4185349 /* SceneDelegate.swift */; };
@@ -107,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E003A443061E13600AE3F05 /* AirshipNotificationServiceExtension in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
