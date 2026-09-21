@@ -2,11 +2,7 @@
 
 #import "RNAirshipMessageView.h"
 
-#if __has_include(<react_native_airship/react_native_airship-Swift.h>)
-#import <react_native_airship/react_native_airship-Swift.h>
-#else
-#import "react_native_airship-Swift.h"
-#endif
+#import "RNAirshipBridge.h"
 
 #import "react/renderer/components/RNAirshipSpec/ComponentDescriptors.h"
 #import "react/renderer/components/RNAirshipSpec/EventEmitters.h"
@@ -14,12 +10,12 @@
 #import "react/renderer/components/RNAirshipSpec/RCTComponentViewHelpers.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "RCTFabricComponentsPlugins.h"
+#import <React/RCTFabricComponentsPlugins.h>
 using namespace facebook::react;
 #endif
 
 @interface RNAirshipMessageView() <RNAirshipMessageWebViewWrapperDelegate, RCTRNAirshipMessageViewViewProtocol>
-@property (nonatomic, strong)RNAirshipMessageWebViewWrapper *wrapper;
+@property (nonatomic, strong)UIView<RNAirshipMessageWebViewBridge> *wrapper;
 @end
 
 NSString *const RNAirshipMessageViewErrorMessageNotAvailable = @"MESSAGE_NOT_AVAILABLE";
@@ -66,7 +62,7 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
 - (instancetype) init {
     self = [self initWithFrame:CGRectZero];
     if (self) {
-        self.wrapper = [[RNAirshipMessageWebViewWrapper alloc] initWithFrame:self.bounds];
+        self.wrapper = [[RNAirshipMessageWebViewBridgeClass() alloc] initWithFrame:self.bounds];
         self.wrapper.delegate = self;
         [self addSubview:self.wrapper];
     }
