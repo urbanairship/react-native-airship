@@ -2,11 +2,7 @@
 
 import Foundation
 import AirshipFrameworkProxy
-#if canImport(AirshipKit)
-import AirshipKit
-#elseif canImport(AirshipCore)
-import AirshipCore
-#endif
+@_spi(AirshipInternal) import AirshipCore
 
 @objc(AirshipPluginLoader)
 @MainActor

@@ -7,32 +7,21 @@ A basic sample application that integrates the Airship React Native module.
 1) In project root
     - Install dependencies `npm install`
 
+2) Copy `example/src/AirshipConfig.ts.example` to `example/src/AirshipConfig.ts` and fill in your app's `appKey`/`appSecret`. `AirshipConfig.ts` is gitignored, so your credentials never get committed.
+
+    ```
+    cp example/src/AirshipConfig.ts.example example/src/AirshipConfig.ts
+    ```
 
 ## Call TakeOff
 
-`takeOff` should be called at the beginning of the lifecycle.
+`takeOff` is already called at app startup in `example/src/App.tsx`, using the full config from `AirshipConfig.ts`:
 
-```javascript
+```typescript
 import Airship from '@ua/react-native-airship';
+import AirshipConfig from './AirshipConfig';
 
-Airship.takeOff({
-    default: {
-        appKey: "REPLACE_WITH_YOUR_APP_KEY",
-        appSecret: "REPLACE_WITH_YOUR_APP_SECRET"
-    },
-    site: "us", // use "eu" for EU cloud projects
-    urlAllowList: ["*"],
-    android: {
-        notificationConfig: {
-            icon: "ic_notification",
-            accentColor: "#00ff00"
-        },
-        // Optional: Control log privacy level
-        // "private" (default) - redacts sensitive information
-        // "public" - logs all information without redaction
-        logPrivacyLevel: "private"
-    }
-});
+Airship.takeOff(AirshipConfig);
 ```
 
 ### iOS

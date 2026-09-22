@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Airship from '@ua/react-native-airship';
 import TabNavigator from './navigation/TabNavigator';
 import styles from './Styles';
+import AirshipConfig from './AirshipConfig';
 
 export default function App() {
   const [isAirshipReady, setIsAirshipReady] = useState(false);
@@ -13,24 +14,7 @@ export default function App() {
     // Initialize Airship SDK
     const initAirship = async () => {
       try {
-        await Airship.takeOff({
-          default: {
-            appKey: "",
-            appSecret: ""
-          },
-          site: "us",
-          urlAllowList: ["*"],
-          android: {
-            notificationConfig: {
-              icon: "ic_notification",
-              accentColor: "#00ff00"
-            },
-            // Optional: Control log privacy level
-            // "private" (default) - redacts sensitive information
-            // "public" - logs all information without redaction
-            logPrivacyLevel: "private"
-          }
-        });
+        await Airship.takeOff(AirshipConfig);
 
         await Airship.channel.addTag('react-app');
 

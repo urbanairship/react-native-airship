@@ -10,11 +10,14 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, 16
 prepare_react_native_project!
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
+# AirshipFrameworkProxy is an automatic-type SPM product; static linking it
+# collides at link time as duplicate-symbol errors.
+linkage = ENV['USE_FRAMEWORKS'] || 'dynamic'
+if linkage.to_sym != :dynamic
+  raise "USE_FRAMEWORKS=#{linkage} is unsupported: AirshipFrameworkProxy requires dynamic linkage. Unset USE_FRAMEWORKS or set it to 'dynamic'."
 end
+Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+use_frameworks! :linkage => linkage.to_sym
 
 target 'AirshipExample' do
   config = use_native_modules!
@@ -37,6 +40,7 @@ target 'AirshipExample' do
   end
 end
 
-target 'AirshipExampleNotificationServiceExtension' do
-  pod 'AirshipServiceExtension'
-end
+# AirshipServiceExtension's CocoaPods release is stuck at 20.12.1 (SDK 21
+# dropped CocoaPods entirely), so this target gets the SPM equivalent,
+# AirshipNotificationServiceExtension, wired directly into its Xcode target
+# instead of through a pod.

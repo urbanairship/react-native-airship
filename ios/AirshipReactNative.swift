@@ -1,11 +1,7 @@
 /* Copyright Airship and Contributors */
 
 import Foundation
-#if canImport(AirshipKit)
-import AirshipKit
-#elseif canImport(AirshipCore)
-import AirshipCore
-#endif
+@_spi(AirshipInternal) import AirshipCore
 import AirshipFrameworkProxy
 import React
 #if canImport(ReactNativeAirshipBridge)
@@ -32,7 +28,7 @@ public final class AirshipReactNative: NSObject, Sendable, @preconcurrency RNAir
     public var overridePresentationOptionsEnabled: Bool {
         get { _overridePresentationOptionsEnabled.value }
         set {
-            _overridePresentationOptionsEnabled.value = newValue
+            _overridePresentationOptionsEnabled.set(newValue)
             if (!newValue) {
                 self.clearPendingPresentationRequests()
             }
@@ -43,7 +39,7 @@ public final class AirshipReactNative: NSObject, Sendable, @preconcurrency RNAir
         AirshipProxy.shared
     }
 
-    public static let version: String = "26.12.0"
+    public static let version: String = "27.0.0"
 
     private let eventNotifier = EventNotifier()
 
@@ -86,9 +82,7 @@ public final class AirshipReactNative: NSObject, Sendable, @preconcurrency RNAir
 
                     let requestID = UUID().uuidString
                     self._pendingPresentationRequests.update {
-                        var requests = $0
-                        requests[requestID] = request
-                        return requests
+                        $0[requestID] = request
                     }
 
                     wrappedNotifier.value?(
@@ -111,10 +105,8 @@ public final class AirshipReactNative: NSObject, Sendable, @preconcurrency RNAir
     @objc
     public func presentationOptionOverridesResult(requestID: String, presentationOptions: [String]?) {
         _pendingPresentationRequests.update {
-            var requests = $0
-            requests[requestID]?.result(optionNames: presentationOptions)
-            requests[requestID] = nil
-            return requests
+            $0[requestID]?.result(optionNames: presentationOptions)
+            $0[requestID] = nil
         }
     }
 
@@ -123,7 +115,7 @@ public final class AirshipReactNative: NSObject, Sendable, @preconcurrency RNAir
             requests.values.forEach { request in
                 request.result(options: nil)
             }
-            return [:]
+            requests = [:]
         }
     }
 

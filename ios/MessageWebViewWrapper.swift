@@ -1,12 +1,8 @@
 /* Copyright Airship and Contributors */
 
 import Foundation
-#if canImport(AirshipKit)
-import AirshipKit
-#elseif canImport(AirshipCore)
 import AirshipCore
 import AirshipMessageCenter
-#endif
 import SwiftUI
 #if canImport(ReactNativeAirshipBridge)
 import ReactNativeAirshipBridge

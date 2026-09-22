@@ -93,3 +93,4 @@ docs/
 airshipconfig.properties
 AirshipConfig.plist
 google-services.json
+example/src/AirshipConfig.ts

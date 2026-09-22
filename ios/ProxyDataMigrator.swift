@@ -3,11 +3,7 @@
 import Foundation
 import AirshipFrameworkProxy
 import UserNotifications
-#if canImport(AirshipKit)
-import AirshipKit
-#elseif canImport(AirshipCore)
-import AirshipCore
-#endif
+@_spi(AirshipInternal) import AirshipCore
 
 struct ProxyDataMigrator {
 

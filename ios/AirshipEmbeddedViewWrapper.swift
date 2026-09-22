@@ -1,12 +1,9 @@
 /* Copyright Airship and Contributors */
 
 import Foundation
-#if canImport(AirshipKit)
-import AirshipKit
-#elseif canImport(AirshipCore)
-import AirshipCore
+@_spi(AirshipInternal) import AirshipCore
 import AirshipAutomation
-#endif
+import AirshipScenes
 import AirshipFrameworkProxy
 import SwiftUI
 #if canImport(ReactNativeAirshipBridge)
@@ -29,7 +26,7 @@ public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBrid
 
         self.viewModel.embeddedID = config.embeddedId
         if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId, !instanceId.isEmpty {
-            self.viewModel.selection = .instance(instanceId)
+            self.viewModel.selection = .instance([instanceId])
         } else {
             self.viewModel.selection = .priority
         }
@@ -129,16 +126,25 @@ struct ReactAirshipEmbeddedView: View {
 
         var height: CGFloat {
             guard let height = self.size?.height, height > 0 else {
-                return (try? AirshipUtils.mainWindow()?.screen.bounds.height) ?? 500
+                return Self.defaultScreenBounds.height
             }
             return height
         }
 
         var width: CGFloat {
             guard let width = self.size?.width, width > 0 else {
-                return (try? AirshipUtils.mainWindow()?.screen.bounds.width) ?? 500
+                return Self.defaultScreenBounds.width
             }
             return width
+        }
+
+        @MainActor
+        private static var defaultScreenBounds: CGRect {
+            let window = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow } ?? UIApplication.shared.delegate?.window ?? nil
+            return window?.screen.bounds ?? CGRect(x: 0, y: 0, width: 500, height: 500)
         }
     }
 

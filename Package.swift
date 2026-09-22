@@ -24,15 +24,19 @@ let package = Package(
     name: "ReactNativeAirship",
     platforms: [.iOS(.v16)],
     products: [
+        // React Native's autolinker requires this product name to exactly
+        // match the npm package name (minus scope), since the generated
+        // top-level aggregate package depends on it by that name.
         .library(
-            name: "ReactNativeAirship",
+            name: "react-native-airship",
             targets: ["ReactNativeAirshipBridge", "react_native_airship", "ReactNativeAirshipObjC"]
         ),
     ],
     dependencies: [
         .package(name: "ReactNative", path: "../../../../xcframeworks"),
         .package(name: "React-GeneratedCode", path: "../../../ios"),
-        .package(url: "https://github.com/urbanairship/airship-mobile-framework-proxy.git", exact: "15.16.0"),
+        .package(url: "https://github.com/urbanairship/airship-mobile-framework-proxy.git", exact: "16.0.1"),
+        .package(url: "https://github.com/urbanairship/ios-library.git", exact: "21.0.2"),
     ],
     targets: [
         // SwiftPM cannot compile Swift and Objective-C++ in one target, and
@@ -50,6 +54,12 @@ let package = Package(
             dependencies: reactHeaders + [
                 "ReactNativeAirshipBridge",
                 .product(name: "AirshipFrameworkProxy", package: "airship-mobile-framework-proxy"),
+                .product(name: "AirshipCore", package: "ios-library"),
+                .product(name: "AirshipAutomation", package: "ios-library"),
+                .product(name: "AirshipMessageCenter", package: "ios-library"),
+                .product(name: "AirshipPreferenceCenter", package: "ios-library"),
+                .product(name: "AirshipFeatureFlags", package: "ios-library"),
+                .product(name: "AirshipScenes", package: "ios-library"),
             ],
             path: "ios",
             sources: [

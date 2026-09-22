@@ -22,6 +22,7 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
             }
         }
 
+        @Suppress("ACCIDENTAL_OVERRIDE")
         override fun receiveCommand(
             view: ReactEmbeddedView,
             commandName: String,

@@ -14,6 +14,7 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
 
     private val delegate = object : ViewManagerDelegate<ReactMessageView> {
 
+        @Suppress("ACCIDENTAL_OVERRIDE")
         override fun setProperty(view: ReactMessageView, propName: String, value: Any?) {
             when (propName) {
                 "messageId" -> setMessageId(view, value as? String)
@@ -21,6 +22,7 @@ class ReactMessageViewManager : SimpleViewManager<ReactMessageView>(),
             }
         }
 
+        @Suppress("ACCIDENTAL_OVERRIDE")
         override fun receiveCommand(
             view: ReactMessageView,
             commandName: String,

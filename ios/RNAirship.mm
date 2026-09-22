@@ -875,7 +875,7 @@ RCT_REMAP_METHOD(featureFlagManagerStatus,
                  featureFlagManagerStatus:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared featureFlagManagerStatusWithCompletionHandler:^(NSString * _Nullable result, NSError * _Nullable error) {
+    [RNAirshipBridgeShared() featureFlagManagerStatusWithCompletionHandler:^(NSString * _Nullable result, NSError * _Nullable error) {
         [self handleResult:result error:error resolve:resolve reject:reject];
     }];
 }
@@ -885,7 +885,7 @@ RCT_REMAP_METHOD(featureFlagManagerWaitRefresh,
                  resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject) {
 
-    [AirshipReactNative.shared featureFlagManagerWaitRefreshWithMaxTimeMillis:maxTimeMillis
+    [RNAirshipBridgeShared() featureFlagManagerWaitRefreshWithMaxTimeMillis:maxTimeMillis
                                                             completionHandler:^(NSError * _Nullable error) {
         [self handleResult:nil error:error resolve:resolve reject:reject];
     }];
