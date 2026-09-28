@@ -63,20 +63,6 @@ Then, add the plugin to your `app.json`:
 ]
 ```
 
-**Known Issues**
-- **Expo SDK 50+ (Dev Builds):** Tapping a foreground notification may cause the app to reload when running in a dev client. This can be resolved by setting the `launchMode` to `launcher` in your `app.json` for `expo-dev-client`. See [issue #550](https://github.com/urbanairship/react-native-airship/issues/550) for more details.
-  ```json
-  "plugins": [
-    [
-      "expo-dev-client",
-      {
-        "ios": { "launchMode": "launcher" },
-        "android": { "launchMode": "launcher" }
-      }
-    ]
-  ]
-  ```
-
 ### iOS Integration
 
 This package supports two iOS dependency managers:
