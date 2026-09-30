@@ -2,7 +2,7 @@
 
 ## Version 27.0.0 - September 21, 2026
 
-Major release that adds experimental Swift Package Manager support on iOS, updates the native Airship SDKs to 21.x, and raises platform requirements. See [MIGRATION.md](MIGRATION.md) for upgrade details.
+Major release that adds experimental Swift Package Manager support on iOS, updates the native Airship SDKs to 21.x, and raises platform requirements. See the [Migration Guide](https://github.com/urbanairship/react-native-airship/blob/27.0.0/CHANGELOG.md) for upgrade details.
 
 ### Changes
 - Added experimental Swift Package Manager support for React Native 0.87+'s SwiftPM integration (`npx react-native spm`); CocoaPods remains the default integration
