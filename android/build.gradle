@@ -14,6 +14,7 @@ buildscript {
     classpath "com.android.tools.build:gradle:8.13.0"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
+    classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
   }
 }
 
@@ -24,6 +25,7 @@ apply plugin: "com.android.library"
 if (project.extensions.findByName('kotlin') == null) {
   apply plugin: "kotlin-android"
 }
+apply plugin: "org.jetbrains.kotlin.plugin.compose"
 apply plugin: "com.facebook.react"
 
 def getExtOrIntegerDefault(name) {
@@ -84,12 +86,20 @@ def getModuleVersion() {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 def proxy_version = getExtOrDefault("airshipProxyVersion")
+def airship_version = getExtOrDefault("airshipVersion")
 
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
   api "com.urbanairship.android:airship-framework-proxy:$proxy_version"
+
+  // AirshipEmbeddedCarousel. Must match the Airship SDK version of the proxy.
+  implementation "com.urbanairship.android:urbanairship-automation-compose:$airship_version"
+  implementation platform("androidx.compose:compose-bom:2025.10.01")
+  implementation "androidx.compose.runtime:runtime"
+  implementation "androidx.compose.ui:ui"
+  implementation "androidx.compose.foundation:foundation"
 
   if (isHmsEnabled()) {
     implementation "com.urbanairship.android:airship-framework-proxy-hms:$proxy_version"

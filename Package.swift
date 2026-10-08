@@ -63,6 +63,7 @@ let package = Package(
             ],
             path: "ios",
             sources: [
+                "AirshipEmbeddedCarouselWrapper.swift",
                 "AirshipEmbeddedViewWrapper.swift",
                 "AirshipPluginLoader.swift",
                 "AirshipReactNative.swift",
@@ -77,6 +78,8 @@ let package = Package(
             sources: [
                 "RNAirship.mm",
                 "RNAirshipBootloader.m",
+                "RNAirshipEmbeddedCarousel.mm",
+                "RNAirshipEmbeddedCarouselViewManager.mm",
                 "RNAirshipEmbeddedView.mm",
                 "RNAirshipEmbeddedViewViewManager.mm",
                 "RNAirshipMessageView.mm",
