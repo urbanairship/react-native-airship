@@ -132,6 +132,19 @@ NS_SWIFT_UI_ACTOR
 - (void)setConfig:(nullable NSString *)json;
 @end
 
+NS_SWIFT_UI_ACTOR
+@protocol RNAirshipEmbeddedCarouselWrapperDelegate <NSObject>
+- (void)onCarouselStateChangedWithCurrentPage:(NSInteger)currentPage pageCount:(NSInteger)pageCount isAvailable:(BOOL)isAvailable NS_SWIFT_NAME(onCarouselStateChanged(currentPage:pageCount:isAvailable:));
+@end
+
+NS_SWIFT_UI_ACTOR
+@protocol RNAirshipEmbeddedCarouselBridge <NSObject>
+@property (nonatomic, weak, nullable) id<RNAirshipEmbeddedCarouselWrapperDelegate> delegate;
+- (void)setConfig:(nullable NSString *)json;
+/// Requests a page. Negative values clear the request.
+- (void)setPage:(NSInteger)page NS_SWIFT_NAME(setPage(_:));
+@end
+
 /// The Swift `AirshipReactNative` class.
 FOUNDATION_EXPORT Class<RNAirshipBridge> RNAirshipBridgeClass(void);
 
@@ -143,6 +156,9 @@ FOUNDATION_EXPORT Class RNAirshipMessageWebViewBridgeClass(void);
 
 /// The Swift `RNAirshipEmbeddedViewWrapper` view class.
 FOUNDATION_EXPORT Class RNAirshipEmbeddedViewBridgeClass(void);
+
+/// The Swift `RNAirshipEmbeddedCarouselWrapper` view class.
+FOUNDATION_EXPORT Class RNAirshipEmbeddedCarouselBridgeClass(void);
 
 /// Disables automatic takeOff by the Swift `AirshipPluginLoader`.
 FOUNDATION_EXPORT void RNAirshipBridgeDisablePluginLoader(void);

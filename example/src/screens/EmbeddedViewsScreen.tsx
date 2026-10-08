@@ -7,8 +7,9 @@ import {
   ScrollView,
   Dimensions,
   Platform,
+  Button,
 } from 'react-native';
-import Airship, { AirshipEmbeddedView } from '@ua/react-native-airship';
+import Airship, { AirshipEmbeddedCarousel, AirshipEmbeddedView } from '@ua/react-native-airship';
 import styles from '../Styles';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -25,6 +26,7 @@ type SizeConfig = {
 };
 
 const EMBEDDED_ID = 'test';
+const CAROUSEL_EMBEDDED_ID = 'embedded-1';
 const SCREEN_NAME = 'embedded_views_screen';
 
 const SIZE_CONFIGS: SizeConfig[] = [
@@ -68,6 +70,8 @@ const SIZE_CONFIGS: SizeConfig[] = [
 
 export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
   const [isEmbeddedReady, setEmbeddedReady] = useState(false);
+  const [carouselPage, setCarouselPage] = useState(0);
+  const [carouselPageCount, setCarouselPageCount] = useState(0);
 
   useEffect(() => {
     Airship.analytics.trackScreen(SCREEN_NAME);
@@ -249,6 +253,38 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
       </View>
 
       {SIZE_CONFIGS.map(renderSizeCard)}
+
+      <View style={styles.evCard}>
+        <View style={styles.evCardHeader}>
+          <Text style={styles.evCardTitle}>Carousel</Text>
+        </View>
+        <Text style={styles.evCardDescription}>
+          <Text style={styles.evCodeText}>
+            ID: "{CAROUSEL_EMBEDDED_ID}" · Page {carouselPageCount > 0 ? carouselPage + 1 : 0} of {carouselPageCount}
+          </Text>
+        </Text>
+        <View style={styles.evCarouselContainer}>
+          <AirshipEmbeddedCarousel
+            embeddedId={CAROUSEL_EMBEDDED_ID}
+            style={styles.evFlexGrow}
+            currentPage={carouselPage}
+            onPageChanged={setCarouselPage}
+            onPageCountChanged={setCarouselPageCount}
+          />
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Button
+            title="Previous"
+            disabled={carouselPage <= 0}
+            onPress={() => setCarouselPage(carouselPage - 1)}
+          />
+          <Button
+            title="Next"
+            disabled={carouselPage >= carouselPageCount - 1}
+            onPress={() => setCarouselPage(carouselPage + 1)}
+          />
+        </View>
+      </View>
 
       <View style={styles.evCard}>
         <View style={styles.evCardHeader}>

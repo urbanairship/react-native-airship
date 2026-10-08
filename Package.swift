@@ -35,7 +35,7 @@ let package = Package(
     dependencies: [
         .package(name: "ReactNative", path: "../../../../xcframeworks"),
         .package(name: "React-GeneratedCode", path: "../../../ios"),
-        .package(url: "https://github.com/urbanairship/airship-mobile-framework-proxy.git", exact: "16.0.1"),
+        .package(url: "https://github.com/urbanairship/airship-mobile-framework-proxy.git", exact: "16.0.2"),
         .package(url: "https://github.com/urbanairship/ios-library.git", exact: "21.0.2"),
     ],
     targets: [
@@ -63,6 +63,7 @@ let package = Package(
             ],
             path: "ios",
             sources: [
+                "AirshipEmbeddedCarouselWrapper.swift",
                 "AirshipEmbeddedViewWrapper.swift",
                 "AirshipPluginLoader.swift",
                 "AirshipReactNative.swift",
@@ -77,6 +78,8 @@ let package = Package(
             sources: [
                 "RNAirship.mm",
                 "RNAirshipBootloader.m",
+                "RNAirshipEmbeddedCarousel.mm",
+                "RNAirshipEmbeddedCarouselViewManager.mm",
                 "RNAirshipEmbeddedView.mm",
                 "RNAirshipEmbeddedViewViewManager.mm",
                 "RNAirshipMessageView.mm",
