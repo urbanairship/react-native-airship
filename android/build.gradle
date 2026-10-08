@@ -86,6 +86,7 @@ def getModuleVersion() {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 def proxy_version = getExtOrDefault("airshipProxyVersion")
+def airship_version = getExtOrDefault("airshipVersion")
 
 dependencies {
   implementation "com.facebook.react:react-android"
@@ -93,7 +94,8 @@ dependencies {
 
   api "com.urbanairship.android:airship-framework-proxy:$proxy_version"
 
-  // Compose, for hosting the AirshipEmbeddedCarousel provided by the proxy.
+  // AirshipEmbeddedCarousel. Must match the Airship SDK version of the proxy.
+  implementation "com.urbanairship.android:urbanairship-automation-compose:$airship_version"
   implementation platform("androidx.compose:compose-bom:2025.10.01")
   implementation "androidx.compose.runtime:runtime"
   implementation "androidx.compose.ui:ui"
