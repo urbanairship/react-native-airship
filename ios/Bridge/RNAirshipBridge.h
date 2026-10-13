@@ -130,6 +130,10 @@ NS_SWIFT_UI_ACTOR
 NS_SWIFT_UI_ACTOR
 @protocol RNAirshipEmbeddedViewBridge <NSObject>
 - (void)setConfig:(nullable NSString *)json;
+- (void)setSizeToContent:(BOOL)sizeToContent;
+
+/// Called with the content height in points whenever it changes.
+@property (nonatomic, copy, nullable) void (^onSizeChange)(CGFloat height);
 @end
 
 /// The Swift `AirshipReactNative` class.
