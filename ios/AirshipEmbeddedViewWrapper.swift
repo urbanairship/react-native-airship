@@ -110,8 +110,8 @@ struct ReactAirshipEmbeddedView: View {
         if let embeddedID = viewModel.embeddedID {
             AirshipEmbeddedView(embeddedID: embeddedID,
                 embeddedSize: .init(
-                    parentWidth: viewModel.width,
-                    parentHeight: viewModel.height
+                    parentWidth: viewModel.parentWidth,
+                    parentHeight: viewModel.parentHeight
                 ),
                 selection: viewModel.selection
             )
@@ -124,27 +124,18 @@ struct ReactAirshipEmbeddedView: View {
         @Published var size: CGSize?
         @Published var selection: AirshipEmbeddedSelection = .priority
 
-        var height: CGFloat {
-            guard let height = self.size?.height, height > 0 else {
-                return Self.defaultScreenBounds.height
-            }
-            return height
-        }
+        /// The host's bound on each axis, or nil while layout has not supplied one.
+        ///
+        /// Nil is the SDK's own signal for "no parent stated": it resolves a percent
+        /// placement against the SwiftUI proposal instead, which is the real box. A
+        /// stand-in value overrides that and sizes content against space the app
+        /// never gave the view. In React Native an unsized view is 0, not unknown.
+        var parentWidth: CGFloat? { Self.bound(self.size?.width) }
+        var parentHeight: CGFloat? { Self.bound(self.size?.height) }
 
-        var width: CGFloat {
-            guard let width = self.size?.width, width > 0 else {
-                return Self.defaultScreenBounds.width
-            }
-            return width
-        }
-
-        @MainActor
-        private static var defaultScreenBounds: CGRect {
-            let window = UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-                .first { $0.isKeyWindow } ?? UIApplication.shared.delegate?.window ?? nil
-            return window?.screen.bounds ?? CGRect(x: 0, y: 0, width: 500, height: 500)
+        private static func bound(_ length: CGFloat?) -> CGFloat? {
+            guard let length, length > 0 else { return nil }
+            return length
         }
     }
 

@@ -55,6 +55,9 @@ using namespace facebook::react;
 - (instancetype) init {
     self = [self initWithFrame:CGRectZero];
     if (self) {
+        // Scene content reports its own size, which can exceed the box Yoga assigned.
+        // Unclipped, a UIView paints that overflow over the app's own views.
+        self.clipsToBounds = YES;
         self.wrapper = [[RNAirshipEmbeddedViewBridgeClass() alloc] initWithFrame:self.bounds];
         [self addSubview:self.wrapper];
     }
