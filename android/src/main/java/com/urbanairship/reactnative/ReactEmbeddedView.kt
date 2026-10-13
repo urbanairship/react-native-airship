@@ -12,6 +12,12 @@ import com.urbanairship.json.JsonValue
 class ReactEmbeddedView(context: Context) : FrameLayout(context) {
 
     private var renderedConfig: String? = null
+    private var sizeToContent: Boolean = false
+
+    /** Records whether the view measures its own content rather than filling its box. */
+    fun setSizeToContent(value: Boolean) {
+        this.sizeToContent = value
+    }
 
     fun setConfig(config: String?) {
         if (config == null || config == renderedConfig) {
@@ -55,5 +61,9 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
         measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY))
         layout(left, top, right, bottom)
+    }
+
+    companion object {
+        const val EVENT_SIZE_CHANGE = "topAirshipEmbeddedViewSizeChange"
     }
 }
