@@ -33,6 +33,9 @@ public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBrid
     }
 
     private func reportContentHeight(_ height: CGFloat) {
+        // The measurement runs on every layout pass; only a self-sizing view reports it.
+        guard self.viewModel.sizeToContent else { return }
+
         // A height at or below the floor means the content could not resolve one, not
         // that it is empty; hold the last real value rather than collapsing the view.
         guard height > Self.minContentHeight,
@@ -48,6 +51,7 @@ public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBrid
     /// Zero bypasses the measurement floor: it is an availability signal, not a
     /// measurement, and the floor exists only to absorb transient layout zeros.
     private func reportContentGone() {
+        guard self.viewModel.sizeToContent else { return }
         guard self.reportedHeight != 0 else { return }
         self.reportedHeight = 0
         self.onSizeChange?(0)
