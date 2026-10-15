@@ -18,6 +18,7 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
         override fun setProperty(view: ReactEmbeddedView, propName: String, value: Any?) {
             when (propName) {
                 "config" -> setConfig(view, value as? String)
+                "sizeToContent" -> setSizeToContent(view, value as? Boolean ?: false)
                 else -> {}
             }
         }
@@ -44,9 +45,25 @@ class ReactEmbeddedViewManager : SimpleViewManager<ReactEmbeddedView>(),
         return ReactEmbeddedView(reactContext)
     }
 
+    override fun getExportedCustomBubblingEventTypeConstants(): MutableMap<String, Any> {
+        return mutableMapOf(
+            ReactEmbeddedView.EVENT_SIZE_CHANGE to mapOf(
+                "phasedRegistrationNames" to mapOf(
+                    "bubbled" to "onSizeChange",
+                    "captured" to "onSizeChangeCapture"
+                )
+            )
+        )
+    }
+
     @ReactProp(name = "config")
     override fun setConfig(view: ReactEmbeddedView, config: String?) {
         view.setConfig(config)
+    }
+
+    @ReactProp(name = "sizeToContent")
+    override fun setSizeToContent(view: ReactEmbeddedView, sizeToContent: Boolean) {
+        view.setSizeToContent(sizeToContent)
     }
 
     companion object {
