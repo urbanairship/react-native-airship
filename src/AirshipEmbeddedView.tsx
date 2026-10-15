@@ -58,7 +58,10 @@ const MIN_CONTENT_HEIGHT = 1;
  * Whether the view measures its own content.
  *
  * It does so only when nothing else determines the height: a caller that states
- * one, in any form, keeps it.
+ * one, or whose style takes it from the parent, keeps it.
+ *
+ * A height the parent imposes from its own side, such as `alignItems: 'stretch'`
+ * on the row above, is not visible here and is not detected.
  *
  * @param style The style passed to the view.
  * @returns `true` when the view should size to its content.
@@ -67,12 +70,25 @@ export function isSelfSizing(style?: ViewStyle): boolean {
   if (style == null) {
     return true;
   }
+  // Stretching and top-to-bottom pinning take the height from the parent without
+  // stating one, so applying a content height would override the parent's.
+  if (style.alignSelf === 'stretch') {
+    return false;
+  }
+  if (
+    style.position === 'absolute' &&
+    style.top != null &&
+    style.bottom != null
+  ) {
+    return false;
+  }
   return (
     style.height == null &&
     style.minHeight == null &&
     style.maxHeight == null &&
     style.aspectRatio == null &&
     style.flex == null &&
+    style.flexGrow == null &&
     style.flexBasis == null
   );
 }
