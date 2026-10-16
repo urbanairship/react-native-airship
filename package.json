@@ -123,7 +123,8 @@
     "ios": {
       "componentProvider": {
         "RNAirshipMessageView": "RNAirshipMessageView",
-        "RNAirshipEmbeddedView": "RNAirshipEmbeddedView"
+        "RNAirshipEmbeddedView": "RNAirshipEmbeddedView",
+        "RNAirshipEmbeddedCarousel": "RNAirshipEmbeddedCarousel"
       }
     }
   },
