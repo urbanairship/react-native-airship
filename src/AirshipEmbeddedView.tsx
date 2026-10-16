@@ -1,7 +1,7 @@
 /* Copyright Airship and Contributors */
 
-import { useCallback, useState } from 'react';
-import type { NativeSyntheticEvent, ViewStyle } from 'react-native';
+import { forwardRef, useCallback, useState } from 'react';
+import type { NativeSyntheticEvent, StyleProp, ViewStyle } from 'react-native';
 import RNAirshipEmbeddedView from './RNAirshipEmbeddedViewNativeComponent';
 
 /**
@@ -26,7 +26,7 @@ export interface AirshipEmbeddedViewSizeChangeEvent {
  * AirshipEmbeddedView props
  */
 export interface AirshipEmbeddedViewProp {
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * The embedded Id.
@@ -40,8 +40,17 @@ export interface AirshipEmbeddedViewProp {
   selection?: AirshipEmbeddedViewSelection;
 
   /**
-   * Called whenever the measured content height changes. Only emitted while the
-   * view is sizing to its content.
+   * Whether the view takes its height from the content instead of filling the
+   * box it is given. Defaults to false.
+   *
+   * The measured height overrides any height in `style`, so a view whose height
+   * comes from its layout should leave this off.
+   */
+  sizeToContent?: boolean;
+
+  /**
+   * Called whenever the measured content height changes. Only emitted while
+   * `sizeToContent` is set.
    *
    * @param event The size change event.
    */
@@ -55,81 +64,47 @@ export interface AirshipEmbeddedViewProp {
 const MIN_CONTENT_HEIGHT = 1;
 
 /**
- * Whether the view measures its own content.
- *
- * It does so only when nothing else determines the height: a caller that states
- * one, or whose style takes it from the parent, keeps it.
- *
- * A height the parent imposes from its own side, such as `alignItems: 'stretch'`
- * on the row above, is not visible here and is not detected.
- *
- * @param style The style passed to the view.
- * @returns `true` when the view should size to its content.
- */
-export function isSelfSizing(style?: ViewStyle): boolean {
-  if (style == null) {
-    return true;
-  }
-  // Stretching and top-to-bottom pinning take the height from the parent without
-  // stating one, so applying a content height would override the parent's.
-  if (style.alignSelf === 'stretch') {
-    return false;
-  }
-  if (
-    style.position === 'absolute' &&
-    style.top != null &&
-    style.bottom != null
-  ) {
-    return false;
-  }
-  return (
-    style.height == null &&
-    style.minHeight == null &&
-    style.maxHeight == null &&
-    style.aspectRatio == null &&
-    style.flex == null &&
-    style.flexGrow == null &&
-    style.flexBasis == null
-  );
-}
-
-/**
  * The style to hand the native view.
  *
+ * The height is appended rather than merged in, so a caller who passes an array
+ * or a registered style keeps every entry and only the height is overridden.
+ *
  * @param style The style passed to the view.
+ * @param sizeToContent Whether the caller asked the view to size itself.
  * @param contentHeight The last measured content height, if any.
- * @returns The style, with a height only when the view is sizing itself and has
- * a usable measurement.
+ * @returns The style, carrying a height only when the caller asked for one and
+ * a usable measurement has arrived.
  */
-export function resolveStyle(
-  style?: ViewStyle,
+function resolveStyle(
+  style: StyleProp<ViewStyle>,
+  sizeToContent: boolean,
   contentHeight?: number
-): ViewStyle | undefined {
-  if (!isSelfSizing(style)) {
+): StyleProp<ViewStyle> {
+  if (!sizeToContent) {
     return style;
   }
   if (contentHeight == null || contentHeight <= MIN_CONTENT_HEIGHT) {
     return style;
   }
-  return { ...style, height: contentHeight };
+  return [style, { height: contentHeight }];
 }
 
 /**
  * Airship Embedded view.
  *
- * Sizes to its content unless the style states a height. While sizing itself it
- * reports each measurement through `onSizeChange`.
+ * Fills the box it is given. Set `sizeToContent` to have it take the height of
+ * its content instead and report each measurement through `onSizeChange`.
  */
-export function AirshipEmbeddedView({
-  style,
-  embeddedId,
-  selection,
-  onSizeChange,
-}: AirshipEmbeddedViewProp) {
+export const AirshipEmbeddedView = forwardRef<
+  React.ComponentRef<typeof RNAirshipEmbeddedView>,
+  AirshipEmbeddedViewProp
+>(function AirshipEmbeddedView(
+  { style, embeddedId, selection, sizeToContent = false, onSizeChange },
+  ref
+) {
   const [contentHeight, setContentHeight] = useState<number | undefined>(
     undefined
   );
-  const selfSizing = isSelfSizing(style);
 
   const handleSizeChange = useCallback(
     (event: NativeSyntheticEvent<AirshipEmbeddedViewSizeChangeEvent>) => {
@@ -142,10 +117,11 @@ export function AirshipEmbeddedView({
 
   return (
     <RNAirshipEmbeddedView
-      style={resolveStyle(style, contentHeight)}
+      ref={ref}
+      style={resolveStyle(style, sizeToContent, contentHeight)}
       config={JSON.stringify({ embeddedId, selection })}
-      sizeToContent={selfSizing}
+      sizeToContent={sizeToContent}
       onSizeChange={handleSizeChange}
     />
   );
-}
+});
