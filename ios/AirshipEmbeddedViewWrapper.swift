@@ -17,6 +17,49 @@ public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBrid
     public let viewController: UIViewController
     public var isAdded: Bool = false
 
+    /// Last height handed to the component view, in points. Negative means none yet.
+    private var reportedHeight: CGFloat = -1
+
+    /// Called with the content height in points whenever it changes.
+    @objc
+    public var onSizeChange: ((CGFloat) -> Void)?
+
+    @objc(setSizeToContent:)
+    public func setSizeToContent(_ value: Bool) {
+        guard self.viewModel.sizeToContent != value else { return }
+        // The next report measures against a different proposal, so not a duplicate.
+        self.reportedHeight = -1
+        self.viewModel.sizeToContent = value
+    }
+
+    private func reportContentHeight(_ height: CGFloat) {
+        // The measurement runs on every layout pass; only a self-sizing view reports it.
+        guard self.viewModel.sizeToContent else { return }
+
+        // A height at or below the floor means the content could not resolve one, not
+        // that it is empty; hold the last real value rather than collapsing the view.
+        guard height > Self.minContentHeight,
+              abs(height - self.reportedHeight) > Self.heightEpsilon else {
+            return
+        }
+        self.reportedHeight = height
+        self.onSizeChange?(height)
+    }
+
+    /// Reports that there is no content, clearing any height already handed over.
+    ///
+    /// Zero bypasses the measurement floor: it is an availability signal, not a
+    /// measurement, and the floor exists only to absorb transient layout zeros.
+    private func reportContentGone() {
+        guard self.viewModel.sizeToContent else { return }
+        guard self.reportedHeight != 0 else { return }
+        self.reportedHeight = 0
+        self.onSizeChange?(0)
+    }
+
+    private static let minContentHeight: CGFloat = 1.0
+    private static let heightEpsilon: CGFloat = 0.5
+
     @objc(setConfig:)
     public func setConfig(_ json: String?) {
         guard let json, let data = json.data(using: .utf8),
@@ -45,6 +88,12 @@ public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBrid
         self.viewController.view.backgroundColor = UIColor.clear
 
         super.init(frame: frame)
+        self.viewModel.onHeightChange = { [weak self] height in
+            self?.reportContentHeight(height)
+        }
+        self.viewModel.onContentUnavailable = { [weak self] in
+            self?.reportContentGone()
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.viewController.view)
         self.viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -108,12 +157,37 @@ struct ReactAirshipEmbeddedView: View {
     var body: some View {
 
         if let embeddedID = viewModel.embeddedID {
-            AirshipEmbeddedView(embeddedID: embeddedID,
+            AirshipEmbeddedView(
+                embeddedID: embeddedID,
                 embeddedSize: .init(
                     parentWidth: viewModel.parentWidth,
                     parentHeight: viewModel.parentHeight
                 ),
                 selection: viewModel.selection
+            ) { [viewModel] in
+                // A measured zero is ambiguous during layout, so unavailability is signalled here.
+                // Zero sized on purpose: a greedy placeholder would feed back the height it cleared.
+                Color.clear
+                    .frame(width: 0, height: 0)
+                    .onAppear { viewModel.onContentUnavailable?() }
+            }
+            // Reported on every layout pass rather than through a preference, which
+            // misses the placeholder-to-content transition. The wrapper dedupes.
+            .background(
+                GeometryReader { [viewModel] proxy -> Color in
+                    let height = proxy.size.height
+                    DispatchQueue.main.async {
+                        viewModel.onHeightChange?(height)
+                    }
+                    return Color.clear
+                }
+            )
+            // While self sizing the host is taller than the visible box, so pin the
+            // content to the top instead of letting SwiftUI centre it out of view.
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity,
+                alignment: viewModel.sizeToContent ? .top : .center
             )
         }
     }
@@ -123,6 +197,13 @@ struct ReactAirshipEmbeddedView: View {
       @Published var embeddedID: String?
         @Published var size: CGSize?
         @Published var selection: AirshipEmbeddedSelection = .priority
+        @Published var sizeToContent: Bool = false
+
+        var onHeightChange: ((CGFloat) -> Void)?
+
+        /// Called when the content goes away, so a stale height cannot size what
+        /// arrives next.
+        var onContentUnavailable: (() -> Void)?
 
         /// The host's bound on each axis, or nil while layout has not supplied one.
         ///
@@ -131,11 +212,28 @@ struct ReactAirshipEmbeddedView: View {
         /// stand-in value overrides that and sizes content against space the app
         /// never gave the view. In React Native an unsized view is 0, not unknown.
         var parentWidth: CGFloat? { Self.bound(self.size?.width) }
-        var parentHeight: CGFloat? { Self.bound(self.size?.height) }
+
+        /// While self sizing the window height stands in: measurement must not depend
+        /// on the box the host just set, or the two feed each other.
+        var parentHeight: CGFloat? {
+            if sizeToContent {
+                return Self.windowHeight()
+            }
+            return Self.bound(self.size?.height)
+        }
 
         private static func bound(_ length: CGFloat?) -> CGFloat? {
             guard let length, length > 0 else { return nil }
             return length
+        }
+
+        @MainActor
+        static func windowHeight() -> CGFloat? {
+            UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow }?
+                .screen.bounds.height
         }
     }
 

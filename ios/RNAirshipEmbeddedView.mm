@@ -41,6 +41,7 @@ using namespace facebook::react;
 {
     const auto &newProps = *std::static_pointer_cast<const RNAirshipEmbeddedViewProps>(props);
     self.config = [NSString stringWithUTF8String:newProps.config.c_str()];
+    [self.wrapper setSizeToContent:newProps.sizeToContent];
 
     [super updateProps:props oldProps:oldProps];
 }
@@ -59,6 +60,10 @@ using namespace facebook::react;
         // Unclipped, a UIView paints that overflow over the app's own views.
         self.clipsToBounds = YES;
         self.wrapper = [[RNAirshipEmbeddedViewBridgeClass() alloc] initWithFrame:self.bounds];
+        __weak RNAirshipEmbeddedView *weakSelf = self;
+        self.wrapper.onSizeChange = ^(CGFloat height) {
+            [weakSelf emitSizeChange:height];
+        };
         [self addSubview:self.wrapper];
     }
     return self;
@@ -70,6 +75,16 @@ using namespace facebook::react;
 
 - (void)didMoveToWindow {
     [super didMoveToWindow];
+}
+
+- (void)emitSizeChange:(CGFloat)height {
+#ifdef RCT_NEW_ARCH_ENABLED
+    if (!_eventEmitter) {
+        return;
+    }
+    std::static_pointer_cast<const RNAirshipEmbeddedViewEventEmitter>(_eventEmitter)
+        ->onSizeChange({.height = static_cast<double>(height)});
+#endif
 }
 
 - (void)setConfig:(NSString *)config {
