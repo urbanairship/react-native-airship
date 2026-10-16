@@ -1,6 +1,11 @@
 /* Copyright Airship and Contributors */
 
 import { forwardRef, useCallback, useState } from 'react';
+import type {
+  ComponentRef,
+  ForwardRefExoticComponent,
+  RefAttributes,
+} from 'react';
 import type { NativeSyntheticEvent, StyleProp, ViewStyle } from 'react-native';
 import RNAirshipEmbeddedView from './RNAirshipEmbeddedViewNativeComponent';
 
@@ -90,15 +95,21 @@ function resolveStyle(
 }
 
 /**
+ * The native view handed to a `ref` on {@link AirshipEmbeddedView}.
+ */
+export type AirshipEmbeddedViewInstance = ComponentRef<
+  typeof RNAirshipEmbeddedView
+>;
+
+/**
  * Airship Embedded view.
  *
  * Fills the box it is given. Set `sizeToContent` to have it take the height of
  * its content instead and report each measurement through `onSizeChange`.
  */
-export const AirshipEmbeddedView = forwardRef<
-  React.ComponentRef<typeof RNAirshipEmbeddedView>,
-  AirshipEmbeddedViewProp
->(function AirshipEmbeddedView(
+export const AirshipEmbeddedView: ForwardRefExoticComponent<
+  AirshipEmbeddedViewProp & RefAttributes<AirshipEmbeddedViewInstance>
+> = forwardRef(function AirshipEmbeddedView(
   { style, embeddedId, selection, sizeToContent = false, onSizeChange },
   ref
 ) {
