@@ -144,6 +144,7 @@ private struct EmbeddedCarouselConfig: Decodable {
     }
 }
 
+@MainActor
 private struct ReactAirshipEmbeddedCarousel: View {
     @ObservedObject var viewModel: ReactAirshipEmbeddedView.ViewModel
     let carouselState: AirshipEmbeddedCarouselState
