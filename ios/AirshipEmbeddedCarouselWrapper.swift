@@ -19,6 +19,12 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
     private var cancellable: AnyCancellable?
     private var pendingPage: Int?
     private var lastRequestedPage: Int?
+    private var lastReportedState: ReportedState?
+
+    private struct ReportedState: Equatable {
+        let currentPage: Int
+        let pageCount: Int
+    }
 
     @objc
     public let viewController: UIViewController
@@ -34,6 +40,12 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
             return
         }
 
+        if self.viewModel.embeddedID != config.embeddedId {
+            // A different carousel (or a recycled view): drop state tied to the previous one.
+            pendingPage = nil
+            lastRequestedPage = nil
+            lastReportedState = nil
+        }
         self.viewModel.embeddedID = config.embeddedId
         if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId, !instanceId.isEmpty {
             self.viewModel.selection = .instance([instanceId])
@@ -44,12 +56,15 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
 
     @objc(setPage:)
     public func setPage(_ page: Int) {
-        guard page != lastRequestedPage else { return }
-        lastRequestedPage = page
         guard page >= 0 else {
+            // Negative values clear the request, so the same index can be requested again.
             pendingPage = nil
+            lastRequestedPage = nil
             return
         }
+        // Only guards against redundant prop updates re-applying the same page.
+        guard page != lastRequestedPage else { return }
+        lastRequestedPage = page
         pendingPage = page
         applyPendingPage()
     }
@@ -101,6 +116,10 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
         // time this runs on the main queue.
         let count = carouselState.pageCount
         let page = count > 0 ? (carouselState.currentPage ?? 0) : 0
+        // The SDK often reassigns the same values; only cross the bridge on a real change.
+        let state = ReportedState(currentPage: page, pageCount: count)
+        guard state != lastReportedState else { return }
+        lastReportedState = state
         delegate?.onCarouselStateChanged(
             currentPage: page,
             pageCount: count,
@@ -154,24 +173,20 @@ private struct ReactAirshipEmbeddedCarousel: View {
                 state: carouselState,
                 embeddedID: embeddedID,
                 embeddedSize: .init(
-                    parentWidth: parentSize.width,
-                    parentHeight: parentSize.height
+                    parentWidth: Self.bound(viewModel.size?.width),
+                    parentHeight: Self.bound(viewModel.size?.height)
                 ),
                 selection: viewModel.selection
             )
         }
     }
 
-    // Falls back to the screen size until the first layout pass, matching the
-    // embedded view's sizing rules.
-    private var parentSize: CGSize {
-        if let size = viewModel.size, size.width > 0, size.height > 0 {
-            return size
-        }
-        let window = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first { $0.isKeyWindow }
-        return window?.screen.bounds.size ?? CGSize(width: 500, height: 500)
+    /// The host's bound on an axis, or nil while layout has not supplied one.
+    ///
+    /// Nil lets the SDK resolve percent placements against the SwiftUI proposal
+    /// (the real box) instead of a stand-in size the app never gave the view.
+    private static func bound(_ length: CGFloat?) -> CGFloat? {
+        guard let length, length > 0 else { return nil }
+        return length
     }
 }

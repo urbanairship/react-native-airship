@@ -24,6 +24,9 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
+      - name: Select Xcode 27.1
+        run: sudo xcode-select -s /Applications/Xcode_27.1.app
+
       - run: npm ci
       - run: bash ./scripts/run_ci_tasks.sh -i
       - run: bash ./scripts/run_ci_tasks.sh -a

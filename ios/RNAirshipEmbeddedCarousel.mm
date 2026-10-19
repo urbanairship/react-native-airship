@@ -51,6 +51,13 @@ using namespace facebook::react;
     [super updateProps:props oldProps:oldProps];
 }
 
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    // Fabric pools views; don't carry the previous placement's page request over.
+    [self.wrapper setPage:-1];
+}
+
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index {
 }
 
@@ -61,6 +68,8 @@ using namespace facebook::react;
 - (instancetype) init {
     self = [self initWithFrame:CGRectZero];
     if (self) {
+        // Keep a carousel taller than its Yoga box from painting over siblings.
+        self.clipsToBounds = YES;
         self.wrapper = [[RNAirshipEmbeddedCarouselBridgeClass() alloc] initWithFrame:self.bounds];
         self.wrapper.delegate = self;
         [self addSubview:self.wrapper];
