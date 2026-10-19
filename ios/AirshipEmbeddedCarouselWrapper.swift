@@ -144,7 +144,6 @@ private struct EmbeddedCarouselConfig: Decodable {
     }
 }
 
-@MainActor
 private struct ReactAirshipEmbeddedCarousel: View {
     @ObservedObject var viewModel: ReactAirshipEmbeddedView.ViewModel
     let carouselState: AirshipEmbeddedCarouselState
@@ -155,11 +154,24 @@ private struct ReactAirshipEmbeddedCarousel: View {
                 state: carouselState,
                 embeddedID: embeddedID,
                 embeddedSize: .init(
-                    parentWidth: viewModel.width,
-                    parentHeight: viewModel.height
+                    parentWidth: parentSize.width,
+                    parentHeight: parentSize.height
                 ),
                 selection: viewModel.selection
             )
         }
+    }
+
+    // Falls back to the screen size until the first layout pass, matching the
+    // embedded view's sizing rules.
+    private var parentSize: CGSize {
+        if let size = viewModel.size, size.width > 0, size.height > 0 {
+            return size
+        }
+        let window = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow }
+        return window?.screen.bounds.size ?? CGSize(width: 500, height: 500)
     }
 }
