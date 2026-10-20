@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Check Version
         run: bash ./scripts/check_version.sh ${GITHUB_REF/refs\/tags\//}
 
@@ -22,10 +22,10 @@ jobs:
       id-token: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: .nvmrc
           registry-url: 'https://registry.npmjs.org'
@@ -36,33 +36,19 @@ jobs:
   github-release:
     needs: check-version
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: Get the release notes
-        id: get_release_notes
-        run: |
-          VERSION=${{ steps.get_version.outputs.VERSION }}
-          NOTES="$(awk "/## Version $VERSION/{flag=1;next}/## Version/{flag=0}flag" CHANGELOG.md)"
-          NOTES="${NOTES//'%'/'%25'}"
-          NOTES="${NOTES//$'\n'/'%0A'}"
-          NOTES="${NOTES//$'\r'/'%0D'}"
-          echo ::set-output name=NOTES::"$NOTES"
-
-      - name: Github Release
-        uses: actions/create-release@v1.0.1
+      - name: Create GitHub release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: ${{ steps.get_version.outputs.VERSION }}
-          body: ${{ steps.get_release_notes.outputs.NOTES }}
-          draft: false
-          prerelease: false
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.ref_name }}
+        run: |
+          awk -v v="## Version $VERSION" '$0 ~ v {flag=1; next} /## Version/ {flag=0} flag' CHANGELOG.md > release_notes.md
+          gh release create "$VERSION" --title "$VERSION" --notes-file release_notes.md --verify-tag
 
   publish-docs:
     needs: check-version
@@ -80,8 +66,12 @@ jobs:
     needs: [check-version, module, github-release, publish-docs]
     runs-on: ubuntu-latest
     steps:
-      - uses: homoluctus/slatify@master
+      - name: Notify Slack
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
-          type: ${{ (contains(needs.*.result, 'failure') && 'failure') || (contains(needs.*.result, 'cancelled') && 'cancelled') || 'success' }}
-          job_name: "React Native Release"
-          url: ${{ secrets.MOBILE_SLACK_WEBHOOK }}
+          webhook: ${{ secrets.MOBILE_SLACK_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            attachments:
+              - color: "${{ (contains(needs.*.result, 'failure') && 'danger') || (contains(needs.*.result, 'cancelled') && 'warning') || 'good' }}"
+                text: "React Native Release: ${{ (contains(needs.*.result, 'failure') && 'failure') || (contains(needs.*.result, 'cancelled') && 'cancelled') || 'success' }} (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|view run>)"
