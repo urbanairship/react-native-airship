@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   test:
-    runs-on: macos-26-xlarge
+    runs-on: xcode-27-xlarge
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -23,9 +23,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'npm'
-
-      - name: Select Xcode 27.1
-        run: sudo xcode-select -s /Applications/Xcode_27.1.app
 
       - run: npm ci
       - run: bash ./scripts/run_ci_tasks.sh -i
