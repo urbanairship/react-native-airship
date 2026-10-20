@@ -1,5 +1,9 @@
 # React Native Module 27.0.0 Changelog
 
+## Version No_version - October 20, 2026
+
+Patch release.
+
 ## Version 27.0.0 - September 21, 2026
 
 Major release that adds experimental Swift Package Manager support on iOS, updates the native Airship SDKs to 21.x, and raises platform requirements. See the [Migration Guide](https://github.com/urbanairship/react-native-airship/blob/27.0.0/MIGRATION.md) for upgrade details.
