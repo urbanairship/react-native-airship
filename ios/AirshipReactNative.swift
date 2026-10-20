@@ -39,7 +39,7 @@ public final class AirshipReactNative: NSObject, Sendable, @preconcurrency RNAir
         AirshipProxy.shared
     }
 
-    public static let version: String = "27.0.0"
+    public static let version: String = "99.0.0"
 
     private let eventNotifier = EventNotifier()
 
