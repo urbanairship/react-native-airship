@@ -1,6 +1,5 @@
 /* Copyright Airship and Contributors */
 
-import React from 'react';
 import { Platform, UIManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';

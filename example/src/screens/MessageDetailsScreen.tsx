@@ -1,10 +1,11 @@
 /* Copyright Airship and Contributors */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
   ActivityIndicator,
+  Alert,
   Button,
   StyleSheet,
 } from 'react-native';
@@ -41,7 +42,7 @@ export default function MessageDetailsScreen({
 
   const failedLoading = () => {
     setAnimating(false);
-    alert('Unable to load message. Please try again later');
+    Alert.alert('Unable to load message. Please try again later');
     navigation.goBack();
   };
   return (
@@ -92,7 +93,11 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   loadingContainer: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',

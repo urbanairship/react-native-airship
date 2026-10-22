@@ -103,7 +103,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
       case TabScreens.MESSAGE_CENTER:
         return <MessageCenterScreen navigation={navigation} route={route} />;
       case TabScreens.PREFERENCE_CENTER:
-        return <PreferenceCenterScreen navigation={navigation} route={route} />;
+        return <PreferenceCenterScreen navigation={navigation} />;
       case TabScreens.EMBEDDED_VIEWS:
         return <EmbeddedViewsScreen navigation={navigation} />;
       case TabScreens.MESSAGE_DETAILS:

@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import styles from '../Styles';
 import Airship, {
+  PromptPermissionFallback,
   EventType,
   AirshipEmbeddedView,
   SmsRegistrationOptions,
@@ -54,7 +55,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const refreshNamedUser = useCallback(async () => {
     try {
       const fetchedNamedUser = await Airship.contact.getNamedUserId();
-      setNamedUser(fetchedNamedUser);
+      setNamedUser(fetchedNamedUser ?? undefined);
     } catch {
       // Ignore errors fetching named user
     }
@@ -143,7 +144,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     try {
       if (enabled) {
         await Airship.push.enableUserNotifications({
-          fallback: 'systemSettings',
+          fallback: PromptPermissionFallback.SystemSettings,
         });
       } else {
         await Airship.push.setUserNotificationsEnabled(false);
@@ -194,6 +195,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         const activities = await Airship.iOS.liveActivityManager.listAll();
         for (const element of activities) {
           await Airship.iOS.liveActivityManager.end({
+            attributesType: 'ExampleWidgetsAttributes',
             activityId: element.id,
             dismissalPolicy: {
               type: 'immediate',
@@ -222,6 +224,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         const activities = await Airship.iOS.liveActivityManager.listAll();
         for (const element of activities) {
           await Airship.iOS.liveActivityManager.update({
+            attributesType: 'ExampleWidgetsAttributes',
             activityId: element.id,
             content: {
               state: {
@@ -272,7 +275,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
         // Get named user
         const fetchedNamedUser = await Airship.contact.getNamedUserId();
-        setNamedUser(fetchedNamedUser);
+        setNamedUser(fetchedNamedUser ?? undefined);
       } catch {
         // Expected error when Airship is not initialized
       } finally {

@@ -3,12 +3,47 @@ name: CI
 on: [pull_request]
 
 jobs:
-  test:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - run: npm ci
+
+      # AirshipConfig.ts holds credentials and is gitignored, so the example
+      # cannot typecheck or bundle without one.
+      - name: Provide the example's Airship config
+        run: cp example/src/AirshipConfig.ts.example example/src/AirshipConfig.ts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+
+      # The native jobs build Debug, which loads JS from Metro at runtime and
+      # never compiles it. Bundling is what fails on a missing import.
+      - name: Bundle the example
+        working-directory: example
+        run: |
+          npx react-native bundle \
+            --platform android \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output "$RUNNER_TEMP/index.android.bundle" \
+            --assets-dest "$RUNNER_TEMP/assets"
+
+  native:
     runs-on: macos-26-xlarge
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -16,8 +51,8 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0.1' 
-      
+          ruby-version: '3.3'
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
