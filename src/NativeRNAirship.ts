@@ -44,7 +44,10 @@ export interface Spec extends TurboModule {
   pushIosSetBadgeNumber(badgeNumber: number): Promise<void>;
   pushIosGetBadgeNumber(): Promise<number>;
   pushIosIsOverridePresentationOptionsEnabled(enabled: boolean): void;
-  pushIosOverridePresentationOptions(requestId: string, options?: string[]): void;
+  pushIosOverridePresentationOptions(
+    requestId: string,
+    options?: string[]
+  ): void;
   pushIosGetAuthorizedNotificationSettings(): Promise<string[]>;
   pushIosGetAuthorizedNotificationStatus(): Promise<string>;
 
@@ -52,7 +55,10 @@ export interface Spec extends TurboModule {
   pushAndroidIsNotificationChannelEnabled(channel: string): Promise<boolean>;
   pushAndroidSetNotificationConfig(config: Object): void;
   pushAndroidIsOverrideForegroundDisplayEnabled(enabled: boolean): void;
-  pushAndroidOverrideForegroundDisplay(requestId: string, shouldDisplay: boolean): void;
+  pushAndroidOverrideForegroundDisplay(
+    requestId: string,
+    shouldDisplay: boolean
+  ): void;
 
   // Contact
   contactIdentify(namedUser: string): Promise<void>;
@@ -71,7 +77,6 @@ export interface Spec extends TurboModule {
   analyticsAssociateIdentifier(key: string, identifier?: string): Promise<void>;
   addCustomEvent(event: Object): Promise<void>;
   analyticsGetSessionId(): Promise<string>;
-
 
   // Action
   actionRun(action: Object): Promise<Object | Error>;
@@ -116,10 +121,16 @@ export interface Spec extends TurboModule {
   localeClearLocaleOverride(): Promise<void>;
 
   // Feature Flag Manager
-  featureFlagManagerFlag(flagName: string, useResultCache: boolean):Promise<Object>;
+  featureFlagManagerFlag(
+    flagName: string,
+    useResultCache: boolean
+  ): Promise<Object>;
   featureFlagManagerTrackInteraction(flag: Object): Promise<void>;
   featureFlagManagerResultCacheGetFlag(flagName: string): Promise<Object>;
-  featureFlagManagerResultCacheSetFlag(flag: Object, ttl: number): Promise<void>;
+  featureFlagManagerResultCacheSetFlag(
+    flag: Object,
+    ttl: number
+  ): Promise<void>;
   featureFlagManagerResultCacheRemoveFlag(flagName: string): Promise<void>;
   featureFlagManagerStatus(): Promise<string>;
   featureFlagManagerWaitRefresh(maxTimeMillis?: number): Promise<void>;

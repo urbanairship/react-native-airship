@@ -64,4 +64,3 @@ export class AirshipLiveUpdateManager {
     return this.module.liveUpdateClearAll();
   }
 }
-

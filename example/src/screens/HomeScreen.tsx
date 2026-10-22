@@ -30,7 +30,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const [channelId, setChannelId] = useState<string | null>(null);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isEmbeddedReady, setEmbeddedReady] = useState(false);
-  const embeddedViewId = "test";
+  const embeddedViewId = 'test';
   const [tags, setTags] = useState<string[]>([]);
   const [tagText, setTagText] = useState('');
   const [namedUser, setNamedUser] = useState<string | undefined>(undefined);
@@ -38,14 +38,16 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const [loading, setLoading] = useState(false);
   const [smsNumber, setSmsNumber] = useState<string | undefined>(undefined);
   const [smsText, setSmsText] = useState('');
-  const [emailAddress, setEmailAddress] = useState<string | undefined>(undefined);
+  const [emailAddress, setEmailAddress] = useState<string | undefined>(
+    undefined
+  );
   const [emailText, setEmailText] = useState('');
 
   const refreshTags = useCallback(async () => {
     try {
       const fetchedTags = await Airship.channel.getTags();
       setTags(fetchedTags);
-    } catch (error) {
+    } catch {
       // Ignore errors fetching tags
     }
   }, []);
@@ -54,7 +56,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     try {
       const fetchedNamedUser = await Airship.contact.getNamedUserId();
       setNamedUser(fetchedNamedUser ?? undefined);
-    } catch (error) {
+    } catch {
       // Ignore errors fetching named user
     }
   }, []);
@@ -66,7 +68,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       await Airship.contact.identify(namedUserText);
       await refreshNamedUser();
       setNamedUserText(''); // Clear named user text once set
-    } catch (error) {
+    } catch {
       // Ignore errors
     } finally {
       setLoading(false);
@@ -115,24 +117,27 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       await Airship.channel.addTag(tagText);
       await refreshTags();
       setTagText('');
-    } catch (error) {
+    } catch {
       //Ignore error
-    }finally {
+    } finally {
       setLoading(false);
     }
   }, [tagText, refreshTags]);
 
-  const handleTagRemove = useCallback(async (text: string) => {
-    setLoading(true);
-    try {
-      await Airship.channel.removeTag(text);
-      await refreshTags();
-    } catch (error) {
-      // Ignore errors
-    } finally {
-      setLoading(false);
-    }
-  }, [refreshTags]);
+  const handleTagRemove = useCallback(
+    async (text: string) => {
+      setLoading(true);
+      try {
+        await Airship.channel.removeTag(text);
+        await refreshTags();
+      } catch {
+        // Ignore errors
+      } finally {
+        setLoading(false);
+      }
+    },
+    [refreshTags]
+  );
 
   const handleNotificationsEnabled = useCallback(async (enabled: boolean) => {
     setLoading(true);
@@ -144,7 +149,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       } else {
         await Airship.push.setUserNotificationsEnabled(false);
       }
-    } catch (error) {
+    } catch {
       // Ignore errors
     } finally {
       setLoading(false);
@@ -176,7 +181,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
           },
         });
       }
-    } catch (error) {
+    } catch {
       // Ignore errors
     } finally {
       setLoading(false);
@@ -193,8 +198,8 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             attributesType: 'ExampleWidgetsAttributes',
             activityId: element.id,
             dismissalPolicy: {
-              type: "immediate"
-            }
+              type: 'immediate',
+            },
           });
         }
       } else {
@@ -205,7 +210,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
           });
         }
       }
-    } catch (error) {
+    } catch {
       // Ignore errors
     } finally {
       setLoading(false);
@@ -240,7 +245,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
           });
         }
       }
-    } catch (error) {
+    } catch {
       // Ignore errors
     } finally {
       setLoading(false);
@@ -253,25 +258,25 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       try {
         // Check embedded view ready state
         setEmbeddedReady(Airship.inApp.isEmbeddedReady(embeddedViewId));
-        
+
         // Get channel ID
         const id = await Airship.channel.getChannelId();
         if (id) {
           setChannelId(id);
         }
-        
+
         // Check notification status
         const status = await Airship.push.getNotificationStatus();
         setNotificationsEnabled(status.isUserOptedIn);
-        
+
         // Get tags
         const fetchedTags = await Airship.channel.getTags();
         setTags(fetchedTags);
-        
+
         // Get named user
         const fetchedNamedUser = await Airship.contact.getNamedUserId();
         setNamedUser(fetchedNamedUser ?? undefined);
-      } catch (error) {
+      } catch {
         // Expected error when Airship is not initialized
       } finally {
         setLoading(false);
@@ -321,7 +326,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             <ActivityIndicator size="large" color="#004bff" />
           </View>
         )}
-        
+
         {/* Main Content */}
         {channelId ? (
           <>
@@ -333,13 +338,21 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
               {isEmbeddedReady ? (
                 <>
                   <View style={styles.embeddedContainer}>
-                    <AirshipEmbeddedView embeddedId={embeddedViewId} style={{ height: 150 }} />
+                    <AirshipEmbeddedView
+                      embeddedId={embeddedViewId}
+                      style={{ height: 150 }}
+                    />
                   </View>
-                  <Text style={styles.embeddedCaption}>Embedded View ID: "{embeddedViewId}"</Text>
+                  <Text style={styles.embeddedCaption}>
+                    Embedded View ID: "{embeddedViewId}"
+                  </Text>
                 </>
               ) : (
                 <View style={styles.homeHeaderContainer}>
-                  <Text style={styles.sectionSubtitle}>Embedded view with ID: "{embeddedViewId}" is not available yet</Text>
+                  <Text style={styles.sectionSubtitle}>
+                    Embedded view with ID: "{embeddedViewId}" is not available
+                    yet
+                  </Text>
                 </View>
               )}
               <TouchableOpacity
@@ -358,9 +371,15 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 <TouchableOpacity
                   style={[
                     styles.pushButton,
-                    { backgroundColor: notificationsEnabled ? '#6ca15f' : '#E0E0E0' }
+                    {
+                      backgroundColor: notificationsEnabled
+                        ? '#6ca15f'
+                        : '#E0E0E0',
+                    },
                   ]}
-                  onPress={() => handleNotificationsEnabled(!notificationsEnabled)}
+                  onPress={() =>
+                    handleNotificationsEnabled(!notificationsEnabled)
+                  }
                 >
                   <Text style={styles.pushButtonText}>
                     {notificationsEnabled ? 'Push Enabled' : 'Push Disabled'}
@@ -375,8 +394,10 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 <Text style={styles.sectionTitle}>Channel ID</Text>
               </View>
               <View style={styles.channelIdContainer}>
-                <Text style={styles.channelIdLabel}>Tap to copy to clipboard:</Text>
-                <TouchableHighlight 
+                <Text style={styles.channelIdLabel}>
+                  Tap to copy to clipboard:
+                </Text>
+                <TouchableHighlight
                   onPress={() => {
                     // Copy to clipboard would go here
                   }}
@@ -544,13 +565,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 />
               </View>
             </View>
-            
           </>
         ) : (
-          <View style={[styles.section, {backgroundColor: '#FFEBEE'}]}>
+          <View style={[styles.section, { backgroundColor: '#FFEBEE' }]}>
             <Text style={styles.warningTitle}>Channel Unavailable</Text>
             <Text style={styles.warningText}>
-              Have you added the takeOff call with the correct app key and secret?
+              Have you added the takeOff call with the correct app key and
+              secret?
             </Text>
           </View>
         )}

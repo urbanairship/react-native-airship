@@ -31,7 +31,7 @@ export type TabNavigatorProps = {
   initialScreen?: TabScreens;
 };
 
-const TabNavigator: React.FC<TabNavigatorProps> = ({ 
+const TabNavigator: React.FC<TabNavigatorProps> = ({
   initialScreen = TabScreens.HOME,
 }) => {
   const [activeScreen, setActiveScreen] = useState<TabScreens>(initialScreen);
@@ -82,7 +82,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
       navigate(routeName as TabScreens, params);
     },
     setParams: (newParams: Record<string, any>) => {
-      setParams({...params, ...newParams});
+      setParams({ ...params, ...newParams });
     },
     setOptions: () => {},
   };
@@ -108,8 +108,8 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
         return <EmbeddedViewsScreen navigation={navigation} />;
       case TabScreens.MESSAGE_DETAILS:
         return (
-          <MessageDetailsScreen 
-            navigation={navigation} 
+          <MessageDetailsScreen
+            navigation={navigation}
             messageId={params.messageId}
             title={params.title}
           />
@@ -120,8 +120,12 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
   };
 
   // Hide tab bar when showing message details or embedded views
-  const shouldShowTabBar = activeScreen !== TabScreens.MESSAGE_DETAILS && activeScreen !== TabScreens.EMBEDDED_VIEWS;
-  const shouldShowBackButton = activeScreen === TabScreens.MESSAGE_DETAILS || activeScreen === TabScreens.EMBEDDED_VIEWS;
+  const shouldShowTabBar =
+    activeScreen !== TabScreens.MESSAGE_DETAILS &&
+    activeScreen !== TabScreens.EMBEDDED_VIEWS;
+  const shouldShowBackButton =
+    activeScreen === TabScreens.MESSAGE_DETAILS ||
+    activeScreen === TabScreens.EMBEDDED_VIEWS;
 
   const getHeaderTitle = () => {
     switch (activeScreen) {
@@ -142,78 +146,97 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({
             <Icon name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         ) : (
-          <Image 
-            source={require('../img/airship-mark.png')} 
+          <Image
+            source={require('../img/airship-mark.png')}
             style={styles.headerImage}
           />
         )}
         <Text style={styles.headerText}>{getHeaderTitle()}</Text>
         {shouldShowBackButton && <View style={styles.headerBackButton} />}
       </View>
-      <View style={styles.contentContainer}>
-        {renderScreen()}
-      </View>
+      <View style={styles.contentContainer}>{renderScreen()}</View>
 
       {shouldShowTabBar && (
         <View style={[styles.tabBar, { paddingBottom: insets.bottom }]}>
-        <Pressable
-          style={({pressed}) => [
-            styles.tabItem,
-            activeScreen === TabScreens.HOME && styles.activeTab,
-            pressed && styles.tabPressed
-          ]}
-          onPress={() => navigate(TabScreens.HOME)}
-        >
-          <Icon name="home" size={26} color={activeScreen === TabScreens.HOME ? '#004bff' : '#666666'} />
-          <Text
-            style={[
-              styles.tabText,
-              activeScreen === TabScreens.HOME && styles.activeTabText,
+          <Pressable
+            style={({ pressed }) => [
+              styles.tabItem,
+              activeScreen === TabScreens.HOME && styles.activeTab,
+              pressed && styles.tabPressed,
             ]}
+            onPress={() => navigate(TabScreens.HOME)}
           >
-            Home
-          </Text>
-        </Pressable>
+            <Icon
+              name="home"
+              size={26}
+              color={activeScreen === TabScreens.HOME ? '#004bff' : '#666666'}
+            />
+            <Text
+              style={[
+                styles.tabText,
+                activeScreen === TabScreens.HOME && styles.activeTabText,
+              ]}
+            >
+              Home
+            </Text>
+          </Pressable>
 
-        <Pressable
-          style={({pressed}) => [
-            styles.tabItem,
-            activeScreen === TabScreens.MESSAGE_CENTER && styles.activeTab,
-            pressed && styles.tabPressed
-          ]}
-          onPress={() => navigate(TabScreens.MESSAGE_CENTER)}
-        >
-          <Icon name="email" size={26} color={activeScreen === TabScreens.MESSAGE_CENTER ? '#004bff' : '#666666'} />
-          <Text
-            style={[
-              styles.tabText,
-              activeScreen === TabScreens.MESSAGE_CENTER && styles.activeTabText,
+          <Pressable
+            style={({ pressed }) => [
+              styles.tabItem,
+              activeScreen === TabScreens.MESSAGE_CENTER && styles.activeTab,
+              pressed && styles.tabPressed,
             ]}
+            onPress={() => navigate(TabScreens.MESSAGE_CENTER)}
           >
-            Messages
-          </Text>
-        </Pressable>
+            <Icon
+              name="email"
+              size={26}
+              color={
+                activeScreen === TabScreens.MESSAGE_CENTER
+                  ? '#004bff'
+                  : '#666666'
+              }
+            />
+            <Text
+              style={[
+                styles.tabText,
+                activeScreen === TabScreens.MESSAGE_CENTER &&
+                  styles.activeTabText,
+              ]}
+            >
+              Messages
+            </Text>
+          </Pressable>
 
-        <Pressable
-          style={({pressed}) => [
-            styles.tabItem,
-            activeScreen === TabScreens.PREFERENCE_CENTER && styles.activeTab,
-            pressed && styles.tabPressed
-          ]}
-          onPress={() => navigate(TabScreens.PREFERENCE_CENTER)}
-        >
-          <Icon name="settings" size={26} color={activeScreen === TabScreens.PREFERENCE_CENTER ? '#004bff' : '#666666'} />
-          <Text
-            style={[
-              styles.tabText,
-              activeScreen === TabScreens.PREFERENCE_CENTER && styles.activeTabText,
+          <Pressable
+            style={({ pressed }) => [
+              styles.tabItem,
+              activeScreen === TabScreens.PREFERENCE_CENTER && styles.activeTab,
+              pressed && styles.tabPressed,
             ]}
+            onPress={() => navigate(TabScreens.PREFERENCE_CENTER)}
           >
-            Preferences
-          </Text>
-        </Pressable>
-
-      </View>
+            <Icon
+              name="settings"
+              size={26}
+              color={
+                activeScreen === TabScreens.PREFERENCE_CENTER
+                  ? '#004bff'
+                  : '#666666'
+              }
+            />
+            <Text
+              style={[
+                styles.tabText,
+                activeScreen === TabScreens.PREFERENCE_CENTER &&
+                  styles.activeTabText,
+              ]}
+            >
+              Preferences
+            </Text>
+          </Pressable>
+        </View>
       )}
     </View>
   );

@@ -1,4 +1,4 @@
-import { CustomEvent } from "./types";
+import { CustomEvent } from './types';
 
 /**
  * Airship analytics.
@@ -8,7 +8,7 @@ export class AirshipAnalytics {
 
   /**
    * Associates an identifier.
-   * 
+   *
    * @param key The key.
    * @param identifier The identifier. `null` to remove.
    * @returns A promise.

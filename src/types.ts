@@ -883,7 +883,6 @@ export interface FeatureFlag {
   readonly _internal: unknown;
 }
 
-
 /**
  * Live Activity info.
  */
@@ -1048,7 +1047,6 @@ export interface LiveUpdate {
    */
   dismissTimestamp?: string;
 }
-
 
 /**
  * Live Update list request.
