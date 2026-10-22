@@ -24,6 +24,7 @@ export { AttributeEditor } from './AttributeEditor';
 export * from './types';
 export * from './MessageView';
 export * from './AirshipEmbeddedView';
+export * from './AirshipEmbeddedCarousel';
 
 export { Subscription } from './UAEventEmitter';
 

@@ -1049,6 +1049,9 @@ export default StyleSheet.create({
   evFlexGrow: {
     flex: 1,
   },
+  evCarouselContainer: {
+    minHeight: 300,
+  },
   evAspectRatio: {
     width: '100%',
     aspectRatio: 16 / 9,

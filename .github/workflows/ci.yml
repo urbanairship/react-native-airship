@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   test:
-    runs-on: macos-26-xlarge
+    runs-on: xcode-27-xlarge
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
