@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -18,7 +18,7 @@ type CustomEventsScreenProps = {
   navigation: any;
 };
 
-export default function CustomEventsScreen({ navigation }: CustomEventsScreenProps) {
+export default function CustomEventsScreen(_props: CustomEventsScreenProps) {
   const [eventName, setEventName] = useState('');
   const [eventValue, setEventValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,13 +32,21 @@ export default function CustomEventsScreen({ navigation }: CustomEventsScreenPro
 
   const updatePropertyKey = (text: string, index: number) => {
     const updatedProperties = [...eventProperties];
-    updatedProperties[index].key = text;
+    const entry = updatedProperties[index];
+    if (!entry) {
+      return;
+    }
+    entry.key = text;
     setEventProperties(updatedProperties);
   };
 
   const updatePropertyValue = (text: string, index: number) => {
     const updatedProperties = [...eventProperties];
-    updatedProperties[index].value = text;
+    const entry = updatedProperties[index];
+    if (!entry) {
+      return;
+    }
+    entry.value = text;
     setEventProperties(updatedProperties);
   };
 
@@ -72,7 +80,7 @@ export default function CustomEventsScreen({ navigation }: CustomEventsScreenPro
       await Airship.analytics.addCustomEvent({
         eventName: eventName,
         eventValue: value,
-        properties: Object.keys(properties).length > 0 ? properties : undefined,
+        properties,
       });
 
       Alert.alert('Success', 'Custom event sent successfully');

@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Text,
   View,
@@ -20,7 +20,7 @@ type MessageCenterScreenProps = {
 type MessageItem = {
   id: string;
   title: string;
-  sentDate: string;
+  sentDate: number;
 };
 
 const Item = ({ message, navigation }: { message: MessageItem; navigation: any }) => (

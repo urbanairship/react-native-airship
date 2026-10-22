@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { View, ActivityIndicator, Alert } from 'react-native';
 import { MessageView } from '@ua/react-native-airship';
 import type { StackNavigationProp } from '@react-navigation/stack';
