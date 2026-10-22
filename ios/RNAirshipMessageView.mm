@@ -53,7 +53,10 @@ NSString *const RNAirshipMessageViewErrorKey = @"error";
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNAirshipMessageViewProps>(props);
-    self.messageID = [NSString stringWithUTF8String:newProps.messageId.c_str()];
+    const auto *old = oldProps ? static_cast<const RNAirshipMessageViewProps *>(oldProps.get()) : nullptr;
+    if (!old || old->messageId != newProps.messageId) {
+        self.messageID = [NSString stringWithUTF8String:newProps.messageId.c_str()];
+    }
 
     [super updateProps:props oldProps:oldProps];
 }
