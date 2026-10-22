@@ -363,12 +363,16 @@ class AirshipModule internal constructor(val context: ReactApplicationContext) :
 
     @ReactMethod
     override fun pushIosGetAuthorizedNotificationSettings(promise: Promise) {
-        // iOS only
+        promise.resolve(scope) {
+            throw IllegalStateException("Not supported on Android")
+        }
     }
 
     @ReactMethod
     override fun pushIosGetAuthorizedNotificationStatus(promise: Promise) {
-        // iOS only
+        promise.resolve(scope) {
+            throw IllegalStateException("Not supported on Android")
+        }
     }
 
     @ReactMethod
