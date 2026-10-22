@@ -73,7 +73,7 @@ jobs:
 
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@4e1beaa7521e8b457b572c090b25bd3db56bf1c5 # v5
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: |
@@ -112,7 +112,7 @@ jobs:
           payload: |
             attachments:
               - color: good
-                text: ":tada: React Native plugin release pull request generated :tada:\n<!subteam^${{ secrets.SLACK_MOBILE_TEAM_ID }}> A new React Native plugin release pull request for (v${{ github.event.inputs.react_native_version }}) is ready! :rocket:\n${{ steps.create-pr.outputs.pull-request-url }}"
+                text: ":tada: React Native plugin release pull request generated :tada:\n<!subteam^${{ vars.SLACK_MOBILE_TEAM_ID }}> A new React Native plugin release pull request for (v${{ github.event.inputs.react_native_version }}) is ready! :rocket:\n${{ steps.create-pr.outputs.pull-request-url }}"
 
       - name: Handle Failure
         if: failure()
@@ -129,4 +129,4 @@ jobs:
           payload: |
             attachments:
               - color: danger
-                text: ":disappointed: React Native Plugin Release Failed :disappointed:\n<!subteam^${{ secrets.SLACK_MOBILE_TEAM_ID }}> The release preparation failed. Please check the workflow logs. :sob:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                text: ":disappointed: React Native Plugin Release Failed :disappointed:\n<!subteam^${{ vars.SLACK_MOBILE_TEAM_ID }}> The release preparation failed. Please check the workflow logs. :sob:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

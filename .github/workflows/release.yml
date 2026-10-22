@@ -12,7 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Check Version
-        run: bash ./scripts/check_version.sh ${GITHUB_REF/refs\/tags\//}
+        run: bash ./scripts/check_version.sh "$GITHUB_REF_NAME"
+      - name: Check release notes
+        run: bash ./scripts/release_notes.sh "$GITHUB_REF_NAME" "$RUNNER_TEMP/release_notes.md"
 
   module:
     needs: check-version
@@ -47,7 +49,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ github.ref_name }}
         run: |
-          awk -v v="## Version $VERSION" '$0 ~ v {flag=1; next} /## Version/ {flag=0} flag' CHANGELOG.md > release_notes.md
+          bash ./scripts/release_notes.sh "$VERSION" release_notes.md
           gh release create "$VERSION" --title "$VERSION" --notes-file release_notes.md --verify-tag
 
   publish-docs:
