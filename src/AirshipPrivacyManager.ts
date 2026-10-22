@@ -13,8 +13,8 @@ export class AirshipPrivacyManager {
    */
   public setEnabledFeatures(features: Feature[]): Promise<void> {
     return this.module.privacyManagerSetEnabledFeatures(
-      features.filter(feature =>
-        feature !== Feature.Location && feature !== Feature.Chat
+      features.filter(
+        (feature) => feature !== Feature.Location && feature !== Feature.Chat
       )
     );
   }
@@ -33,8 +33,8 @@ export class AirshipPrivacyManager {
    */
   public enableFeatures(features: Feature[]): Promise<void> {
     return this.module.privacyManagerEnableFeature(
-      features.filter(feature =>
-        feature !== Feature.Location && feature !== Feature.Chat
+      features.filter(
+        (feature) => feature !== Feature.Location && feature !== Feature.Chat
       )
     );
   }
@@ -46,8 +46,8 @@ export class AirshipPrivacyManager {
    */
   public disableFeatures(features: Feature[]): Promise<void> {
     return this.module.privacyManagerDisableFeature(
-      features.filter(feature =>
-        feature !== Feature.Location && feature !== Feature.Chat
+      features.filter(
+        (feature) => feature !== Feature.Location && feature !== Feature.Chat
       )
     );
   }
@@ -59,8 +59,8 @@ export class AirshipPrivacyManager {
    */
   public isFeaturesEnabled(features: Feature[]): Promise<void> {
     return this.module.privacyManagerIsFeatureEnabled(
-      features.filter(feature =>
-        feature !== Feature.Location && feature !== Feature.Chat
+      features.filter(
+        (feature) => feature !== Feature.Location && feature !== Feature.Chat
       )
     );
   }

@@ -56,4 +56,3 @@ export class AirshipLiveActivityManager {
     return this.module.liveActivityEnd(request);
   }
 }
-
