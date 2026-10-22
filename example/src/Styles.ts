@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 
 /**
  * Airship Example App Styles
- * 
+ *
  * This file contains all styles for the Airship Example App, organized by usage.
  * - Common styles are shared across multiple screens
  * - Each section-specific styles are grouped together
@@ -14,26 +14,26 @@ import { StyleSheet } from 'react-native';
 // Colors - design system
 const Colors = {
   // Primary palette
-  primaryDark: '#001f9e',   // Dark blue
-  primary: '#004bff',       // Light blue
-  accent: '#f1084f',        // Red
-  success: '#6ca15f',       // Green
-  
+  primaryDark: '#001f9e', // Dark blue
+  primary: '#004bff', // Light blue
+  accent: '#f1084f', // Red
+  success: '#6ca15f', // Green
+
   // Neutral palette
-  text: '#020202',          // Black text
+  text: '#020202', // Black text
   textSecondary: '#666666', // Secondary text
-  textMuted: '#94a3b8',     // Muted text
-  background: '#F8F8F8',    // Background gray
+  textMuted: '#94a3b8', // Muted text
+  background: '#F8F8F8', // Background gray
   backgroundAlt: '#f1f5f9', // Alternative background
-  cardBackground: '#FFFFFF',// Card background
-  border: '#E0E0E0',        // Border color
-  borderLight: '#e2e8f0',   // Light border
-  
+  cardBackground: '#FFFFFF', // Card background
+  border: '#E0E0E0', // Border color
+  borderLight: '#e2e8f0', // Light border
+
   // Semantic colors
   error: '#D32F2F',
   warning: '#FFEBEE',
   overlay: 'rgba(255, 255, 255, 0.7)',
-  
+
   // Preference Center specific
   switchTrackActive: '#10b981',
   switchTrackInactive: '#cbd5e1',
@@ -107,7 +107,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
+
   /**
    * Card & Section Components
    */
@@ -137,7 +137,7 @@ export default StyleSheet.create({
     ...Typography.body,
     color: Colors.textSecondary,
   },
-  
+
   /**
    * Loading & Status Indicators
    */
@@ -157,9 +157,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
   /**
-   * Warning & Error Components 
+   * Warning & Error Components
    */
   warningContainer: {
     backgroundColor: Colors.warning,
@@ -190,7 +190,7 @@ export default StyleSheet.create({
   warningBodyText: {
     color: Colors.border,
   },
-  
+
   /**
    * Form Elements
    */
@@ -223,7 +223,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
-  // Standard button 
+  // Standard button
   button: {
     backgroundColor: Colors.primary,
     borderRadius: 8,
@@ -234,7 +234,7 @@ export default StyleSheet.create({
     color: Colors.cardBackground,
     fontWeight: 'bold',
   },
-  
+
   /**
    * List Items & Chips
    */
@@ -267,7 +267,7 @@ export default StyleSheet.create({
     color: Colors.text,
     marginRight: Spacing.s,
   },
-  
+
   /**
    * HOME SCREEN
    */
@@ -304,7 +304,7 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  
+
   // Channel ID
   channelIdContainer: {
     backgroundColor: '#F5F5F5',
@@ -319,7 +319,7 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: 'monospace',
   },
-  
+
   // Push Notifications
   pushContainer: {
     padding: Spacing.s,
@@ -334,7 +334,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  
+
   // Named User
   namedUserContainer: {
     padding: Spacing.s,
@@ -343,7 +343,7 @@ export default StyleSheet.create({
     marginBottom: Spacing.s,
     fontSize: 14,
   },
-  
+
   // Tags
   tagsContainer: {
     padding: Spacing.s,
@@ -379,17 +379,17 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-  
+
   // Live Activities
   liveButtonRow: {
     marginBottom: Spacing.m,
   },
-  
+
   /**
    * MESSAGE CENTER SCREEN
    */
   // No specific styles - using shared list components
-  
+
   /**
    * PREFERENCE CENTER SCREEN
    */
@@ -406,7 +406,7 @@ export default StyleSheet.create({
     paddingTop: Spacing.m,
     paddingBottom: 32,
   },
-  
+
   // Loading state
   pcLoadingContainer: {
     flex: 1,
@@ -420,7 +420,7 @@ export default StyleSheet.create({
     color: Colors.textSecondary,
     fontWeight: '500',
   },
-  
+
   // Section header
   pcSectionHeader: {
     paddingTop: Spacing.xl,
@@ -442,7 +442,7 @@ export default StyleSheet.create({
   pcSectionSpacer: {
     height: Spacing.m,
   },
-  
+
   // Subscription card
   pcSubscriptionCard: {
     backgroundColor: Colors.cardBackground,
@@ -459,7 +459,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  
+
   // Item text
   pcItemTextContainer: {
     flex: 1,
@@ -477,7 +477,7 @@ export default StyleSheet.create({
     color: Colors.textSecondary,
     lineHeight: 20,
   },
-  
+
   // Switch
   pcSwitchContainer: {
     flexDirection: 'row',
@@ -494,7 +494,7 @@ export default StyleSheet.create({
   pcSwitchLabelActive: {
     color: Colors.switchTrackActive,
   },
-  
+
   // Scope buttons
   pcScopeContainer: {
     flexDirection: 'row',
@@ -531,7 +531,7 @@ export default StyleSheet.create({
     color: Colors.cardBackground,
     fontWeight: '700',
   },
-  
+
   // Alert card
   pcAlertCard: {
     backgroundColor: Colors.alertBackground,
@@ -563,7 +563,7 @@ export default StyleSheet.create({
     color: Colors.textSecondary,
     lineHeight: 20,
   },
-  
+
   // Separators
   pcItemSeparator: {
     height: Spacing.m,
@@ -571,7 +571,7 @@ export default StyleSheet.create({
   pcSectionSeparator: {
     height: Spacing.xs,
   },
-  
+
   // Empty state
   pcEmptyContainer: {
     flex: 1,
@@ -621,7 +621,7 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  
+
   /**
    * CUSTOM EVENTS SCREEN
    */
@@ -663,7 +663,7 @@ export default StyleSheet.create({
     flex: 0.6,
     marginRight: Spacing.s,
   },
-  
+
   // Action buttons
   removeButton: {
     width: 30,
@@ -690,7 +690,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  
+
   // Examples section
   examplesContainer: {
     flexDirection: 'row',
@@ -713,7 +713,7 @@ export default StyleSheet.create({
   exampleDescription: {
     ...Typography.body,
   },
-  
+
   /**
    * MISCELLANEOUS / LEGACY SUPPORT
    */
@@ -795,7 +795,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     marginBottom: 36,
   },
-  
+
   /**
    * UI ELEMENTS
    */
@@ -843,7 +843,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.border,
   },
-  
+
   /**
    * APP COMPONENT STYLES
    */
@@ -877,7 +877,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: Colors.text,
   },
-  
+
   /**
    * EMBEDDED VIEWS SCREEN
    */

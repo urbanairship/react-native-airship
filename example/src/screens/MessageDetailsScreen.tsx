@@ -1,7 +1,13 @@
 /* Copyright Airship and Contributors */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, Button, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  Button,
+  StyleSheet,
+} from 'react-native';
 import { MessageView } from '@ua/react-native-airship';
 
 type MessageDetailsScreenProps = {
@@ -10,7 +16,11 @@ type MessageDetailsScreenProps = {
   title?: string;
 };
 
-export default function MessageDetailsScreen({ navigation, messageId, title = 'Message' }: MessageDetailsScreenProps) {
+export default function MessageDetailsScreen({
+  navigation,
+  messageId,
+  title = 'Message',
+}: MessageDetailsScreenProps) {
   const [animating, setAnimating] = useState(true);
 
   useEffect(() => {

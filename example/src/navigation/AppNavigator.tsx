@@ -46,34 +46,34 @@ export default function AppNavigator() {
           },
         }}
       >
-        <Stack.Screen 
-          name="Home" 
-          component={HomeScreen} 
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
           options={{ title: 'Airship Example' }}
         />
-        <Stack.Screen 
-          name="MessageCenter" 
-          component={MessageCenterScreen} 
+        <Stack.Screen
+          name="MessageCenter"
+          component={MessageCenterScreen}
           options={{ title: 'Message Center' }}
         />
-        <Stack.Screen 
-          name="MessageDetails" 
-          component={MessageScreen} 
+        <Stack.Screen
+          name="MessageDetails"
+          component={MessageScreen}
           options={({ route }) => ({ title: route.params?.title || 'Message' })}
         />
-        <Stack.Screen 
-          name="PreferenceCenter" 
-          component={PreferenceCenterScreen} 
+        <Stack.Screen
+          name="PreferenceCenter"
+          component={PreferenceCenterScreen}
           options={{ title: 'Preference Center' }}
         />
-        <Stack.Screen 
-          name="CustomEvents" 
-          component={CustomEventsScreen} 
+        <Stack.Screen
+          name="CustomEvents"
+          component={CustomEventsScreen}
           options={{ title: 'Custom Events' }}
         />
-        <Stack.Screen 
-          name="EmbeddedViews" 
-          component={EmbeddedViewsScreen} 
+        <Stack.Screen
+          name="EmbeddedViews"
+          component={EmbeddedViewsScreen}
           options={{ title: 'Embedded Views' }}
         />
       </Stack.Navigator>

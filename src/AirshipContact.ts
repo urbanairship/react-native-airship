@@ -4,7 +4,11 @@ import {
   ScopedSubscriptionListOperation,
 } from './ScopedSubscriptionListEditor';
 import { TagGroupEditor, TagGroupOperation } from './TagGroupEditor';
-import { EmailRegistrationOptions, SmsRegistrationOptions, SubscriptionScope } from './types';
+import {
+  EmailRegistrationOptions,
+  SmsRegistrationOptions,
+  SubscriptionScope,
+} from './types';
 
 /**
  * Airship contact.
@@ -35,7 +39,10 @@ export class AirshipContact {
    * @param options The SMS registration options.
    * @returns A promise.
    */
-  public registerSms(msisdn: string, options: SmsRegistrationOptions): Promise<void> {
+  public registerSms(
+    msisdn: string,
+    options: SmsRegistrationOptions
+  ): Promise<void> {
     return this.module.contactRegisterSms(msisdn, options);
   }
 
@@ -45,7 +52,10 @@ export class AirshipContact {
    * @param options The email registration options.
    * @returns A promise.
    */
-  public registerEmail(address: string, options: EmailRegistrationOptions): Promise<void> {
+  public registerEmail(
+    address: string,
+    options: EmailRegistrationOptions
+  ): Promise<void> {
     return this.module.contactRegisterEmail(address, options);
   }
 
@@ -53,9 +63,9 @@ export class AirshipContact {
    * Notifies the contact of a remote login.
    * @returns A promise.
    */
-    public notifyRemoteLogin(): Promise<void> {
-      return this.module.contactNotifyRemoteLogin();
-    }
+  public notifyRemoteLogin(): Promise<void> {
+    return this.module.contactNotifyRemoteLogin();
+  }
 
   /**
    * Gets the named user Id.

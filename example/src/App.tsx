@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StatusBar, useColorScheme } from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StatusBar,
+  useColorScheme,
+} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Airship from '@ua/react-native-airship';
 import TabNavigator from './navigation/TabNavigator';
@@ -49,8 +55,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-         <TabNavigator />
+      <TabNavigator />
     </SafeAreaProvider>
   );
 }
-
