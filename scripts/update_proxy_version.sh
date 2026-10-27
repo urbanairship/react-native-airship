@@ -12,6 +12,21 @@ if [ -z "$PROXY_VERSION" ]; then
     exit 1
 fi
 
+# Anything that is not a version is a mistake, and rejecting it here gives a
+# clearer failure than a pin that reads back wrong at the end.
+require_version() {
+    local label="$1" value="$2"
+    if ! printf '%s' "$value" | grep -Eq '^[0-9]+(\.[0-9]+)*([-+][0-9A-Za-z.-]+)?$'; then
+        echo "error: $label version '$value' is not a version number" >&2
+        exit 1
+    fi
+}
+
+require_version "proxy" "$PROXY_VERSION"
+if [ -n "$IOS_LIBRARY_VERSION" ]; then
+    require_version "ios-library" "$IOS_LIBRARY_VERSION"
+fi
+
 PROXY_URL='https://github\.com/urbanairship/airship-mobile-framework-proxy\.git'
 IOS_LIBRARY_URL='https://github\.com/urbanairship/ios-library\.git'
 
@@ -55,17 +70,24 @@ check_pin() {
     fi
 }
 
+# The version reaches perl through the environment rather than the program
+# text: a `}` in the argument would otherwise close the replacement and the
+# rest would run as Perl, and a bare $ or @ would interpolate silently.
 apply_pin() {
     local file="$2" regex="$3" version="$4"
-    perl -0777 -i.bak -pe 's{'"$regex"'}{${1}'"$version"'}g' "$ROOT_PATH/$file"
+    PIN_VERSION="$version" \
+        perl -0777 -i.bak -pe 's{'"$regex"'}{${1}$ENV{PIN_VERSION}}g' "$ROOT_PATH/$file"
 }
 
 # Reads each pin back out, so a bad rewrite shows up in the release log rather
 # than in a published artifact.
 verify_pin() {
-    local label="$1" file="$2" version="$4"
-    if ! grep -q -- "$version" "$ROOT_PATH/$file"; then
-        echo "error: $label is not $version in $file after rewriting" >&2
+    local label="$1" file="$2" regex="$3" version="$4" found
+    # Read the pin back through the same pattern. Searching the whole file
+    # would match any other field that happens to carry the same digits.
+    found="$(perl -0777 -ne 'print $2 if m{'"$regex"'}' "$ROOT_PATH/$file")"
+    if [ "$found" != "$version" ]; then
+        echo "error: $label pin in $file reads '$found', expected '$version'" >&2
         exit 1
     fi
     echo "  ok: $file pins $label at $version"
@@ -74,7 +96,9 @@ verify_pin() {
 for_each_pin check_pin
 for_each_pin apply_pin
 
-find "$ROOT_PATH" -name "*.bak" -delete
-
 echo "Pins after update:"
 for_each_pin verify_pin
+
+# Only once every pin reads back correctly; a failed verify leaves the .bak
+# files in place to restore from.
+find "$ROOT_PATH" -name "*.bak" -delete
