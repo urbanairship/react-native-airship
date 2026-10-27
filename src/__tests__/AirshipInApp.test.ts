@@ -71,13 +71,12 @@ describe('AirshipInApp', () => {
       pending('footer', 'c'),
     ]);
 
-    expect(inApp.getPendingEmbedded('banner').map((p) => p.instanceId)).toEqual([
-      'a',
-      'b',
-    ]);
-    expect(inApp.getPendingEmbedded('footer').map((p) => p.instanceId)).toEqual([
-      'c',
-    ]);
+    expect(inApp.getPendingEmbedded('banner').map((p) => p.instanceId)).toEqual(
+      ['a', 'b']
+    );
+    expect(inApp.getPendingEmbedded('footer').map((p) => p.instanceId)).toEqual(
+      ['c']
+    );
     expect(inApp.getPendingEmbedded('absent')).toEqual([]);
   });
 
