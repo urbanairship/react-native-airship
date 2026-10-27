@@ -1,7 +1,12 @@
 /* Copyright Airship and Contributors */
 
 import { afterEach, describe, expect, it } from '@jest/globals';
-import { Platform, emit, reset, runHeadlessTask } from '../../jest/react-native';
+import {
+  Platform,
+  emit,
+  reset,
+  runHeadlessTask,
+} from '../../jest/react-native';
 import { UAEventEmitter } from '../UAEventEmitter';
 
 const PENDING_EVENTS = 'com.airship.pending_events';
@@ -126,8 +131,9 @@ describe('UAEventEmitter', () => {
 
   it('registers no background task on iOS', async () => {
     const native = fakeNativeModule();
-    new UAEventEmitter(native);
+    const emitter = new UAEventEmitter(native);
 
+    expect(emitter).toBeDefined();
     await expect(
       runHeadlessTask('AirshipAndroidBackgroundEventTask')
     ).resolves.toBeUndefined();
