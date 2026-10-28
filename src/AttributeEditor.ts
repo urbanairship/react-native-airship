@@ -22,11 +22,11 @@ export interface AttributeOperation {
   /**
    * Expiration for json attributes.
    */
-  expiration_milliseconds?: number
+  expiration_milliseconds?: number;
   /**
    * The attribute value, if available.
    */
-  value?: any
+  value?: any;
   /**
    * The attribute type, if available.
    */
@@ -96,37 +96,36 @@ export class AttributeEditor {
     return this;
   }
 
-   /**
+  /**
    * Adds a JSON attribute.
-   * 
+   *
    * @param name The attribute name.
    * @param instanceId The instance ID.
    * @param json The json value. Must not contain `exp` as top level key.
    * @param expiration Optional expiration.
    * @return The attribute editor instance.
    */
-   setJsonAttribute(
+  setJsonAttribute(
     name: string,
     instanceId: string,
     json: Record<string, any>,
-    expiration?: Date,
+    expiration?: Date
   ): AttributeEditor {
     var operation: AttributeOperation = {
       action: 'set',
       value: json,
       key: name,
       instance_id: instanceId,
-      type: 'json'
-    }
+      type: 'json',
+    };
 
     if (expiration != null) {
-      operation.expiration_milliseconds = expiration.getTime()
+      operation.expiration_milliseconds = expiration.getTime();
     }
-    
+
     this.operations.push(operation);
     return this;
   }
-
 
   /**
    * Removes an attribute.

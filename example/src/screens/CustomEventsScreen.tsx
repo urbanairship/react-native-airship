@@ -18,13 +18,13 @@ type CustomEventsScreenProps = {
   navigation: any;
 };
 
-export default function CustomEventsScreen({ navigation }: CustomEventsScreenProps) {
+export default function CustomEventsScreen(_props: CustomEventsScreenProps) {
   const [eventName, setEventName] = useState('');
   const [eventValue, setEventValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [eventProperties, setEventProperties] = useState<Array<{ key: string; value: string }>>([
-    { key: '', value: '' },
-  ]);
+  const [eventProperties, setEventProperties] = useState<
+    Array<{ key: string; value: string }>
+  >([{ key: '', value: '' }]);
 
   const addPropertyField = () => {
     setEventProperties([...eventProperties, { key: '', value: '' }]);
@@ -140,7 +140,10 @@ export default function CustomEventsScreen({ navigation }: CustomEventsScreenPro
           <View style={styles.inputGroup}>
             <View style={styles.propertiesHeader}>
               <Text style={styles.label}>Event Properties (optional)</Text>
-              <TouchableOpacity style={styles.addButton} onPress={addPropertyField}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={addPropertyField}
+              >
                 <Text style={styles.addButtonText}>+ Add</Text>
               </TouchableOpacity>
             </View>
@@ -186,7 +189,11 @@ export default function CustomEventsScreen({ navigation }: CustomEventsScreenPro
             <Text style={styles.sectionTitle}>Event Examples</Text>
           </View>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.examplesContainer}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.examplesContainer}
+          >
             <TouchableOpacity
               style={styles.exampleCard}
               onPress={() => {
@@ -244,4 +251,3 @@ export default function CustomEventsScreen({ navigation }: CustomEventsScreenPro
     </KeyboardAvoidingView>
   );
 }
-

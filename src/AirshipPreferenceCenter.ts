@@ -8,9 +8,9 @@ export class AirshipPreferenceCenter {
 
   /**
    * Requests to display a preference center.
-   * 
-   * Will either emit an event to display the 
-   * Preference Center if auto launch is disabled, 
+   *
+   * Will either emit an event to display the
+   * Preference Center if auto launch is disabled,
    * or display the OOTB UI.
    * @param preferenceCenterId The preference center Id.
    * @returns A promise.
@@ -28,7 +28,7 @@ export class AirshipPreferenceCenter {
     return this.module.preferenceCenterGetConfig(preferenceCenterId);
   }
 
-   /**
+  /**
    * Enables or disables showing the OOTB UI when requested to display by either
    * `display` or by a notification with some other action.
    * @param preferenceCenterId The preference center Id.
