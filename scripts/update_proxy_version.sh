@@ -63,9 +63,18 @@ for_each_pin() {
 # leaving the tree half bumped, with some platforms on the new version.
 check_pin() {
     local label="$1" file="$2" regex="$3" matches
+
+    # perl only warns on a file it cannot read and still exits 0, which would
+    # leave the count empty. An empty count is not a number, so the comparison
+    # below would error, and an errored test inside `if` reads as a pass.
+    if [ ! -r "$ROOT_PATH/$file" ]; then
+        echo "error: $file is missing or unreadable" >&2
+        exit 1
+    fi
+
     matches="$(perl -0777 -ne 'my $c = 0; $c++ while m{'"$regex"'}g; print $c' "$ROOT_PATH/$file")"
-    if [ "$matches" -ne 1 ]; then
-        echo "error: expected one $label pin in $file, found $matches" >&2
+    if [ "${matches:-0}" -ne 1 ]; then
+        echo "error: expected one $label pin in $file, found ${matches:-0}" >&2
         exit 1
     fi
 }
