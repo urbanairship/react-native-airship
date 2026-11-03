@@ -37,6 +37,16 @@ target 'AirshipExample' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # RNCClipboard calls UTType APIs but its podspec declares only React-Core,
+    # so the framework carrying them is never linked and the pod fails to link.
+    installer.pods_project.targets.each do |target|
+      next unless target.name == 'RNCClipboard'
+      target.build_configurations.each do |config|
+        config.build_settings['OTHER_LDFLAGS'] =
+          "#{config.build_settings['OTHER_LDFLAGS'] || '$(inherited)'} -framework MobileCoreServices"
+      end
+    end
   end
 end
 

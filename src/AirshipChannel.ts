@@ -1,6 +1,7 @@
 import { AttributeEditor, AttributeOperation } from './AttributeEditor';
 import {
-  SubscriptionListEditor, SubscriptionListOperation,
+  SubscriptionListEditor,
+  SubscriptionListOperation,
 } from './SubscriptionListEditor';
 import { TagGroupEditor, TagGroupOperation } from './TagGroupEditor';
 import { TagEditor, TagOperation } from './TagEditor';
@@ -61,7 +62,7 @@ export class AirshipChannel {
 
   /**
    * Gets the channel Id.
-   * 
+   *
    * @returns A promise with the result.
    */
   public getChannelId(): Promise<string | null | undefined> {
@@ -71,12 +72,12 @@ export class AirshipChannel {
   /**
    * Returns the channel ID. If the channel ID is not yet created the function it will wait for it before returning. After
    * the channel ID is created, this method functions the same as `getChannelId()`.
-   * 
+   *
    * @returns A promise with the result.
    */
-    public waitForChannelId(): Promise<string | null | undefined> {
-      return this.module.channelWaitForChannelId();
-    }
+  public waitForChannelId(): Promise<string | null | undefined> {
+    return this.module.channelWaitForChannelId();
+  }
 
   /**
    * Gets a list of the channel's subscriptions.

@@ -1,7 +1,6 @@
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
 import { JsonObject } from './types';
 
-
 /**
  * Info for a pending embedded content instance.
  */
@@ -31,29 +30,39 @@ export interface PendingEmbedded {
  * Airship InApp Experiences.
  */
 export class AirshipInApp {
-  private pendingEmbedded: Map<string, PendingEmbedded[]> = new Map()
-  private pendingEmbeddedListeners: Map<string, ((pending: PendingEmbedded[]) => any)[]> = new Map();
+  private pendingEmbedded: Map<string, PendingEmbedded[]> = new Map();
+  private pendingEmbeddedListeners: Map<
+    string,
+    ((pending: PendingEmbedded[]) => any)[]
+  > = new Map();
 
-  constructor(private readonly module: any, private readonly eventEmitter: UAEventEmitter) {
-    this.eventEmitter.addListener("com.airship.pending_embedded_updated", (event) => {
-      let pending = event["pending"] as PendingEmbedded[];
+  constructor(
+    private readonly module: any,
+    private readonly eventEmitter: UAEventEmitter
+  ) {
+    this.eventEmitter.addListener(
+      'com.airship.pending_embedded_updated',
+      (event) => {
+        let pending = event.pending as PendingEmbedded[];
 
-      this.pendingEmbedded = pending.reduce((map, entry) => {
-        var embeddedId = entry.embeddedId
-        if (!map.has(embeddedId)) {
-          map.set(embeddedId, [entry])
-        } else {
-          map.get(embeddedId)?.push(entry)
-        }
-        return map
-      }, new Map<string, PendingEmbedded[]>());
+        this.pendingEmbedded = pending.reduce((map, entry) => {
+          var embeddedId = entry.embeddedId;
+          if (!map.has(embeddedId)) {
+            map.set(embeddedId, [entry]);
+          } else {
+            map.get(embeddedId)?.push(entry);
+          }
+          return map;
+        }, new Map<string, PendingEmbedded[]>());
 
-
-      this.pendingEmbeddedListeners.forEach((listeners, embeddedId) => {
-        let pending = this.pendingEmbedded.get(embeddedId);
-        listeners.forEach((listener) => { listener(pending ?? []) });
-      });
-    });
+        this.pendingEmbeddedListeners.forEach((listeners, embeddedId) => {
+          let pending = this.pendingEmbedded.get(embeddedId);
+          listeners.forEach((listener) => {
+            listener(pending ?? []);
+          });
+        });
+      }
+    );
 
     module.inAppResendPendingEmbeddedEvent();
   }
@@ -74,7 +83,10 @@ export class AirshipInApp {
    * @param listener The listener, called with the current pending list.
    * @returns A subscription that can be used to cancel the listener.
    */
-  public addPendingEmbeddedListener(embeddedId: string, listener: (pending: PendingEmbedded[]) => void): Subscription {
+  public addPendingEmbeddedListener(
+    embeddedId: string,
+    listener: (pending: PendingEmbedded[]) => void
+  ): Subscription {
     listener(this.getPendingEmbedded(embeddedId));
 
     if (!this.pendingEmbeddedListeners.has(embeddedId)) {
@@ -84,7 +96,12 @@ export class AirshipInApp {
     }
 
     return new Subscription(() => {
-      this.pendingEmbeddedListeners.set(embeddedId, this.pendingEmbeddedListeners.get(embeddedId)?.filter((obj) => obj !== listener) ?? []);
+      this.pendingEmbeddedListeners.set(
+        embeddedId,
+        this.pendingEmbeddedListeners
+          .get(embeddedId)
+          ?.filter((obj) => obj !== listener) ?? []
+      );
     });
   }
 
@@ -94,7 +111,10 @@ export class AirshipInApp {
    * @param listener  The listener.
    * @returns A subscription that can be used to cancel the listener.
    */
-  public addEmbeddedReadyListener(embeddedId: string, listener: (isReady: boolean) => void): Subscription {
+  public addEmbeddedReadyListener(
+    embeddedId: string,
+    listener: (isReady: boolean) => void
+  ): Subscription {
     var currentValue = this.isEmbeddedReady(embeddedId);
     listener(currentValue);
 
@@ -104,7 +124,7 @@ export class AirshipInApp {
         listener(nextValue);
       }
       currentValue = nextValue;
-    }
+    };
 
     if (!this.pendingEmbeddedListeners.has(embeddedId)) {
       this.pendingEmbeddedListeners.set(embeddedId, [wrappedListener]);
@@ -113,7 +133,12 @@ export class AirshipInApp {
     }
 
     return new Subscription(() => {
-      this.pendingEmbeddedListeners.set(embeddedId, this.pendingEmbeddedListeners.get(embeddedId)?.filter((obj) => obj !== wrappedListener) ?? []);
+      this.pendingEmbeddedListeners.set(
+        embeddedId,
+        this.pendingEmbeddedListeners
+          .get(embeddedId)
+          ?.filter((obj) => obj !== wrappedListener) ?? []
+      );
     });
   }
 

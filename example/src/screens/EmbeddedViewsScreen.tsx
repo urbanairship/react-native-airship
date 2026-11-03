@@ -1,13 +1,7 @@
 /* Copyright Airship and Contributors */
 
 import { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Dimensions,
-  Platform,
-} from 'react-native';
+import { View, Text, ScrollView, Dimensions, Platform } from 'react-native';
 import Airship, { AirshipEmbeddedView } from '@ua/react-native-airship';
 import styles from '../Styles';
 
@@ -76,9 +70,12 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
   useEffect(() => {
     setEmbeddedReady(Airship.inApp.isEmbeddedReady(EMBEDDED_ID));
 
-    const listener = Airship.inApp.addEmbeddedReadyListener(EMBEDDED_ID, (ready) => {
-      setEmbeddedReady(ready);
-    });
+    const listener = Airship.inApp.addEmbeddedReadyListener(
+      EMBEDDED_ID,
+      (ready) => {
+        setEmbeddedReady(ready);
+      }
+    );
 
     return () => {
       listener.remove();
@@ -90,8 +87,15 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
       <View key={config.key} style={styles.evCard}>
         <View style={styles.evCardHeader}>
           <Text style={styles.evCardTitle}>{config.label}</Text>
-          <View style={[styles.evStatusBadge, isEmbeddedReady ? styles.evStatusReady : styles.evStatusPending]}>
-            <Text style={styles.evStatusText}>{isEmbeddedReady ? 'Ready' : 'Pending'}</Text>
+          <View
+            style={[
+              styles.evStatusBadge,
+              isEmbeddedReady ? styles.evStatusReady : styles.evStatusPending,
+            ]}
+          >
+            <Text style={styles.evStatusText}>
+              {isEmbeddedReady ? 'Ready' : 'Pending'}
+            </Text>
           </View>
         </View>
         <Text style={styles.evCardDescription}>
@@ -121,7 +125,9 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
                 embeddedId={EMBEDDED_ID}
                 style={styles.evFixedHeight}
               />
-            ) : placeholder}
+            ) : (
+              placeholder
+            )}
           </View>
         );
 
@@ -193,7 +199,10 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
         );
 
       case 'explicit':
-        const explicitStyle = { ...styles.evExplicitSize, width: SCREEN_WIDTH - 72 };
+        const explicitStyle = {
+          ...styles.evExplicitSize,
+          width: SCREEN_WIDTH - 72,
+        };
         return (
           <View style={styles.evEmbeddedWrapper}>
             {isReady ? (
@@ -230,7 +239,10 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.evContentContainer}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.evContentContainer}
+    >
       <View style={styles.evHeader}>
         <Text style={styles.evHeaderTitle}>Embedded Views Test</Text>
         <Text style={styles.evHeaderSubtitle}>
@@ -256,7 +268,9 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
         </View>
         <Text style={styles.evCardDescription}>
           <Text style={styles.evCodeText}>
-            selection={'{'}{'{'} type: 'instance_id', instanceId: 'demo-instance' {'}'}{'}'}
+            selection={'{'}
+            {'{'} type: 'instance_id', instanceId: 'demo-instance' {'}'}
+            {'}'}
           </Text>
         </Text>
         <View style={styles.evEmbeddedWrapper}>
@@ -276,7 +290,8 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
 
       <View style={styles.evFooter}>
         <Text style={styles.evFooterText}>
-          Create one embedded content in Airship dashboard with ID: "{EMBEDDED_ID}"
+          Create one embedded content in Airship dashboard with ID: "
+          {EMBEDDED_ID}"
         </Text>
       </View>
     </ScrollView>

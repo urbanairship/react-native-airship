@@ -94,3 +94,5 @@ airshipconfig.properties
 AirshipConfig.plist
 google-services.json
 example/src/AirshipConfig.ts
+# Jest coverage output
+coverage/

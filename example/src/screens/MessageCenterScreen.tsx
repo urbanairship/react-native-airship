@@ -1,6 +1,6 @@
 /* Copyright Airship and Contributors */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Text,
   View,
@@ -20,10 +20,16 @@ type MessageCenterScreenProps = {
 type MessageItem = {
   id: string;
   title: string;
-  sentDate: string;
+  sentDate: number;
 };
 
-const Item = ({ message, navigation }: { message: MessageItem; navigation: any }) => (
+const Item = ({
+  message,
+  navigation,
+}: {
+  message: MessageItem;
+  navigation: any;
+}) => (
   <TouchableHighlight
     activeOpacity={0.6}
     underlayColor="#DDDDDD"
@@ -49,13 +55,16 @@ const MessageCenterScreen = ({ navigation }: MessageCenterScreenProps) => {
   const [refreshing, setRefreshing] = useState(true);
 
   const handleUpdateMessageList = useCallback(() => {
-    Airship.messageCenter.getMessages().then((data) => {
-      setMessages(data);
-      setRefreshing(false);
-    }).catch(() => {
-      // Expected error when message center is not available
-      setRefreshing(false);
-    });
+    Airship.messageCenter
+      .getMessages()
+      .then((data) => {
+        setMessages(data);
+        setRefreshing(false);
+      })
+      .catch(() => {
+        // Expected error when message center is not available
+        setRefreshing(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -91,7 +100,7 @@ const MessageCenterScreen = ({ navigation }: MessageCenterScreenProps) => {
   return (
     <View style={styles.backgroundContainer}>
       {refreshing ? (
-        <View style={[styles.centerContainer, {padding: 16}]}>
+        <View style={[styles.centerContainer, { padding: 16 }]}>
           <ActivityIndicator size="large" color="#004bff" />
         </View>
       ) : messages.length > 0 ? (

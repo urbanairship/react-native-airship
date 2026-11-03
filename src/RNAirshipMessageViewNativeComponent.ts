@@ -1,5 +1,9 @@
 // @ts-ignore
-import { codegenNativeComponent, type HostComponent, type ViewProps } from 'react-native';
+import {
+  codegenNativeComponent,
+  type HostComponent,
+  type ViewProps,
+} from 'react-native';
 import type {
   BubblingEventHandler,
   // @ts-ignore
@@ -33,8 +37,16 @@ interface NativeProps extends ViewProps {
     MessageLoadFinishedEvent,
     'topAirshipMessageViewLoadFinished'
   >;
-  onLoadError: BubblingEventHandler<MessageLoadErrorEvent, 'topAirshipMessageViewLoadError'>;
-  onClose: BubblingEventHandler<MessageClosedEvent, 'topAirshipMessageViewClose'>;
+  onLoadError: BubblingEventHandler<
+    MessageLoadErrorEvent,
+    'topAirshipMessageViewLoadError'
+  >;
+  onClose: BubblingEventHandler<
+    MessageClosedEvent,
+    'topAirshipMessageViewClose'
+  >;
 }
 
-export default codegenNativeComponent<NativeProps>('RNAirshipMessageView') as HostComponent<NativeProps>;
+export default codegenNativeComponent<NativeProps>(
+  'RNAirshipMessageView'
+) as HostComponent<NativeProps>;

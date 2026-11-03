@@ -36,17 +36,13 @@ export interface ScopedSubscriptionListOperation {
  * Scoped subscription list editor.
  */
 export class ScopedSubscriptionListEditor {
-  onApply: (
-    operations: ScopedSubscriptionListOperation[]
-  ) => Promise<void>;
+  onApply: (operations: ScopedSubscriptionListOperation[]) => Promise<void>;
   operations: ScopedSubscriptionListOperation[];
 
   /**
    */
   constructor(
-    onApply: (
-      operations: ScopedSubscriptionListOperation[]
-    ) => Promise<void>
+    onApply: (operations: ScopedSubscriptionListOperation[]) => Promise<void>
   ) {
     this.onApply = onApply;
     this.operations = [];
@@ -59,7 +55,10 @@ export class ScopedSubscriptionListEditor {
    * @param scope The subscription scope to subscribe.
    * @return The editor instance.
    */
-  subscribe(subscriptionListId: string, scope: SubscriptionScope): ScopedSubscriptionListEditor {
+  subscribe(
+    subscriptionListId: string,
+    scope: SubscriptionScope
+  ): ScopedSubscriptionListEditor {
     const operation = {
       listId: subscriptionListId,
       action: ScopedSubscriptionListOperationAction.subscribe,
@@ -76,7 +75,10 @@ export class ScopedSubscriptionListEditor {
    * @param scope The subscription scope to unsubscribe.
    * @return The editor instance.
    */
-  unsubscribe(subscriptionListId: string, scope: SubscriptionScope): ScopedSubscriptionListEditor {
+  unsubscribe(
+    subscriptionListId: string,
+    scope: SubscriptionScope
+  ): ScopedSubscriptionListEditor {
     const operation = {
       listId: subscriptionListId,
       action: ScopedSubscriptionListOperationAction.unsubscribe,

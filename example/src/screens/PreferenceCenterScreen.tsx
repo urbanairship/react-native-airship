@@ -49,9 +49,15 @@ interface ItemProps {
 export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
   const [preferenceCenterId] = useState('app_default');
   const [isFetching, setIsFetching] = useState(true);
-  const [activeChannelSubscriptions, setActiveChannelSubscriptions] = useState<string[]>([]);
-  const [activeContactSubscriptions, setActiveContactSubscriptions] = useState<Record<string, SubscriptionScope[]>>({});
-  const [preferenceCenterData, setPreferenceCenterData] = useState<PreferenceCenterSection[]>([]);
+  const [activeChannelSubscriptions, setActiveChannelSubscriptions] = useState<
+    string[]
+  >([]);
+  const [activeContactSubscriptions, setActiveContactSubscriptions] = useState<
+    Record<string, SubscriptionScope[]>
+  >({});
+  const [preferenceCenterData, setPreferenceCenterData] = useState<
+    PreferenceCenterSection[]
+  >([]);
   const [fadeAnim] = useState(new Animated.Value(0));
 
   const fillInSubscriptionList = useCallback(async () => {
@@ -69,7 +75,8 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
 
   const refreshPreferenceCenterConfig = useCallback(async () => {
     try {
-      const config = await Airship.preferenceCenter.getConfig(preferenceCenterId);
+      const config =
+        await Airship.preferenceCenter.getConfig(preferenceCenterId);
       const sections = config?.sections;
       if (sections && sections.length > 0) {
         const data: PreferenceCenterSection[] = sections.map((section) => ({
@@ -136,7 +143,11 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
   );
 
   const onPreferenceContactSubscriptionItemToggled = useCallback(
-    (subscriptionId: string, scopes: SubscriptionScope[], subscribe: boolean) => {
+    (
+      subscriptionId: string,
+      scopes: SubscriptionScope[],
+      subscribe: boolean
+    ) => {
       const editor = Airship.contact.editSubscriptionLists();
       scopes.forEach((scope) => {
         if (subscribe) {
@@ -187,7 +198,9 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
       <View style={styles.pcAlertContent}>
         <Text style={styles.pcAlertTitle}>{item.display.name}</Text>
         {item.display.description ? (
-          <Text style={styles.pcAlertDescription}>{item.display.description}</Text>
+          <Text style={styles.pcAlertDescription}>
+            {item.display.description}
+          </Text>
         ) : null}
       </View>
     </View>
@@ -201,7 +214,12 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
         <View style={styles.pcSubscriptionContent}>
           <ItemDisplay item={item} />
           <View style={styles.pcSwitchContainer}>
-            <Text style={[styles.pcSwitchLabel, isSubscribed && styles.pcSwitchLabelActive]}>
+            <Text
+              style={[
+                styles.pcSwitchLabel,
+                isSubscribed && styles.pcSwitchLabelActive,
+              ]}
+            >
               {isSubscribed ? 'On' : 'Off'}
             </Text>
             <Switch
@@ -224,13 +242,21 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
 
   // Contact subscription item component
   const ContactSubscriptionItem = ({ item }: ItemProps) => {
-    const isSubscribed = isSubscribedContactSubscription(item.subscription_id, []);
+    const isSubscribed = isSubscribedContactSubscription(
+      item.subscription_id,
+      []
+    );
     return (
       <View style={styles.pcSubscriptionCard}>
         <View style={styles.pcSubscriptionContent}>
           <ItemDisplay item={item} />
           <View style={styles.pcSwitchContainer}>
-            <Text style={[styles.pcSwitchLabel, isSubscribed && styles.pcSwitchLabelActive]}>
+            <Text
+              style={[
+                styles.pcSwitchLabel,
+                isSubscribed && styles.pcSwitchLabelActive,
+              ]}
+            >
               {isSubscribed ? 'On' : 'Off'}
             </Text>
             <Switch
@@ -241,7 +267,11 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
               thumbColor={Colors.cardBackground}
               ios_backgroundColor={Colors.switchTrackInactive}
               onValueChange={(value) =>
-                onPreferenceContactSubscriptionItemToggled(item.subscription_id, [], value)
+                onPreferenceContactSubscriptionItemToggled(
+                  item.subscription_id,
+                  [],
+                  value
+                )
               }
               value={isSubscribed}
             />
@@ -259,7 +289,10 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
     subscriptionId: string;
     component: any;
   }) => {
-    const isActive = isSubscribedContactSubscription(subscriptionId, component.scopes);
+    const isActive = isSubscribedContactSubscription(
+      subscriptionId,
+      component.scopes
+    );
     return (
       <TouchableOpacity
         style={[styles.pcScopeButton, isActive && styles.pcScopeButtonActive]}
@@ -272,7 +305,12 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
         }
         activeOpacity={0.7}
       >
-        <Text style={[styles.pcScopeButtonText, isActive && styles.pcScopeButtonTextActive]}>
+        <Text
+          style={[
+            styles.pcScopeButtonText,
+            isActive && styles.pcScopeButtonTextActive,
+          ]}
+        >
           {component.display.name}
         </Text>
         {isActive && <Text style={styles.pcScopeCheckmark}>✓</Text>}
@@ -313,14 +351,20 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
   };
 
   // Render section header
-  const renderSectionHeader = ({ section }: { section: PreferenceCenterSection }) => {
+  const renderSectionHeader = ({
+    section,
+  }: {
+    section: PreferenceCenterSection;
+  }) => {
     const { title } = section;
     if (!title.name && !title.description) {
       return <View style={styles.pcSectionSpacer} />;
     }
     return (
       <View style={styles.pcSectionHeader}>
-        {title.name ? <Text style={styles.pcSectionTitle}>{title.name}</Text> : null}
+        {title.name ? (
+          <Text style={styles.pcSectionTitle}>{title.name}</Text>
+        ) : null}
         {title.description ? (
           <Text style={styles.pcSectionDescription}>{title.description}</Text>
         ) : null}
@@ -336,7 +380,8 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
       </View>
       <Text style={styles.pcEmptyTitle}>Preference Center Unavailable</Text>
       <Text style={styles.pcEmptyDescription}>
-        No preference center configuration found. Pull down to refresh or check your setup.
+        No preference center configuration found. Pull down to refresh or check
+        your setup.
       </Text>
       <TouchableOpacity style={styles.pcRetryButton} onPress={onRefresh}>
         <Text style={styles.pcRetryButtonText}>Try Again</Text>
@@ -375,8 +420,12 @@ export default function PreferenceCenterScreen(_props: PreferenceCenterProps) {
                 colors={[Colors.primary]}
               />
             }
-            ItemSeparatorComponent={() => <View style={styles.pcItemSeparator} />}
-            SectionSeparatorComponent={() => <View style={styles.pcSectionSeparator} />}
+            ItemSeparatorComponent={() => (
+              <View style={styles.pcItemSeparator} />
+            )}
+            SectionSeparatorComponent={() => (
+              <View style={styles.pcSectionSeparator} />
+            )}
           />
         </Animated.View>
       ) : (
