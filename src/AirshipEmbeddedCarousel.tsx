@@ -49,6 +49,11 @@ export interface AirshipEmbeddedCarouselProp {
    * page (clamped to the last page). If content is not available yet, the
    * navigation happens once it is. When omitted the carousel manages its own
    * page; use `onPageChanged` to track it.
+   *
+   * Navigation only happens when the value changes. If you pass `currentPage`,
+   * keep it in sync with the visible page through `onPageChanged`; otherwise
+   * after the user swipes, re-rendering with the old value will not navigate
+   * back.
    */
   currentPage?: number;
 

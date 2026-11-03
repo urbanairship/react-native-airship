@@ -147,6 +147,8 @@ NS_SWIFT_UI_ACTOR
 - (void)setConfig:(nullable NSString *)json;
 /// Requests a page. Negative values clear the request.
 - (void)setPage:(NSInteger)page NS_SWIFT_NAME(setPage(_:));
+/// Drops all state tied to the previous placement when Fabric recycles the view.
+- (void)prepareForReuse NS_SWIFT_NAME(prepareForReuse());
 @end
 
 /// The Swift `AirshipReactNative` class.

@@ -20,6 +20,7 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
     private var pendingPage: Int?
     private var lastRequestedPage: Int?
     private var lastReportedState: ReportedState?
+    private var lastConfig: String?
 
     private struct ReportedState: Equatable {
         let currentPage: Int
@@ -35,6 +36,8 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
 
     @objc(setConfig:)
     public func setConfig(_ json: String?) {
+        // Props can be re-applied without a real change; avoid re-publishing to SwiftUI.
+        guard json != lastConfig else { return }
         guard let json, let data = json.data(using: .utf8),
               let config = try? JSONDecoder().decode(EmbeddedCarouselConfig.self, from: data) else {
             AirshipLogger.debug("AirshipEmbeddedCarousel - Ignoring missing or malformed config: \(json ?? "nil")")
@@ -52,12 +55,20 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
             lastRequestedPage = nil
             lastReportedState = nil
         }
+        lastConfig = json
         self.viewModel.embeddedID = config.embeddedId
         if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId, !instanceId.isEmpty {
             self.viewModel.selection = .instance([instanceId])
         } else {
             self.viewModel.selection = .priority
         }
+    }
+
+    @objc(prepareForReuse)
+    public func prepareForReuse() {
+        pendingPage = nil
+        lastRequestedPage = nil
+        lastReportedState = nil
     }
 
     @objc(setPage:)

@@ -45,7 +45,11 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNAirshipEmbeddedCarouselProps>(props);
-    self.config = [NSString stringWithUTF8String:newProps.config.c_str()];
+    const auto *oldCarouselProps = oldProps ? static_cast<const RNAirshipEmbeddedCarouselProps *>(oldProps.get()) : nullptr;
+    // Skip re-applying the config on unrelated prop updates (e.g. style changes).
+    if (!oldCarouselProps || oldCarouselProps->config != newProps.config) {
+        self.config = [NSString stringWithUTF8String:newProps.config.c_str()];
+    }
     self.page = newProps.page;
 
     [super updateProps:props oldProps:oldProps];
@@ -54,8 +58,9 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
-    // Fabric pools views; don't carry the previous placement's page request over.
-    [self.wrapper setPage:-1];
+    // Fabric pools views; don't carry the previous placement's page request or
+    // reported state over, otherwise the new JS component never gets its initial state.
+    [self.wrapper prepareForReuse];
 }
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index {
