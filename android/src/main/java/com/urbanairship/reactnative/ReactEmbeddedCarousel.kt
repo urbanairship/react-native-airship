@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
+import com.urbanairship.android.framework.proxy.ProxyLogger
 import com.urbanairship.automation.compose.AirshipEmbeddedCarousel
 import com.urbanairship.automation.compose.AirshipEmbeddedCarouselDefaults
 import com.urbanairship.automation.compose.rememberAirshipEmbeddedCarouselState
@@ -90,11 +91,13 @@ class ReactEmbeddedCarousel(context: Context) : FrameLayout(context) {
         val json = try {
             JsonValue.parseString(config).optMap()
         } catch (e: JsonException) {
+            ProxyLogger.debug("AirshipEmbeddedCarousel - Ignoring malformed config: $config")
             return
         }
 
         val embeddedId = json.opt("embeddedId").optString()
         if (embeddedId.isEmpty()) {
+            ProxyLogger.debug("AirshipEmbeddedCarousel - Ignoring config with empty embeddedId")
             return
         }
 

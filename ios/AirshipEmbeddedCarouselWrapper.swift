@@ -37,6 +37,12 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
     public func setConfig(_ json: String?) {
         guard let json, let data = json.data(using: .utf8),
               let config = try? JSONDecoder().decode(EmbeddedCarouselConfig.self, from: data) else {
+            AirshipLogger.debug("AirshipEmbeddedCarousel - Ignoring missing or malformed config: \(json ?? "nil")")
+            return
+        }
+
+        guard !config.embeddedId.isEmpty else {
+            AirshipLogger.debug("AirshipEmbeddedCarousel - Ignoring config with empty embeddedId")
             return
         }
 
