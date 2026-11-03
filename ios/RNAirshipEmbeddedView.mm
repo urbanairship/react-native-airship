@@ -40,8 +40,8 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNAirshipEmbeddedViewProps>(props);
-    const auto *old = oldProps ? static_cast<const RNAirshipEmbeddedViewProps *>(oldProps.get()) : nullptr;
-    if (!old || old->config != newProps.config) {
+    const auto *oldViewProps = oldProps ? static_cast<const RNAirshipEmbeddedViewProps *>(oldProps.get()) : nullptr;
+    if (!oldViewProps || oldViewProps->config != newProps.config) {
         self.config = [NSString stringWithUTF8String:newProps.config.c_str()];
     }
     [self.wrapper setSizeToContent:newProps.sizeToContent];
