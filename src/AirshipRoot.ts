@@ -154,7 +154,7 @@ export class AirshipRoot {
 
 export class AirshipRootIOS {
   public readonly liveActivityManager: AirshipLiveActivityManager;
-  
+
   constructor(module: any) {
     this.liveActivityManager = new AirshipLiveActivityManager(module);
   }
@@ -162,7 +162,7 @@ export class AirshipRootIOS {
 
 export class AirshipRootAndroid {
   public readonly liveUpdateManager: AirshipLiveUpdateManager;
-  
+
   constructor(module: any) {
     this.liveUpdateManager = new AirshipLiveUpdateManager(module);
   }

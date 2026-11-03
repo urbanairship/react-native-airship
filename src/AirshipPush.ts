@@ -1,5 +1,11 @@
 import { NativeEventEmitter, Platform } from 'react-native';
-import { Android, iOS, PushNotificationStatus, PushPayload, PromptPermissionFallback } from './types';
+import {
+  Android,
+  iOS,
+  PushNotificationStatus,
+  PushPayload,
+  PromptPermissionFallback,
+} from './types';
 
 /**
  * Airship Push.
@@ -10,12 +16,10 @@ export class AirshipPush {
    */
   public readonly iOS: AirshipPushIOS;
 
-
   /**
    * Android only push methods.
    */
   public readonly android: AirshipPushAndroid;
-  
 
   constructor(private readonly module: any) {
     this.iOS = new AirshipPushIOS(module);
@@ -24,9 +28,9 @@ export class AirshipPush {
 
   /**
    * Enables/disables notifications on Airship.
-   * 
+   *
    * When enabled, it will cause the user to be prompted for
-   * the permission on platforms that support it. 
+   * the permission on platforms that support it.
    * To get the result of the prompt, use `enableUserNotifications`.
    * @param enabled true to enable, false to disable
    * @returns A promise.
@@ -49,7 +53,7 @@ export class AirshipPush {
    * @returns A promise with the permission result.
    */
   public enableUserNotifications(options?: {
-    fallback?: PromptPermissionFallback
+    fallback?: PromptPermissionFallback;
   }): Promise<boolean> {
     return this.module.pushEnableUserNotifications(options);
   }
@@ -74,7 +78,7 @@ export class AirshipPush {
 
   /**
    * Gets the list of active notifications.
-   * 
+   *
    * On Android, this list only includes notifications
    * sent through Airship.
    * @returns A promise with the result.
@@ -92,7 +96,7 @@ export class AirshipPush {
 
   /**
    * Clears a specific notification.
-   * 
+   *
    * On Android, you can use this method to clear
    * notifications outside of Airship, The identifier is in
    * the format of <tag>:<id>.
@@ -107,41 +111,49 @@ export class AirshipPush {
  * iOS Push.
  */
 export class AirshipPushIOS {
-  
   private eventEmitter: NativeEventEmitter;
-  private presentationOverridesCallback?: (pushPayload: PushPayload) => Promise<iOS.ForegroundPresentationOption[] | null>
+  private presentationOverridesCallback?: (
+    pushPayload: PushPayload
+  ) => Promise<iOS.ForegroundPresentationOption[] | null>;
 
   constructor(private readonly module: any) {
     this.eventEmitter = new NativeEventEmitter(module);
 
     if (Platform.OS === 'ios') {
-      this.eventEmitter.addListener("com.airship.ios.override_presentation_options", (event: any) => {
-        let payload = event["pushPayload"] as PushPayload
-        let requestId = event["requestId"] as string
-  
-        if (this.presentationOverridesCallback) {
-          this.presentationOverridesCallback(payload).then( (result) => {
-            module.pushIosOverridePresentationOptions(requestId, result);
-          })
-          .catch(() => {
-            module.pushIosOverridePresentationOptions(requestId, null);
-          });
+      this.eventEmitter.addListener(
+        'com.airship.ios.override_presentation_options',
+        (event: any) => {
+          let payload = event.pushPayload as PushPayload;
+          let requestId = event.requestId as string;
+
+          if (this.presentationOverridesCallback) {
+            this.presentationOverridesCallback(payload)
+              .then((result) => {
+                module.pushIosOverridePresentationOptions(requestId, result);
+              })
+              .catch(() => {
+                module.pushIosOverridePresentationOptions(requestId, null);
+              });
+          }
         }
-      })
+      );
     }
   }
 
   /**
    * Overrides the presentation options per notification. If a `null` is returned, the default
    * options will be used. The callback should return as quickly as possible to avoid delaying notification delivery.
-   * 
+   *
    * @param callback A callback that can override the foreground presentation options.
    */
-  public setForegroundPresentationOptionsCallback(callback?: (pushPayload: PushPayload) => Promise<iOS.ForegroundPresentationOption[] | null>) {
-
+  public setForegroundPresentationOptionsCallback(
+    callback?: (
+      pushPayload: PushPayload
+    ) => Promise<iOS.ForegroundPresentationOption[] | null>
+  ) {
     if (Platform.OS === 'ios') {
-      this.presentationOverridesCallback = callback
-      this.module.pushIosIsOverridePresentationOptionsEnabled(callback != null)
+      this.presentationOverridesCallback = callback;
+      this.module.pushIosIsOverridePresentationOptionsEnabled(callback != null);
     }
   }
 
@@ -205,7 +217,9 @@ export class AirshipPushIOS {
    * Gets the list of authorized notification settings.
    * @returns A promise with the result.
    */
-  public getAuthorizedNotificationSettings(): Promise<iOS.AuthorizedNotificationSetting[]> {
+  public getAuthorizedNotificationSettings(): Promise<
+    iOS.AuthorizedNotificationSetting[]
+  > {
     return this.module.pushIosGetAuthorizedNotificationSettings();
   }
 
@@ -222,27 +236,32 @@ export class AirshipPushIOS {
  * Android Push.
  */
 export class AirshipPushAndroid {
-
   private eventEmitter: NativeEventEmitter;
-  private foregroundDisplayPredicate?: (pushPayload: PushPayload) => Promise<boolean>
+  private foregroundDisplayPredicate?: (
+    pushPayload: PushPayload
+  ) => Promise<boolean>;
 
   constructor(private readonly module: any) {
     this.eventEmitter = new NativeEventEmitter(module);
 
     if (Platform.OS === 'android') {
-      this.eventEmitter.addListener("com.airship.android.override_foreground_display", (event: any) => {
-        let payload = event["pushPayload"] as PushPayload
-        let requestId = event["requestId"] as string
-  
-        if (this.foregroundDisplayPredicate) {
-          this.foregroundDisplayPredicate(payload).then( (result) => {
-            module.pushAndroidOverrideForegroundDisplay(requestId, result);
-          })
-          .catch(() => {
-            module.pushAndroidOverrideForegroundDisplay(requestId, true);
-          });
+      this.eventEmitter.addListener(
+        'com.airship.android.override_foreground_display',
+        (event: any) => {
+          let payload = event.pushPayload as PushPayload;
+          let requestId = event.requestId as string;
+
+          if (this.foregroundDisplayPredicate) {
+            this.foregroundDisplayPredicate(payload)
+              .then((result) => {
+                module.pushAndroidOverrideForegroundDisplay(requestId, result);
+              })
+              .catch(() => {
+                module.pushAndroidOverrideForegroundDisplay(requestId, true);
+              });
+          }
         }
-      })
+      );
     }
   }
   /**
@@ -264,15 +283,19 @@ export class AirshipPushAndroid {
 
   /**
    * Overrides the foreground display per notification.
-   * 
+   *
    * The predicate should return as quickly as possible to avoid delaying notification delivery.
-   * 
+   *
    * @param predicate A foreground display predicate.
    */
-  public setForegroundDisplayPredicate(predicate?: (pushPayload: PushPayload) => Promise<boolean>) {
+  public setForegroundDisplayPredicate(
+    predicate?: (pushPayload: PushPayload) => Promise<boolean>
+  ) {
     if (Platform.OS === 'android') {
-      this.foregroundDisplayPredicate = predicate
-      this.module.pushAndroidIsOverrideForegroundDisplayEnabled(predicate != null)
+      this.foregroundDisplayPredicate = predicate;
+      this.module.pushAndroidIsOverrideForegroundDisplayEnabled(
+        predicate != null
+      );
     }
   }
 }

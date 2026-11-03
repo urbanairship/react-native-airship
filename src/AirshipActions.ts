@@ -18,6 +18,6 @@ export class AirshipActions {
     actionName: string,
     actionValue?: JsonValue
   ): Promise<JsonValue | null | undefined> {
-    return this.module.actionRun({name: actionName, value: actionValue});
+    return this.module.actionRun({ name: actionName, value: actionValue });
   }
 }

@@ -29,42 +29,53 @@ export class UAEventEmitter {
   }
 
   removeListener(eventType: string, listener: (...args: any[]) => any): void {
-    var typedListeners = this.listeners.get(eventType);
-    if (typedListeners) {
-      typedListeners = typedListeners.filter((obj) => obj !== listener);
-      this.listeners.set(eventType, typedListeners);
+    const typedListeners = this.listeners.get(eventType);
+    if (!typedListeners) {
+      return;
+    }
+
+    const remaining = typedListeners.filter((obj) => obj !== listener);
+    if (remaining.length > 0) {
+      this.listeners.set(eventType, remaining);
+    } else {
+      // An entry with no listeners would still be drained by dispatchEvents.
+      this.listeners.delete(eventType);
     }
   }
 
   addListener(eventType: string, listener: (...args: any[]) => any): void {
-    if (!this.listeners.get(eventType)) {
-      this.listeners.set(eventType, new Array());
-    }
-
-    this.listeners.get(eventType)?.push(listener);
+    const typedListeners = this.listeners.get(eventType) ?? [];
+    typedListeners.push(listener);
+    this.listeners.set(eventType, typedListeners);
     this.nativeModule.airshipListenerAdded(eventType);
   }
 
   removeAllListeners(eventType: string) {
-    this.listeners.set(eventType, new Array());
+    this.listeners.delete(eventType);
   }
 
   private async dispatchEvents(isHeadlessJS: boolean): Promise<any> {
-    let actions = Array.from(this.listeners.keys()).map(async (key: string) => {
-      let typedListeners = this.listeners.get(key);
-      if (typedListeners == null) {
-        return Promise.resolve();
-      }
+    const actions = Array.from(this.listeners.entries()).map(
+      async ([eventType, typedListeners]) => {
+        // takePendingEvents consumes the events natively, so only ask for a
+        // type that still has somewhere to deliver them.
+        if (typedListeners.length === 0) {
+          return;
+        }
 
-      let events = await this.nativeModule.takePendingEvents(key, isHeadlessJS);
-      return Promise.all(
-        typedListeners.map(async (listener: (...args: any[]) => any) => {
-          for (const event of events) {
-            await listener(event);
-          }
-        })
-      );
-    });
+        const events = await this.nativeModule.takePendingEvents(
+          eventType,
+          isHeadlessJS
+        );
+        return Promise.all(
+          typedListeners.map(async (listener: (...args: any[]) => any) => {
+            for (const event of events) {
+              await listener(event);
+            }
+          })
+        );
+      }
+    );
     return Promise.all(actions);
   }
 }
