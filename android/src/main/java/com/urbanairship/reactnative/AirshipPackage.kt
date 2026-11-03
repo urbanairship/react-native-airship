@@ -34,6 +34,6 @@ class AirshipPackage : BaseReactPackage() {
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf<ViewManager<*, *>>(ReactMessageViewManager(), ReactEmbeddedViewManager())
+    return listOf<ViewManager<*, *>>(ReactMessageViewManager(), ReactEmbeddedViewManager(), ReactEmbeddedCarouselManager())
   }
 }
