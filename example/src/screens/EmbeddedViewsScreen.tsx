@@ -9,7 +9,10 @@ import {
   Platform,
   Button,
 } from 'react-native';
-import Airship, { AirshipEmbeddedCarousel, AirshipEmbeddedView } from '@ua/react-native-airship';
+import Airship, {
+  AirshipEmbeddedCarousel,
+  AirshipEmbeddedView,
+} from '@ua/react-native-airship';
 import styles from '../Styles';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
