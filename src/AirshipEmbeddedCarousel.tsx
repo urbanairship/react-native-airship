@@ -107,7 +107,11 @@ export class AirshipEmbeddedCarousel extends React.Component<AirshipEmbeddedCaro
       <RNAirshipEmbeddedCarousel
         style={style}
         config={JSON.stringify({ embeddedId, selection })}
-        page={currentPage !== undefined && currentPage >= 0 ? Math.floor(currentPage) : -1}
+        page={
+          currentPage !== undefined && currentPage >= 0
+            ? Math.floor(currentPage)
+            : -1
+        }
         onStateChange={this.onStateChange}
       />
     );

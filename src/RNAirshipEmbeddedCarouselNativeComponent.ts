@@ -1,5 +1,9 @@
 // @ts-ignore
-import { codegenNativeComponent, type HostComponent, type ViewProps } from 'react-native';
+import {
+  codegenNativeComponent,
+  type HostComponent,
+  type ViewProps,
+} from 'react-native';
 import type {
   BubblingEventHandler,
   Int32,
@@ -24,4 +28,6 @@ interface NativeProps extends ViewProps {
   >;
 }
 
-export default codegenNativeComponent<NativeProps>('RNAirshipEmbeddedCarousel') as HostComponent<NativeProps>;
+export default codegenNativeComponent<NativeProps>(
+  'RNAirshipEmbeddedCarousel'
+) as HostComponent<NativeProps>;
