@@ -281,7 +281,9 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
         </View>
         <Text style={styles.evCardDescription}>
           <Text style={styles.evCodeText}>
-            ID: "{CAROUSEL_EMBEDDED_ID}" · Page {carouselPageCount > 0 ? carouselPage + 1 : 0} of {carouselPageCount}
+            ID: "{CAROUSEL_EMBEDDED_ID}" · Page{' '}
+            {carouselPageCount > 0 ? carouselPage + 1 : 0} of{' '}
+            {carouselPageCount}
           </Text>
         </Text>
         <View style={styles.evCarouselContainer}>
