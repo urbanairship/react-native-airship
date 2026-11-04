@@ -112,6 +112,45 @@ export default function App() {
 
 For a more detailed setup guide, please see the full [Getting Started Documentation](https://docs.airship.com/developer/sdk-integration/react-native/installation/getting-started).
 
+## Sizing an Embedded View
+
+`AirshipEmbeddedView` fills the box you give it. Give it a height and the
+content is laid out inside that box:
+
+```jsx
+<AirshipEmbeddedView embeddedId="banner" style={{ height: 120 }} />
+```
+
+Set `sizeToContent` to have the view take the height of its content instead.
+Use it when the content's height is not known ahead of time, such as a banner
+in a feed:
+
+```jsx
+<AirshipEmbeddedView embeddedId="banner" sizeToContent />
+```
+
+It is off by default, so adding it is the only thing that changes sizing
+behaviour. While it is set, the measured height replaces any height in
+`style`, so a view whose height comes from its layout should leave it off.
+
+### Reacting to the measured height
+
+`onSizeChange` reports each measurement in points, and fires only while
+`sizeToContent` is set. Use it when the surrounding layout needs the number,
+for example to animate a container alongside the view:
+
+```jsx
+<AirshipEmbeddedView
+  embeddedId="banner"
+  sizeToContent
+  onSizeChange={({ height }) => setBannerHeight(height)}
+/>
+```
+
+A height of `0` means the content went away, so the view has collapsed.
+
+The example app shows these side by side, on the Embedded Views screen.
+
 ## Versions and Support
 
 For the current Support Status of each module major, EOL dates, and the full lifecycle policy, see the [Airship SDK Support Policy](https://www.airship.com/docs/reference/sdk-support-policy/).
