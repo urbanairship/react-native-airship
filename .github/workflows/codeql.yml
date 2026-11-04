@@ -1,0 +1,73 @@
+name: CodeQL
+
+on:
+  pull_request:
+  schedule:
+    # Weekly, so the scheduled run also covers advisories published since the
+    # last pull request.
+    - cron: '0 3 * * 1'
+
+jobs:
+  analyze:
+    name: Analyze ${{ matrix.language }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Swift is left out on purpose: it needs a macOS runner and a full
+        # Xcode build, which costs about as much as the native CI job for a
+        # language that is a thin bridging layer here. Worth revisiting if the
+        # Swift surface grows.
+        language: ['javascript-typescript', 'java-kotlin']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        if: matrix.language == 'java-kotlin'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          # `languages`, not `language`: an unrecognised input is ignored, and
+          # init then auto-detects every language in the repo, Swift included,
+          # which cannot be analysed on an Ubuntu runner.
+          languages: ${{ matrix.language }}
+
+      # Autobuild treats android/ as a standalone project and fails the Android
+      # plugin version check. The library only builds through the example app's
+      # Gradle project, which needs the JS dependencies for the React Native
+      # Gradle plugin.
+      - name: Setup Node.js
+        if: matrix.language == 'java-kotlin'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Install JS dependencies
+        if: matrix.language == 'java-kotlin'
+        run: npm ci
+
+      - name: Build the library
+        if: matrix.language == 'java-kotlin'
+        working-directory: example/android
+        run: ./gradlew :ua_react-native-airship:compileDebugKotlin --console=plain
+
+      - name: Autobuild
+        if: matrix.language != 'java-kotlin'
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:${{ matrix.language }}
