@@ -43,7 +43,28 @@ jobs:
           # which cannot be analysed on an Ubuntu runner.
           languages: ${{ matrix.language }}
 
+      # Autobuild treats android/ as a standalone project and fails the Android
+      # plugin version check. The library only builds through the example app's
+      # Gradle project, which needs the JS dependencies for the React Native
+      # Gradle plugin.
+      - name: Setup Node.js
+        if: matrix.language == 'java-kotlin'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Install JS dependencies
+        if: matrix.language == 'java-kotlin'
+        run: npm ci
+
+      - name: Build the library
+        if: matrix.language == 'java-kotlin'
+        working-directory: example/android
+        run: ./gradlew :ua_react-native-airship:compileDebugKotlin --console=plain
+
       - name: Autobuild
+        if: matrix.language != 'java-kotlin'
         uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL analysis
