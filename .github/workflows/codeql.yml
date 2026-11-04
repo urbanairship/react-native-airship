@@ -38,7 +38,10 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          language: ${{ matrix.language }}
+          # `languages`, not `language`: an unrecognised input is ignored, and
+          # init then auto-detects every language in the repo, Swift included,
+          # which cannot be analysed on an Ubuntu runner.
+          languages: ${{ matrix.language }}
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
