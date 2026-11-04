@@ -1,0 +1,49 @@
+name: CodeQL
+
+on:
+  pull_request:
+  schedule:
+    # Weekly, so the scheduled run also covers advisories published since the
+    # last pull request.
+    - cron: '0 3 * * 1'
+
+jobs:
+  analyze:
+    name: Analyze ${{ matrix.language }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Swift is left out on purpose: it needs a macOS runner and a full
+        # Xcode build, which costs about as much as the native CI job for a
+        # language that is a thin bridging layer here. Worth revisiting if the
+        # Swift surface grows.
+        language: ['javascript-typescript', 'java-kotlin']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        if: matrix.language == 'java-kotlin'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          language: ${{ matrix.language }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:${{ matrix.language }}
