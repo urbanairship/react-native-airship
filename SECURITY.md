@@ -8,31 +8,28 @@ for version lifecycles and end-of-life dates.
 
 ## Reporting a vulnerability
 
-Please do not open a public GitHub issue for a security report.
+Please do not open a public GitHub issue for a security report, and do not
+include details in a pull request.
 
-Report privately through GitHub's
-[private vulnerability reporting](https://github.com/urbanairship/react-native-airship/security/advisories/new),
-which opens a draft advisory visible only to you and Airship.
+Report privately through
+[GitHub's private vulnerability reporting](https://github.com/urbanairship/react-native-airship/security/advisories/new).
+That opens a draft advisory visible only to you and the maintainers, and keeps
+the discussion in one place until a fix is released.
 
-<!-- TODO: confirm the address Airship wants listed here as the alternative
-     to private advisories, and remove this comment. -->
-If you would rather use email, write to `support@airship.com` and mark the
-subject as a security report.
+A report is most useful when it says:
 
-Please include:
+- the version of the SDK, and the platform or platforms it reproduces on
+- what an attacker is able to do
+- how to reproduce it, or a short proof of concept
 
-- the affected version, and the platform or platforms it reproduces on
-- what an attacker can do with it
-- steps to reproduce, or a short proof of concept
+## What happens next
 
-## What to expect
+We will acknowledge the report, tell you whether we can reproduce it, and keep
+you updated while we work on it. Where a fix needs a release, we will say which
+release it is going into.
 
-- **Acknowledgement** within 3 business days, confirming we received the report.
-- **An initial assessment** within 10 business days, saying whether we can
-  reproduce it and how we are rating it.
-- **Progress updates** at least every 10 business days until it is resolved.
-- **Credit** in the advisory and release notes, unless you ask us not to.
+Please give us the chance to publish a fix before describing the issue
+publicly. If you are working to a disclosure deadline, mention it in your first
+message so we can tell you whether it is workable.
 
-Please give us a chance to release a fix before disclosing publicly. If you
-have a disclosure deadline, say so in your first message and we will tell you
-whether it is workable.
+With your permission we will credit you in the advisory when the fix ships.
