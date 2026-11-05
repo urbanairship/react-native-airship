@@ -70,9 +70,9 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
         }
 
         val selectionJson = json.opt("selection").optMap()
-        val instanceId = selectionJson.opt("instanceId").optString()
-        val selection = if (selectionJson.opt("type").optString() == "instance_id" && instanceId.isNotEmpty()) {
-            AirshipEmbeddedSelection.ByInstanceId(instanceId)
+        val instanceIds = instanceIds(selectionJson.opt("instanceId"))
+        val selection = if (selectionJson.opt("type").optString() == "instance_id" && instanceIds.isNotEmpty()) {
+            AirshipEmbeddedSelection.ByInstanceId(instanceIds)
         } else {
             AirshipEmbeddedSelection.Priority
         }
@@ -80,6 +80,20 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
         renderedConfig = config
         reportedHeight = -1.0
         applyContainer(AirshipEmbeddedView(context, embeddedId, selection = selection))
+    }
+
+    /**
+     * Reads the requested instances in preference order.
+     *
+     * A single instance arrives from the JS side as a bare string rather than
+     * a one-element list, so both shapes are accepted.
+     *
+     * @param value the `instanceId` entry of the selection.
+     * @return the requested instance IDs, empty entries dropped.
+     */
+    private fun instanceIds(value: JsonValue): List<String> {
+        val values = if (value.isJsonList) value.optList().list else listOf(value)
+        return values.mapNotNull { it.string?.takeIf(String::isNotEmpty) }
     }
 
     /**
