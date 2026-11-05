@@ -68,8 +68,9 @@ public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBrid
         }
 
         self.viewModel.embeddedID = config.embeddedId
-        if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId, !instanceId.isEmpty {
-            self.viewModel.selection = .instance([instanceId])
+        let instanceIds = (config.selection?.instanceIds ?? []).filter { !$0.isEmpty }
+        if config.selection?.type == "instance_id", !instanceIds.isEmpty {
+            self.viewModel.selection = .instance(instanceIds)
         } else {
             self.viewModel.selection = .priority
         }
@@ -133,7 +134,28 @@ private struct EmbeddedViewConfig: Decodable {
 
     struct Selection: Decodable {
         let type: String
-        let instanceId: String?
+
+        /// The requested instances, in preference order. A single ID from the
+        /// JS side arrives as a bare string rather than a one-element list.
+        let instanceIds: [String]
+
+        private enum CodingKeys: String, CodingKey {
+            case type
+            case instanceId
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.type = try container.decode(String.self, forKey: .type)
+
+            if let list = try? container.decode([String].self, forKey: .instanceId) {
+                self.instanceIds = list
+            } else if let single = try? container.decode(String.self, forKey: .instanceId) {
+                self.instanceIds = [single]
+            } else {
+                self.instanceIds = []
+            }
+        }
     }
 }
 

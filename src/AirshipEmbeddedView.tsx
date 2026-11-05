@@ -15,7 +15,15 @@ import RNAirshipEmbeddedView from './RNAirshipEmbeddedViewNativeComponent';
  */
 export type AirshipEmbeddedViewSelection =
   | { type: 'priority' }
-  | { type: 'instance_id'; instanceId: string };
+  | {
+      type: 'instance_id';
+      /**
+       * The instance to display, or an ordered preference list. The earliest
+       * entry that is currently pending wins, and nothing is displayed when
+       * none of them is.
+       */
+      instanceId: string | string[];
+    };
 
 /**
  * Reports the measured height of the embedded content.
