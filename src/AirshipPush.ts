@@ -6,6 +6,7 @@ import {
   PushPayload,
   PromptPermissionFallback,
 } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship Push.
@@ -21,7 +22,7 @@ export class AirshipPush {
    */
   public readonly android: AirshipPushAndroid;
 
-  constructor(private readonly module: any) {
+  constructor(private readonly module: Spec) {
     this.iOS = new AirshipPushIOS(module);
     this.android = new AirshipPushAndroid(module);
   }
@@ -63,7 +64,7 @@ export class AirshipPush {
    * @returns A promise with the result.
    */
   public getNotificationStatus(): Promise<PushNotificationStatus> {
-    return this.module.pushGetNotificationStatus();
+    return this.module.pushGetNotificationStatus() as Promise<PushNotificationStatus>;
   }
 
   /**
@@ -84,7 +85,7 @@ export class AirshipPush {
    * @returns A promise with the result.
    */
   public getActiveNotifications(): Promise<PushPayload[]> {
-    return this.module.pushGetActiveNotifications();
+    return this.module.pushGetActiveNotifications() as Promise<PushPayload[]>;
   }
 
   /**
@@ -116,7 +117,7 @@ export class AirshipPushIOS {
     pushPayload: PushPayload
   ) => Promise<iOS.ForegroundPresentationOption[] | null>;
 
-  constructor(private readonly module: any) {
+  constructor(private readonly module: Spec) {
     this.eventEmitter = new NativeEventEmitter(module);
 
     if (Platform.OS === 'ios') {
@@ -129,10 +130,15 @@ export class AirshipPushIOS {
           if (this.presentationOverridesCallback) {
             this.presentationOverridesCallback(payload)
               .then((result) => {
-                module.pushIosOverridePresentationOptions(requestId, result);
+                // The option is declared optional, so a missing value is
+                // undefined rather than null.
+                module.pushIosOverridePresentationOptions(
+                  requestId,
+                  result ?? undefined
+                );
               })
               .catch(() => {
-                module.pushIosOverridePresentationOptions(requestId, null);
+                module.pushIosOverridePresentationOptions(requestId, undefined);
               });
           }
         }
@@ -220,7 +226,9 @@ export class AirshipPushIOS {
   public getAuthorizedNotificationSettings(): Promise<
     iOS.AuthorizedNotificationSetting[]
   > {
-    return this.module.pushIosGetAuthorizedNotificationSettings();
+    return this.module.pushIosGetAuthorizedNotificationSettings() as Promise<
+      iOS.AuthorizedNotificationSetting[]
+    >;
   }
 
   /**
@@ -228,7 +236,7 @@ export class AirshipPushIOS {
    * @returns A promise with the result.
    */
   public getAuthorizedNotificationStatus(): Promise<iOS.AuthorizedNotificationStatus> {
-    return this.module.pushIosGetAuthorizedNotificationStatus();
+    return this.module.pushIosGetAuthorizedNotificationStatus() as Promise<iOS.AuthorizedNotificationStatus>;
   }
 }
 
@@ -241,7 +249,7 @@ export class AirshipPushAndroid {
     pushPayload: PushPayload
   ) => Promise<boolean>;
 
-  constructor(private readonly module: any) {
+  constructor(private readonly module: Spec) {
     this.eventEmitter = new NativeEventEmitter(module);
 
     if (Platform.OS === 'android') {

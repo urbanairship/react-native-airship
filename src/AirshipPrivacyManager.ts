@@ -1,10 +1,11 @@
 import { Feature } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship Privacy Manager.
  */
 export class AirshipPrivacyManager {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Sets the current set of enabled features.
@@ -23,7 +24,7 @@ export class AirshipPrivacyManager {
    * @returns A promise with the result.
    */
   public getEnabledFeatures(): Promise<Feature[]> {
-    return this.module.privacyManagerGetEnabledFeatures();
+    return this.module.privacyManagerGetEnabledFeatures() as Promise<Feature[]>;
   }
 
   /**
@@ -57,7 +58,7 @@ export class AirshipPrivacyManager {
    * @param features The features to check.
    * @returns A promise with the result.
    */
-  public isFeaturesEnabled(features: Feature[]): Promise<void> {
+  public isFeaturesEnabled(features: Feature[]): Promise<boolean> {
     return this.module.privacyManagerIsFeatureEnabled(
       features.filter(
         (feature) => feature !== Feature.Location && feature !== Feature.Chat

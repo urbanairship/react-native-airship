@@ -5,12 +5,13 @@ import {
   LiveActivityUpdateRequest,
   LiveActivityEndRequest,
 } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Live Activity manager.
  */
 export class AirshipLiveActivityManager {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Lists any Live Activities for the request.
@@ -18,7 +19,7 @@ export class AirshipLiveActivityManager {
    * @returns A promise with the result.
    */
   public list(request: LiveActivityListRequest): Promise<LiveActivity[]> {
-    return this.module.liveActivityList(request);
+    return this.module.liveActivityList(request) as Promise<LiveActivity[]>;
   }
 
   /**
@@ -26,7 +27,7 @@ export class AirshipLiveActivityManager {
    * @returns A promise with the result.
    */
   public listAll(): Promise<LiveActivity[]> {
-    return this.module.liveActivityListAll();
+    return this.module.liveActivityListAll() as Promise<LiveActivity[]>;
   }
 
   /**
@@ -35,7 +36,7 @@ export class AirshipLiveActivityManager {
    * @returns A promise with the result.
    */
   public start(request: LiveActivityStartRequest): Promise<LiveActivity> {
-    return this.module.liveActivityStart(request);
+    return this.module.liveActivityStart(request) as Promise<LiveActivity>;
   }
 
   /**
