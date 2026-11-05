@@ -9,12 +9,13 @@ import {
   SmsRegistrationOptions,
   SubscriptionScope,
 } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship contact.
  */
 export class AirshipContact {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Identifies the contact with a named user Id.
@@ -80,7 +81,9 @@ export class AirshipContact {
    * @returns A promise with the result.
    */
   public getSubscriptionLists(): Promise<Record<string, SubscriptionScope[]>> {
-    return this.module.contactGetSubscriptionLists();
+    return this.module.contactGetSubscriptionLists() as Promise<
+      Record<string, SubscriptionScope[]>
+    >;
   }
 
   /**

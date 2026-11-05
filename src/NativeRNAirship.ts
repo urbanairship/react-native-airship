@@ -1,5 +1,29 @@
 import { TurboModuleRegistry, type TurboModule } from 'react-native';
 
+/**
+ * The native module, as codegen sees it.
+ *
+ * Structured payloads are declared `Object` because codegen cannot express the
+ * richer types the public API promises. The managers narrow those at the call
+ * site, so a shape stated here is the one codegen enforces, and a shape stated
+ * on a manager is an assertion about what native returns.
+ */
+/**
+ * The notification status as it crosses the bridge.
+ *
+ * `notificationPermissionStatus` is a plain string here because codegen has no
+ * enums; `AirshipPush` narrows it to `PermissionStatus`.
+ */
+export type NativePushNotificationStatus = {
+  isUserNotificationsEnabled: boolean;
+  areNotificationsAllowed: boolean;
+  isPushPrivacyFeatureEnabled: boolean;
+  isPushTokenRegistered: boolean;
+  isOptedIn: boolean;
+  isUserOptedIn: boolean;
+  notificationPermissionStatus: string;
+};
+
 export interface Spec extends TurboModule {
   // Airship
   takeOff(config: Object): Promise<boolean>;
@@ -30,7 +54,7 @@ export interface Spec extends TurboModule {
   pushSetUserNotificationsEnabled(enabled: boolean): Promise<void>;
   pushIsUserNotificationsEnabled(): Promise<boolean>;
   pushEnableUserNotifications(options?: Object): Promise<boolean>;
-  pushGetNotificationStatus(): Promise<Object>;
+  pushGetNotificationStatus(): Promise<NativePushNotificationStatus>;
   pushGetRegistrationToken(): Promise<string | null | undefined>;
   pushGetActiveNotifications(): Promise<Object[]>;
   pushClearNotifications(): void;
@@ -86,7 +110,7 @@ export interface Spec extends TurboModule {
   privacyManagerGetEnabledFeatures(): Promise<string[]>;
   privacyManagerEnableFeature(features: string[]): Promise<void>;
   privacyManagerDisableFeature(features: string[]): Promise<void>;
-  privacyManagerIsFeatureEnabled(features: string[]): Promise<void>;
+  privacyManagerIsFeatureEnabled(features: string[]): Promise<boolean>;
 
   // InApp
   inAppSetDisplayInterval(milliseconds: number): Promise<void>;

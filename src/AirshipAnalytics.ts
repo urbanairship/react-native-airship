@@ -1,10 +1,11 @@
 import { CustomEvent } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship analytics.
  */
 export class AirshipAnalytics {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Associates an identifier.

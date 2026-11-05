@@ -1,10 +1,11 @@
 import { InboxMessage } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship Message Center
  */
 export class AirshipMessageCenter {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Gets the unread count.
@@ -19,7 +20,7 @@ export class AirshipMessageCenter {
    * @returns A promise with the result.
    */
   public getMessages(): Promise<InboxMessage[]> {
-    return this.module.messageCenterGetMessages();
+    return this.module.messageCenterGetMessages() as Promise<InboxMessage[]>;
   }
 
   /**
