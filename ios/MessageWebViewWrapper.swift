@@ -73,7 +73,11 @@ public final class MessageWebViewWrapper: UIView, RNAirshipMessageWebViewBridge 
                     self.delegate?.onMessageLoadFailed(messageID: messageID)
                 case .messageLoadFailed:
                     self.delegate?.onMessageBodyLoadFailed(messageID: messageID)
+                @unknown default:
+                    self.delegate?.onMessageLoadFailed(messageID: messageID)
                 }
+            @unknown default:
+                break
             }
         }
     }
