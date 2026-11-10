@@ -19,10 +19,12 @@ export type AirshipEmbeddedViewSelection =
       type: 'instance_id';
       /**
        * The instance to display, or an ordered preference list. The earliest
-       * entry that is currently pending wins, and nothing is displayed when
-       * none of them is.
+       * entry that is currently pending wins.
+       *
+       * A list with no usable entries selects by priority instead, so build
+       * the list before choosing this selection type.
        */
-      instanceId: string | string[];
+      instanceId: string | readonly string[];
     };
 
 /**
@@ -110,6 +112,29 @@ export type AirshipEmbeddedViewInstance = ComponentRef<
 >;
 
 /**
+ * Puts the selection into the one shape the native side reads.
+ *
+ * The config crosses as a JSON string and the Android view rebuilds whenever
+ * that string changes, so a single ID and a one-entry list have to produce the
+ * same string or switching between them re-inflates the view.
+ *
+ * @param selection The selection as the caller wrote it.
+ * @returns The selection with any instance ID expressed as a list.
+ */
+function normalize(
+  selection?: AirshipEmbeddedViewSelection
+): AirshipEmbeddedViewSelection | undefined {
+  if (selection?.type !== 'instance_id') {
+    return selection;
+  }
+  const { instanceId } = selection;
+  return {
+    type: 'instance_id',
+    instanceId: typeof instanceId === 'string' ? [instanceId] : instanceId,
+  };
+}
+
+/**
  * Airship Embedded view.
  *
  * Fills the box it is given. Set `sizeToContent` to have it take the height of
@@ -138,7 +163,7 @@ export const AirshipEmbeddedView: ForwardRefExoticComponent<
     <RNAirshipEmbeddedView
       ref={ref}
       style={resolveStyle(style, sizeToContent, contentHeight)}
-      config={JSON.stringify({ embeddedId, selection })}
+      config={JSON.stringify({ embeddedId, selection: normalize(selection) })}
       sizeToContent={sizeToContent}
       onSizeChange={handleSizeChange}
     />
