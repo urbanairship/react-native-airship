@@ -83,6 +83,11 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
       EMBEDDED_ID,
       (ready) => {
         setEmbeddedReady(ready);
+        if (!ready) {
+          // The readout belongs to content that has gone; keeping it would
+          // show a stale height against the next content that arrives.
+          setContentHeight(undefined);
+        }
       }
     );
 
@@ -127,8 +132,8 @@ export default function EmbeddedViewsScreen(_props: EmbeddedViewsScreenProps) {
 
     switch (config.sizeType) {
       // The view takes the height of its content, and reports each
-      // measurement. Every other case below states a height instead, which
-      // turns self sizing off.
+      // measurement. Every other case below leaves sizeToContent off and
+      // states a height.
       case 'selfSizing':
         return (
           <View style={styles.evEmbeddedWrapper}>

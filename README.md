@@ -130,8 +130,10 @@ in a feed:
 ```
 
 It is off by default, so adding it is the only thing that changes sizing
-behaviour. While it is set, the measured height replaces any height in
+behaviour. Once a usable measurement arrives it replaces any height in
 `style`, so a view whose height comes from its layout should leave it off.
+Before that first measurement, and whenever there is no content, the style is
+used as written.
 
 ### Reacting to the measured height
 
@@ -147,7 +149,10 @@ for example to animate a container alongside the view:
 />
 ```
 
-A height of `0` means the content went away, so the view has collapsed.
+A height of `0` means there is no content to show. It arrives when content
+goes away, and on iOS also on mount when nothing is pending. It does not force
+the view to collapse: a view that also states a height in `style` keeps that
+height.
 
 The example app shows these side by side, on the Embedded Views screen.
 
