@@ -1,9 +1,8 @@
+import type { Spec } from './NativeRNAirship';
+
 /**
  * Manages locale used by Airship messaging.
  */
-
-import type { Spec } from './NativeRNAirship';
-
 export class AirshipLocale {
   constructor(private readonly module: Spec) {}
 

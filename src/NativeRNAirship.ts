@@ -1,14 +1,6 @@
 import { TurboModuleRegistry, type TurboModule } from 'react-native';
 
 /**
- * The native module, as codegen sees it.
- *
- * Structured payloads are declared `Object` because codegen cannot express the
- * richer types the public API promises. The managers narrow those at the call
- * site, so a shape stated here is the one codegen enforces, and a shape stated
- * on a manager is an assertion about what native returns.
- */
-/**
  * The notification status as it crosses the bridge.
  *
  * `notificationPermissionStatus` is a plain string here because codegen has no
@@ -24,6 +16,14 @@ export type NativePushNotificationStatus = {
   notificationPermissionStatus: string;
 };
 
+/**
+ * The native module, as codegen sees it.
+ *
+ * Structured payloads are declared `Object` because codegen cannot express the
+ * richer types the public API promises. The managers narrow those at the call
+ * site, so a shape stated here is the one codegen enforces, and a shape stated
+ * on a manager is an assertion about what native returns.
+ */
 export interface Spec extends TurboModule {
   // Airship
   takeOff(config: Object): Promise<boolean>;
