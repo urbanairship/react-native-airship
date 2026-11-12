@@ -5,12 +5,13 @@ import {
 } from './SubscriptionListEditor';
 import { TagGroupEditor, TagGroupOperation } from './TagGroupEditor';
 import { TagEditor, TagOperation } from './TagEditor';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship channel.
  */
 export class AirshipChannel {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Enables channel creation if channel creation has been delayed.

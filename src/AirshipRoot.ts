@@ -14,6 +14,7 @@ import { AirshipConfig, EventTypeMap, EventType } from './types';
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
 import { AirshipLiveActivityManager } from './AirshipLiveActivityManager';
 import { AirshipLiveUpdateManager } from './AirshipLiveUpdateManager';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship
@@ -43,7 +44,7 @@ export class AirshipRoot {
 
   private readonly eventEmitter: UAEventEmitter;
 
-  constructor(private readonly module: any) {
+  constructor(private readonly module: Spec) {
     this.eventEmitter = new UAEventEmitter(module);
 
     this.actions = new AirshipActions(module);
@@ -155,7 +156,7 @@ export class AirshipRoot {
 export class AirshipRootIOS {
   public readonly liveActivityManager: AirshipLiveActivityManager;
 
-  constructor(module: any) {
+  constructor(module: Spec) {
     this.liveActivityManager = new AirshipLiveActivityManager(module);
   }
 }
@@ -163,7 +164,7 @@ export class AirshipRootIOS {
 export class AirshipRootAndroid {
   public readonly liveUpdateManager: AirshipLiveUpdateManager;
 
-  constructor(module: any) {
+  constructor(module: Spec) {
     this.liveUpdateManager = new AirshipLiveUpdateManager(module);
   }
 }

@@ -5,12 +5,13 @@ import {
   LiveUpdateUpdateRequest,
   LiveUpdateEndRequest,
 } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Live Update manager.
  */
 export class AirshipLiveUpdateManager {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Lists any Live Updates for the request.
@@ -18,7 +19,7 @@ export class AirshipLiveUpdateManager {
    * @returns A promise with the result.
    */
   public list(request: LiveUpdateListRequest): Promise<LiveUpdate[]> {
-    return this.module.liveUpdateList(request);
+    return this.module.liveUpdateList(request) as Promise<LiveUpdate[]>;
   }
 
   /**
@@ -26,7 +27,7 @@ export class AirshipLiveUpdateManager {
    * @returns A promise with the result.
    */
   public listAll(): Promise<LiveUpdate[]> {
-    return this.module.liveUpdateListAll();
+    return this.module.liveUpdateListAll() as Promise<LiveUpdate[]>;
   }
 
   /**

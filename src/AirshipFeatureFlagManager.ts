@@ -1,4 +1,5 @@
 import { FeatureFlag, FeatureFlagUpdateStatus } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship feature flag manager.
@@ -9,7 +10,7 @@ export class AirshipFeatureFlagManager {
    */
   public readonly resultCache: AirshipFeatureFlagResultCache;
 
-  constructor(private readonly module: any) {
+  constructor(private readonly module: Spec) {
     this.resultCache = new AirshipFeatureFlagResultCache(module);
   }
 
@@ -24,7 +25,10 @@ export class AirshipFeatureFlagManager {
     flagName: string,
     useResultCache: boolean = true
   ): Promise<FeatureFlag> {
-    return this.module.featureFlagManagerFlag(flagName, useResultCache);
+    return this.module.featureFlagManagerFlag(
+      flagName,
+      useResultCache
+    ) as Promise<FeatureFlag>;
   }
 
   /**
@@ -42,7 +46,7 @@ export class AirshipFeatureFlagManager {
    * @return {Promise<FeatureFlagUpdateStatus>} A promise resolving to the status.
    */
   public status(): Promise<FeatureFlagUpdateStatus> {
-    return this.module.featureFlagManagerStatus();
+    return this.module.featureFlagManagerStatus() as Promise<FeatureFlagUpdateStatus>;
   }
 
   /**
@@ -59,7 +63,7 @@ export class AirshipFeatureFlagManager {
 }
 
 export class AirshipFeatureFlagResultCache {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Retrieve a flag from the cache.
@@ -67,7 +71,9 @@ export class AirshipFeatureFlagResultCache {
    * @return {Promise<FeatureFlag>} A promise resolving to the feature flag.
    */
   public flag(flagName: string): Promise<FeatureFlag> {
-    return this.module.featureFlagManagerResultCacheGetFlag(flagName);
+    return this.module.featureFlagManagerResultCacheGetFlag(
+      flagName
+    ) as Promise<FeatureFlag>;
   }
 
   /**

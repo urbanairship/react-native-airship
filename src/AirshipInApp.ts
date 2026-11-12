@@ -1,5 +1,6 @@
 import { Subscription, UAEventEmitter } from './UAEventEmitter';
 import { JsonObject } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Info for a pending embedded content instance.
@@ -37,7 +38,7 @@ export class AirshipInApp {
   > = new Map();
 
   constructor(
-    private readonly module: any,
+    private readonly module: Spec,
     private readonly eventEmitter: UAEventEmitter
   ) {
     this.eventEmitter.addListener(
