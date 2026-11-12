@@ -70,9 +70,12 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
         }
 
         val selectionJson = json.opt("selection").optMap()
-        val instanceId = selectionJson.opt("instanceId").optString()
-        val selection = if (selectionJson.opt("type").optString() == "instance_id" && instanceId.isNotEmpty()) {
-            AirshipEmbeddedSelection.ByInstanceId(instanceId)
+        val instanceIds = instanceIds(selectionJson.opt("instanceId"))
+        // ByInstanceId is an allow-list, so an empty one displays nothing. A
+        // caller that asked for specific instances and computed none of them
+        // should see nothing rather than arbitrary content.
+        val selection = if (selectionJson.opt("type").optString() == "instance_id") {
+            AirshipEmbeddedSelection.ByInstanceId(instanceIds)
         } else {
             AirshipEmbeddedSelection.Priority
         }
@@ -80,6 +83,20 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
         renderedConfig = config
         reportedHeight = -1.0
         applyContainer(AirshipEmbeddedView(context, embeddedId, selection = selection))
+    }
+
+    /**
+     * Reads the requested instances in preference order.
+     *
+     * The JS side sends a list, and a bare string is accepted as a one-entry
+     * list so the config remains readable on its own.
+     *
+     * @param value the `instanceId` entry of the selection.
+     * @return the requested instance IDs, empty entries dropped.
+     */
+    private fun instanceIds(value: JsonValue): List<String> {
+        val values = if (value.isJsonList) value.optList().list else listOf(value)
+        return values.mapNotNull { it.string?.takeIf(String::isNotEmpty) }
     }
 
     /**
