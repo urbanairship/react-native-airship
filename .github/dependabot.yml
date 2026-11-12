@@ -8,3 +8,49 @@ updates:
       github-actions:
         patterns:
           - "*"
+
+  # The npm tree covers the library and the example workspace together.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      # Routine bumps arrive as one PR; majors still come separately so a
+      # breaking change is never buried in a batch.
+      minor-and-patch:
+        # React Native is 0.x, so 0.87 to 0.88 is a semver minor while being a
+        # template, AGP, Gradle and Podfile upgrade. React moves with it, and a
+        # React bump alone passes typecheck and bundling then fails at runtime
+        # on React Native's version check. Those land on their own.
+        exclude-patterns:
+          - "react"
+          - "react-dom"
+          - "react-native"
+          - "@react-native/*"
+          - "@react-native-community/*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "gradle"
+    directory: "/android"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "gradle"
+    directory: "/example/android"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
