@@ -1,10 +1,5 @@
 export type JsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JsonObject
-  | JsonArray;
+  string | number | boolean | null | JsonObject | JsonArray;
 
 export type JsonObject = {
   [key: string]: JsonValue | undefined;
@@ -467,12 +462,7 @@ export type Site = 'us' | 'eu';
  * Log levels.
  */
 export type LogLevel =
-  | 'verbose'
-  | 'debug'
-  | 'info'
-  | 'warning'
-  | 'error'
-  | 'none';
+  'verbose' | 'debug' | 'info' | 'warning' | 'error' | 'none';
 
 /**
  * Airship config
