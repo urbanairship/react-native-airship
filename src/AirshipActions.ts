@@ -1,10 +1,11 @@
 import { JsonValue } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship actions.
  */
 export class AirshipActions {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Runs an Airship action.
@@ -18,6 +19,9 @@ export class AirshipActions {
     actionName: string,
     actionValue?: JsonValue
   ): Promise<JsonValue | null | undefined> {
-    return this.module.actionRun({ name: actionName, value: actionValue });
+    return this.module.actionRun({
+      name: actionName,
+      value: actionValue,
+    }) as Promise<JsonValue | undefined>;
   }
 }

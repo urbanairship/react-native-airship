@@ -1,8 +1,10 @@
+import type { Spec } from './NativeRNAirship';
+
 /**
  * Manages locale used by Airship messaging.
  */
 export class AirshipLocale {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Sets the locale override.
