@@ -71,7 +71,10 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
 
         val selectionJson = json.opt("selection").optMap()
         val instanceIds = instanceIds(selectionJson.opt("instanceId"))
-        val selection = if (selectionJson.opt("type").optString() == "instance_id" && instanceIds.isNotEmpty()) {
+        // ByInstanceId is an allow-list, so an empty one displays nothing. A
+        // caller that asked for specific instances and computed none of them
+        // should see nothing rather than arbitrary content.
+        val selection = if (selectionJson.opt("type").optString() == "instance_id") {
             AirshipEmbeddedSelection.ByInstanceId(instanceIds)
         } else {
             AirshipEmbeddedSelection.Priority
@@ -85,8 +88,8 @@ class ReactEmbeddedView(context: Context) : FrameLayout(context) {
     /**
      * Reads the requested instances in preference order.
      *
-     * A single instance arrives from the JS side as a bare string rather than
-     * a one-element list, so both shapes are accepted.
+     * The JS side sends a list, and a bare string is accepted as a one-entry
+     * list so the config remains readable on its own.
      *
      * @param value the `instanceId` entry of the selection.
      * @return the requested instance IDs, empty entries dropped.

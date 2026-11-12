@@ -21,8 +21,8 @@ export type AirshipEmbeddedViewSelection =
        * The instance to display, or an ordered preference list. The earliest
        * entry that is currently pending wins.
        *
-       * A list with no usable entries selects by priority instead, so build
-       * the list before choosing this selection type.
+       * The list is an allow-list, so an empty one displays nothing rather
+       * than falling back to priority.
        */
       instanceId: string | readonly string[];
     };
