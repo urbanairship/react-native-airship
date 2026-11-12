@@ -4,6 +4,20 @@ import { afterEach, describe, expect, it } from '@jest/globals';
 import { emit, reset } from '../../jest/react-native';
 import { AirshipInApp, type PendingEmbedded } from '../AirshipInApp';
 import { UAEventEmitter } from '../UAEventEmitter';
+import type { Spec } from '../NativeRNAirship';
+
+/**
+ * Presents a test double as the full native module.
+ *
+ * A double only implements the calls the class under test makes, which is the
+ * point of it; this keeps that from having to list the rest of the spec.
+ *
+ * @param double The subset of the native module the test provides.
+ * @returns The same object, typed as the native module.
+ */
+function spec(double: object): Spec {
+  return double as unknown as Spec;
+}
 
 const PENDING_EVENTS = 'com.airship.pending_events';
 const PENDING_EMBEDDED = 'com.airship.pending_embedded_updated';
@@ -35,7 +49,7 @@ function setup() {
     },
   };
 
-  const inApp = new AirshipInApp(native, new UAEventEmitter(native));
+  const inApp = new AirshipInApp(spec(native), new UAEventEmitter(native));
 
   return {
     inApp,
@@ -160,7 +174,7 @@ describe('AirshipInApp', () => {
       },
       inAppGetDisplayInterval: () => Promise.resolve(30),
     };
-    const inApp = new AirshipInApp(native, new UAEventEmitter(native));
+    const inApp = new AirshipInApp(spec(native), new UAEventEmitter(native));
 
     await inApp.setPaused(true);
     await inApp.setDisplayInterval(30);

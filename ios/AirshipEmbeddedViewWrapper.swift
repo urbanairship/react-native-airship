@@ -68,8 +68,12 @@ public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBrid
         }
 
         self.viewModel.embeddedID = config.embeddedId
-        if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId, !instanceId.isEmpty {
-            self.viewModel.selection = .instance([instanceId])
+        // .instance is an allow-list, so an empty one displays nothing. A caller
+        // that asked for specific instances and computed none of them should see
+        // nothing rather than arbitrary content.
+        let instanceIds = (config.selection?.instanceIds ?? []).filter { !$0.isEmpty }
+        if config.selection?.type == "instance_id" {
+            self.viewModel.selection = .instance(instanceIds)
         } else {
             self.viewModel.selection = .priority
         }
@@ -133,7 +137,29 @@ private struct EmbeddedViewConfig: Decodable {
 
     struct Selection: Decodable {
         let type: String
-        let instanceId: String?
+
+        /// The requested instances, in preference order. The JS side sends a
+        /// list, and a bare string is accepted as a one-entry list so the
+        /// config remains readable on its own.
+        let instanceIds: [String]
+
+        private enum CodingKeys: String, CodingKey {
+            case type
+            case instanceId
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.type = try container.decode(String.self, forKey: .type)
+
+            if let list = try? container.decode([String].self, forKey: .instanceId) {
+                self.instanceIds = list
+            } else if let single = try? container.decode(String.self, forKey: .instanceId) {
+                self.instanceIds = [single]
+            } else {
+                self.instanceIds = []
+            }
+        }
     }
 }
 

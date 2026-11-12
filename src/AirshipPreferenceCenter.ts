@@ -1,10 +1,11 @@
 import { PreferenceCenter } from './types';
+import type { Spec } from './NativeRNAirship';
 
 /**
  * Airship Preference Center.
  */
 export class AirshipPreferenceCenter {
-  constructor(private readonly module: any) {}
+  constructor(private readonly module: Spec) {}
 
   /**
    * Requests to display a preference center.
@@ -25,7 +26,9 @@ export class AirshipPreferenceCenter {
    * @returns A promise with the result.
    */
   public getConfig(preferenceCenterId: string): Promise<PreferenceCenter> {
-    return this.module.preferenceCenterGetConfig(preferenceCenterId);
+    return this.module.preferenceCenterGetConfig(
+      preferenceCenterId
+    ) as Promise<PreferenceCenter>;
   }
 
   /**
