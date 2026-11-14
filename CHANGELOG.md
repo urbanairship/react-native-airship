@@ -1,5 +1,17 @@
 # React Native Module 27.0.0 Changelog
 
+## Version 27.1.0 - November 13, 2026
+
+Minor release that updates the Android and iOS SDKs to 21.2.0, which fixes reporting for Scenes launched from a push, and adds content sizing to `AirshipEmbeddedView`.
+
+### Changes
+- Updated Android SDK to [21.2.0](https://github.com/urbanairship/android-library/releases/tag/21.2.0)
+- Updated iOS SDK to [21.2.0](https://github.com/urbanairship/ios-library/releases/tag/21.2.0)
+- Added a `sizeToContent` prop to `AirshipEmbeddedView`, and support for an ordered list of instance IDs in its `selection`
+- Fixed `AirshipEmbeddedView` drawing outside its box when it has no height
+- Fixed the iOS-only push authorization methods never resolving on Android
+
+
 ## Version 27.0.0 - September 21, 2026
 
 Major release that adds experimental Swift Package Manager support on iOS, updates the native Airship SDKs to 21.x, and raises platform requirements. See the [Migration Guide](https://github.com/urbanairship/react-native-airship/blob/27.0.0/MIGRATION.md) for upgrade details.
