@@ -10,6 +10,7 @@ Minor release that updates the Android and iOS SDKs to 21.2.0, which fixes repor
 - Added a `sizeToContent` prop to `AirshipEmbeddedView`, and support for an ordered list of instance IDs in its `selection`
 - Fixed `AirshipEmbeddedView` drawing outside its box when it has no height
 - Fixed the iOS-only push authorization methods never resolving on Android
+- Reduced repeated work on Android before Airship takes off, which could contribute to ANRs
 
 
 ## Version 27.0.0 - September 21, 2026
