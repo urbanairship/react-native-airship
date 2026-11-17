@@ -6,6 +6,7 @@ import React from 'react';
 import { NativeSyntheticEvent, ViewStyle } from 'react-native';
 import RNAirshipEmbeddedCarousel from './RNAirshipEmbeddedCarouselNativeComponent';
 import type { AirshipEmbeddedViewSelection } from './AirshipEmbeddedView';
+import { normalizeSelection } from './normalizeSelection';
 
 /**
  * AirshipEmbeddedCarousel state.
@@ -111,7 +112,10 @@ export class AirshipEmbeddedCarousel extends React.Component<AirshipEmbeddedCaro
     return (
       <RNAirshipEmbeddedCarousel
         style={style}
-        config={JSON.stringify({ embeddedId, selection })}
+        config={JSON.stringify({
+          embeddedId,
+          selection: normalizeSelection(selection),
+        })}
         page={
           currentPage !== undefined && currentPage >= 0
             ? Math.floor(currentPage)

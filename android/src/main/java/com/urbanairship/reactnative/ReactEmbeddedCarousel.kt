@@ -102,9 +102,10 @@ class ReactEmbeddedCarousel(context: Context) : FrameLayout(context) {
         }
 
         val selectionJson = json.opt("selection").optMap()
-        val instanceId = selectionJson.opt("instanceId").optString()
-        val selection = if (selectionJson.opt("type").optString() == "instance_id" && instanceId.isNotEmpty()) {
-            AirshipEmbeddedSelection.ByInstanceId(instanceId)
+        val instanceIds = parseInstanceIds(selectionJson.opt("instanceId"))
+        // ByInstanceId is an allow-list, so an empty one displays nothing.
+        val selection = if (selectionJson.opt("type").optString() == "instance_id") {
+            AirshipEmbeddedSelection.ByInstanceId(instanceIds)
         } else {
             AirshipEmbeddedSelection.Priority
         }

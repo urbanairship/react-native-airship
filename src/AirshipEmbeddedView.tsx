@@ -8,6 +8,7 @@ import type {
 } from 'react';
 import type { NativeSyntheticEvent, StyleProp, ViewStyle } from 'react-native';
 import RNAirshipEmbeddedView from './RNAirshipEmbeddedViewNativeComponent';
+import { normalizeSelection } from './normalizeSelection';
 
 /**
  * Controls which pending embedded content instance is displayed when more
@@ -112,29 +113,6 @@ export type AirshipEmbeddedViewInstance = ComponentRef<
 >;
 
 /**
- * Puts the selection into the one shape the native side reads.
- *
- * The config crosses as a JSON string and the Android view rebuilds whenever
- * that string changes, so a single ID and a one-entry list have to produce the
- * same string or switching between them re-inflates the view.
- *
- * @param selection The selection as the caller wrote it.
- * @returns The selection with any instance ID expressed as a list.
- */
-function normalize(
-  selection?: AirshipEmbeddedViewSelection
-): AirshipEmbeddedViewSelection | undefined {
-  if (selection?.type !== 'instance_id') {
-    return selection;
-  }
-  const { instanceId } = selection;
-  return {
-    type: 'instance_id',
-    instanceId: typeof instanceId === 'string' ? [instanceId] : instanceId,
-  };
-}
-
-/**
  * Airship Embedded view.
  *
  * Fills the box it is given. Set `sizeToContent` to have it take the height of
@@ -163,7 +141,10 @@ export const AirshipEmbeddedView: ForwardRefExoticComponent<
     <RNAirshipEmbeddedView
       ref={ref}
       style={resolveStyle(style, sizeToContent, contentHeight)}
-      config={JSON.stringify({ embeddedId, selection: normalize(selection) })}
+      config={JSON.stringify({
+        embeddedId,
+        selection: normalizeSelection(selection),
+      })}
       sizeToContent={sizeToContent}
       onSizeChange={handleSizeChange}
     />

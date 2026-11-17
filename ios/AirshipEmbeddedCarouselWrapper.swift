@@ -39,7 +39,7 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
         // Props can be re-applied without a real change; avoid re-publishing to SwiftUI.
         guard json != lastConfig else { return }
         guard let json, let data = json.data(using: .utf8),
-              let config = try? JSONDecoder().decode(EmbeddedCarouselConfig.self, from: data) else {
+              let config = try? JSONDecoder().decode(EmbeddedViewConfig.self, from: data) else {
             AirshipLogger.debug("AirshipEmbeddedCarousel - Ignoring missing or malformed config: \(json ?? "nil")")
             return
         }
@@ -57,8 +57,10 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
         }
         lastConfig = json
         self.viewModel.embeddedID = config.embeddedId
-        if config.selection?.type == "instance_id", let instanceId = config.selection?.instanceId, !instanceId.isEmpty {
-            self.viewModel.selection = .instance([instanceId])
+        // .instance is an allow-list, so an empty one displays nothing.
+        let instanceIds = (config.selection?.instanceIds ?? []).filter { !$0.isEmpty }
+        if config.selection?.type == "instance_id" {
+            self.viewModel.selection = .instance(instanceIds)
         } else {
             self.viewModel.selection = .priority
         }
@@ -167,16 +169,6 @@ public final class AirshipEmbeddedCarouselWrapper: UIView, RNAirshipEmbeddedCaro
     public override func layoutSubviews() {
         super.layoutSubviews()
         self.viewModel.size = bounds.size
-    }
-}
-
-private struct EmbeddedCarouselConfig: Decodable {
-    let embeddedId: String
-    let selection: Selection?
-
-    struct Selection: Decodable {
-        let type: String
-        let instanceId: String?
     }
 }
 
