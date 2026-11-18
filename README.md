@@ -79,6 +79,28 @@ This package supports two iOS dependency managers:
   ```
   React Native's SwiftPM support is still marked experimental. On React Native <0.88, the generated autolinking package hardcodes an iOS 15 minimum, which prevents packages that require iOS 16 (including this one) from resolving. React Native 0.88 fixes this by reading the floor from your app's own Xcode deployment target instead.
 
+#### Prebuilt Airship SDK (CocoaPods)
+
+To link the prebuilt Airship iOS SDK ([ios-library-prebuilt](https://github.com/urbanairship/ios-library-prebuilt)) instead of compiling it from source, call `airship_use_prebuilt!` from your Podfile's `post_install`:
+
+```ruby
+airship_path = File.dirname(Pod::Executable.execute_command('node', ['-p',
+  'require.resolve("@ua/react-native-airship/package.json", {paths: [process.argv[1]]})', __dir__]).strip)
+require File.join(airship_path, 'ios/airship_prebuilt')
+
+post_install do |installer|
+  react_native_post_install(installer, ...)
+  airship_use_prebuilt!(installer)
+end
+```
+
+Then run `pod install`. The helper:
+- Adds a SwiftPM mirror from `ios-library` to `ios-library-prebuilt` in `<App>.xcworkspace/xcshareddata/swiftpm/configuration/mirrors.json`, keeping any other mirrors in that file. If `ios-library` is already mirrored elsewhere, it leaves that mirror in place and prints a warning.
+- Removes the `ios-library` pin from the workspace's `Package.resolved` so Xcode re-resolves it; other pins are left alone.
+- Links the Airship products on your app target so Xcode embeds the prebuilt frameworks, including any Airship products your app extensions link.
+
+To switch back to building from source, change the call to `airship_use_prebuilt!(installer, enabled: false)` and run `pod install`. This removes the mirror and unlinks the Airship products from your app targets. To use a copy of `ios-library-prebuilt` that you host, pass its repository URL as `url:`.
+
 ### Initialization
 
 Initialize Airship in your `App.tsx`:
