@@ -131,7 +131,7 @@ public final class AirshipEmbeddedViewWrapper: UIView, RNAirshipEmbeddedViewBrid
     }
 }
 
-private struct EmbeddedViewConfig: Decodable {
+struct EmbeddedViewConfig: Decodable {
     let embeddedId: String
     let selection: Selection?
 
