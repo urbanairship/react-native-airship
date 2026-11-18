@@ -1,11 +1,25 @@
 version: 2
+
+# Every ecosystem runs on the 1st and 16th and groups everything it finds, so a
+# quiet fortnight produces nothing and a busy one produces a handful of pull
+# requests rather than dozens.
+#
+# Security updates are grouped too, but they are not on this schedule and
+# cannot be put on one: Dependabot raises them against published advisories.
+# That is deliberate, since a security update held back is worth less.
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "cron"
+      cronjob: "0 9 1,16 * *"
+    open-pull-requests-limit: 1
     groups:
       github-actions:
+        patterns:
+          - "*"
+      github-actions-security:
+        applies-to: security-updates
         patterns:
           - "*"
 
@@ -13,12 +27,18 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
+      interval: "cron"
+      cronjob: "0 9 1,16 * *"
+    open-pull-requests-limit: 1
+    # Leave a release alone for a fortnight, so one that is pulled or quickly
+    # patched is never picked up at all.
+    cooldown:
+      default-days: 14
     groups:
       # Routine bumps arrive as one PR; majors still come separately so a
       # breaking change is never buried in a batch.
       minor-and-patch:
+        applies-to: version-updates
         # React Native is 0.x, so 0.87 to 0.88 is a semver minor while being a
         # template, AGP, Gradle and Podfile upgrade. React moves with it, and a
         # React bump alone passes typecheck and bundling then fails at runtime
@@ -32,25 +52,33 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      # Without this every advisory opens its own pull request. The SDK ships
+      # no runtime dependencies, so these are build and CI surface only and are
+      # better reviewed together.
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
+  # Both Gradle trees in one entry, so they produce one pull request between
+  # them rather than one each.
   - package-ecosystem: "gradle"
-    directory: "/android"
+    directories:
+      - "/android"
+      - "/example/android"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
+      interval: "cron"
+      cronjob: "0 9 1,16 * *"
+    open-pull-requests-limit: 1
+    cooldown:
+      default-days: 14
     groups:
       minor-and-patch:
+        applies-to: version-updates
         update-types:
           - "minor"
           - "patch"
-
-  - package-ecosystem: "gradle"
-    directory: "/example/android"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
-    groups:
-      minor-and-patch:
-        update-types:
-          - "minor"
-          - "patch"
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
