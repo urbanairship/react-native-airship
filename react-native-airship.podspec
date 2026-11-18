@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   spm_dependency(
     s,
     url: "https://github.com/urbanairship/airship-mobile-framework-proxy.git",
-    requirement: { kind: "exactVersion", version: "16.0.1" },
+    requirement: { kind: "exactVersion", version: "16.1.0" },
     products: ["AirshipFrameworkProxy"]
   )
 
@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
   spm_dependency(
     s,
     url: "https://github.com/urbanairship/ios-library.git",
-    requirement: { kind: "exactVersion", version: "21.0.2" },
+    requirement: { kind: "exactVersion", version: "21.2.0" },
     products: [
       "AirshipCore",
       "AirshipAutomation",
