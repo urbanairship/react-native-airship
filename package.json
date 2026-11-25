@@ -66,7 +66,7 @@
     "@eslint/js": "^9.35.0",
     "@react-native-community/cli": "20.1.0",
     "@react-native/babel-preset": "0.87.1",
-    "@react-native/eslint-config": "0.87.1",
+    "@react-native/eslint-config": "0.88.1",
     "@types/react": "^19.2.0",
     "commitlint": "^19.6.1",
     "del-cli": "^6.0.0",
