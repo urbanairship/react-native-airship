@@ -29,6 +29,10 @@ Class RNAirshipEmbeddedViewBridgeClass(void) {
     return NSClassFromString(@"RNAirshipEmbeddedViewWrapper");
 }
 
+Class RNAirshipEmbeddedCarouselBridgeClass(void) {
+    return NSClassFromString(@"RNAirshipEmbeddedCarouselWrapper");
+}
+
 void RNAirshipBridgeDisablePluginLoader(void) {
     Class<RNAirshipPluginLoaderProvider> cls = NSClassFromString(@"AirshipPluginLoader");
     [cls setDisabled:YES];
